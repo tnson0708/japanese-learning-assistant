@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { Volume2, VolumeX } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { OptionGroup } from "@/components/option-group";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -8,10 +9,19 @@ import { PracticeSession } from "@/components/practice/practice-session";
 import {
   PaperPracticeSession,
   type PaperDirection,
+  type PaperItem,
 } from "@/components/practice/paper-practice-session";
 import { randomKana, type Script } from "@/lib/kana";
+import {
+  JLPT_LEVELS,
+  JLPT_LEVEL_LABELS,
+  randomWord,
+  type JlptLevel,
+} from "@/lib/words";
+import { cn } from "@/lib/utils";
 
 type Scope = Script | "both";
+type ContentType = "character" | "word";
 
 const SCOPE_OPTIONS: { value: Scope; label: string }[] = [
   { value: "hiragana", label: "Hiragana" },
@@ -24,8 +34,42 @@ const DIRECTION_OPTIONS: { value: PaperDirection; label: string }[] = [
   { value: "read", label: "Read (kana → romaji)" },
 ];
 
+const CONTENT_OPTIONS: { value: ContentType; label: string }[] = [
+  { value: "character", label: "Character" },
+  { value: "word", label: "Word" },
+];
+
+const LEVEL_OPTIONS: { value: JlptLevel; label: string }[] = JLPT_LEVELS.map(
+  (level) => ({ value: level, label: JLPT_LEVEL_LABELS[level] })
+);
+
 const PROMPT_SECONDS_OPTIONS = [3, 5, 8, 10];
 const REVEAL_SECONDS_OPTIONS = [2, 3, 5];
+
+function pickNextKana(scope: Scope, excludeId: string): PaperItem {
+  let candidate = randomKana(scope);
+  for (let i = 0; i < 5 && candidate.id === excludeId; i++) {
+    candidate = randomKana(scope);
+  }
+  return candidate;
+}
+
+function pickNextWord(
+  level: JlptLevel,
+  scope: Scope,
+  excludeId: string
+): PaperItem {
+  let candidate = randomWord(level, scope);
+  for (let i = 0; i < 5 && candidate.id === excludeId; i++) {
+    candidate = randomWord(level, scope);
+  }
+  return {
+    id: candidate.id,
+    char: candidate.word,
+    romaji: candidate.romaji,
+    meaning: candidate.meaning,
+  };
+}
 
 export default function PracticePage() {
   return (
@@ -38,16 +82,16 @@ export default function PracticePage() {
         </p>
       </div>
 
-      <Tabs defaultValue="handwriting">
+      <Tabs defaultValue="paper">
         <TabsList className="w-full">
-          <TabsTrigger value="handwriting">Handwriting</TabsTrigger>
           <TabsTrigger value="paper">Paper</TabsTrigger>
+          <TabsTrigger value="handwriting">Handwriting</TabsTrigger>
         </TabsList>
-        <TabsContent value="handwriting" className="mt-6">
-          <HandwritingPanel />
-        </TabsContent>
         <TabsContent value="paper" className="mt-6">
           <PaperPanel />
+        </TabsContent>
+        <TabsContent value="handwriting" className="mt-6">
+          <HandwritingPanel />
         </TabsContent>
       </Tabs>
     </div>
@@ -92,24 +136,41 @@ function HandwritingPanel() {
 
 function PaperPanel() {
   const [started, setStarted] = useState(false);
+  const [contentType, setContentType] = useState<ContentType>("character");
   const [scope, setScope] = useState<Scope>("hiragana");
+  const [level, setLevel] = useState<JlptLevel>("n5");
   const [direction, setDirection] = useState<PaperDirection>("write");
   const [promptSeconds, setPromptSeconds] = useState(5);
   const [revealSeconds, setRevealSeconds] = useState(3);
+  const [autoPlayAudio, setAutoPlayAudio] = useState(true);
   const [sessionKey, setSessionKey] = useState(0);
 
   if (!started) {
     return (
       <div className="flex flex-col gap-6 rounded-xl border bg-card p-6">
         <p className="text-sm text-muted-foreground">
-          A character (or its romaji) flashes on screen, then hides — grab a
-          pen and write or read it on real paper before the reveal checks
-          your answer.
+          A character, or a JLPT vocabulary word (or its romaji), flashes on
+          screen, then hides — grab a pen and write or read it on real paper
+          before the reveal checks your answer.
         </p>
+        <div className="flex flex-col gap-2">
+          <span className="text-sm font-medium">Content</span>
+          <OptionGroup
+            options={CONTENT_OPTIONS}
+            value={contentType}
+            onChange={setContentType}
+          />
+        </div>
         <div className="flex flex-col gap-2">
           <span className="text-sm font-medium">Script</span>
           <OptionGroup options={SCOPE_OPTIONS} value={scope} onChange={setScope} />
         </div>
+        {contentType === "word" && (
+          <div className="flex flex-col gap-2">
+            <span className="text-sm font-medium">JLPT Level</span>
+            <OptionGroup options={LEVEL_OPTIONS} value={level} onChange={setLevel} />
+          </div>
+        )}
         <div className="flex flex-col gap-2">
           <span className="text-sm font-medium">Direction</span>
           <OptionGroup
@@ -146,6 +207,26 @@ function PaperPanel() {
             <CustomSecondsInput value={revealSeconds} onChange={setRevealSeconds} />
           </div>
         </div>
+        <div className="flex flex-col gap-2">
+          <span className="text-sm font-medium">Pronunciation</span>
+          <button
+            type="button"
+            onClick={() => setAutoPlayAudio((v) => !v)}
+            className={cn(
+              "inline-flex w-fit items-center gap-1.5 rounded-full border px-4 py-2 text-sm font-medium transition-colors",
+              autoPlayAudio
+                ? "border-primary bg-primary text-primary-foreground"
+                : "hover:bg-accent"
+            )}
+          >
+            {autoPlayAudio ? (
+              <Volume2 className="size-3.5" />
+            ) : (
+              <VolumeX className="size-3.5" />
+            )}
+            Auto-play on check
+          </button>
+        </div>
         <Button
           size="lg"
           onClick={() => {
@@ -159,13 +240,19 @@ function PaperPanel() {
     );
   }
 
+  const pickNext = (excludeId: string) =>
+    contentType === "character"
+      ? pickNextKana(scope, excludeId)
+      : pickNextWord(level, scope, excludeId);
+
   return (
     <PaperPracticeSession
       key={sessionKey}
-      scope={scope}
       direction={direction}
       promptSeconds={promptSeconds}
       revealSeconds={revealSeconds}
+      autoPlayAudio={autoPlayAudio}
+      pickNext={pickNext}
       onEnd={() => setStarted(false)}
     />
   );

@@ -5,7 +5,6 @@ import { Pause, Play, SkipForward, Volume2, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { cn } from "@/lib/utils";
-import { randomKana, type Kana, type Script } from "@/lib/kana";
 import { speakJapanese } from "@/lib/speech";
 
 export type PaperDirection = "write" | "read";
@@ -13,30 +12,40 @@ type Phase = "prompt" | "reveal";
 
 const TICK_MS = 100;
 
+/** The minimal shape a paper-practice item needs — satisfied by both `Kana` and word entries. */
+export interface PaperItem {
+  id: string;
+  char: string;
+  romaji: string;
+  /** Vietnamese meaning, shown during the check phase (words only). */
+  meaning?: string;
+}
+
 interface PaperPracticeSessionProps {
-  scope: Script | "both";
   direction: PaperDirection;
   promptSeconds: number;
   revealSeconds: number;
+  autoPlayAudio: boolean;
+  /** Returns the next item, given the current item's id (to avoid immediate repeats). */
+  pickNext: (excludeId: string) => PaperItem;
   onEnd: () => void;
 }
 
-function pickNext(scope: Script | "both", excludeId: string): Kana {
-  let candidate = randomKana(scope);
-  for (let i = 0; i < 5 && candidate.id === excludeId; i++) {
-    candidate = randomKana(scope);
-  }
-  return candidate;
+function sizeClass(text: string): string {
+  if (text.length <= 2) return "text-7xl";
+  if (text.length <= 5) return "text-5xl";
+  return "text-3xl";
 }
 
 export function PaperPracticeSession({
-  scope,
   direction,
   promptSeconds,
   revealSeconds,
+  autoPlayAudio,
+  pickNext,
   onEnd,
 }: PaperPracticeSessionProps) {
-  const [kana, setKana] = useState<Kana>(() => randomKana(scope));
+  const [item, setItem] = useState<PaperItem>(() => pickNext(""));
   const [phase, setPhase] = useState<Phase>("prompt");
   const [remainingMs, setRemainingMs] = useState(promptSeconds * 1000);
   const [paused, setPaused] = useState(false);
@@ -46,14 +55,14 @@ export function PaperPracticeSession({
     (phase === "prompt" ? promptSeconds : revealSeconds) * 1000;
 
   // The showing/asking side depends on direction: "write" asks from romaji
-  // and reveals the kana to check against paper; "read" asks from the kana
-  // glyph and reveals the romaji (with audio) to check pronunciation.
-  const showingKana =
+  // and reveals the kana/word to check against paper; "read" asks from the
+  // kana glyph and reveals the romaji (with audio) to check pronunciation.
+  const showingChar =
     (direction === "write" && phase === "reveal") ||
     (direction === "read" && phase === "prompt");
 
   function goNext() {
-    setKana((prev) => pickNext(scope, prev.id));
+    setItem((prev) => pickNext(prev.id));
     setPhase("prompt");
     setRemainingMs(promptSeconds * 1000);
     setRound((r) => r + 1);
@@ -86,11 +95,10 @@ export function PaperPracticeSession({
   }, [remainingMs, paused, phase]);
 
   useEffect(() => {
-    if (direction === "read" && phase === "reveal") {
-      speakJapanese(kana.char);
+    if (autoPlayAudio && phase === "reveal") {
+      speakJapanese(item.char);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [kana, phase]);
+  }, [item, phase, autoPlayAudio]);
 
   const seconds = Math.ceil(remainingMs / 1000);
 
@@ -117,28 +125,33 @@ export function PaperPracticeSession({
         </div>
       </div>
 
-      <div className="flex flex-col items-center gap-2 rounded-xl border bg-card py-10">
+      <div className="flex flex-col items-center gap-2 rounded-xl border bg-card px-4 py-10">
         <span
           className={cn(
-            "font-medium",
-            showingKana ? "text-7xl" : "text-6xl"
+            "text-center font-medium",
+            showingChar ? sizeClass(item.char) : sizeClass(item.romaji)
           )}
         >
-          {showingKana ? kana.char : kana.romaji}
+          {showingChar ? item.char : item.romaji}
         </span>
         {phase === "reveal" && (
-          <div className="mt-1 flex items-center gap-2">
-            <span className="text-sm text-muted-foreground">
-              {direction === "write" ? kana.romaji : kana.char}
-            </span>
-            <button
-              type="button"
-              onClick={() => speakJapanese(kana.char)}
-              className="rounded-full p-1.5 text-muted-foreground hover:bg-accent hover:text-foreground"
-              aria-label="Play pronunciation"
-            >
-              <Volume2 className="size-4" />
-            </button>
+          <div className="mt-1 flex flex-col items-center gap-1">
+            <div className="flex items-center gap-2">
+              <span className="text-sm text-muted-foreground">
+                {direction === "write" ? item.romaji : item.char}
+              </span>
+              <button
+                type="button"
+                onClick={() => speakJapanese(item.char)}
+                className="rounded-full p-1.5 text-muted-foreground hover:bg-accent hover:text-foreground"
+                aria-label="Play pronunciation"
+              >
+                <Volume2 className="size-4" />
+              </button>
+            </div>
+            {item.meaning && (
+              <span className="text-sm text-muted-foreground">{item.meaning}</span>
+            )}
           </div>
         )}
       </div>
