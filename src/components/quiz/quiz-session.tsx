@@ -1,9 +1,12 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
+import { Volume2 } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
 import { cn } from "@/lib/utils";
+import { speakJapanese } from "@/lib/speech";
 import type { QuizQuestion } from "@/lib/quiz";
+
 
 export interface QuizAnswerRecord {
   question: QuizQuestion;
@@ -103,16 +106,26 @@ export function QuizSession({
       </div>
       <Progress value={(index / questions.length) * 100} />
 
-      <div className="flex flex-col items-center gap-3 rounded-xl border bg-card py-10">
-        <span className="text-xs uppercase tracking-wide text-muted-foreground">
+      <div className="relative flex flex-col items-center gap-3 rounded-xl border bg-card py-8 sm:py-10 shadow-2xs">
+        <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
           {question.direction === "kana-to-romaji"
             ? `What is the romaji for this ${question.kana.script} character?`
             : `Which ${question.kana.script} character reads "${question.kana.romaji}"?`}
         </span>
-        <span className="text-6xl font-medium">
+        <span className="text-6xl font-medium tracking-tight">
           {promptChar ?? promptRomaji}
         </span>
+        <button
+          type="button"
+          onClick={() => speakJapanese(question.kana.char)}
+          className="rounded-full border bg-background p-2 text-muted-foreground hover:bg-accent hover:text-foreground transition-colors"
+          title={`Listen to ${question.kana.char}`}
+          aria-label={`Listen to ${question.kana.char}`}
+        >
+          <Volume2 className="size-4" />
+        </button>
       </div>
+
 
       <div className="grid grid-cols-2 gap-3">
         {question.choices.map((choice) => {

@@ -1,4 +1,4 @@
-import { kanaList, type Kana, type Script } from "./kana";
+import { filterKana, type Kana, type KanaSection, type Script } from "./kana";
 
 export type QuizScope = Script | "both";
 export type QuizDirection = "kana-to-romaji" | "romaji-to-kana" | "mixed";
@@ -19,8 +19,8 @@ function shuffle<T>(arr: T[]): T[] {
   return copy;
 }
 
-function pool(scope: QuizScope): Kana[] {
-  return scope === "both" ? kanaList : kanaList.filter((k) => k.script === scope);
+function pool(scope: QuizScope, section: KanaSection = "all"): Kana[] {
+  return filterKana(scope, section);
 }
 
 /** Kana whose romaji doesn't collide with another kana in the same pool (e.g. じ/ぢ both "ji"). */
@@ -50,10 +50,12 @@ function pickDistractors<T>(
 export function generateQuestions(
   scope: QuizScope,
   direction: QuizDirection,
-  count: number
+  count: number,
+  section: KanaSection = "all"
 ): QuizQuestion[] {
-  const basePool = pool(scope);
+  const basePool = pool(scope, section);
   const romajiToKanaPool = unambiguousRomajiPool(basePool);
+
 
   const questions: QuizQuestion[] = [];
   let lastChar: string | null = null;
