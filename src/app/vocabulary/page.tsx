@@ -98,10 +98,10 @@ export default function VocabularyPage() {
   const totalWords = visibleGroups.reduce((sum, g) => sum + g.words.length, 0);
 
   return (
-    <div className="mx-auto flex w-full max-w-2xl flex-1 flex-col gap-6 px-4 py-8 sm:px-6">
+    <div className="mx-auto flex w-full max-w-6xl flex-1 flex-col gap-6 px-4 py-8 sm:px-6 lg:py-10">
       {/* Header */}
       <div>
-        <h1 className="text-2xl font-bold tracking-tight">Vocabulary</h1>
+        <h1 className="text-2xl font-bold tracking-tight lg:text-3xl">Vocabulary</h1>
         <p className="text-sm text-muted-foreground">
           Learn JLPT words grouped by topic — pick a level, script, and
           category to focus on.
@@ -109,7 +109,7 @@ export default function VocabularyPage() {
       </div>
 
       {/* Filters card */}
-      <div className="flex flex-col gap-5 rounded-xl border bg-card p-5">
+      <div className="grid gap-5 rounded-xl border bg-card p-5 lg:grid-cols-2 lg:gap-8 lg:p-6">
         <div className="flex flex-col gap-2">
           <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
             Script
@@ -208,15 +208,16 @@ export default function VocabularyPage() {
       )}
 
       {/* Word groups */}
-      <div className="flex flex-col gap-3">
+      <div className="lg:columns-2 lg:gap-4 xl:columns-3">
         {visibleGroups.map(({ category, words }) => (
-          <CategorySection
-            key={category}
-            category={category}
-            words={words}
-            expanded={expanded.has(category)}
-            onToggle={() => toggle(category)}
-          />
+          <div key={category} className="mb-3 break-inside-avoid">
+            <CategorySection
+              category={category}
+              words={words}
+              expanded={expanded.has(category)}
+              onToggle={() => toggle(category)}
+            />
+          </div>
         ))}
         {allGroups.length === 0 && (
           <p className="py-8 text-center text-sm text-muted-foreground">

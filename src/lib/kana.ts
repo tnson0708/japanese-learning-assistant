@@ -48,6 +48,17 @@ export const GROUP_ORDER = [
   "t-dakuten",
   "h-dakuten",
   "h-handakuten",
+  "k-youon",
+  "s-youon",
+  "t-youon",
+  "n-youon",
+  "h-youon",
+  "m-youon",
+  "r-youon",
+  "k-dakuten-youon",
+  "s-dakuten-youon",
+  "h-dakuten-youon",
+  "h-handakuten-youon",
 ] as const;
 
 export const GROUP_LABELS: Record<string, string> = {
@@ -66,6 +77,17 @@ export const GROUP_LABELS: Record<string, string> = {
   "t-dakuten": "T (dakuten)",
   "h-dakuten": "H (dakuten)",
   "h-handakuten": "H (handakuten)",
+  "k-youon": "Youon — K",
+  "s-youon": "Youon — Sh",
+  "t-youon": "Youon — Ch",
+  "n-youon": "Youon — N",
+  "h-youon": "Youon — H",
+  "m-youon": "Youon — M",
+  "r-youon": "Youon — R",
+  "k-dakuten-youon": "Youon — G",
+  "s-dakuten-youon": "Youon — J",
+  "h-dakuten-youon": "Youon — B",
+  "h-handakuten-youon": "Youon — P",
 };
 
 export function sortByGroup(list: Kana[]): Kana[] {

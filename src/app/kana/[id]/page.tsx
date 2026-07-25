@@ -31,7 +31,7 @@ export default function KanaDetailPage() {
   const next = scriptList[(idx + 1) % scriptList.length];
 
   return (
-    <div className="mx-auto flex w-full max-w-md flex-1 flex-col gap-6 px-4 py-8 sm:px-6">
+    <div className="mx-auto flex w-full max-w-lg flex-1 flex-col gap-6 px-4 py-8 sm:px-6 lg:max-w-xl lg:py-12">
       <Link
         href="/kana"
         className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground"
@@ -39,13 +39,13 @@ export default function KanaDetailPage() {
         <ArrowLeft className="size-4" /> Back to chart
       </Link>
 
-      <div className="flex flex-col items-center gap-4 rounded-xl border bg-card p-6">
+      <div className="flex flex-col items-center gap-4 rounded-xl border bg-card p-6 lg:p-10">
         <span className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
           {kana.script}
         </span>
-        <StrokeOrderSvg kana={kana} className="w-40 text-foreground" />
+        <StrokeOrderSvg kana={kana} className="w-40 text-foreground sm:w-48 lg:w-56" />
         <div className="flex items-center gap-3">
-          <span className="text-3xl font-semibold">{kana.romaji}</span>
+          <span className="text-3xl font-semibold lg:text-4xl">{kana.romaji}</span>
           <button
             type="button"
             onClick={() => speakJapanese(kana.char)}

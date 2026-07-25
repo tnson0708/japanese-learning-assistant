@@ -1,5 +1,13 @@
 // Fetches stroke-order SVG data from KanjiVG for every Hiragana/Katakana
-// character and bundles it into src/data/kana-strokes.json for offline use.
+// character (plus youon/contracted-sound combinations like きゃ) and bundles
+// it into src/data/kana-strokes.json for offline use.
+//
+// Youon combos (base kana + small ya/yu/yo, e.g. き + ゃ = きゃ) aren't single
+// Unicode characters, so KanjiVG has no glyph for them directly. We fetch the
+// base kana and the small ya/yu/yo separately, then compose a synthetic
+// stroke list by scaling and repositioning each into a shared 0-109 square
+// (the same coordinate space every other kana uses, so the existing
+// stroke-order viewer and handwriting-practice canvas need no changes).
 //
 // KanjiVG data is (C) Ulrich Apel, distributed under CC BY-SA 3.0.
 // https://kanjivg.tagaini.net/
@@ -32,7 +40,32 @@ const HIRAGANA_TABLE = [
   ["ぱ", "pa", "h-handakuten"], ["ぴ", "pi", "h-handakuten"], ["ぷ", "pu", "h-handakuten"], ["ぺ", "pe", "h-handakuten"], ["ぽ", "po", "h-handakuten"],
 ];
 
+// Small ya/yu/yo, fetched only to source stroke data for the youon combos
+// below — never written to the output as standalone entries.
+const SMALL_YOUON_TABLE = [
+  ["ゃ", "ya"],
+  ["ゅ", "yu"],
+  ["ょ", "yo"],
+];
+
+// Youon (contracted sound) combos: [baseHiragana, smallHiragana, romaji, group].
+// Grouped alongside the base row they're taught with, suffixed "-youon".
+const YOUON_TABLE = [
+  ["き", "ゃ", "kya", "k-youon"], ["き", "ゅ", "kyu", "k-youon"], ["き", "ょ", "kyo", "k-youon"],
+  ["し", "ゃ", "sha", "s-youon"], ["し", "ゅ", "shu", "s-youon"], ["し", "ょ", "sho", "s-youon"],
+  ["ち", "ゃ", "cha", "t-youon"], ["ち", "ゅ", "chu", "t-youon"], ["ち", "ょ", "cho", "t-youon"],
+  ["に", "ゃ", "nya", "n-youon"], ["に", "ゅ", "nyu", "n-youon"], ["に", "ょ", "nyo", "n-youon"],
+  ["ひ", "ゃ", "hya", "h-youon"], ["ひ", "ゅ", "hyu", "h-youon"], ["ひ", "ょ", "hyo", "h-youon"],
+  ["み", "ゃ", "mya", "m-youon"], ["み", "ゅ", "myu", "m-youon"], ["み", "ょ", "myo", "m-youon"],
+  ["り", "ゃ", "rya", "r-youon"], ["り", "ゅ", "ryu", "r-youon"], ["り", "ょ", "ryo", "r-youon"],
+  ["ぎ", "ゃ", "gya", "k-dakuten-youon"], ["ぎ", "ゅ", "gyu", "k-dakuten-youon"], ["ぎ", "ょ", "gyo", "k-dakuten-youon"],
+  ["じ", "ゃ", "ja", "s-dakuten-youon"], ["じ", "ゅ", "ju", "s-dakuten-youon"], ["じ", "ょ", "jo", "s-dakuten-youon"],
+  ["び", "ゃ", "bya", "h-dakuten-youon"], ["び", "ゅ", "byu", "h-dakuten-youon"], ["び", "ょ", "byo", "h-dakuten-youon"],
+  ["ぴ", "ゃ", "pya", "h-handakuten-youon"], ["ぴ", "ゅ", "pyu", "h-handakuten-youon"], ["ぴ", "ょ", "pyo", "h-handakuten-youon"],
+];
+
 const KATAKANA_OFFSET = 0x60;
+const CANVAS = 109;
 
 function toEntries() {
   const entries = [];
@@ -98,42 +131,148 @@ async function fetchWithRetry(url, retries = 3) {
   return null;
 }
 
+async function fetchStrokes(codepoint) {
+  const svgText = await fetchWithRetry(svgUrlFor(codepoint));
+  if (!svgText) return null;
+  const strokes = parseStrokes(svgText);
+  return strokes.length ? strokes : null;
+}
+
+function round(n) {
+  return Math.round(n * 100) / 100;
+}
+
+// KanjiVG stroke paths only ever use one absolute "M x,y" moveto followed by
+// relative "c" cubic-curve segments, so a full path-grammar parser isn't
+// needed: transform the leading M point with the full affine (scale +
+// translate), and scale every subsequent number as a delta (no translation).
+function transformPathD(d, { scale, tx, ty }) {
+  const mMatch = d.match(/^M\s*(-?[\d.]+)[, ]\s*(-?[\d.]+)/);
+  if (!mMatch) throw new Error(`Unexpected stroke path format: ${d}`);
+  const mx = round(parseFloat(mMatch[1]) * scale + tx);
+  const my = round(parseFloat(mMatch[2]) * scale + ty);
+  const rest = d.slice(mMatch[0].length);
+  const scaledRest = rest.replace(/-?\d+\.?\d*/g, (num) =>
+    String(round(parseFloat(num) * scale))
+  );
+  return `M${mx},${my}${scaledRest}`;
+}
+
+function transformStrokes(strokes, transform, orderOffset) {
+  return strokes.map((s, i) => ({
+    order: orderOffset + i + 1,
+    d: transformPathD(s.d, transform),
+  }));
+}
+
+// Lay the base char (larger, left) and small ya/yu/yo (smaller, bottom-right,
+// slightly overlapping) out inside the same 0-109 square every other kana
+// uses, so the stroke-order viewer and handwriting-practice canvas work
+// unmodified for youon entries.
+function composeYouonStrokes(baseStrokes, smallStrokes) {
+  const BASE_SCALE = 0.64;
+  const SMALL_SCALE = 0.46;
+  const OVERLAP = 0.12; // fraction of the base's width the small char overlaps into
+
+  const baseW = BASE_SCALE * CANVAS;
+  const smallW = SMALL_SCALE * CANVAS;
+  const totalW = baseW + smallW * (1 - OVERLAP);
+  const marginX = (CANVAS - totalW) / 2;
+
+  const txBase = marginX;
+  const tyBase = (CANVAS - baseW) / 2;
+  const baseTransformed = transformStrokes(
+    baseStrokes,
+    { scale: BASE_SCALE, tx: txBase, ty: tyBase },
+    0
+  );
+
+  const txSmall = marginX + baseW - smallW * OVERLAP;
+  const tySmall = tyBase + baseW - smallW; // bottom-align with the base char
+  const smallTransformed = transformStrokes(
+    smallStrokes,
+    { scale: SMALL_SCALE, tx: txSmall, ty: tySmall },
+    baseStrokes.length
+  );
+
+  return [...baseTransformed, ...smallTransformed];
+}
+
 async function main() {
   const entries = toEntries();
   const results = [];
   const missing = [];
+  const strokesByKey = new Map(); // `${script}:${char}` -> strokes, for youon composition
 
+  const smallEntries = [];
+  for (const [char, romaji] of SMALL_YOUON_TABLE) {
+    const hiraCp = char.codePointAt(0);
+    const kataCp = hiraCp + KATAKANA_OFFSET;
+    smallEntries.push({ char, script: "hiragana", codepoint: hiraCp, romaji });
+    smallEntries.push({
+      char: String.fromCodePoint(kataCp),
+      script: "katakana",
+      codepoint: kataCp,
+      romaji,
+    });
+  }
+
+  const fetchQueue = [...entries, ...smallEntries];
   const concurrency = 8;
   let cursor = 0;
 
   async function worker() {
-    while (cursor < entries.length) {
-      const entry = entries[cursor++];
-      const url = svgUrlFor(entry.codepoint);
-      const svgText = await fetchWithRetry(url);
-      if (!svgText) {
+    while (cursor < fetchQueue.length) {
+      const entry = fetchQueue[cursor++];
+      const strokes = await fetchStrokes(entry.codepoint);
+      if (!strokes) {
         missing.push(entry);
         continue;
       }
-      const strokes = parseStrokes(svgText);
-      if (strokes.length === 0) {
-        missing.push(entry);
+      strokesByKey.set(`${entry.script}:${entry.char}`, strokes);
+      if (entry.group) {
+        results.push({
+          ...entry,
+          viewBox: CANVAS,
+          strokeCount: strokes.length,
+          strokes,
+        });
+      }
+    }
+  }
+
+  await Promise.all(Array.from({ length: concurrency }, worker));
+
+  // Compose youon combos from the already-fetched base + small-kana strokes.
+  let youonCodepoint = 0xf000;
+  for (const [baseHira, smallHira, romaji, group] of YOUON_TABLE) {
+    for (const script of ["hiragana", "katakana"]) {
+      const base = script === "hiragana" ? baseHira : String.fromCodePoint(baseHira.codePointAt(0) + KATAKANA_OFFSET);
+      const small = script === "hiragana" ? smallHira : String.fromCodePoint(smallHira.codePointAt(0) + KATAKANA_OFFSET);
+      const baseStrokes = strokesByKey.get(`${script}:${base}`);
+      const smallStrokes = strokesByKey.get(`${script}:${small}`);
+      if (!baseStrokes || !smallStrokes) {
+        missing.push({ char: `${base}${small}`, script });
         continue;
       }
+      const strokes = composeYouonStrokes(baseStrokes, smallStrokes);
       results.push({
-        ...entry,
-        viewBox: 109,
+        id: `${script}-${romaji}-youon`,
+        char: `${base}${small}`,
+        script,
+        romaji,
+        group,
+        codepoint: youonCodepoint++,
+        viewBox: CANVAS,
         strokeCount: strokes.length,
         strokes,
       });
     }
   }
 
-  await Promise.all(Array.from({ length: concurrency }, worker));
-
   results.sort((a, b) => a.codepoint - b.codepoint);
 
-  console.log(`Fetched ${results.length}/${entries.length} characters.`);
+  console.log(`Fetched ${results.length} characters.`);
   if (missing.length) {
     console.log(
       "Missing:",

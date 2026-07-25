@@ -73,9 +73,9 @@ function pickNextWord(
 
 export default function PracticePage() {
   return (
-    <div className="mx-auto flex w-full max-w-md flex-1 flex-col gap-6 px-4 py-8 sm:px-6">
+    <div className="mx-auto flex w-full max-w-md flex-1 flex-col gap-6 px-4 py-8 sm:px-6 lg:max-w-3xl lg:py-10">
       <div>
-        <h1 className="text-2xl font-bold tracking-tight">Practice</h1>
+        <h1 className="text-2xl font-bold tracking-tight lg:text-3xl">Practice</h1>
         <p className="text-sm text-muted-foreground">
           Drill your kana digitally, or step away from the screen and write on
           paper.
@@ -106,7 +106,7 @@ function HandwritingPanel() {
 
   if (!started) {
     return (
-      <div className="flex flex-col gap-6 rounded-xl border bg-card p-6">
+      <div className="mx-auto flex max-w-md flex-col gap-6 rounded-xl border bg-card p-6 lg:max-w-lg lg:p-8">
         <p className="text-sm text-muted-foreground">
           Write with your finger, mouse, or Apple Pencil. Your attempt is
           scored against the correct stroke shapes.
@@ -130,7 +130,9 @@ function HandwritingPanel() {
   }
 
   return (
-    <PracticeSession key={sessionKey} initialKana={startKana} scope={scope} />
+    <div className="mx-auto w-full max-w-md lg:max-w-lg">
+      <PracticeSession key={sessionKey} initialKana={startKana} scope={scope} />
+    </div>
   );
 }
 
@@ -147,8 +149,8 @@ function PaperPanel() {
 
   if (!started) {
     return (
-      <div className="flex flex-col gap-6 rounded-xl border bg-card p-6">
-        <p className="text-sm text-muted-foreground">
+      <div className="flex flex-col gap-6 rounded-xl border bg-card p-6 lg:gap-x-10 lg:gap-y-6 lg:p-8 lg:grid lg:grid-cols-2">
+        <p className="text-sm text-muted-foreground lg:col-span-2">
           A character, or a JLPT vocabulary word (or its romaji), flashes on
           screen, then hides — grab a pen and write or read it on real paper
           before the reveal checks your answer.
@@ -233,6 +235,7 @@ function PaperPanel() {
             setSessionKey((k) => k + 1);
             setStarted(true);
           }}
+          className="lg:col-span-2"
         >
           Start Paper Practice
         </Button>
@@ -246,15 +249,17 @@ function PaperPanel() {
       : pickNextWord(level, scope, excludeId);
 
   return (
-    <PaperPracticeSession
-      key={sessionKey}
-      direction={direction}
-      promptSeconds={promptSeconds}
-      revealSeconds={revealSeconds}
-      autoPlayAudio={autoPlayAudio}
-      pickNext={pickNext}
-      onEnd={() => setStarted(false)}
-    />
+    <div className="mx-auto w-full max-w-md lg:max-w-lg">
+      <PaperPracticeSession
+        key={sessionKey}
+        direction={direction}
+        promptSeconds={promptSeconds}
+        revealSeconds={revealSeconds}
+        autoPlayAudio={autoPlayAudio}
+        pickNext={pickNext}
+        onEnd={() => setStarted(false)}
+      />
+    </div>
   );
 }
 

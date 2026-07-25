@@ -17,7 +17,7 @@ export function Nav() {
 
   return (
     <header className="sticky top-0 z-40 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="mx-auto flex h-14 max-w-5xl items-center gap-1 px-3 sm:px-6">
+      <div className="mx-auto flex h-14 max-w-6xl items-center gap-1 px-3 sm:px-6">
         <Link href="/" className="mr-2 font-semibold tracking-tight shrink-0">
           仮名道場
         </Link>

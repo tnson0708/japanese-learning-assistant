@@ -52,16 +52,16 @@ export default function QuizPage() {
   }
 
   return (
-    <div className="mx-auto flex w-full max-w-2xl flex-1 flex-col gap-6 px-4 py-8 sm:px-6">
+    <div className="mx-auto flex w-full max-w-md flex-1 flex-col gap-6 px-4 py-8 sm:px-6 lg:max-w-3xl lg:py-10">
       <div>
-        <h1 className="text-2xl font-bold tracking-tight">Quiz</h1>
+        <h1 className="text-2xl font-bold tracking-tight lg:text-3xl">Quiz</h1>
         <p className="text-sm text-muted-foreground">
           Multiple-choice drills to lock in kana ↔ romaji recall.
         </p>
       </div>
 
       {stage === "setup" && (
-        <div className="flex flex-col gap-6 rounded-xl border bg-card p-6">
+        <div className="grid gap-6 rounded-xl border bg-card p-6 lg:grid-cols-2 lg:gap-x-10 lg:p-8">
           <div className="flex flex-col gap-2">
             <span className="text-sm font-medium">Script</span>
             <OptionGroup options={SCOPE_OPTIONS} value={scope} onChange={setScope} />
@@ -86,27 +86,31 @@ export default function QuizPage() {
             <span className="text-sm font-medium">Time limit</span>
             <OptionGroup options={TIME_OPTIONS} value={timeLimit} onChange={setTimeLimit} />
           </div>
-          <Button onClick={start} size="lg">
+          <Button onClick={start} size="lg" className="lg:col-span-2">
             Start Quiz
           </Button>
         </div>
       )}
 
       {stage === "active" && questions.length > 0 && (
-        <QuizSession
-          questions={questions}
-          timeLimitSeconds={timeLimit || null}
-          onFinish={finish}
-        />
+        <div className="mx-auto w-full lg:max-w-2xl">
+          <QuizSession
+            questions={questions}
+            timeLimitSeconds={timeLimit || null}
+            onFinish={finish}
+          />
+        </div>
       )}
 
       {stage === "results" && (
-        <QuizResults
-          records={results}
-          totalQuestions={questions.length}
-          onRetry={start}
-          onChangeSettings={() => setStage("setup")}
-        />
+        <div className="mx-auto w-full lg:max-w-2xl">
+          <QuizResults
+            records={results}
+            totalQuestions={questions.length}
+            onRetry={start}
+            onChangeSettings={() => setStage("setup")}
+          />
+        </div>
       )}
     </div>
   );
