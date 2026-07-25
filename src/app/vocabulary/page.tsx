@@ -7,35 +7,39 @@ import { speakJapanese } from "@/lib/speech";
 import { type Script } from "@/lib/kana";
 import {
   CATEGORY_LABELS,
+  CATEGORY_LABELS_VI,
   CATEGORY_ORDER,
+  SUB_CATEGORY_LABELS,
   THEME_OPTIONS,
   WORD_DIFFICULTIES,
-  WORD_DIFFICULTY_LABELS,
+  WORD_DIFFICULTY_LABELS_BILINGUAL,
   getSubCategory,
+  getWordMeaning,
+  getWordNotes,
   getWordsByDifficulty,
   wordList,
   type CategoryTheme,
   type WordDifficulty,
   type WordCategory,
 } from "@/lib/words";
+import { useLanguage } from "@/lib/language-context";
 import { cn } from "@/lib/utils";
 
 type Scope = Script | "both";
 
 const SCOPE_OPTIONS: { value: Scope; label: string }[] = [
+  { value: "both", label: "Both" },
   { value: "hiragana", label: "Hiragana" },
   { value: "katakana", label: "Katakana" },
-  { value: "both", label: "Both" },
 ];
-
-const DIFFICULTY_OPTIONS: { value: WordDifficulty; label: string }[] = WORD_DIFFICULTIES.map(
-  (d) => ({ value: d, label: WORD_DIFFICULTY_LABELS[d] })
-);
 
 const PAGE_SIZE_OPTIONS = [25, 50, 100];
 
 export default function VocabularyPage() {
-  const [scope, setScope] = useState<Scope>("hiragana");
+  const { t, language } = useLanguage();
+
+  const [scope, setScope] = useState<Scope>("both");
+
   const [difficulty, setDifficulty] = useState<WordDifficulty>("easy");
   const [theme, setTheme] = useState<CategoryTheme>("all");
   const [category, setCategory] = useState<WordCategory | "all">("all");
@@ -43,6 +47,21 @@ export default function VocabularyPage() {
   const [query, setQuery] = useState("");
   const [pageSize, setPageSize] = useState(25);
   const [page, setPage] = useState(1);
+
+  const difficultyOptions: { value: WordDifficulty; label: string }[] =
+    WORD_DIFFICULTIES.map((d) => ({
+      value: d,
+      label: WORD_DIFFICULTY_LABELS_BILINGUAL[language][d],
+    }));
+
+  const themeOptions = [
+    { value: "all", label: t("theme_all") },
+    { value: "daily_life", label: t("theme_daily_life") },
+    { value: "time_numbers", label: t("theme_time_numbers") },
+    { value: "nature_places", label: t("theme_nature_places") },
+    { value: "school_work", label: t("theme_school_work") },
+    { value: "concepts_actions", label: t("theme_concepts_actions") },
+  ];
 
   // Available topics based on selected theme
   const availableTopics = useMemo(() => {
@@ -97,13 +116,13 @@ export default function VocabularyPage() {
           w.word.toLowerCase().includes(q) ||
           (w.kanji && w.kanji.toLowerCase().includes(q)) ||
           w.romaji.toLowerCase().includes(q) ||
-          w.meaning.toLowerCase().includes(q) ||
+          getWordMeaning(w, language).toLowerCase().includes(q) ||
           getSubCategory(w).toLowerCase().includes(q)
       );
     }
 
     return list;
-  }, [difficulty, scope, category, theme, availableTopics, subCategory, query]);
+  }, [difficulty, scope, category, theme, availableTopics, subCategory, query, language]);
 
   // Reset to page 1 whenever filters change
   const totalPages = Math.ceil(filteredWords.length / pageSize) || 1;
@@ -122,10 +141,10 @@ export default function VocabularyPage() {
       {/* Header */}
       <div className="flex flex-col gap-1">
         <h1 className="text-2xl font-bold tracking-tight sm:text-3xl lg:text-4xl">
-          Vocabulary Table
+          {t("vocab_title")}
         </h1>
         <p className="text-sm text-muted-foreground">
-          Learn Japanese vocabulary organized by difficulty, theme, topic, and sub-category.
+          {t("vocab_subtitle")}
         </p>
       </div>
 
@@ -135,7 +154,7 @@ export default function VocabularyPage() {
         <div className="grid gap-4 md:grid-cols-2 lg:gap-6">
           <div className="flex flex-col gap-2">
             <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-              Script
+              {t("vocab_script")}
             </span>
             <OptionGroup
               options={SCOPE_OPTIONS}
@@ -150,10 +169,10 @@ export default function VocabularyPage() {
 
           <div className="flex flex-col gap-2">
             <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-              Difficulty Level
+              {t("vocab_difficulty")}
             </span>
             <OptionGroup
-              options={DIFFICULTY_OPTIONS}
+              options={difficultyOptions}
               value={difficulty}
               onChange={(d) => {
                 setDifficulty(d);
@@ -167,13 +186,13 @@ export default function VocabularyPage() {
         {/* Row 2: Category Theme Selector */}
         <div className="flex flex-col gap-2 pt-2 border-t">
           <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-            Category Theme
+            {t("vocab_theme")}
           </span>
           <div className="overflow-x-auto pb-1 scrollbar-none">
             <OptionGroup
-              options={THEME_OPTIONS.map((t) => ({ value: t.id, label: t.label }))}
+              options={themeOptions}
               value={theme}
-              onChange={(th) => handleThemeChange(th)}
+              onChange={(th) => handleThemeChange(th as CategoryTheme)}
               size="sm"
               className="flex-nowrap"
             />
@@ -181,10 +200,10 @@ export default function VocabularyPage() {
         </div>
 
         {/* Row 3: Topic Selector & Search Box */}
-        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-          <div className="flex items-center gap-2">
-            <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground whitespace-nowrap">
-              Topic:
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between pt-2 border-t">
+          <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:gap-2">
+            <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground whitespace-nowrap">
+              {t("vocab_topic")}
             </span>
             <select
               value={category}
@@ -193,18 +212,19 @@ export default function VocabularyPage() {
                 setSubCategory("all");
                 setPage(1);
               }}
-              className="rounded-lg border bg-background px-3 py-1.5 text-xs text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              className="w-full sm:w-auto rounded-lg border bg-background px-3 py-2 sm:py-1.5 text-sm font-medium text-foreground shadow-2xs transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
             >
               <option value="all">
-                All Topics ({theme === "all" ? wordList.length : availableTopics.length})
+                {t("vocab_all_topics")} ({theme === "all" ? wordList.length : availableTopics.length})
               </option>
               {availableTopics.map((cat) => (
                 <option key={cat} value={cat}>
-                  {CATEGORY_LABELS[cat]}
+                  {language === "vi" ? CATEGORY_LABELS_VI[cat] : CATEGORY_LABELS[cat]}
                 </option>
               ))}
             </select>
           </div>
+
 
           {/* Search Box */}
           <div className="relative flex-1 sm:max-w-xs">
@@ -216,7 +236,7 @@ export default function VocabularyPage() {
                 setQuery(e.target.value);
                 setPage(1);
               }}
-              placeholder="Search vocabulary, kanji, romaji..."
+              placeholder={t("vocab_search_placeholder")}
               className="w-full rounded-lg border bg-background pl-9 pr-8 py-1.5 text-xs ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
             />
             {query && (
@@ -240,14 +260,17 @@ export default function VocabularyPage() {
             <div className="flex items-center justify-between">
               <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground inline-flex items-center gap-1">
                 <Filter className="size-3 text-primary" />
-                Sub-Category
+                {t("vocab_sub_category")}
               </span>
             </div>
             <div className="overflow-x-auto pb-1 scrollbar-none">
               <OptionGroup
                 options={[
-                  { value: "all", label: "All Sub-categories" },
-                  ...availableSubCategories.map((sub) => ({ value: sub, label: sub })),
+                  { value: "all", label: t("vocab_all_subcats") },
+                  ...availableSubCategories.map((sub) => ({
+                    value: sub,
+                    label: SUB_CATEGORY_LABELS[sub]?.[language] || sub,
+                  })),
                 ]}
                 value={subCategory}
                 onChange={(sc) => {
@@ -266,11 +289,11 @@ export default function VocabularyPage() {
       <div className="flex flex-col gap-4">
         <div className="flex items-center justify-between text-xs text-muted-foreground px-1">
           <span>
-            Showing <strong className="text-foreground">{filteredWords.length}</strong> words
+            {t("vocab_showing")} <strong className="text-foreground">{filteredWords.length}</strong> {t("vocab_words")}
           </span>
 
           <div className="flex items-center gap-2">
-            <span>Per page:</span>
+            <span>{t("vocab_per_page")}</span>
             <div className="flex items-center gap-1">
               {PAGE_SIZE_OPTIONS.map((sz) => (
                 <button
@@ -294,21 +317,25 @@ export default function VocabularyPage() {
           </div>
         </div>
 
-        {/* 5-Column English Table */}
+        {/* 5-Column Table (English / Vietnamese) */}
         <div className="overflow-x-auto rounded-xl border bg-card shadow-2xs">
           <table className="w-full text-left text-sm">
             <thead className="border-b bg-muted/50 text-xs font-bold uppercase tracking-wider text-muted-foreground">
               <tr>
-                <th scope="col" className="px-4 py-3 sm:px-6">Vocabulary</th>
-                <th scope="col" className="px-4 py-3 sm:px-6">Kanji</th>
-                <th scope="col" className="px-4 py-3 sm:px-6">Romaji</th>
-                <th scope="col" className="px-4 py-3 sm:px-6">Meaning</th>
-                <th scope="col" className="px-4 py-3 sm:px-6">Notes</th>
+                <th scope="col" className="px-4 py-3 sm:px-6">{t("vocab_col_vocab")}</th>
+                <th scope="col" className="px-4 py-3 sm:px-6">{t("vocab_col_kanji")}</th>
+                <th scope="col" className="px-4 py-3 sm:px-6">{t("vocab_col_romaji")}</th>
+                <th scope="col" className="px-4 py-3 sm:px-6">{t("vocab_col_meaning")}</th>
+                <th scope="col" className="px-4 py-3 sm:px-6">{t("vocab_col_notes")}</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-border/60">
               {paginatedWords.map((word) => {
-                const subCatLabel = getSubCategory(word);
+                const subCatRaw = getSubCategory(word);
+                const subCatLabel = SUB_CATEGORY_LABELS[subCatRaw]?.[language] || subCatRaw;
+                const meaningText = getWordMeaning(word, language);
+                const notesText = getWordNotes(word, language);
+
                 return (
                   <tr
                     key={word.id}
@@ -350,19 +377,19 @@ export default function VocabularyPage() {
 
                     {/* Column 4: Meaning */}
                     <td className="px-4 py-3 text-sm text-foreground sm:px-6">
-                      {word.meaning}
+                      {meaningText}
                     </td>
 
                     {/* Column 5: Notes & Sub-category badge */}
                     <td className="px-4 py-3 text-sm text-muted-foreground sm:px-6">
                       <div className="flex flex-wrap items-center gap-2">
-                        {word.notes && <span>{word.notes}</span>}
-                        {subCatLabel !== "General Words" && (
+                        {notesText && <span>{notesText}</span>}
+                        {subCatRaw !== "General Words" && (
                           <span className="rounded-full bg-secondary/80 px-2 py-0.5 text-[10px] font-medium text-muted-foreground">
                             {subCatLabel}
                           </span>
                         )}
-                        {!word.notes && subCatLabel === "General Words" && (
+                        {!notesText && subCatRaw === "General Words" && (
                           <span className="text-muted-foreground/40">-</span>
                         )}
                       </div>
@@ -377,7 +404,7 @@ export default function VocabularyPage() {
                     colSpan={5}
                     className="px-4 py-12 text-center text-sm text-muted-foreground"
                   >
-                    No vocabulary words match the selected filters.
+                    {t("vocab_no_words")}
                   </td>
                 </tr>
               )}
@@ -389,7 +416,7 @@ export default function VocabularyPage() {
         {totalPages > 1 && (
           <div className="flex items-center justify-between pt-2">
             <span className="text-xs text-muted-foreground">
-              Page <strong className="text-foreground">{safePage}</strong> of{" "}
+              {t("vocab_page")} <strong className="text-foreground">{safePage}</strong> {t("vocab_of")}{" "}
               <strong className="text-foreground">{totalPages}</strong>
             </span>
 
@@ -401,7 +428,7 @@ export default function VocabularyPage() {
                 className="inline-flex items-center gap-1 rounded-lg border bg-background px-3 py-1.5 text-xs font-medium text-foreground transition-colors disabled:opacity-40 disabled:cursor-not-allowed hover:bg-accent"
               >
                 <ChevronLeft className="size-3.5" />
-                Previous
+                {t("vocab_prev")}
               </button>
 
               <button
@@ -410,7 +437,7 @@ export default function VocabularyPage() {
                 disabled={safePage === totalPages}
                 className="inline-flex items-center gap-1 rounded-lg border bg-background px-3 py-1.5 text-xs font-medium text-foreground transition-colors disabled:opacity-40 disabled:cursor-not-allowed hover:bg-accent"
               >
-                Next
+                {t("vocab_next")}
                 <ChevronRight className="size-3.5" />
               </button>
             </div>
@@ -420,5 +447,6 @@ export default function VocabularyPage() {
     </div>
   );
 }
+
 
 

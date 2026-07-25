@@ -18,42 +18,17 @@ import {
   type Script,
 } from "@/lib/kana";
 import {
+  getWordsByDifficulty,
   randomWordByDifficulty,
   WORD_DIFFICULTIES,
-  WORD_DIFFICULTY_LABELS,
+  WORD_DIFFICULTY_LABELS_BILINGUAL,
   type WordDifficulty,
 } from "@/lib/words";
+import { useLanguage } from "@/lib/language-context";
 import { cn } from "@/lib/utils";
 
 type Scope = Script | "both";
 type ContentType = "character" | "word";
-
-const SCOPE_OPTIONS: { value: Scope; label: string }[] = [
-  { value: "hiragana", label: "Hiragana" },
-  { value: "katakana", label: "Katakana" },
-  { value: "both", label: "Both" },
-];
-
-const SECTION_OPTIONS: { value: KanaSection; label: string }[] = [
-  { value: "all", label: "All" },
-  { value: "main", label: "Main (五十音)" },
-  { value: "dakuten", label: "Dakuten (濁音)" },
-  { value: "youon", label: "Youon (拗音)" },
-];
-
-const DIRECTION_OPTIONS: { value: PaperDirection; label: string }[] = [
-  { value: "write", label: "Write (romaji → kana)" },
-  { value: "read", label: "Read (kana → romaji)" },
-];
-
-const CONTENT_OPTIONS: { value: ContentType; label: string }[] = [
-  { value: "character", label: "Character" },
-  { value: "word", label: "Word" },
-];
-
-const DIFFICULTY_OPTIONS: { value: WordDifficulty; label: string }[] = WORD_DIFFICULTIES.map(
-  (d) => ({ value: d, label: WORD_DIFFICULTY_LABELS[d] })
-);
 
 const PROMPT_SECONDS_OPTIONS = [3, 5, 8, 10];
 const REVEAL_SECONDS_OPTIONS = [2, 3, 5];
@@ -83,30 +58,31 @@ function pickNextWord(
   };
 }
 
-
 export default function PracticePage() {
+  const { t } = useLanguage();
+
   return (
     <div className="mx-auto flex w-full max-w-4xl flex-1 flex-col gap-6 px-4 py-6 sm:px-6 lg:py-8">
       {/* Header */}
       <div className="flex flex-col gap-1">
         <h1 className="text-2xl font-bold tracking-tight sm:text-3xl lg:text-4xl">
-          Practice
+          {t("practice_title")}
         </h1>
         <p className="text-sm text-muted-foreground">
-          Train your handwriting digitally with stroke recognition, or step away from the screen for timed paper drills.
+          {t("practice_subtitle")}
         </p>
       </div>
 
       {/* Practice Mode Selector */}
       <Tabs defaultValue="paper">
         <TabsList className="grid w-full grid-cols-2 max-w-md">
-          <TabsTrigger value="paper" className="flex items-center gap-2">
+          <TabsTrigger value="paper" className="flex items-center gap-2 font-semibold">
             <FileText className="size-4" />
-            <span>Paper Drill</span>
+            <span>{t("practice_tab_paper")}</span>
           </TabsTrigger>
-          <TabsTrigger value="handwriting" className="flex items-center gap-2">
+          <TabsTrigger value="handwriting" className="flex items-center gap-2 font-semibold">
             <PenTool className="size-4" />
-            <span>Handwriting</span>
+            <span>{t("practice_tab_handwriting")}</span>
           </TabsTrigger>
         </TabsList>
 
@@ -117,16 +93,29 @@ export default function PracticePage() {
           <HandwritingPanel />
         </TabsContent>
       </Tabs>
-
     </div>
   );
 }
 
 function HandwritingPanel() {
+  const { t } = useLanguage();
   const [started, setStarted] = useState(false);
   const [scope, setScope] = useState<Scope>("hiragana");
   const [section, setSection] = useState<KanaSection>("all");
   const [sessionKey, setSessionKey] = useState(0);
+
+  const scopeOptions: { value: Scope; label: string }[] = [
+    { value: "hiragana", label: "Hiragana" },
+    { value: "katakana", label: "Katakana" },
+    { value: "both", label: "Both" },
+  ];
+
+  const sectionOptions: { value: KanaSection; label: string }[] = [
+    { value: "all", label: t("practice_sec_all") },
+    { value: "main", label: t("practice_sec_main") },
+    { value: "dakuten", label: t("practice_sec_dakuten") },
+    { value: "youon", label: t("practice_sec_youon") },
+  ];
 
   const poolCount = useMemo(
     () => filterKana(scope, section).length,
@@ -139,34 +128,34 @@ function HandwritingPanel() {
     return (
       <div className="mx-auto flex max-w-xl flex-col gap-6 rounded-xl border bg-card p-5 sm:p-7 shadow-2xs">
         <div className="flex flex-col gap-1">
-          <h2 className="text-lg font-semibold tracking-tight">Handwriting Practice Setup</h2>
+          <h2 className="text-lg font-semibold tracking-tight">{t("mod_practice_title")}</h2>
           <p className="text-sm text-muted-foreground">
-            Draw characters on screen using stroke recognition. Practice copying stroke shapes or recalling them from memory.
+            {t("mod_practice_desc")}
           </p>
         </div>
 
         {/* Script Selection */}
         <div className="flex flex-col gap-2">
           <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-            Script
+            {t("practice_script")}
           </span>
-          <OptionGroup options={SCOPE_OPTIONS} value={scope} onChange={setScope} size="sm" />
+          <OptionGroup options={scopeOptions} value={scope} onChange={setScope} size="sm" />
         </div>
 
         {/* Section Selection */}
         <div className="flex flex-col gap-2">
           <div className="flex items-center justify-between">
             <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-              Section
+              {t("practice_section")}
             </span>
             <span className="inline-flex items-center gap-1 rounded-full bg-secondary/80 px-2.5 py-0.5 text-xs font-medium text-muted-foreground">
               <Sparkles className="size-3 text-primary" />
-              {poolCount} characters in pool
+              {poolCount} {t("practice_pool_count")}
             </span>
           </div>
           <div className="overflow-x-auto pb-1 scrollbar-none">
             <OptionGroup
-              options={SECTION_OPTIONS}
+              options={sectionOptions}
               value={section}
               onChange={setSection}
               size="sm"
@@ -184,7 +173,7 @@ function HandwritingPanel() {
           }}
           className="mt-2 w-full text-base font-semibold"
         >
-          Start Handwriting Practice
+          {t("practice_btn_start_digital")}
         </Button>
       </div>
     );
@@ -197,7 +186,7 @@ function HandwritingPanel() {
         onClick={() => setStarted(false)}
         className="self-start text-xs font-medium text-muted-foreground hover:text-foreground transition-colors"
       >
-        ← Change Settings
+        ← Exit Practice
       </button>
 
       <PracticeSession key={sessionKey} initialKana={startKana} scope={scope} section={section} />
@@ -206,6 +195,7 @@ function HandwritingPanel() {
 }
 
 function PaperPanel() {
+  const { t, language } = useLanguage();
   const [started, setStarted] = useState(false);
   const [contentType, setContentType] = useState<ContentType>("character");
   const [scope, setScope] = useState<Scope>("hiragana");
@@ -217,28 +207,62 @@ function PaperPanel() {
   const [autoPlayAudio, setAutoPlayAudio] = useState(true);
   const [sessionKey, setSessionKey] = useState(0);
 
+  const scopeOptions: { value: Scope; label: string }[] = [
+    { value: "hiragana", label: "Hiragana" },
+    { value: "katakana", label: "Katakana" },
+    { value: "both", label: "Both" },
+  ];
+
+  const sectionOptions: { value: KanaSection; label: string }[] = [
+    { value: "all", label: t("practice_sec_all") },
+    { value: "main", label: t("practice_sec_main") },
+    { value: "dakuten", label: t("practice_sec_dakuten") },
+    { value: "youon", label: t("practice_sec_youon") },
+  ];
+
+  const contentOptions: { value: ContentType; label: string }[] = [
+    { value: "character", label: t("practice_content_kana") },
+    { value: "word", label: t("practice_content_words") },
+  ];
+
+  const difficultyOptions: { value: WordDifficulty; label: string }[] =
+    WORD_DIFFICULTIES.map((d) => ({
+      value: d,
+      label: WORD_DIFFICULTY_LABELS_BILINGUAL[language][d],
+    }));
+
+  const directionOptions: { value: PaperDirection; label: string }[] = [
+    { value: "write", label: `${t("practice_title")} (romaji → kana)` },
+    { value: "read", label: `${t("nav_learn")} (kana → romaji)` },
+  ];
+
   const poolCount = useMemo(
     () => filterKana(scope, section).length,
     [scope, section]
+  );
+
+  const wordPoolCount = useMemo(
+    () => getWordsByDifficulty(difficulty, scope).length,
+    [difficulty, scope]
   );
 
   if (!started) {
     return (
       <div className="flex flex-col gap-6 rounded-xl border bg-card p-5 sm:p-7 shadow-2xs lg:grid lg:grid-cols-2 lg:gap-x-8 lg:gap-y-6">
         <div className="flex flex-col gap-1 lg:col-span-2">
-          <h2 className="text-lg font-semibold tracking-tight">Paper Practice Setup</h2>
+          <h2 className="text-lg font-semibold tracking-tight">{t("practice_tab_paper")}</h2>
           <p className="text-sm text-muted-foreground">
-            A prompt flashes on screen, then hides — write or read it on real paper before the reveal checks your answer.
+            {t("paper_ready_desc")}
           </p>
         </div>
 
         {/* Content Type */}
         <div className="flex flex-col gap-2">
           <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-            Content
+            {t("practice_content")}
           </span>
           <OptionGroup
-            options={CONTENT_OPTIONS}
+            options={contentOptions}
             value={contentType}
             onChange={setContentType}
             size="sm"
@@ -248,26 +272,26 @@ function PaperPanel() {
         {/* Script Selection */}
         <div className="flex flex-col gap-2">
           <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-            Script
+            {t("practice_script")}
           </span>
-          <OptionGroup options={SCOPE_OPTIONS} value={scope} onChange={setScope} size="sm" />
+          <OptionGroup options={scopeOptions} value={scope} onChange={setScope} size="sm" />
         </div>
 
-        {/* Kana Section (only when Content is Character) */}
+        {/* Kana Section */}
         {contentType === "character" && (
           <div className="flex flex-col gap-2 lg:col-span-2">
             <div className="flex items-center justify-between">
               <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                Kana Section
+                {t("practice_section")}
               </span>
               <span className="inline-flex items-center gap-1 rounded-full bg-secondary/80 px-2.5 py-0.5 text-xs font-medium text-muted-foreground">
                 <Sparkles className="size-3 text-primary" />
-                {poolCount} characters in pool
+                {poolCount} {t("practice_pool_count")}
               </span>
             </div>
             <div className="overflow-x-auto pb-1 scrollbar-none">
               <OptionGroup
-                options={SECTION_OPTIONS}
+                options={sectionOptions}
                 value={section}
                 onChange={setSection}
                 size="sm"
@@ -277,73 +301,37 @@ function PaperPanel() {
           </div>
         )}
 
-        {/* Word Level (only when Content is Word) */}
+        {/* Word Level */}
         {contentType === "word" && (
           <div className="flex flex-col gap-2 lg:col-span-2">
-            <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-              Word Level
-            </span>
-            <OptionGroup options={DIFFICULTY_OPTIONS} value={difficulty} onChange={setDifficulty} size="sm" />
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                {t("practice_difficulty")}
+              </span>
+              <span className="inline-flex items-center gap-1 rounded-full bg-secondary/80 px-2.5 py-0.5 text-xs font-medium text-muted-foreground">
+                <Sparkles className="size-3 text-primary" />
+                {wordPoolCount} {t("practice_word_pool_count")}
+              </span>
+            </div>
+            <OptionGroup options={difficultyOptions} value={difficulty} onChange={setDifficulty} size="sm" />
           </div>
         )}
-
 
         {/* Direction */}
         <div className="flex flex-col gap-2 lg:col-span-2">
           <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-            Direction
+            {t("quiz_direction")}
           </span>
           <OptionGroup
-            options={DIRECTION_OPTIONS}
+            options={directionOptions}
             value={direction}
             onChange={setDirection}
             size="sm"
           />
         </div>
 
-        {/* Prompt Time */}
-        <div className="flex flex-col gap-2">
-          <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-            Prompt Display Time
-          </span>
-          <div className="flex flex-wrap items-center gap-2">
-            <OptionGroup
-              options={PROMPT_SECONDS_OPTIONS.map((s) => ({
-                value: s,
-                label: `${s}s`,
-              }))}
-              value={promptSeconds}
-              onChange={setPromptSeconds}
-              size="sm"
-            />
-            <CustomSecondsInput value={promptSeconds} onChange={setPromptSeconds} />
-          </div>
-        </div>
-
-        {/* Reveal Time */}
-        <div className="flex flex-col gap-2">
-          <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-            Check Answer Time
-          </span>
-          <div className="flex flex-wrap items-center gap-2">
-            <OptionGroup
-              options={REVEAL_SECONDS_OPTIONS.map((s) => ({
-                value: s,
-                label: `${s}s`,
-              }))}
-              value={revealSeconds}
-              onChange={setRevealSeconds}
-              size="sm"
-            />
-            <CustomSecondsInput value={revealSeconds} onChange={setRevealSeconds} />
-          </div>
-        </div>
-
         {/* Audio Option */}
         <div className="flex flex-col gap-2 lg:col-span-2">
-          <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-            Pronunciation
-          </span>
           <button
             type="button"
             onClick={() => setAutoPlayAudio((v) => !v)}
@@ -359,7 +347,7 @@ function PaperPanel() {
             ) : (
               <VolumeX className="size-3.5" />
             )}
-            Auto-play pronunciation on check
+            Auto-play pronunciation
           </button>
         </div>
 
@@ -371,7 +359,7 @@ function PaperPanel() {
           }}
           className="mt-2 w-full text-base font-semibold lg:col-span-2"
         >
-          Start Paper Practice
+          {t("practice_btn_start_paper")}
         </Button>
       </div>
     );
@@ -382,7 +370,6 @@ function PaperPanel() {
       ? pickNextKana(scope, section, excludeId)
       : pickNextWord(difficulty, scope, excludeId);
 
-
   return (
     <div className="mx-auto flex w-full max-w-md flex-col gap-4 lg:max-w-lg">
       <button
@@ -390,7 +377,7 @@ function PaperPanel() {
         onClick={() => setStarted(false)}
         className="self-start text-xs font-medium text-muted-foreground hover:text-foreground transition-colors"
       >
-        ← Change Settings
+        ← Exit Practice
       </button>
 
       <PaperPracticeSession
@@ -406,29 +393,4 @@ function PaperPanel() {
   );
 }
 
-function CustomSecondsInput({
-  value,
-  onChange,
-}: {
-  value: number;
-  onChange: (n: number) => void;
-}) {
-  return (
-    <label className="flex items-center gap-1.5 text-xs text-muted-foreground">
-      Custom
-      <input
-        type="number"
-        min={1}
-        max={60}
-        value={value}
-        onChange={(e) => {
-          const n = Number(e.target.value);
-          if (Number.isFinite(n) && n > 0) onChange(Math.min(60, n));
-        }}
-        className="w-14 rounded-md border bg-background px-2 py-1 text-xs text-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
-      />
-      s
-    </label>
-  );
-}
 

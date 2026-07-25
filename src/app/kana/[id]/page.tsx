@@ -7,17 +7,19 @@ import { Button } from "@/components/ui/button";
 import { StrokeOrderSvg } from "@/components/kana/stroke-order-svg";
 import { getKanaById, kanaList, sortByGroup } from "@/lib/kana";
 import { speakJapanese } from "@/lib/speech";
+import { useLanguage } from "@/lib/language-context";
 
 export default function KanaDetailPage() {
+  const { t } = useLanguage();
   const params = useParams<{ id: string }>();
   const kana = getKanaById(params.id);
 
   if (!kana) {
     return (
       <div className="mx-auto flex w-full max-w-2xl flex-1 flex-col items-center justify-center gap-4 px-4 py-16 text-center">
-        <p className="text-muted-foreground">Character not found.</p>
+        <p className="text-muted-foreground">{t("kana_no_results")}</p>
         <Button render={<Link href="/kana" />} nativeButton={false} variant="outline">
-          Back to kana chart
+          {t("detail_back")}
         </Button>
       </div>
     );
@@ -36,7 +38,7 @@ export default function KanaDetailPage() {
         href="/kana"
         className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground"
       >
-        <ArrowLeft className="size-4" /> Back to chart
+        <ArrowLeft className="size-4" /> {t("detail_back")}
       </Link>
 
       <div className="flex flex-col items-center gap-4 rounded-xl border bg-card p-6 lg:p-10">
@@ -62,7 +64,7 @@ export default function KanaDetailPage() {
           className="w-full"
         >
           <PencilLine className="size-4" />
-          Practice writing this
+          {t("detail_practice_btn")}
         </Button>
       </div>
 
@@ -87,3 +89,4 @@ export default function KanaDetailPage() {
     </div>
   );
 }
+

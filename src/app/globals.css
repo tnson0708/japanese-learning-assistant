@@ -127,4 +127,23 @@
   html {
     @apply font-sans;
   }
+
+  /* Arial font rule for Vietnamese language */
+  html[lang="vi"],
+  html[data-lang="vi"],
+  [data-lang="vi"] body,
+  [data-lang="vi"] button,
+  [data-lang="vi"] input,
+  [data-lang="vi"] select,
+  [data-lang="vi"] textarea,
+  [data-lang="vi"] p,
+  [data-lang="vi"] span,
+  [data-lang="vi"] h1,
+  [data-lang="vi"] h2,
+  [data-lang="vi"] h3,
+  [data-lang="vi"] h4,
+  [data-lang="vi"] td,
+  [data-lang="vi"] th {
+    font-family: Arial, "Helvetica Neue", Helvetica, sans-serif !important;
+  }
 }

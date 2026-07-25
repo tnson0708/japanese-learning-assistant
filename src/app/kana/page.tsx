@@ -14,16 +14,10 @@ import {
   type Script,
 } from "@/lib/kana";
 import { speakJapanese } from "@/lib/speech";
+import { useLanguage } from "@/lib/language-context";
 import { cn } from "@/lib/utils";
 
 type SectionFilter = "all" | "main" | "dakuten" | "youon";
-
-const SECTION_OPTIONS: { value: SectionFilter; label: string }[] = [
-  { value: "all", label: "All" },
-  { value: "main", label: "Main (五十音)" },
-  { value: "dakuten", label: "Dakuten (濁音)" },
-  { value: "youon", label: "Youon (拗音)" },
-];
 
 const MAIN_GROUPS = new Set(["vowel", "k", "s", "t", "n", "h", "m", "y", "r", "w"]);
 const DAKUTEN_GROUPS = new Set([
@@ -62,17 +56,23 @@ function KanaCard({ kana }: { kana: Kana }) {
         <Volume2 className="size-3.5" />
       </button>
 
-      <span className="text-2xl font-medium leading-none tracking-tight sm:text-3xl">
+      <span className="text-3xl font-medium tracking-tight text-foreground transition-colors group-hover:text-primary">
         {kana.char}
       </span>
-      <span className="mt-1 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground group-hover:text-foreground">
+      <span className="text-xs font-semibold uppercase text-muted-foreground transition-colors group-hover:text-foreground">
         {kana.romaji}
       </span>
     </Link>
   );
 }
 
-function KanaGroupCard({ groupKey, kanaItems }: { groupKey: string; kanaItems: Kana[] }) {
+function KanaGroupCard({
+  groupKey,
+  kanaItems,
+}: {
+  groupKey: string;
+  kanaItems: Kana[];
+}) {
   const is5Cols = kanaItems.length === 5;
 
   return (
@@ -101,6 +101,7 @@ function KanaGroupCard({ groupKey, kanaItems }: { groupKey: string; kanaItems: K
 }
 
 function KanaGrid({ script, section, query }: { script: Script; section: SectionFilter; query: string }) {
+  const { t } = useLanguage();
   const allKana = useMemo(() => sortByGroup(getKanaByScript(script)), [script]);
 
   const grouped = useMemo(() => {
@@ -126,7 +127,7 @@ function KanaGrid({ script, section, query }: { script: Script; section: Section
     if (searchResults.length === 0) {
       return (
         <div className="rounded-xl border border-dashed p-8 text-center text-muted-foreground">
-          No characters match &quot;{query}&quot;.
+          {t("kana_no_results")}
         </div>
       );
     }
@@ -149,22 +150,26 @@ function KanaGrid({ script, section, query }: { script: Script; section: Section
 
   const sectionsToRender: { title: string; groups: string[] }[] = [];
 
+  const mainTitle = t("kana_sec_main");
+  const dakutenTitle = t("kana_sec_dakuten");
+  const youonTitle = t("kana_sec_youon");
+
   if (section === "all") {
     const main = availableGroups.filter((g) => getGroupSection(g) === "main");
     const dakuten = availableGroups.filter((g) => getGroupSection(g) === "dakuten");
     const youon = availableGroups.filter((g) => getGroupSection(g) === "youon");
 
-    if (main.length > 0) sectionsToRender.push({ title: "Main Kana (五十音)", groups: main });
-    if (dakuten.length > 0) sectionsToRender.push({ title: "Dakuten & Handakuten (濁音・半濁音)", groups: dakuten });
-    if (youon.length > 0) sectionsToRender.push({ title: "Youon (拗音)", groups: youon });
+    if (main.length > 0) sectionsToRender.push({ title: mainTitle, groups: main });
+    if (dakuten.length > 0) sectionsToRender.push({ title: dakutenTitle, groups: dakuten });
+    if (youon.length > 0) sectionsToRender.push({ title: youonTitle, groups: youon });
   } else {
     sectionsToRender.push({
       title:
         section === "main"
-          ? "Main Kana (五十音)"
+          ? mainTitle
           : section === "dakuten"
-          ? "Dakuten & Handakuten (濁音・半濁音)"
-          : "Youon (拗音)",
+          ? dakutenTitle
+          : youonTitle,
       groups: availableGroups,
     });
   }
@@ -195,76 +200,90 @@ function KanaGrid({ script, section, query }: { script: Script; section: Section
   );
 }
 
-export default function KanaChartPage() {
-  const [tab, setTab] = useState<Script>("hiragana");
+export default function KanaPage() {
+  const { t } = useLanguage();
+  const [script, setScript] = useState<Script>("hiragana");
   const [section, setSection] = useState<SectionFilter>("all");
-  const [query, setQuery] = useState("");
+  const [search, setSearch] = useState("");
+
+  const sectionOptions: { value: SectionFilter; label: string }[] = [
+    { value: "all", label: t("kana_sec_all") },
+    { value: "main", label: t("kana_sec_main") },
+    { value: "dakuten", label: t("kana_sec_dakuten") },
+    { value: "youon", label: t("kana_sec_youon") },
+  ];
 
   return (
     <div className="mx-auto flex w-full max-w-6xl flex-1 flex-col gap-6 px-4 py-6 sm:px-6 lg:py-8">
-      {/* Page Title Header */}
-      <div className="flex flex-col gap-1">
-        <h1 className="text-2xl font-bold tracking-tight sm:text-3xl lg:text-4xl">
-          Learn Kana
-        </h1>
-        <p className="text-sm text-muted-foreground">
-          Master Hiragana and Katakana with structured Gojūon grids, audio pronunciation, and stroke order animations.
-        </p>
-      </div>
-
-      {/* Controls Bar: Tabs, Section Filter, Search */}
-      <div className="flex flex-col gap-4 rounded-xl border bg-card p-4 sm:p-5 shadow-2xs">
-        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-          <Tabs value={tab} onValueChange={(v) => setTab(v as Script)} className="w-full sm:w-auto">
-            <TabsList className="grid w-full grid-cols-2 sm:w-48">
-              <TabsTrigger value="hiragana" className="text-sm">Hiragana</TabsTrigger>
-              <TabsTrigger value="katakana" className="text-sm">Katakana</TabsTrigger>
-            </TabsList>
-          </Tabs>
-
-          {/* Search box */}
-          <div className="relative flex-1 sm:max-w-xs">
-            <Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
-            <input
-              type="text"
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              placeholder="Search romaji or kana..."
-              className="w-full rounded-lg border bg-background pl-9 pr-8 py-1.5 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-            />
-            {query && (
-              <button
-                type="button"
-                onClick={() => setQuery("")}
-                className="absolute right-2.5 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
-              >
-                <X className="size-4" />
-              </button>
-            )}
-          </div>
+      {/* Header & Controls Bar */}
+      <div className="flex flex-col gap-4">
+        <div>
+          <h1 className="text-2xl font-bold tracking-tight sm:text-3xl lg:text-4xl">
+            {t("kana_title")}
+          </h1>
+          <p className="text-sm text-muted-foreground">
+            {t("kana_subtitle")}
+          </p>
         </div>
 
-        {/* Section Filter Pills */}
-        <div className="flex flex-col gap-2 pt-1 sm:flex-row sm:items-center">
-          <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground whitespace-nowrap">
-            Section:
-          </span>
-          <div className="w-full overflow-x-auto pb-1 sm:w-auto sm:pb-0 scrollbar-none">
-            <OptionGroup
-              options={SECTION_OPTIONS}
-              value={section}
-              onChange={setSection}
-              size="sm"
-              className="flex-nowrap"
-            />
+        {/* Filter Controls Card */}
+        <div className="flex flex-col gap-4 rounded-xl border bg-card p-4 shadow-2xs sm:p-5">
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+            {/* Script Selector */}
+            <Tabs
+              value={script}
+              onValueChange={(v) => setScript(v as Script)}
+              className="w-full sm:w-auto"
+            >
+              <TabsList className="grid w-full grid-cols-2 sm:w-80 md:w-[360px]">
+                <TabsTrigger value="hiragana">Hiragana (ひらがな)</TabsTrigger>
+                <TabsTrigger value="katakana">Katakana (カタカナ)</TabsTrigger>
+              </TabsList>
+
+            </Tabs>
+
+            {/* Search Input */}
+            <div className="relative w-full sm:w-64">
+              <Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+              <input
+                type="text"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                placeholder={t("kana_search_placeholder")}
+                className="w-full rounded-lg border bg-background pl-9 pr-8 py-1.5 text-xs ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              />
+              {search && (
+                <button
+                  type="button"
+                  onClick={() => setSearch("")}
+                  className="absolute right-2.5 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                >
+                  <X className="size-3.5" />
+                </button>
+              )}
+            </div>
+          </div>
+
+          {/* Section Filter Pills */}
+          <div className="flex flex-col gap-2 pt-2 border-t sm:flex-row sm:items-center sm:gap-3">
+            <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground whitespace-nowrap">
+              {t("kana_section")}:
+            </span>
+            <div className="overflow-x-auto pb-1 scrollbar-none sm:pb-0">
+              <OptionGroup
+                options={sectionOptions}
+                value={section}
+                onChange={setSection}
+                size="sm"
+                className="flex-nowrap"
+              />
+            </div>
           </div>
         </div>
       </div>
-
 
       {/* Kana Content Grid */}
-      <KanaGrid script={tab} section={section} query={query} />
+      <KanaGrid script={script} section={section} query={search} />
     </div>
   );
 }
-

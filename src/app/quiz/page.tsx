@@ -9,6 +9,7 @@ import { filterKana, type KanaSection } from "@/lib/kana";
 import { generateQuestions, type QuizDirection, type QuizScope } from "@/lib/quiz";
 import { QuizSession, type QuizAnswerRecord } from "@/components/quiz/quiz-session";
 import { speakJapanese } from "@/lib/speech";
+import { useLanguage } from "@/lib/language-context";
 
 type Stage = "setup" | "active" | "results";
 
@@ -16,19 +17,6 @@ const SCOPE_OPTIONS: { value: QuizScope; label: string }[] = [
   { value: "hiragana", label: "Hiragana" },
   { value: "katakana", label: "Katakana" },
   { value: "both", label: "Both" },
-];
-
-const SECTION_OPTIONS: { value: KanaSection; label: string }[] = [
-  { value: "all", label: "All" },
-  { value: "main", label: "Main (五十音)" },
-  { value: "dakuten", label: "Dakuten (濁音)" },
-  { value: "youon", label: "Youon (拗音)" },
-];
-
-const DIRECTION_OPTIONS: { value: QuizDirection; label: string }[] = [
-  { value: "kana-to-romaji", label: "Kana → Romaji" },
-  { value: "romaji-to-kana", label: "Romaji → Kana" },
-  { value: "mixed", label: "Mixed" },
 ];
 
 const COUNT_OPTIONS = [10, 20, 30];
@@ -42,6 +30,7 @@ const TIME_OPTIONS = [
 ];
 
 export default function QuizPage() {
+  const { t } = useLanguage();
   const [stage, setStage] = useState<Stage>("setup");
   const [scope, setScope] = useState<QuizScope>("hiragana");
   const [section, setSection] = useState<KanaSection>("all");
@@ -50,6 +39,26 @@ export default function QuizPage() {
   const [timeLimit, setTimeLimit] = useState(0);
   const [questions, setQuestions] = useState<ReturnType<typeof generateQuestions>>([]);
   const [results, setResults] = useState<QuizAnswerRecord[]>([]);
+
+  const sectionOptions: { value: KanaSection; label: string }[] = [
+    { value: "all", label: t("kana_sec_all") },
+    { value: "main", label: t("kana_sec_main") },
+    { value: "dakuten", label: t("kana_sec_dakuten") },
+    { value: "youon", label: t("kana_sec_youon") },
+  ];
+
+  const directionOptions: { value: QuizDirection; label: string }[] = [
+    { value: "kana-to-romaji", label: t("quiz_dir_k2r") },
+    { value: "romaji-to-kana", label: t("quiz_dir_r2k") },
+    { value: "mixed", label: t("quiz_dir_mixed") },
+  ];
+
+  const timeOptions = [
+    { value: 0, label: t("quiz_time_none") },
+    { value: 30, label: "30s" },
+    { value: 60, label: "60s" },
+    { value: 120, label: "2 min" },
+  ];
 
   const poolCount = useMemo(
     () => filterKana(scope, section).length,
@@ -72,10 +81,10 @@ export default function QuizPage() {
       {/* Header */}
       <div className="flex flex-col gap-1">
         <h1 className="text-2xl font-bold tracking-tight sm:text-3xl lg:text-4xl">
-          Quiz
+          {t("quiz_title")}
         </h1>
         <p className="text-sm text-muted-foreground">
-          Multiple-choice drills to lock in Kana & Romaji recognition.
+          {t("quiz_subtitle")}
         </p>
       </div>
 
@@ -84,7 +93,7 @@ export default function QuizPage() {
           {/* Script Selection */}
           <div className="flex flex-col gap-2">
             <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-              Script
+              {t("kana_script")}
             </span>
             <OptionGroup options={SCOPE_OPTIONS} value={scope} onChange={setScope} size="sm" />
           </div>
@@ -92,10 +101,10 @@ export default function QuizPage() {
           {/* Direction */}
           <div className="flex flex-col gap-2">
             <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-              Direction
+              {t("quiz_direction")}
             </span>
             <OptionGroup
-              options={DIRECTION_OPTIONS}
+              options={directionOptions}
               value={direction}
               onChange={setDirection}
               size="sm"
@@ -106,16 +115,16 @@ export default function QuizPage() {
           <div className="flex flex-col gap-2 lg:col-span-2">
             <div className="flex items-center justify-between">
               <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                Section
+                {t("kana_section")}
               </span>
               <span className="inline-flex items-center gap-1 rounded-full bg-secondary/80 px-2.5 py-0.5 text-xs font-medium text-muted-foreground">
                 <Sparkles className="size-3 text-primary" />
-                {poolCount} characters in pool
+                {poolCount} {t("practice_pool_count")}
               </span>
             </div>
             <div className="overflow-x-auto pb-1 scrollbar-none">
               <OptionGroup
-                options={SECTION_OPTIONS}
+                options={sectionOptions}
                 value={section}
                 onChange={setSection}
                 size="sm"
@@ -127,10 +136,10 @@ export default function QuizPage() {
           {/* Question Count */}
           <div className="flex flex-col gap-2">
             <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-              Question Count
+              {t("quiz_count")}
             </span>
             <OptionGroup
-              options={COUNT_OPTIONS.map((c) => ({ value: c, label: `${c} items` }))}
+              options={COUNT_OPTIONS.map((c) => ({ value: c, label: `${c} ${t("quiz_count_items")}` }))}
               value={count}
               onChange={setCount}
               size="sm"
@@ -140,10 +149,10 @@ export default function QuizPage() {
           {/* Time Limit */}
           <div className="flex flex-col gap-2">
             <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-              Time Limit
+              {t("quiz_time_limit")}
             </span>
             <OptionGroup
-              options={TIME_OPTIONS}
+              options={timeOptions}
               value={timeLimit}
               onChange={setTimeLimit}
               size="sm"
@@ -155,7 +164,7 @@ export default function QuizPage() {
             onClick={start}
             className="mt-2 w-full text-base font-semibold lg:col-span-2"
           >
-            Start Quiz
+            {t("quiz_btn_start")}
           </Button>
         </div>
       )}
@@ -167,7 +176,7 @@ export default function QuizPage() {
             onClick={() => setStage("setup")}
             className="self-start text-xs font-medium text-muted-foreground hover:text-foreground transition-colors"
           >
-            ← Exit Quiz
+            ← {t("quiz_exit")}
           </button>
 
           <QuizSession
@@ -203,6 +212,7 @@ function QuizResults({
   onRetry: () => void;
   onChangeSettings: () => void;
 }) {
+  const { t } = useLanguage();
   const correct = records.filter((r) => r.correct).length;
   const pct =
     records.length === 0 ? 0 : Math.round((correct / records.length) * 100);
@@ -214,17 +224,17 @@ function QuizResults({
       {/* Score Summary Box */}
       <div className="flex flex-col items-center gap-2 rounded-xl border bg-card py-8 px-6 shadow-2xs text-center">
         <span className="text-[11px] font-bold uppercase tracking-wider text-muted-foreground">
-          Quiz Completed
+          {t("quiz_completed")}
         </span>
         <span className="text-5xl font-bold tracking-tight text-foreground sm:text-6xl">
           {pct}%
         </span>
         <span className="text-sm font-medium text-muted-foreground">
-          {correct} of {records.length} questions correct
+          {correct} / {records.length}
         </span>
         {unanswered > 0 && (
           <span className="mt-1 rounded-full bg-amber-500/10 px-3 py-1 text-xs font-medium text-amber-600 dark:text-amber-400">
-            Time ran out — {unanswered} question{unanswered === 1 ? "" : "s"} unanswered
+            {t("quiz_time_out")} — {unanswered} {t("quiz_unanswered")}
           </span>
         )}
       </div>
@@ -233,7 +243,7 @@ function QuizResults({
       {missed.length > 0 && (
         <div className="flex flex-col gap-3 rounded-xl border bg-card/60 p-5 shadow-2xs">
           <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
-            Review Missed Characters ({missed.length})
+            {t("quiz_review_missed")} ({missed.length})
           </span>
           <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-3">
             {missed.map((r, i) => (
@@ -270,14 +280,15 @@ function QuizResults({
       <div className="flex flex-col gap-3 sm:flex-row">
         <Button onClick={onRetry} size="lg" className="flex-1 gap-2 font-semibold">
           <RotateCcw className="size-4" />
-          Retry Same Settings
+          {t("quiz_btn_retry")}
         </Button>
         <Button onClick={onChangeSettings} variant="outline" size="lg" className="flex-1 gap-2 font-semibold">
           <Settings className="size-4" />
-          Change Settings
+          {t("quiz_btn_change")}
         </Button>
       </div>
     </div>
   );
 }
+
 

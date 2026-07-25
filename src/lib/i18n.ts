@@ -1,0 +1,407 @@
+export type Language = "en" | "vi";
+
+export const translations = {
+  en: {
+    // Navigation
+    nav_home: "Home",
+    nav_learn: "Learn",
+    nav_vocabulary: "Vocabulary",
+    nav_phrases: "Common Sentences",
+    nav_practice: "Practice",
+    nav_quiz: "Quiz",
+    footer_stroke_data: "Stroke order data from",
+
+
+    // Home Page
+    hero_badge: "仮名道場 • Master Japanese Kana & Vocabulary",
+    hero_title: "Master Japanese Kana & Vocabulary with Confidence",
+    hero_subtitle:
+      "A focused learning suite for Hiragana, Katakana, and Japanese vocabulary — browse Gojūon grids, train handwriting with stroke recognition, run paper drills, and study categorized words.",
+    hero_btn_explore: "Explore Kana Charts",
+    hero_btn_paper: "Start Paper Drill",
+    spotlight_title: "Spotlight Kana",
+    spotlight_shuffle: "Shuffle 🎲",
+    spotlight_stroke: "strokes",
+    spotlight_btn_view: "View Stroke Order",
+    modules_title: "Learning Modules",
+    modules_subtitle:
+      "Pick a module to start learning, practicing, or testing your knowledge.",
+    mod_learn_title: "Learn Kana",
+    mod_learn_badge: "104 Characters",
+    mod_learn_desc:
+      "Explore Hiragana & Katakana charts in 5-column Gojūon grids with animated stroke order and audio pronunciation.",
+    mod_vocab_title: "Vocabulary Table",
+    mod_vocab_badge: "2,500+ Words",
+    mod_vocab_desc:
+      "Study categorized vocabulary words across 4 difficulty levels (Easy, Medium, Advanced, Native) with Kanji, Romaji, and notes.",
+    mod_practice_title: "Practice Writing",
+    mod_practice_badge: "2 Modes",
+    mod_practice_desc:
+      "Score your handwriting digitally with stroke recognition, or step away from the screen for timed paper drills.",
+    mod_quiz_title: "Quiz Yourself",
+    mod_quiz_badge: "Multiple-Choice",
+    mod_quiz_desc:
+      "Test Kana & Romaji recognition with customizable drills, instant feedback, and session score tracking.",
+    mod_phrases_title: "Common Sentences",
+    mod_phrases_badge: "40+ Daily Phrases",
+    mod_phrases_desc:
+      "Learn essential daily Japanese conversation sentences grouped by themes, topics, and formality levels.",
+
+    // Phrases Page (/phrases)
+    phrases_title: "Common Conversation Sentences",
+    phrases_subtitle:
+      "Master essential daily Japanese sentences categorized by theme, topic, and formality with clear audio pronunciation.",
+    phrases_theme: "Category Theme",
+    phrases_topic: "Topic",
+    phrases_formality: "Formality",
+    phrases_all_topics: "All Topics",
+    phrases_all_formalities: "All Formality Levels",
+    phrases_search_placeholder: "Search sentences, romaji, or meanings...",
+    phrases_showing: "Showing",
+    phrases_items: "sentences",
+    phrases_no_results: "No sentences match the selected filters.",
+    phrases_copy: "Copy Japanese",
+    phrases_copied: "Copied!",
+
+    hl_kana_title: "104 Kana Characters",
+    hl_kana_desc:
+      "Complete Gojūon, Dakuten & Youon (拗音) charts for Hiragana and Katakana.",
+    hl_vocab_title: "2,500+ Categorized Words",
+    hl_vocab_desc:
+      "Vocabulary organized into Easy, Medium, Advanced, and Native levels with Kanji.",
+    hl_modes_title: "Dual Practice Modes",
+    hl_modes_desc:
+      "Digital stroke recognition matching + timed off-screen paper drills.",
+
+    // Learn Tab (/kana)
+    kana_title: "Kana Practice & Reference",
+    kana_subtitle:
+      "Browse Hiragana and Katakana charts with animated stroke orders and clear audio pronunciation.",
+    kana_script: "Script",
+    kana_section: "Section",
+    kana_search_placeholder: "Search character or romaji (e.g. ka, あ)...",
+    kana_sec_all: "All",
+    kana_sec_main: "Main Kana (五十音)",
+    kana_sec_dakuten: "Dakuten & Handakuten (濁音・半濁音)",
+    kana_sec_youon: "Youon (拗音)",
+    kana_strokes: "strokes",
+    kana_card_detail: "Stroke order",
+    kana_no_results: "No characters match your search or filter.",
+
+    // Kana Detail (/kana/[id])
+    detail_back: "Back to Kana Chart",
+    detail_practice_btn: "Practice writing this",
+    detail_replay_strokes: "Replay stroke order",
+
+    // Practice Tab (/practice)
+    practice_title: "Practice",
+    practice_subtitle:
+      "Train your handwriting digitally or step away from the screen for timed paper drills.",
+    practice_tab_paper: "Paper Drill (Recommended)",
+    practice_tab_handwriting: "Digital Handwriting",
+    practice_script: "Script",
+    practice_section: "Section",
+    practice_content: "Content",
+    practice_difficulty: "Difficulty",
+    practice_speed: "Speed",
+    practice_pool_count: "characters in pool",
+    practice_word_pool_count: "words in pool",
+    practice_btn_start_paper: "Start Paper Drill",
+    practice_btn_start_digital: "Start Handwriting Practice",
+    practice_sec_all: "All",
+    practice_sec_main: "Main (五十音)",
+    practice_sec_dakuten: "Dakuten (濁音)",
+    practice_sec_youon: "Youon (拗音)",
+    practice_content_kana: "Single Kana",
+    practice_content_words: "Vocabulary Words",
+    practice_speed_slow: "Slow (6s)",
+    practice_speed_medium: "Medium (4s)",
+    practice_speed_fast: "Fast (2s)",
+    practice_speed_none: "Manual (Click Next)",
+
+    // Paper Drill Session
+    paper_ready_title: "Get ready with pen & paper!",
+    paper_ready_desc:
+      "Look at the screen, write the character or word on your paper, then check when it reveals.",
+    paper_btn_begin: "Begin Drill",
+    paper_exit: "Exit Drill",
+    paper_revealing_in: "Revealing answer in",
+    paper_btn_reveal: "Show Answer Now",
+    paper_btn_next: "Next Character →",
+    paper_btn_restart: "Restart Drill",
+    paper_stats_completed: "Drill Completed!",
+    paper_stats_items: "items practiced",
+
+    // Digital Handwriting Session
+    digital_clear: "Clear Canvas",
+    digital_check: "Check Accuracy",
+    digital_next: "Next →",
+    digital_score: "Accuracy Match",
+
+    // Quiz Tab (/quiz)
+    quiz_title: "Quiz",
+    quiz_subtitle:
+      "Multiple-choice drills to lock in Kana & Romaji recognition.",
+    quiz_direction: "Direction",
+    quiz_dir_k2r: "Kana → Romaji",
+    quiz_dir_r2k: "Romaji → Kana",
+    quiz_dir_mixed: "Mixed",
+    quiz_count: "Question Count",
+    quiz_count_items: "items",
+    quiz_time_limit: "Time Limit",
+    quiz_time_none: "No limit",
+    quiz_btn_start: "Start Quiz",
+    quiz_exit: "Exit Quiz",
+    quiz_question_num: "Question",
+    quiz_score: "Score",
+    quiz_completed: "Quiz Completed",
+    quiz_time_out: "Time ran out",
+    quiz_unanswered: "question(s) unanswered",
+    quiz_review_missed: "Review Missed Characters",
+    quiz_btn_retry: "Retry Same Settings",
+    quiz_btn_change: "Change Settings",
+
+    // Vocabulary Tab (/vocabulary)
+    vocab_title: "Vocabulary Table",
+    vocab_subtitle:
+      "Learn Japanese vocabulary organized by difficulty, theme, topic, and sub-category.",
+    vocab_col_vocab: "Vocabulary",
+    vocab_col_kanji: "Kanji",
+    vocab_col_romaji: "Romaji",
+    vocab_col_meaning: "Meaning",
+    vocab_col_notes: "Notes",
+    vocab_script: "Script",
+    vocab_difficulty: "Difficulty Level",
+    vocab_theme: "Category Theme",
+    vocab_topic: "Topic:",
+    vocab_sub_category: "Sub-Category",
+    vocab_all_topics: "All Topics",
+    vocab_all_subcats: "All Sub-categories",
+    vocab_search_placeholder: "Search vocabulary, kanji, romaji...",
+    vocab_showing: "Showing",
+    vocab_words: "words",
+    vocab_per_page: "Per page:",
+    vocab_no_words: "No vocabulary words match the selected filters.",
+    vocab_page: "Page",
+    vocab_of: "of",
+    vocab_prev: "Previous",
+    vocab_next: "Next",
+
+    // Difficulty levels
+    diff_easy: "Easy",
+    diff_medium: "Medium",
+    diff_advanced: "Advanced",
+    diff_native: "Native",
+
+    // Themes
+    theme_all: "All Themes",
+    theme_daily_life: "🏠 Daily Life",
+    theme_time_numbers: "⏰ Time & Numbers",
+    theme_nature_places: "🌿 Nature & Places",
+    theme_school_work: "💼 School & Work",
+    theme_concepts_actions: "💬 Concepts & Actions",
+  },
+
+  vi: {
+    // Navigation
+    nav_home: "Trang chủ",
+    nav_learn: "Học Kana",
+    nav_vocabulary: "Từ vựng",
+    nav_phrases: "Mẫu câu thông dụng",
+    nav_practice: "Luyện tập",
+    nav_quiz: "Kiểm tra",
+    footer_stroke_data: "Dữ liệu thứ tự nét viết từ",
+
+
+    // Home Page
+    hero_badge: "仮名道場 • Làm chủ Kana & Từ vựng tiếng Nhật",
+    hero_title: "Làm chủ Kana & Từ vựng tiếng Nhật dễ dàng",
+    hero_subtitle:
+      "Bộ công cụ học tập toàn diện cho Hiragana, Katakana và Từ vựng — tra cứu bảng Gojūon, luyện viết chữ nét chuẩn, viết trên giấy có bấm giờ và học từ vựng theo chủ đề.",
+    hero_btn_explore: "Xem bảng chữ Kana",
+    hero_btn_paper: "Luyện viết trên giấy",
+    spotlight_title: "Chữ Kana nổi bật",
+    spotlight_shuffle: "Đổi chữ 🎲",
+    spotlight_stroke: "nét",
+    spotlight_btn_view: "Xem thứ tự nét viết",
+    modules_title: "Các mục học tập",
+    modules_subtitle:
+      "Chọn một mục để bắt đầu học, luyện tập hoặc kiểm tra kiến thức của bạn.",
+    mod_learn_title: "Học Kana",
+    mod_learn_badge: "104 Chữ cái",
+    mod_learn_desc:
+      "Khám phá bảng Hiragana & Katakana dạng 5 cột chuẩn Gojūon với hoạt ảnh nét viết và phát âm chuẩn.",
+    mod_vocab_title: "Bảng từ vựng",
+    mod_vocab_badge: "2,500+ Từ",
+    mod_vocab_desc:
+      "Học 2,500+ từ vựng phân theo 4 cấp độ (Dễ, Trung bình, Nâng cao, Bản ngữ) đầy đủ Hán tự, Romaji và ghi chú.",
+    mod_practice_title: "Luyện viết",
+    mod_practice_badge: "2 Chế độ",
+    mod_practice_desc:
+      "Chấm điểm nét chữ cảm ứng trực tiếp hoặc luyện viết trên giấy thực tế có đếm giờ.",
+    mod_quiz_title: "Trắc nghiệm",
+    mod_quiz_badge: "Trắc nghiệm",
+    mod_quiz_desc:
+      "Kiểm tra phản xạ Kana ↔ Romaji với các bài trắc nghiệm tùy chỉnh và theo dõi điểm số.",
+    mod_phrases_title: "Mẫu câu giao tiếp",
+    mod_phrases_badge: "40+ Mẫu câu",
+    mod_phrases_desc:
+      "Học các mẫu câu giao tiếp tiếng Nhật hàng ngày được phân loại theo chủ đề, chủ đề phụ và cấp độ lịch sự.",
+
+    // Phrases Page (/phrases)
+    phrases_title: "Mẫu câu giao tiếp thông dụng",
+    phrases_subtitle:
+      "Làm chủ các mẫu câu giao tiếp tiếng Nhật hàng ngày phân theo chủ đề, tình huống và cấp độ lịch sự có phát âm giọng đọc chuẩn.",
+    phrases_theme: "Chủ đề lớn",
+    phrases_topic: "Chủ đề",
+    phrases_formality: "Mức độ lịch sự",
+    phrases_all_topics: "Tất cả chủ đề",
+    phrases_all_formalities: "Tất cả mức độ lịch sự",
+    phrases_search_placeholder: "Tìm mẫu câu, romaji hoặc nghĩa...",
+    phrases_showing: "Hiển thị",
+    phrases_items: "mẫu câu",
+    phrases_no_results: "Không tìm thấy mẫu câu nào phù hợp.",
+    phrases_copy: "Sao chép tiếng Nhật",
+    phrases_copied: "Đã sao chép!",
+
+    hl_kana_title: "104 Chữ Kana",
+    hl_kana_desc:
+      "Đầy đủ bảng chữ Gojūon, Dakuten (濁音) và Youon (拗音) cho Hiragana và Katakana.",
+    hl_vocab_title: "2,500+ Từ vựng theo chủ đề",
+    hl_vocab_desc:
+      "Từ vựng được sắp xếp theo các cấp độ Dễ, Trung bình, Nâng cao và Bản ngữ cùng Hán tự.",
+    hl_modes_title: "2 Chế độ luyện tập",
+    hl_modes_desc:
+      "Nhận diện nét chữ số hóa trên màn hình + bài luyện tập trên giấy thực tế.",
+
+    // Learn Tab (/kana)
+    kana_title: "Học & Tra cứu Kana",
+    kana_subtitle:
+      "Khám phá bảng chữ Hiragana và Katakana với mô phỏng thứ tự nét viết và phát âm âm thanh rõ ràng.",
+    kana_script: "Bảng chữ",
+    kana_section: "Phân loại",
+    kana_search_placeholder: "Tìm chữ cái hoặc romaji (vd: ka, あ)...",
+    kana_sec_all: "Tất cả",
+    kana_sec_main: "Main Kana (五十音)",
+    kana_sec_dakuten: "Biến âm (濁音・半濁音)",
+    kana_sec_youon: "Âm ghép (拗音)",
+    kana_strokes: "nét",
+    kana_card_detail: "Thứ tự nét viết",
+    kana_no_results: "Không tìm thấy chữ cái nào phù hợp.",
+
+    // Kana Detail (/kana/[id])
+    detail_back: "Trở lại bảng Kana",
+    detail_practice_btn: "Luyện viết chữ này",
+    detail_replay_strokes: "Xem lại thứ tự nét viết",
+
+    // Practice Tab (/practice)
+    practice_title: "Luyện tập",
+    practice_subtitle:
+      "Luyện viết nét chữ trực tiếp trên màn hình hoặc luyện viết trên giấy thực tế.",
+    practice_tab_paper: "Viết trên giấy (Khuyên dùng)",
+    practice_tab_handwriting: "Viết cảm ứng",
+    practice_script: "Bảng chữ",
+    practice_section: "Phân loại",
+    practice_content: "Nội dung",
+    practice_difficulty: "Độ khó",
+    practice_speed: "Tốc độ",
+    practice_pool_count: "chữ cái trong kho",
+    practice_word_pool_count: "từ vựng trong kho",
+    practice_btn_start_paper: "Bắt đầu viết trên giấy",
+    practice_btn_start_digital: "Bắt đầu luyện viết cảm ứng",
+    practice_sec_all: "Tất cả",
+    practice_sec_main: "Main (五十音)",
+    practice_sec_dakuten: "Biến âm (濁音)",
+    practice_sec_youon: "Âm ghép (拗音)",
+    practice_content_kana: "Chữ cái đơn",
+    practice_content_words: "Từ vựng",
+    practice_speed_slow: "Chậm (6 giây)",
+    practice_speed_medium: "Vừa (4 giây)",
+    practice_speed_fast: "Nhanh (2 giây)",
+    practice_speed_none: "Thủ công (Bấm Tiếp theo)",
+
+    // Paper Drill Session
+    paper_ready_title: "Sẵn sàng bút và giấy!",
+    paper_ready_desc:
+      "Nhìn màn hình, viết chữ cái hoặc từ lên giấy của bạn, sau đó đối chiếu khi đáp án hiện ra.",
+    paper_btn_begin: "Bắt đầu bài tập",
+    paper_exit: "Thoát luyện tập",
+    paper_revealing_in: "Hiện đáp án sau",
+    paper_btn_reveal: "Hiện đáp án ngay",
+    paper_btn_next: "Chữ tiếp theo →",
+    paper_btn_restart: "Làm lại bài tập",
+    paper_stats_completed: "Hoàn thành bài tập!",
+    paper_stats_items: "mục đã luyện tập",
+
+    // Digital Handwriting Session
+    digital_clear: "Xóa bảng",
+    digital_check: "Kiểm tra nét chữ",
+    digital_next: "Tiếp theo →",
+    digital_score: "Độ chính xác",
+
+    // Quiz Tab (/quiz)
+    quiz_title: "Trắc nghiệm",
+    quiz_subtitle:
+      "Bài tập trắc nghiệm giúp tăng phản xạ ghi nhớ Kana ↔ Romaji.",
+    quiz_direction: "Chiều câu hỏi",
+    quiz_dir_k2r: "Kana → Romaji",
+    quiz_dir_r2k: "Romaji → Kana",
+    quiz_dir_mixed: "Hỗn hợp",
+    quiz_count: "Số lượng câu hỏi",
+    quiz_count_items: "câu",
+    quiz_time_limit: "Thời gian",
+    quiz_time_none: "Không giới hạn",
+    quiz_btn_start: "Bắt đầu kiểm tra",
+    quiz_exit: "Thoát trắc nghiệm",
+    quiz_question_num: "Câu hỏi",
+    quiz_score: "Điểm số",
+    quiz_completed: "Hoàn thành bài test",
+    quiz_time_out: "Hết giờ làm bài",
+    quiz_unanswered: "câu hỏi chưa trả lời",
+    quiz_review_missed: "Xem lại các câu làm sai",
+    quiz_btn_retry: "Thử lại cài đặt này",
+    quiz_btn_change: "Thay đổi cài đặt",
+
+    // Vocabulary Tab (/vocabulary)
+    vocab_title: "Bảng từ vựng",
+    vocab_subtitle:
+      "Học từ vựng tiếng Nhật sắp xếp theo độ khó, chủ đề lớn, chủ đề nhỏ và phân loại chi tiết.",
+    vocab_col_vocab: "Từ vựng",
+    vocab_col_kanji: "Hán tự",
+    vocab_col_romaji: "Romaji",
+    vocab_col_meaning: "Nghĩa của từ",
+    vocab_col_notes: "Ghi chú",
+    vocab_script: "Bảng chữ",
+    vocab_difficulty: "Độ khó",
+    vocab_theme: "Chủ đề lớn",
+    vocab_topic: "Chủ đề:",
+    vocab_sub_category: "Phân loại nhỏ",
+    vocab_all_topics: "Tất cả chủ đề",
+    vocab_all_subcats: "Tất cả phân loại nhỏ",
+    vocab_search_placeholder: "Tìm từ vựng, hán tự, romaji, nghĩa...",
+    vocab_showing: "Hiển thị",
+    vocab_words: "từ",
+    vocab_per_page: "Mỗi trang:",
+    vocab_no_words: "Không có từ vựng nào phù hợp với bộ lọc.",
+    vocab_page: "Trang",
+    vocab_of: "trên",
+    vocab_prev: "Trang trước",
+    vocab_next: "Trang sau",
+
+    // Difficulty levels
+    diff_easy: "Dễ",
+    diff_medium: "Trung bình",
+    diff_advanced: "Nâng cao",
+    diff_native: "Bản ngữ",
+
+    // Themes
+    theme_all: "Tất cả chủ đề lớn",
+    theme_daily_life: "🏠 Đời sống hàng ngày",
+    theme_time_numbers: "⏰ Thời gian & Con số",
+    theme_nature_places: "🌿 Thiên nhiên & Địa điểm",
+    theme_school_work: "💼 Trường học & Công việc",
+    theme_concepts_actions: "💬 Khái niệm & Hành động",
+  },
+} as const;
+
+export type TranslationKey = keyof typeof translations.en;

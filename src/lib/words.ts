@@ -275,11 +275,15 @@ export function getSubCategory(word: Word): string {
   }
 
   if (cat === "places_directions") {
+    if (word.id.startsWith("country-") || ["ベトナム", "アメリカ", "イギリス", "フランス", "ドイツ", "オーストラリア", "カナダ", "タイ", "シンガポール", "マレーシア", "インドネシア", "フィリピン", "インド", "イタリア", "スペイン", "ロシア", "ブラジル", "メキシコ", "エジプト"].includes(w)) {
+      return "Countries & Nations";
+    }
     if (["うえ", "した", "まえ", "うしろ", "みぎ", "ひだり", "なか", "そと", "となり", "ちかく", "ひがし", "にし", "みなみ", "きた"].includes(w)) {
       return "Directions & Positions";
     }
     return "Places & Locations";
   }
+
 
   if (cat === "actions_general") {
     if (["いく", "くる", "かえる", "あるく", "はしる", "およぐ", "でかける", "のる", "おりる"].includes(w)) {
@@ -336,10 +340,55 @@ export const DAYS_OF_THE_MONTH: Word[] = [
   { id: "day-31", word: "さんじゅういちにち", kanji: "三十一日", romaji: "sanjuuichinichi", level: "n5", script: "hiragana", category: "time_calendar", meaning: "31st day of the month" },
 ];
 
+export const COUNTRY_WORDS: Word[] = [
+  { id: "country-vietnam", word: "ベトナム", kanji: "べとなむ (越南)", romaji: "Betonamu", level: "n5", script: "katakana", category: "places_directions", meaning: "Vietnam", notes: "Việt Nam" },
+  { id: "country-japan", word: "にほん", kanji: "日本", romaji: "Nihon", level: "n5", script: "hiragana", category: "places_directions", meaning: "Japan", notes: "Nhật Bản" },
+  { id: "country-usa", word: "アメリカ", kanji: "あめりか (米国)", romaji: "Amerika", level: "n5", script: "katakana", category: "places_directions", meaning: "United States (USA)", notes: "Nước Mỹ" },
+  { id: "country-uk", word: "イギリス", kanji: "いぎりす (英国)", romaji: "Igirisu", level: "n5", script: "katakana", category: "places_directions", meaning: "United Kingdom (UK)", notes: "Nước Anh" },
+  { id: "country-china", word: "ちゅうごく", kanji: "中国", romaji: "Chuugoku", level: "n5", script: "hiragana", category: "places_directions", meaning: "China", notes: "Trung Quốc" },
+  { id: "country-korea", word: "かんこく", kanji: "韓国", romaji: "Kankoku", level: "n5", script: "hiragana", category: "places_directions", meaning: "South Korea", notes: "Hàn Quốc" },
+  { id: "country-france", word: "フランス", kanji: "ふらんす", romaji: "Furansu", level: "n5", script: "katakana", category: "places_directions", meaning: "France", notes: "Nước Pháp" },
+  { id: "country-germany", word: "ドイツ", kanji: "どいつ", romaji: "Doitsu", level: "n5", script: "katakana", category: "places_directions", meaning: "Germany", notes: "Nước Đức" },
+  { id: "country-australia", word: "オーストラリア", kanji: "おーすとらりあ", romaji: "Oosutoraria", level: "n5", script: "katakana", category: "places_directions", meaning: "Australia", notes: "Nước Úc" },
+  { id: "country-canada", word: "カナダ", kanji: "かなだ", romaji: "Kanada", level: "n5", script: "katakana", category: "places_directions", meaning: "Canada", notes: "Canada" },
+  { id: "country-thailand", word: "タイ", kanji: "たい", romaji: "Tai", level: "n5", script: "katakana", category: "places_directions", meaning: "Thailand", notes: "Thái Lan" },
+  { id: "country-singapore", word: "シンガポール", kanji: "しんがぽーる", romaji: "Singapooru", level: "n5", script: "katakana", category: "places_directions", meaning: "Singapore", notes: "Singapore" },
+  { id: "country-malaysia", word: "マレーシア", kanji: "まれーしあ", romaji: "Mareeshia", level: "n5", script: "katakana", category: "places_directions", meaning: "Malaysia", notes: "Malaysia" },
+  { id: "country-indonesia", word: "インドネシア", kanji: "いんどねしあ", romaji: "Indoneshia", level: "n5", script: "katakana", category: "places_directions", meaning: "Indonesia", notes: "Indonesia" },
+  { id: "country-philippines", word: "フィリピン", kanji: "ふぃりぴん", romaji: "Firipin", level: "n5", script: "katakana", category: "places_directions", meaning: "Philippines", notes: "Philippines" },
+  { id: "country-india", word: "インド", kanji: "いんど (印度)", romaji: "Indo", level: "n5", script: "katakana", category: "places_directions", meaning: "India", notes: "Ấn Độ" },
+  { id: "country-italy", word: "イタリア", kanji: "いたりあ", romaji: "Itaria", level: "n5", script: "katakana", category: "places_directions", meaning: "Italy", notes: "Nước Ý" },
+  { id: "country-spain", word: "スペイン", kanji: "すぺいん", romaji: "Supein", level: "n5", script: "katakana", category: "places_directions", meaning: "Spain", notes: "Tây Ban Nha" },
+  { id: "country-russia", word: "ロシア", kanji: "ろしあ", romaji: "Roshia", level: "n5", script: "katakana", category: "places_directions", meaning: "Russia", notes: "Nước Nga" },
+  { id: "country-brazil", word: "ブラジル", kanji: "ぶらじる", romaji: "Buraziru", level: "n5", script: "katakana", category: "places_directions", meaning: "Brazil", notes: "Nước Brazil" },
+  { id: "country-mexico", word: "メキシコ", kanji: "めきしこ", romaji: "Mekishiko", level: "n5", script: "katakana", category: "places_directions", meaning: "Mexico", notes: "Mexico" },
+  { id: "country-egypt", word: "エジプト", kanji: "えじぷと", romaji: "Ejiputo", level: "n5", script: "katakana", category: "places_directions", meaning: "Egypt", notes: "Ai Cập" },
+  { id: "country-switzerland", word: "スイス", kanji: "すいす", romaji: "Suisu", level: "n5", script: "katakana", category: "places_directions", meaning: "Switzerland", notes: "Thụy Sĩ" },
+  { id: "country-netherlands", word: "オランダ", kanji: "おらんだ", romaji: "Oranda", level: "n5", script: "katakana", category: "places_directions", meaning: "Netherlands", notes: "Hà Lan" },
+  { id: "country-belgium", word: "ベルギー", kanji: "べるぎー", romaji: "Berugii", level: "n5", script: "katakana", category: "places_directions", meaning: "Belgium", notes: "Nước Bỉ" },
+  { id: "country-sweden", word: "スウェーデン", kanji: "すうぇーでん", romaji: "Suweeden", level: "n5", script: "katakana", category: "places_directions", meaning: "Sweden", notes: "Thụy Điển" },
+  { id: "country-norway", word: "ノルウェー", kanji: "のるうぇー", romaji: "Noruwee", level: "n5", script: "katakana", category: "places_directions", meaning: "Norway", notes: "Na Uy" },
+  { id: "country-denmark", word: "デンマーク", kanji: "でんまーく", romaji: "Denmaaku", level: "n5", script: "katakana", category: "places_directions", meaning: "Denmark", notes: "Đan Mạch" },
+  { id: "country-finland", word: "フィンランド", kanji: "ふぃんらんど", romaji: "Finrando", level: "n5", script: "katakana", category: "places_directions", meaning: "Finland", notes: "Phần Lan" },
+  { id: "country-newzealand", word: "ニュージーランド", kanji: "にゅーじーらんど", romaji: "Nyuujiirando", level: "n5", script: "katakana", category: "places_directions", meaning: "New Zealand", notes: "New Zealand" },
+  { id: "country-turkey", word: "トルコ", kanji: "とるこ", romaji: "Toruko", level: "n5", script: "katakana", category: "places_directions", meaning: "Turkey", notes: "Thổ Nhĩ Kỳ" },
+  { id: "country-saudi", word: "サウジアラビア", kanji: "さうじあらびあ", romaji: "Saujiarabia", level: "n5", script: "katakana", category: "places_directions", meaning: "Saudi Arabia", notes: "Ả Rập Xê Út" },
+  { id: "country-argentina", word: "アルゼンチン", kanji: "あるぜんちん", romaji: "Aruzenchin", level: "n5", script: "katakana", category: "places_directions", meaning: "Argentina", notes: "Argentina" },
+  { id: "country-chile", word: "チリ", kanji: "ちり", romaji: "Chiri", level: "n5", script: "katakana", category: "places_directions", meaning: "Chile", notes: "Chile" },
+  { id: "country-colombia", word: "コロンビア", kanji: "ころんびあ", romaji: "Koronbia", level: "n5", script: "katakana", category: "places_directions", meaning: "Colombia", notes: "Colombia" },
+  { id: "country-cambodia", word: "カンボジア", kanji: "かんぼじあ", romaji: "Kanbojia", level: "n5", script: "katakana", category: "places_directions", meaning: "Cambodia", notes: "Campuchia" },
+  { id: "country-laos", word: "ラオス", kanji: "らおす", romaji: "Raosu", level: "n5", script: "katakana", category: "places_directions", meaning: "Laos", notes: "Nước Lào" },
+  { id: "country-myanmar", word: "ミャンマー", kanji: "みゃんまー", romaji: "Myanmaa", level: "n5", script: "katakana", category: "places_directions", meaning: "Myanmar", notes: "Myanmar" },
+  { id: "country-mongolia", word: "モンゴル", kanji: "もんごる (蒙古)", romaji: "Mongoru", level: "n5", script: "katakana", category: "places_directions", meaning: "Mongolia", notes: "Mông Cổ" },
+  { id: "country-pakistan", word: "パキスタン", kanji: "ぱきすたん", romaji: "Pakisutan", level: "n5", script: "katakana", category: "places_directions", meaning: "Pakistan", notes: "Pakistan" },
+];
+
+
 const dayWordsSet = new Set(DAYS_OF_THE_MONTH.map((d) => d.word));
+const countryWordsSet = new Set(COUNTRY_WORDS.map((c) => c.word));
 
 const baseMappedWords: Word[] = (jlptWordsRaw as Word[])
-  .filter((w) => !dayWordsSet.has(w.word))
+  .filter((w) => !dayWordsSet.has(w.word) && !countryWordsSet.has(w.word))
   .map((w) => {
     const mappedKanji = KANJI_MAP[w.word];
     if (mappedKanji && !w.kanji) {
@@ -348,7 +397,8 @@ const baseMappedWords: Word[] = (jlptWordsRaw as Word[])
     return w;
   });
 
-export const wordList: Word[] = [...DAYS_OF_THE_MONTH, ...baseMappedWords];
+export const wordList: Word[] = [...DAYS_OF_THE_MONTH, ...COUNTRY_WORDS, ...baseMappedWords];
+
 
 
 
@@ -361,19 +411,106 @@ export const WORD_DIFFICULTIES: WordDifficulty[] = [
   "native",
 ];
 
-export const WORD_DIFFICULTY_LABELS: Record<WordDifficulty, string> = {
-  easy: "Easy",
-  medium: "Medium",
-  advanced: "Advanced",
-  native: "Native",
+export const WORD_DIFFICULTY_LABELS_BILINGUAL: Record<
+  "en" | "vi",
+  Record<WordDifficulty, string>
+> = {
+  en: {
+    easy: "Easy",
+    medium: "Medium",
+    advanced: "Advanced",
+    native: "Native",
+  },
+  vi: {
+    easy: "Dễ",
+    medium: "Trung bình",
+    advanced: "Nâng cao",
+    native: "Bản ngữ",
+  },
 };
 
+export const WORD_DIFFICULTY_LABELS: Record<WordDifficulty, string> =
+  WORD_DIFFICULTY_LABELS_BILINGUAL.en;
+
+export const CATEGORY_LABELS_VI: Record<WordCategory, string> = {
+  numbers_counting: "Con số & Phép đếm",
+  time_calendar: "Thời gian & Lịch",
+  family_people: "Gia đình & Con người",
+  body_health: "Cơ thể & Sức khỏe",
+  food_drink: "Đồ ăn & Thức uống",
+  home_daily_life: "Nhà cửa & Đời sống",
+  clothing_appearance: "Trang phục & Diện mạo",
+  nature_weather: "Thiên nhiên & Thời tiết",
+  animals_plants: "Động vật & Thực vật",
+  places_directions: "Địa điểm & Phương hướng",
+  transportation_travel: "Giao thông & Du lịch",
+  school_work: "Trường học & Công việc",
+  technology_communication: "Công nghệ & Giao tiếp",
+  money_shopping: "Tiền bạc & Mua sắm",
+  emotions_personality: "Cảm xúc & Tính cách",
+  society_culture_business: "Xã hội & Văn hóa",
+  thinking_abstract: "Tư duy & Khái niệm",
+  actions_general: "Hành động chung",
+  grammar_words: "Từ ngữ ngữ pháp",
+  other: "Khác",
+};
+
+export const SUB_CATEGORY_LABELS: Record<string, Record<"en" | "vi", string>> = {
+  "Countries & Nations": { en: "Countries & Nations", vi: "Tên các quốc gia" },
+  "Days of the Month": { en: "Days of the Month", vi: "Ngày trong tháng" },
+  "Days of the Week": { en: "Days of the Week", vi: "Các ngày trong tuần" },
+  "Months of the Year": { en: "Months of the Year", vi: "Các tháng trong năm" },
+  "Relative Time & Seasons": { en: "Relative Time & Seasons", vi: "Thời gian tương đối & Mùa" },
+  "General Time Words": { en: "General Time Words", vi: "Từ chỉ thời gian chung" },
+  "Basic Numbers": { en: "Basic Numbers", vi: "Số cơ bản" },
+  "Counters & Quantities": { en: "Counters & Quantities", vi: "Lượng từ & Bộ đếm" },
+  "General Numbers": { en: "General Numbers", vi: "Các con số khác" },
+  "Family Members": { en: "Family Members", vi: "Thành viên gia đình" },
+  "People & Relationships": { en: "People & Relationships", vi: "Mối quan hệ & Con người" },
+  "General People Words": { en: "General People Words", vi: "Từ ngữ xưng hô" },
+  "Meals & Drinks": { en: "Meals & Drinks", vi: "Bữa ăn & Đồ uống" },
+  "Food & Ingredients": { en: "Food & Ingredients", vi: "Thực phẩm & Nguyên liệu" },
+  "General Food Words": { en: "General Food Words", vi: "Từ vựng ẩm thực" },
+  "Directions & Positions": { en: "Directions & Positions", vi: "Phương hướng & Vị trí" },
+  "Places & Locations": { en: "Places & Locations", vi: "Địa điểm & Nơi chốn" },
+  "General Location Words": { en: "General Location Words", vi: "Từ vựng địa điểm chung" },
+  "Movement & Travel": { en: "Movement & Travel", vi: "Di chuyển & Du lịch" },
+  "Communication & Study": { en: "Communication & Study", vi: "Giao tiếp & Học tập" },
+  "Daily Action Verbs": { en: "Daily Action Verbs", vi: "Động từ hàng ngày" },
+  "General Words": { en: "General Words", vi: "Từ vựng chung" },
+};
+
+export function getWordMeaning(word: Word, lang: "en" | "vi"): string {
+  if (word.id.startsWith("day-")) {
+    const dayNum = word.id.replace("day-", "");
+    if (lang === "vi") return `Ngày ${dayNum} trong tháng`;
+  }
+  if (word.id.startsWith("country-") && word.notes && lang === "vi") {
+    return word.notes;
+  }
+  return word.meaning;
+}
+
+export function getWordNotes(word: Word, lang: "en" | "vi"): string | undefined {
+  if (!word.notes) return undefined;
+  if (word.notes === "Special reading") {
+    return lang === "vi" ? "Cách đọc đặc biệt" : "Special reading";
+  }
+  if (word.id.startsWith("country-")) {
+    return lang === "vi" ? "Tên quốc gia" : "Country name";
+  }
+  return word.notes;
+}
+
+
 export const DIFFICULTY_JLPT_MAP: Record<WordDifficulty, JlptLevel[]> = {
+
   easy: ["n5"],
   medium: ["n4", "n3"],
   advanced: ["n2"],
   native: ["n1"],
 };
+
 
 export function getWordsByDifficulty(
   difficulty: WordDifficulty,
