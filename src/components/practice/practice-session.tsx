@@ -10,7 +10,7 @@ import {
 } from "@/components/practice/handwriting-canvas";
 import { ComparisonOverlay } from "@/components/practice/comparison-overlay";
 import { scoreAttempt, type ScoreResult } from "@/lib/scoring";
-import { randomKana, type Kana, type Script } from "@/lib/kana";
+import { randomKana, type Kana, type KanaSection, type Script } from "@/lib/kana";
 import { speakJapanese } from "@/lib/speech";
 
 type Mode = "copy" | "recall";
@@ -19,9 +19,10 @@ type Scope = Script | "both";
 interface PracticeSessionProps {
   initialKana: Kana;
   scope: Scope;
+  section?: KanaSection;
 }
 
-export function PracticeSession({ initialKana, scope }: PracticeSessionProps) {
+export function PracticeSession({ initialKana, scope, section = "all" }: PracticeSessionProps) {
   const [kana, setKana] = useState(initialKana);
   const [mode, setMode] = useState<Mode>("copy");
   const [hintEnabled, setHintEnabled] = useState(true);
@@ -36,16 +37,17 @@ export function PracticeSession({ initialKana, scope }: PracticeSessionProps) {
   }
 
   function next() {
-    let candidate = randomKana(scope);
+    let candidate = randomKana(scope, section);
     // Avoid immediate repeats when the pool allows it.
     for (let i = 0; i < 5 && candidate.id === kana.id; i++) {
-      candidate = randomKana(scope);
+      candidate = randomKana(scope, section);
     }
     setKana(candidate);
     setResult(null);
     setHasInk(false);
     canvasRef.current?.clear();
   }
+
 
   function clear() {
     canvasRef.current?.clear();

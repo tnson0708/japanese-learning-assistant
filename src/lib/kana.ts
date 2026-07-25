@@ -99,8 +99,52 @@ export function sortByGroup(list: Kana[]): Kana[] {
   });
 }
 
-export function randomKana(script: Script | "both" = "both"): Kana {
-  const pool =
-    script === "both" ? kanaList : kanaList.filter((k) => k.script === script);
+export type KanaSection = "all" | "main" | "dakuten" | "youon";
+
+export const MAIN_GROUPS = new Set([
+  "vowel",
+  "k",
+  "s",
+  "t",
+  "n",
+  "h",
+  "m",
+  "y",
+  "r",
+  "w",
+]);
+
+export const DAKUTEN_GROUPS = new Set([
+  "k-dakuten",
+  "s-dakuten",
+  "t-dakuten",
+  "h-dakuten",
+  "h-handakuten",
+]);
+
+export function getKanaSection(group: string): "main" | "dakuten" | "youon" {
+  if (MAIN_GROUPS.has(group)) return "main";
+  if (DAKUTEN_GROUPS.has(group)) return "dakuten";
+  return "youon";
+}
+
+export function filterKana(
+  script: Script | "both" = "both",
+  section: KanaSection = "all"
+): Kana[] {
+  return kanaList.filter((k) => {
+    if (script !== "both" && k.script !== script) return false;
+    if (section !== "all" && getKanaSection(k.group) !== section) return false;
+    return true;
+  });
+}
+
+export function randomKana(
+  script: Script | "both" = "both",
+  section: KanaSection = "all"
+): Kana {
+  const pool = filterKana(script, section);
+  if (pool.length === 0) return kanaList[0];
   return pool[Math.floor(Math.random() * pool.length)];
 }
+
