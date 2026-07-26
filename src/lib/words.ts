@@ -620,3 +620,8 @@ export function groupWordsByCategory(
   }));
 }
 
+export function getAllWords(): Word[] {
+  return wordList;
+}
+
+

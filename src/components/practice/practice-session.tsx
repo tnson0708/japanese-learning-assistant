@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { Volume2, RotateCcw, Undo2, ArrowRight, Eye, EyeOff } from "lucide-react";
+import { Volume2, RotateCcw, Undo2, ArrowRight, Eye, EyeOff, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import {
@@ -20,9 +20,10 @@ interface PracticeSessionProps {
   initialKana: Kana;
   scope: Scope;
   section?: KanaSection;
+  onEnd?: () => void;
 }
 
-export function PracticeSession({ initialKana, scope, section = "all" }: PracticeSessionProps) {
+export function PracticeSession({ initialKana, scope, section = "all", onEnd }: PracticeSessionProps) {
   const [kana, setKana] = useState(initialKana);
   const [mode, setMode] = useState<Mode>("copy");
   const [hintEnabled, setHintEnabled] = useState(true);
@@ -64,7 +65,7 @@ export function PracticeSession({ initialKana, scope, section = "all" }: Practic
 
   return (
     <div className="flex w-full flex-col gap-5">
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between gap-2">
         <div className="inline-flex rounded-full border p-0.5 text-sm">
           {(["copy", "recall"] as Mode[]).map((m) => (
             <button
@@ -75,7 +76,7 @@ export function PracticeSession({ initialKana, scope, section = "all" }: Practic
                 setResult(null);
               }}
               className={cn(
-                "rounded-full px-3 py-1 font-medium transition-colors",
+                "rounded-full px-3 py-1 font-medium transition-colors text-xs sm:text-sm",
                 mode === m
                   ? "bg-primary text-primary-foreground"
                   : "text-muted-foreground hover:text-foreground"
@@ -85,13 +86,13 @@ export function PracticeSession({ initialKana, scope, section = "all" }: Practic
             </button>
           ))}
         </div>
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2 sm:gap-3">
           <button
             type="button"
             onClick={() => setHintEnabled((h) => !h)}
             disabled={mode === "recall"}
             className={cn(
-              "inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-sm font-medium transition-colors disabled:cursor-not-allowed disabled:opacity-40",
+              "inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-xs font-medium transition-colors disabled:cursor-not-allowed disabled:opacity-40",
               hintEnabled && mode === "copy"
                 ? "border-primary bg-primary/10 text-primary"
                 : "text-muted-foreground hover:text-foreground"
@@ -105,9 +106,16 @@ export function PracticeSession({ initialKana, scope, section = "all" }: Practic
             {hintEnabled ? <Eye className="size-3.5" /> : <EyeOff className="size-3.5" />}
             Hint
           </button>
-          <span className="text-xs uppercase tracking-wide text-muted-foreground">
-            {kana.script}
-          </span>
+          {onEnd && (
+            <button
+              type="button"
+              onClick={onEnd}
+              className="inline-flex items-center gap-1.5 rounded-lg border border-border bg-background px-2.5 py-1 text-xs font-medium text-muted-foreground hover:bg-accent hover:text-foreground transition-colors"
+            >
+              <X className="size-3.5" />
+              <span>Exit</span>
+            </button>
+          )}
         </div>
       </div>
 
