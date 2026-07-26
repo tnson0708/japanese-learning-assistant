@@ -20,6 +20,21 @@ export const metadata: Metadata = {
   title: "Kana Dojo — Japanese Handwriting & Vocabulary",
   description:
     "Learn Hiragana and Katakana, practice handwriting with Apple Pencil, and study categorized Japanese vocabulary words.",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "black-translucent",
+    title: "Kana Dojo",
+  },
+  icons: {
+    icon: [
+      { url: "/favicon.ico", sizes: "any" },
+      { url: "/icon.png", sizes: "512x512", type: "image/png" },
+      { url: "/icon-192.png", sizes: "192x192", type: "image/png" },
+    ],
+    apple: [
+      { url: "/apple-icon.png", sizes: "180x180", type: "image/png" },
+    ],
+  },
 };
 
 export const viewport: Viewport = {
