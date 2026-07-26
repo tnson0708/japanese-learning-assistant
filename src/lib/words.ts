@@ -274,6 +274,12 @@ export function getSubCategory(word: Word): string {
     return "Food & Ingredients";
   }
 
+  if (cat === "home_daily_life" || cat === "clothing_appearance") {
+    if (word.id.startsWith("color-") || ["いろ", "あか", "あかい", "あお", "あおい", "きいろ", "きいろい", "くろ", "くろい", "しろ", "しろい", "みどり", "むらさき", "ちゃいろ", "ピンク", "オレンジ", "はいいろ", "みずいろ", "きんいろ", "ぎんいろ"].includes(w)) {
+      return "Colors & Appearance";
+    }
+  }
+
   if (cat === "places_directions") {
     if (word.id.startsWith("country-") || ["ベトナム", "アメリカ", "イギリス", "フランス", "ドイツ", "オーストラリア", "カナダ", "タイ", "シンガポール", "マレーシア", "インドネシア", "フィリピン", "インド", "イタリア", "スペイン", "ロシア", "ブラジル", "メキシコ", "エジプト"].includes(w)) {
       return "Countries & Nations";
@@ -283,6 +289,7 @@ export function getSubCategory(word: Word): string {
     }
     return "Places & Locations";
   }
+
 
 
   if (cat === "actions_general") {
@@ -384,11 +391,35 @@ export const COUNTRY_WORDS: Word[] = [
 ];
 
 
+export const COLOR_WORDS: Word[] = [
+  { id: "color-iro", word: "いろ", kanji: "色", romaji: "Iro", level: "n5", script: "hiragana", category: "home_daily_life", meaning: "Color", notes: "Màu sắc" },
+  { id: "color-aka", word: "あか", kanji: "赤", romaji: "Aka", level: "n5", script: "hiragana", category: "home_daily_life", meaning: "Red (noun)", notes: "Màu đỏ" },
+  { id: "color-akai", word: "あかい", kanji: "赤い", romaji: "Akai", level: "n5", script: "hiragana", category: "home_daily_life", meaning: "Red (adjective)", notes: "Đỏ" },
+  { id: "color-ao", word: "あお", kanji: "青", romaji: "Ao", level: "n5", script: "hiragana", category: "home_daily_life", meaning: "Blue (noun)", notes: "Màu xanh dương" },
+  { id: "color-aoi", word: "あおい", kanji: "青い", romaji: "Aoi", level: "n5", script: "hiragana", category: "home_daily_life", meaning: "Blue (adjective)", notes: "Xanh dương" },
+  { id: "color-kiiro", word: "きいろ", kanji: "黄色", romaji: "Kiiro", level: "n5", script: "hiragana", category: "home_daily_life", meaning: "Yellow (noun)", notes: "Màu vàng" },
+  { id: "color-kiiroi", word: "きいろい", kanji: "黄色い", romaji: "Kiiroi", level: "n5", script: "hiragana", category: "home_daily_life", meaning: "Yellow (adjective)", notes: "Vàng" },
+  { id: "color-kuro", word: "くろ", kanji: "黒", romaji: "Kuro", level: "n5", script: "hiragana", category: "home_daily_life", meaning: "Black (noun)", notes: "Màu đen" },
+  { id: "color-kuroi", word: "くろい", kanji: "黒い", romaji: "Kuroi", level: "n5", script: "hiragana", category: "home_daily_life", meaning: "Black (adjective)", notes: "Đen" },
+  { id: "color-shiro", word: "しろ", kanji: "白", romaji: "Shiro", level: "n5", script: "hiragana", category: "home_daily_life", meaning: "White (noun)", notes: "Màu trắng" },
+  { id: "color-shiroi", word: "しろい", kanji: "白い", romaji: "Shiroi", level: "n5", script: "hiragana", category: "home_daily_life", meaning: "White (adjective)", notes: "Trắng" },
+  { id: "color-midori", word: "みどり", kanji: "緑", romaji: "Midori", level: "n5", script: "hiragana", category: "home_daily_life", meaning: "Green", notes: "Màu xanh lá cây" },
+  { id: "color-murasaki", word: "むらさき", kanji: "紫", romaji: "Murasaki", level: "n5", script: "hiragana", category: "home_daily_life", meaning: "Purple", notes: "Màu tím" },
+  { id: "color-chairo", word: "ちゃいろ", kanji: "茶色", romaji: "Chairo", level: "n5", script: "hiragana", category: "home_daily_life", meaning: "Brown", notes: "Màu nâu" },
+  { id: "color-pinku", word: "ピンク", kanji: "ぴんく", romaji: "Pinku", level: "n5", script: "katakana", category: "home_daily_life", meaning: "Pink", notes: "Màu hồng" },
+  { id: "color-orenji", word: "オレンジ", kanji: "おれんじ", romaji: "Orenji", level: "n5", script: "katakana", category: "home_daily_life", meaning: "Orange", notes: "Màu cam" },
+  { id: "color-haiiro", word: "はいいろ", kanji: "灰色", romaji: "Haiiro", level: "n5", script: "hiragana", category: "home_daily_life", meaning: "Gray", notes: "Màu xám" },
+  { id: "color-mizuiro", word: "みずいろ", kanji: "水色", romaji: "Mizuiro", level: "n5", script: "hiragana", category: "home_daily_life", meaning: "Light blue", notes: "Màu xanh da trời" },
+  { id: "color-kin", word: "きんいろ", kanji: "金色", romaji: "Kiniro", level: "n5", script: "hiragana", category: "home_daily_life", meaning: "Gold", notes: "Màu vàng kim" },
+  { id: "color-gin", word: "ぎんいろ", kanji: "銀色", romaji: "Giniro", level: "n5", script: "hiragana", category: "home_daily_life", meaning: "Silver", notes: "Màu bạc" },
+];
+
 const dayWordsSet = new Set(DAYS_OF_THE_MONTH.map((d) => d.word));
 const countryWordsSet = new Set(COUNTRY_WORDS.map((c) => c.word));
+const colorWordsSet = new Set(COLOR_WORDS.map((c) => c.word));
 
 const baseMappedWords: Word[] = (jlptWordsRaw as Word[])
-  .filter((w) => !dayWordsSet.has(w.word) && !countryWordsSet.has(w.word))
+  .filter((w) => !dayWordsSet.has(w.word) && !countryWordsSet.has(w.word) && !colorWordsSet.has(w.word))
   .map((w) => {
     const mappedKanji = KANJI_MAP[w.word];
     if (mappedKanji && !w.kanji) {
@@ -397,7 +428,8 @@ const baseMappedWords: Word[] = (jlptWordsRaw as Word[])
     return w;
   });
 
-export const wordList: Word[] = [...DAYS_OF_THE_MONTH, ...COUNTRY_WORDS, ...baseMappedWords];
+export const wordList: Word[] = [...DAYS_OF_THE_MONTH, ...COUNTRY_WORDS, ...COLOR_WORDS, ...baseMappedWords];
+
 
 
 
@@ -456,6 +488,7 @@ export const CATEGORY_LABELS_VI: Record<WordCategory, string> = {
 };
 
 export const SUB_CATEGORY_LABELS: Record<string, Record<"en" | "vi", string>> = {
+  "Colors & Appearance": { en: "Colors & Appearance", vi: "Màu sắc & Diện mạo" },
   "Countries & Nations": { en: "Countries & Nations", vi: "Tên các quốc gia" },
   "Days of the Month": { en: "Days of the Month", vi: "Ngày trong tháng" },
   "Days of the Week": { en: "Days of the Week", vi: "Các ngày trong tuần" },
@@ -485,7 +518,7 @@ export function getWordMeaning(word: Word, lang: "en" | "vi"): string {
     const dayNum = word.id.replace("day-", "");
     if (lang === "vi") return `Ngày ${dayNum} trong tháng`;
   }
-  if (word.id.startsWith("country-") && word.notes && lang === "vi") {
+  if ((word.id.startsWith("country-") || word.id.startsWith("color-")) && word.notes && lang === "vi") {
     return word.notes;
   }
   return word.meaning;
@@ -499,8 +532,12 @@ export function getWordNotes(word: Word, lang: "en" | "vi"): string | undefined 
   if (word.id.startsWith("country-")) {
     return lang === "vi" ? "Tên quốc gia" : "Country name";
   }
+  if (word.id.startsWith("color-")) {
+    return lang === "vi" ? "Từ vựng màu sắc" : "Color word";
+  }
   return word.notes;
 }
+
 
 
 export const DIFFICULTY_JLPT_MAP: Record<WordDifficulty, JlptLevel[]> = {

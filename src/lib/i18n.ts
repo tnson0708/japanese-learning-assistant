@@ -177,7 +177,8 @@ export const translations = {
     vocab_sub_category: "Sub-Category",
     vocab_all_topics: "All Topics",
     vocab_all_subcats: "All Sub-categories",
-    vocab_search_placeholder: "Search vocabulary, kanji, romaji...",
+    vocab_search_placeholder: "Search words, topics, categories, romaji, or meanings...",
+
     vocab_showing: "Showing",
     vocab_words: "words",
     vocab_per_page: "Per page:",
@@ -378,7 +379,8 @@ export const translations = {
     vocab_sub_category: "Phân loại nhỏ",
     vocab_all_topics: "Tất cả chủ đề",
     vocab_all_subcats: "Tất cả phân loại nhỏ",
-    vocab_search_placeholder: "Tìm từ vựng, hán tự, romaji, nghĩa...",
+    vocab_search_placeholder: "Tìm từ vựng, chủ đề, danh mục, romaji hoặc nghĩa...",
+
     vocab_showing: "Hiển thị",
     vocab_words: "từ",
     vocab_per_page: "Mỗi trang:",

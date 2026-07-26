@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-Assign a 'category' to every word in jlpt-words.json.
-Uses substring matching on Vietnamese meaning + romaji patterns.
+Assign a 'category' to every word in jlpt-words.json using regex word-boundaries (\b)
+on Vietnamese meaning + romaji/kana patterns.
 """
 
 import json, re
@@ -10,494 +10,188 @@ from pathlib import Path
 ROOT = Path(__file__).parent.parent
 DATA = ROOT / "src" / "data" / "jlpt-words.json"
 
-# ── Category rules: (category, [(field, substring), ...]) ────────────────────
-# field: 'v' = Vietnamese meaning, 'r' = romaji
-# All substrings are checked; first matching category wins.
-
+# Rules list in order of evaluation. First matching category wins.
 RULES = [
-    # Time – check early (many time words are short/common)
+    # 1. Time & Calendar
     ("time_calendar", [
-        ("v", "giờ"), ("v", "phút"), ("v", "giây"),
-        ("v", "buổi sáng"), ("v", "buổi trưa"), ("v", "buổi chiều"),
-        ("v", "buổi tối"), ("v", "ban đêm"), ("v", "sáng sớm"),
-        ("v", "hôm nay"), ("v", "ngày mai"), ("v", "hôm qua"),
-        ("v", "ngày kia"), ("v", "hôm kia"),
-        ("v", "tuần này"), ("v", "tháng này"), ("v", "năm nay"),
-        ("v", "tuần tới"), ("v", "tháng tới"), ("v", "năm tới"),
-        ("v", "tuần trước"), ("v", "tháng trước"), ("v", "năm ngoái"),
-        ("v", "mùa xuân"), ("v", "mùa hè"), ("v", "mùa thu"), ("v", "mùa đông"),
-        ("v", "thứ hai"), ("v", "thứ ba"), ("v", "thứ tư"),
-        ("v", "thứ năm"), ("v", "thứ sáu"), ("v", "thứ bảy"), ("v", "chủ nhật"),
-        ("v", "tháng một"), ("v", "tháng hai"), ("v", "tháng ba"),
-        ("v", "tháng tư"), ("v", "tháng năm"), ("v", "tháng sáu"),
-        ("v", "tháng bảy"), ("v", "tháng tám"), ("v", "tháng chín"),
-        ("v", "tháng mười"), ("v", "năm mới"), ("v", "tết"),
-        ("v", "khoảng thời gian"), ("v", "thời gian"),
-        ("v", "bây giờ"), ("v", "lúc này"), ("v", "hiện tại"),
-        ("v", "quá khứ"), ("v", "tương lai"), ("v", "lịch"),
-        ("v", "bất cứ lúc nào"), ("v", "sắp, đến lúc"),
-        ("r", "gatsu"), ("r", "nichi"), ("r", "youbi"),
-        ("r", "jikan"), ("r", "fun"), ("r", "pun"),
-        ("r", "asa"), ("r", "hiru"), ("r", "yoru"), ("r", "ban"),
-        ("r", "kyou"), ("r", "ashita"), ("r", "kinou"),
-        ("r", "konshu"), ("r", "kongetsu"), ("r", "kotoshi"),
-        ("r", "raishu"), ("r", "raigetsu"), ("r", "rainen"),
-        ("r", "senshu"), ("r", "sengetsu"), ("r", "sakunen"),
-        ("r", "haru"), ("r", "natsu"), ("r", "aki"), ("r", "fuyu"),
-        ("r", "gozen"), ("r", "gogo"), ("r", "ima"),
+        (r"\b(giờ|phút|giây|buổi sáng|buổi trưa|buổi chiều|buổi tối|ban đêm|sáng sớm|nửa đêm)\b", "v"),
+        (r"\b(hôm nay|ngày mai|hôm qua|ngày kia|hôm kia)\b", "v"),
+        (r"\b(tuần này|tháng này|năm nay|tuần tới|tháng tới|năm tới|tuần trước|tháng trước|năm ngoái)\b", "v"),
+        (r"\b(mùa xuân|mùa hè|mùa thu|mùa đông)\b", "v"),
+        (r"\b(thứ hai|thứ ba|thứ tư|thứ năm|thứ sáu|thứ bảy|chủ nhật)\b", "v"),
+        (r"\b(tháng một|tháng hai|tháng ba|tháng tư|tháng năm|tháng sáu|tháng bảy|tháng tám|tháng chín|tháng mười|tháng 11|tháng 12|năm mới|tết)\b", "v"),
+        (r"\b(khoảng thời gian|thời gian|bây giờ|lúc này|hiện tại|quá khứ|tương lai|lịch)\b", "v"),
+        (r"\b(mùng một|mùng hai|mùng ba|mùng bốn|mùng năm|mùng sáu|mùng bảy|mùng tám|mùng chín|mùng mười)\b", "v"),
+        (r"\b(ngày mùng|mấy ngày)\b", "v"),
+        (r"\b(gatsu|youbi|jikan|fun|pun|asa|hiru|yoru|kyou|ashita|kinou|konshu|kongetsu|kotoshi|raishu|raigetsu|rainen|senshu|sengetsu|sakunen|haru|natsu|aki|fuyu|gozen|gogo)\b", "r"),
+        (r"^(ふつか|みっか|よっか|いつか|むいか|<ctrl42>のか|ようか|ここのか|とおか|はつか|ついたち)$", "w"),
     ]),
 
-    # Numbers
+    # 2. Numbers & Counting
     ("numbers_counting", [
-        ("v", "một"), ("v", "hai mươi"), ("v", "ba mươi"),
-        ("v", "trăm"), ("v", "nghìn"), ("v", "vạn"), ("v", "triệu"),
-        ("v", "mấy lần"), ("v", "ngày mấy"), ("v", "mấy ngày"),
-        ("v", "mấy độ"), ("v", "số lượng"), ("v", "bao nhiêu"),
-        ("v", "đếm"), ("v", "con số"),
-        ("r", "futatsu"), ("r", "mittsu"), ("r", "yottsu"), ("r", "itsutsu"),
-        ("r", "muttsu"), ("r", "nanatsu"), ("r", "yattsu"), ("r", "kokonotsu"),
-        ("r", "suuryou"), ("r", "kazu"),
+        (r"\b(một|hai|ba|bốn|năm|sáu|bảy|tám|chín|mười|trăm|nghìn|vạn|triệu|tỷ)\b", "v"),
+        (r"\b(hai mươi|ba mươi|bốn mươi|năm mươi|sáu mươi|bảy mươi|tám mươi|chín mươi)\b", "v"),
+        (r"\b(số|con số|số lượng|đếm|bao nhiêu|mấy|mấy lần|mấy độ|số không)\b", "v"),
+        (r"\b(ichi|ni|san|yon|roku|nana|hachi|kyuu|juu|nijuu|hyaku|sen|man|futatsu|mittsu|yottsu|itsutsu|muttsu|nanatsu|yattsu|kokonotsu|too|suuryou|kazu|zero|rei)\b", "r"),
+        (r"^(いち|に|さん|よん|ご|ろく|なな|しち|はち|きゅう|く|じゅう|ひとつ|ふたつ|みっつ|よっつ|いつつ|むっつ|ななつ|やつ|ここのつ|とお)$", "w"),
     ]),
 
-    # Family & People
+    # 3. Family & People
     ("family_people", [
-        ("v", "bố"), ("v", "mẹ"), ("v", "cha"), ("v", "con trai"), ("v", "con gái"),
-        ("v", "anh trai"), ("v", "chị gái"), ("v", "em trai"), ("v", "em gái"),
-        ("v", "ông"), ("v", "bà"), ("v", "chú"), ("v", "bác"), ("v", "dì"), ("v", "cô"),
-        ("v", "gia đình"), ("v", "bạn bè"), ("v", "kết hôn"), ("v", "vợ"), ("v", "chồng"),
-        ("v", "bé trai"), ("v", "bé gái"), ("v", "trẻ em"),
-        ("v", "người nhật"), ("v", "người nước ngoài"),
-        ("v", "cô ấy"), ("v", "anh ấy"), ("v", "bạn gái"), ("v", "bạn trai"),
-        ("v", "hàng xóm"), ("v", "khách (người)"), ("v", "thanh niên"),
-        ("v", "nữ giới"), ("v", "nam giới"),
-        ("v", "con của bạn"), ("v", "vợ của bạn"),
-        ("v", "người thân"), ("v", "cặp đôi"),
-        ("r", "kazoku"), ("r", "tomodachi"), ("r", "kodomo"),
-        ("r", "josei"), ("r", "dansei"),
-        ("r", "musuko"), ("r", "musume"),
-        ("r", "sofu"), ("r", "sobo"),
-        ("r", "oji"), ("r", "oba"),
-        ("r", "nihonjin"), ("r", "gaikokujin"),
-        ("r", "watashi"), ("r", "boku"), ("r", "anata"), ("r", "kimi"),
-        ("r", "kare"), ("r", "kanojo"),
-        ("r", "otokonoko"), ("r", "onnanoko"),
-        ("r", "otousan"), ("r", "okaasan"), ("r", "oniisan"), ("r", "oneesan"),
-        ("r", "otouto"), ("r", "imouto"),
+        (r"\b(bố|mẹ|cha|con trai|con gái|anh trai|chị gái|em trai|em gái|ông|bà|chú|bác|dì|cô|cậu|dượng|thím)\b", "v"),
+        (r"\b(gia đình|bạn bè|kết hôn|vợ|chồng|bé trai|bé gái|trẻ em|người nhật|người nước ngoài|cô ấy|anh ấy|bạn gái|bạn trai|hàng xóm|khách|thanh niên|nữ giới|nam giới|ông bà|cha mẹ|quý ông|quý bà|nhân loại)\b", "v"),
+        (r"\b(giáo viên|thầy giáo|cô giáo|thầy/cô|học sinh|sinh viên|người)\b", "v"),
+        (r"\b(kazoku|tomodachi|kodomo|josei|dansei|musuko|musume|sofu|sobo|oji|oba|nihonjin|gaikokujin|watashi|boku|anata|kimi|kare|kanojo|otokonoko|onnanoko|otousan|okaasan|oniisan|oneesan|otouto|imouto|sensei|gakusei|seito|hito)\b", "r"),
     ]),
 
-    # Body & Health
+    # 4. Body & Health
     ("body_health", [
-        ("v", "mắt"), ("v", "tai"), ("v", "mũi"), ("v", "miệng"),
-        ("v", "ngón tay"), ("v", "ngón chân"),
-        ("v", "đầu"), ("v", "cổ"), ("v", "vai"), ("v", "ngực"), ("v", "bụng"), ("v", "lưng"),
-        ("v", "bệnh viện"), ("v", "bác sĩ"), ("v", "y tá"), ("v", "thuốc"),
-        ("v", "sức khỏe"), ("v", "cơ thể"), ("v", "thân thể"),
-        ("v", "cảm cúm"), ("v", "cảm lạnh"), ("v", "sốt"), ("v", "đau"),
-        ("v", "bị thương"), ("v", "chữa bệnh"), ("v", "phẫu thuật"),
-        ("v", "khỏe mạnh"), ("v", "bệnh tật"), ("v", "triệu chứng"),
-        ("r", "karada"), ("r", "byouki"), ("r", "kenko"),
-        ("r", "byouin"), ("r", "isha"), ("r", "kusuri"),
-        ("r", "atama"), ("r", "nodo"), ("r", "mune"), ("r", "hara"),
-        ("r", "me"), ("r", "mimi"), ("r", "hana"), ("r", "kuchi"),
-        ("r", "ude"), ("r", "koshi"), ("r", "senaka"),
+        (r"\b(mắt|tai|mũi|miệng|ngón tay|ngón chân|đầu|cổ|vai|ngực|bụng|lưng|cánh tay|chân|răng|tóc|tim|gan|phổi)\b", "v"),
+        (r"\b(bệnh viện|bác sĩ|y tá|thuốc|sức khỏe|cơ thể|thân thể|cảm cúm|cảm lạnh|sốt|đau|bị thương|chữa bệnh|phẫu thuật|khỏe mạnh|bệnh tật|triệu chứng)\b", "v"),
+        (r"\b(karada|byouki|kenko|byouin|isha|kusuri|atama|nodo|mune|hara|me|mimi|hana|kuchi|ude|koshi|senaka|ashi|ha)\b", "r"),
     ]),
 
-    # Food & Drink
+    # 5. Food & Drink
     ("food_drink", [
-        ("v", "ăn"), ("v", "uống"),
-        ("v", "nước uống"), ("v", "nước lọc"), ("v", "nước (uống)"),
-        ("v", "trà"), ("v", "cơm"), ("v", "bánh mì"), ("v", "thịt"), ("v", "cá"),
-        ("v", "rau"), ("v", "hoa quả"), ("v", "trứng"), ("v", "pizza"),
-        ("v", "salad"), ("v", "súp"),
-        ("v", "bữa ăn"), ("v", "bữa sáng"), ("v", "bữa trưa"), ("v", "bữa tối"),
-        ("v", "cà phê"), ("v", "sữa"), ("v", "bia"), ("v", "rượu"),
-        ("v", "nước trái cây"), ("v", "thực phẩm"), ("v", "đồ ăn"), ("v", "đồ uống"),
-        ("v", "kem"), ("v", "muối"), ("v", "đường (ngọt)"), ("v", "nước tương"),
-        ("v", "cà chua"), ("v", "cà rốt"), ("v", "hành tây"), ("v", "khoai tây"),
-        ("v", "chuối"), ("v", "táo"), ("v", "dâu tây"),
-        ("v", "sushi"), ("v", "ramen"), ("v", "udon"), ("v", "soba"), ("v", "đậu phụ"),
-        ("v", "cơm nắm"), ("v", "cơm hộp"), ("v", "thực đơn"),
-        ("v", "ngon"), ("v", "cay"), ("v", "ngọt"), ("v", "đắng"), ("v", "mặn"),
-        ("v", "bánh quy"), ("v", "kẹo cao su"), ("v", "mứt"),
-        ("v", "bánh kem"), ("v", "bánh"),
-        ("r", "taberu"), ("r", "nomu"), ("r", "shokuji"),
-        ("r", "gohan"), ("r", "pan"), ("r", "sushi"), ("r", "soba"),
-        ("r", "ramen"), ("r", "udon"), ("r", "tofu"),
-        ("r", "kohii"), ("r", "miruku"), ("r", "gyuunyuu"), ("r", "juusu"),
-        ("r", "biiru"), ("r", "sake"), ("r", "wain"),
-        ("r", "yasai"), ("r", "kudamono"), ("r", "tamago"),
-        ("r", "shio"), ("r", "satou"), ("r", "shouyu"),
-        ("r", "ringo"), ("r", "ichigo"), ("r", "banana"),
+        (r"\b(bữa ăn|bữa sáng|bữa trưa|bữa tối|đồ ăn|đồ uống|thực phẩm|nước|nước uống|nước lọc)\b", "v"),
+        (r"\b(cơm|bánh mì|thịt|cá|rau|hoa quả|trái cây|trứng|pizza|salad|súp|cà phê|sữa|bia|rượu|nước trái cây|kem|muối|đường|nước tương|cà chua|cà rốt|hành tây|khoai tây|chuối|táo|dâu tây|sushi|ramen|udon|soba|đậu phụ|cơm nắm|cơm hộp|thực đơn|mứt|bánh quy|kẹo)\b", "v"),
+        (r"\b(ngon|cay|ngọt|đắng|mặn)\b", "v"),
+        (r"\b(taberu|nomu|shokuji|gohan|pan|sushi|soba|ramen|udon|tofu|kohii|miruku|gyuunyuu|juusu|biiru|sake|wain|yasai|kudamono|tamago|shio|satou|shouyu|ringo|ichigo|banana|mizu)\b", "r"),
+        (r"^(みず)$", "w"),
     ]),
 
-    # Home & Daily Life
+    # 6. Home & Daily Life
     ("home_daily_life", [
-        ("v", "nhà ở"), ("v", "căn nhà"), ("v", "phòng"), ("v", "cửa ra vào"),
-        ("v", "cửa sổ"), ("v", "vườn"), ("v", "bếp"), ("v", "phòng tắm"),
-        ("v", "nhà vệ sinh"), ("v", "lối vào"), ("v", "sàn nhà"), ("v", "tường"),
-        ("v", "dọn dẹp"), ("v", "giặt đồ"), ("v", "nấu ăn"),
-        ("v", "ngủ"), ("v", "thức dậy"),
-        ("v", "sống"), ("v", "sinh sống"), ("v", "cuộc sống hàng ngày"),
-        ("v", "đồ đạc"), ("v", "bàn (đồ vật)"), ("v", "ghế"), ("v", "sofa"),
-        ("v", "giường"), ("v", "tủ lạnh"), ("v", "bát đĩa"),
-        ("v", "cốc"), ("v", "ly"), ("v", "chăn"), ("v", "gối"), ("v", "khăn"),
-        ("v", "chuyển nhà"), ("v", "đèn điện"), ("v", "điều hòa"),
-        ("v", "đồ bỏ quên"), ("v", "cất đi, dọn"), ("v", "rác"),
-        ("r", "ie"), ("r", "uchi"), ("r", "heya"),
-        ("r", "daidokoro"), ("r", "furo"), ("r", "toire"),
-        ("r", "genkan"), ("r", "niwa"),
-        ("r", "souji"), ("r", "sentaku"), ("r", "ryouri"),
-        ("r", "neru"), ("r", "okiru"), ("r", "sumu"),
-        ("r", "beddo"), ("r", "reizouko"), ("r", "sofaa"),
-        ("r", "wasuremono"), ("r", "gomi"), ("r", "shimau"),
-        ("r", "futon"), ("r", "kagu"),
-        ("r", "sara"), ("r", "chawan"), ("r", "koppu"),
+        (r"\b(nhà ở|căn nhà|phòng|cửa ra vào|cửa sổ|vườn|bếp|phòng tắm|nhà vệ sinh|lối vào|sàn nhà|tường)\b", "v"),
+        (r"\b(dọn dẹp|giặt đồ|nấu ăn|ngủ|thức dậy|sinh sống|cuộc sống)\b", "v"),
+        (r"\b(đồ đạc|bàn|ghế|sofa|giường|tủ lạnh|bát đĩa|cốc|ly|chăn|gối|khăn|đèn điện|điều hòa|rác)\b", "v"),
+        (r"\b(ie|uchi|heya|daidokoro|furo|toire|genkan|niwa|souji|sentaku|ryouri|neru|okiru|sumu|beddo|reizouko|sofaa|futon|kagu|sara|chawan|koppu)\b", "r"),
     ]),
 
-    # Clothing & Appearance
+    # 7. Clothing & Appearance
     ("clothing_appearance", [
-        ("v", "quần áo"), ("v", "áo sơ mi"), ("v", "cà vạt"), ("v", "tất"), ("v", "giày"),
-        ("v", "dép"), ("v", "mũ"), ("v", "kính mắt"), ("v", "túi xách"), ("v", "ví"),
-        ("v", "kimono"), ("v", "áo khoác"), ("v", "đồng phục"),
-        ("v", "trang phục"), ("v", "vẻ ngoài"), ("v", "khuôn mặt"),
-        ("v", "tóc"), ("v", "trang điểm"), ("v", "ô, dù"), ("v", "ô (dù)"),
-        ("v", "bộ vest"), ("v", "vali"),
-        ("r", "fuku"), ("r", "shatsu"), ("r", "kutsu"), ("r", "boushi"),
-        ("r", "megane"), ("r", "kaban"), ("r", "saifu"),
-        ("r", "kimono"), ("r", "yukata"), ("r", "kooto"),
-        ("r", "kasa"), ("r", "suutsu"), ("r", "suutsukeesu"),
-        ("r", "nekutai"), ("r", "kutsushita"),
+        (r"\b(quần áo|áo sơ mi|cà vạt|tất|giày|dép|mũ|kính mắt|túi xách|ví|kimono|áo khoác|đồng phục|trang phục|vẻ ngoài|khuôn mặt|trang điểm|ô|dù|bộ vest|vali)\b", "v"),
+        (r"\b(fuku|shatsu|kutsu|boushi|megane|kaban|saifu|kimono|yukata|kooto|kasa|suutsu|suutsukeesu|nekutai|kutsushita)\b", "r"),
     ]),
 
-    # Nature & Weather
+    # 8. Nature & Weather
     ("nature_weather", [
-        ("v", "thời tiết"), ("v", "mưa"), ("v", "nắng"), ("v", "mây"),
-        ("v", "tuyết"), ("v", "gió"), ("v", "sấm chớp"), ("v", "bão"), ("v", "động đất"),
-        ("v", "biển"), ("v", "núi"), ("v", "sông"), ("v", "rừng"), ("v", "bầu trời"),
-        ("v", "sao (thiên văn)"), ("v", "mặt trăng"), ("v", "mặt trời"),
-        ("v", "thiên nhiên"), ("v", "hoa anh đào"),
-        ("r", "tenki"), ("r", "ame"), ("r", "hare"), ("r", "kumo"), ("r", "yuki"),
-        ("r", "kaze"), ("r", "kaminari"), ("r", "taifuu"), ("r", "jishin"),
-        ("r", "umi"), ("r", "yama"), ("r", "kawa"), ("r", "mori"), ("r", "sora"),
-        ("r", "hoshi"), ("r", "taiyou"), ("r", "shizen"), ("r", "sakura"),
+        (r"\b(thời tiết|mưa|nắng|mây|tuyết|gió|sấm chớp|bão|động đất|biển|núi|sông|rừng|bầu trời|sao|mặt trăng|mặt trời|thiên nhiên|hoa anh đào)\b", "v"),
+        (r"\b(tenki|ame|hare|kumo|yuki|kaze|kaminari|taifuu|jishin|umi|yama|kawa|mori|sora|hoshi|taiyou|shizen|sakura)\b", "r"),
     ]),
 
-    # Animals & Plants
+    # 9. Animals & Plants
     ("animals_plants", [
-        ("v", "chó"), ("v", "mèo"), ("v", "chim"), ("v", "ngựa"), ("v", "bò"),
-        ("v", "lợn"), ("v", "heo"), ("v", "khỉ"), ("v", "thỏ"), ("v", "rùa"),
-        ("v", "rắn"), ("v", "ếch"), ("v", "gấu"), ("v", "hổ"),
-        ("v", "động vật"), ("v", "thực vật"), ("v", "hoa"), ("v", "cây"), ("v", "cỏ"), ("v", "lá"),
-        ("v", "côn trùng"), ("v", "bướm"), ("v", "muỗi"),
-        ("r", "inu"), ("r", "neko"), ("r", "tori"), ("r", "uma"), ("r", "ushi"),
-        ("r", "buta"), ("r", "saru"), ("r", "usagi"), ("r", "kame"), ("r", "hebi"),
-        ("r", "kaeru"), ("r", "tora"), ("r", "kuma"),
-        ("r", "doubutsu"), ("r", "shokubutsu"),
+        (r"\b(chó|mèo|chim|ngựa|bò|lợn|heo|khỉ|thỏ|rùa|rắn|ếch|gấu|hổ|động vật|thực vật|hoa|cây|cỏ|lá|côn trùng|bướm|muỗi)\b", "v"),
+        (r"\b(inu|neko|tori|uma|ushi|buta|saru|usagi|kame|hebi|kaeru|tora|kuma|doubutsu|shokubutsu)\b", "r"),
     ]),
 
-    # Places & Directions
-    ("places_directions", [
-        ("v", "nhà ga"), ("v", "ngân hàng"), ("v", "bưu điện"), ("v", "hiệu sách"),
-        ("v", "siêu thị"), ("v", "công viên"), ("v", "nhà máy"),
-        ("v", "trường tiểu học"), ("v", "trường trung học"), ("v", "đại học"),
-        ("v", "đông (hướng)"), ("v", "tây (hướng)"), ("v", "nam (hướng)"), ("v", "bắc (hướng)"),
-        ("v", "bên phải"), ("v", "bên trái"), ("v", "phía bên trái"), ("v", "phía bên phải"),
-        ("v", "phía trên"), ("v", "phía dưới"),
-        ("v", "phía trước"), ("v", "phía sau"),
-        ("v", "bên trong"), ("v", "bên ngoài"),
-        ("v", "bên cạnh"), ("v", "kế bên"),
-        ("v", "thành phố"), ("v", "làng"), ("v", "đảo"), ("v", "quốc gia"),
-        ("v", "nhật bản"), ("v", "trung quốc"), ("v", "nước ngoài"),
-        ("v", "tiếng trung"), ("v", "ngoại ngữ"),
-        ("v", "khu phố"), ("v", "thị trấn"), ("v", "địa điểm"),
-        ("v", "sân ga"), ("v", "cảnh sát"),
-        ("v", "phía nào, đâu"), ("v", "phía nào"),
-        ("v", "bên này"), ("v", "bên nào"),
-        ("r", "eki"), ("r", "ginkou"), ("r", "yuubinkyoku"),
-        ("r", "kouen"), ("r", "koujo"),
-        ("r", "daigaku"), ("r", "koukou"), ("r", "shougakkou"),
-        ("r", "higashi"), ("r", "nishi"), ("r", "minami"), ("r", "kita"),
-        ("r", "migi"), ("r", "hidari"), ("r", "ue"), ("r", "shita"),
-        ("r", "soto"), ("r", "naka"), ("r", "mae"), ("r", "ushiro"),
-        ("r", "koko"), ("r", "soko"), ("r", "asoko"),
-        ("r", "machi"), ("r", "shigai"), ("r", "mura"), ("r", "shima"),
-        ("r", "kuni"), ("r", "nihon"), ("r", "chuugoku"), ("r", "gaikoku"),
-        ("r", "tonari"), ("r", "keisatsu"),
-        ("r", "hoomu"),  # station platform
-    ]),
-
-    # Transportation
+    # 10. Transportation & Travel
     ("transportation_travel", [
-        ("v", "tàu điện"), ("v", "xe buýt"), ("v", "taxi"), ("v", "máy bay"),
-        ("v", "tàu thủy"), ("v", "ô tô"), ("v", "xe đạp"),
-        ("v", "tàu cao tốc"), ("v", "tàu điện ngầm"), ("v", "xe máy"),
-        ("v", "thang máy"), ("v", "thang cuốn"),
-        ("v", "đường bộ"), ("v", "ngã tư"), ("v", "đèn giao thông"),
-        ("v", "du lịch"), ("v", "khách sạn"), ("v", "vé tàu"), ("v", "vé xe"),
-        ("v", "lên xe, đi bằng"), ("v", "lên xe"), ("v", "xuống xe"),
-        ("v", "về, trở về"), ("v", "khởi hành"), ("v", "đến nơi"),
-        ("r", "densha"), ("r", "basu"), ("r", "takushii"), ("r", "hikouki"),
-        ("r", "fune"), ("r", "jidousha"), ("r", "jitensha"),
-        ("r", "shinkansen"), ("r", "chikatetsu"),
-        ("r", "noru"), ("r", "oriru"),
-        ("r", "ryokou"), ("r", "hoteru"),
-        ("r", "ootobai"), ("r", "erebeetaa"),
+        (r"\b(tàu điện|xe buýt|taxi|máy bay|tàu thủy|ô tô|xe đạp|tàu cao tốc|tàu điện ngầm|xe máy|thang máy|thang cuốn|đường bộ|ngã tư|đèn giao thông|du lịch|khách sạn|vé tàu|vé xe|xe hơi|xe)\b", "v"),
+        (r"\b(lên xe|xuống xe|bến xe|sân bay)\b", "v"),
+        (r"\b(densha|basu|takushii|hikouki|fune|jidousha|jitensha|shinkansen|chikatetsu|ryokou|hoteru|ootobai|erebeetaa|kuruma)\b", "r"),
+        (r"^(くるま)$", "w"),
     ]),
 
-    # School & Work
+    # 11. School & Work
     ("school_work", [
-        ("v", "trường học"), ("v", "giáo viên"), ("v", "học sinh"), ("v", "sinh viên"),
-        ("v", "toán học"), ("v", "lịch sử"), ("v", "tiếng anh"), ("v", "tiếng nhật"),
-        ("v", "lớp học"), ("v", "bảng đen"), ("v", "bút chì"), ("v", "vở ghi"),
-        ("v", "từ điển"), ("v", "sách giáo khoa"),
-        ("v", "bài tập về nhà"), ("v", "bài kiểm tra"), ("v", "điểm số"),
-        ("v", "công việc"), ("v", "công ty"), ("v", "nhân viên"), ("v", "họp"),
-        ("v", "công chức"), ("v", "nơi làm việc"), ("v", "văn phòng"),
-        ("v", "ứng tuyển"), ("v", "lương"),
-        ("r", "gakkou"), ("r", "sensei"), ("r", "seito"), ("r", "gakusei"),
-        ("r", "kyoushitsu"), ("r", "enpitsu"), ("r", "nooto"), ("r", "jisho"),
-        ("r", "shukudai"), ("r", "shiken"),
-        ("r", "shigoto"), ("r", "kaisha"), ("r", "kaigi"), ("r", "hataraku"),
+        (r"\b(trường học|lớp học|bảng đen|bút chì|vở ghi|từ điển|sách giáo khoa|bài tập về nhà|bài kiểm tra|điểm số)\b", "v"),
+        (r"\b(công việc|công ty|nhân viên|họp|công chức|nơi làm việc|văn phòng|ứng tuyển|lương|đồng nghiệp|giám đốc|trưởng phòng|báo cáo)\b", "v"),
+        (r"\b(kyoushitsu|enpitsu|nooto|jisho|shukudai|shiken|shigoto|kaisha|kaigi|hataraku|houkoku)\b", "r"),
     ]),
 
-    # Technology
-    ("technology_communication", [
-        ("v", "điện thoại"), ("v", "điện thoại di động"), ("v", "điện thoại thông minh"),
-        ("v", "máy tính"), ("v", "internet"), ("v", "email"),
-        ("v", "radio"), ("v", "ảnh chụp"), ("v", "máy ảnh"),
-        ("v", "liên lạc"), ("v", "truyền thông"),
-        ("v", "chụp ảnh"), ("v", "mạng xã hội"), ("v", "dịch vụ"),
-        ("v", "tivi"), ("v", "ti vi"),
-        ("r", "denwa"), ("r", "keitai"), ("r", "sumaho"), ("r", "pasokon"),
-        ("r", "terebi"), ("r", "rajio"), ("r", "shashin"), ("r", "kamera"),
-        ("r", "saabisu"),
-    ]),
-
-    # Money & Shopping
+    # 12. Money & Shopping
     ("money_shopping", [
-        ("v", "mua sắm"), ("v", "mua hàng"), ("v", "bán hàng"), ("v", "tiền"),
-        ("v", "giá cả"), ("v", "rẻ"), ("v", "đắt tiền"), ("v", "ví tiền"),
-        ("v", "cửa hàng"), ("v", "thanh toán"), ("v", "giá"), ("v", "đồng yên"),
-        ("v", "thẻ tín dụng"), ("v", "chi tiêu"), ("v", "ngân sách"),
-        ("v", "giảm giá"), ("v", "cửa hàng tiện lợi"), ("v", "miễn phí"),
-        ("v", "quà tặng"),
-        ("r", "kaimono"), ("r", "okane"), ("r", "nedan"), ("r", "kakaku"),
-        ("r", "yasui"), ("r", "takai"),
-        ("r", "kurejittokaado"), ("r", "purezento"),
+        (r"\b(mua sắm|mua hàng|bán hàng|tiền|giá cả|rẻ|đắt tiền|ví tiền|cửa hàng|thanh toán|giá|đồng yên|thẻ tín dụng|chi tiêu|ngân sách|giảm giá|cửa hàng tiện lợi|miễn phí|quà tặng|rút tiền)\b", "v"),
+        (r"\b(kaimono|okane|nedan|kakaku|yasui|takai|kurejittokaado|purezento)\b", "r"),
     ]),
 
-    # Emotions & Personality
+    # 13. Places & Directions
+    ("places_directions", [
+        (r"\b(nhà ga|ngân hàng|bưu điện|hiệu sách|siêu thị|công viên|nhà máy|trường tiểu học|trường trung học|đại học|thành phố|làng|đảo|quốc gia|nhật bản|trung quốc|nước ngoài|khu phố|thị trấn|địa điểm|sân ga|cảnh sát)\b", "v"),
+        (r"\b(đông|tây|nam|bắc|bên phải|bên trái|phía bên trái|phía bên phải|phía trên|phía dưới|phía trước|phía sau|bên trong|bên ngoài|bên cạnh|kế bên)\b", "v"),
+        (r"\b(eki|ginkou|yuubinkyoku|kouen|koujo|daigaku|koukou|shougakkou|higashi|nishi|minami|kita|migi|hidari|ue|shita|soto|naka|mae|ushiro|koko|soko|asoko|machi|shigai|mura|shima|kuni|nihon|chuugoku|gaikoku|tonari|keisatsu|hoomu)\b", "r"),
+    ]),
+
+    # 14. Technology & Communication
+    ("technology_communication", [
+        (r"\b(điện thoại|điện thoại di động|điện thoại thông minh|máy tính|internet|email|radio|ảnh chụp|máy ảnh|liên lạc|truyền thông|chụp ảnh|mạng xã hội|dịch vụ|tivi|ti vi)\b", "v"),
+        (r"\b(denwa|keitai|sumaho|pasokon|terebi|rajio|shashin|kamera|saabisu)\b", "r"),
+    ]),
+
+    # 15. Emotions & Personality
     ("emotions_personality", [
-        ("v", "thích"), ("v", "ghét"), ("v", "vui mừng"), ("v", "vui, thú vị"),
-        ("v", "vui vẻ"), ("v", "buồn"), ("v", "sợ hãi"),
-        ("v", "cảm xúc"), ("v", "cô đơn"), ("v", "tức giận"),
-        ("v", "lo lắng"), ("v", "ngạc nhiên"), ("v", "giật mình"),
-        ("v", "tử tế"), ("v", "dễ chịu"), ("v", "khó chịu"),
-        ("v", "hài lòng"), ("v", "bực bội"), ("v", "căng thẳng"),
-        ("v", "hạnh phúc"), ("v", "tình yêu"),
-        ("v", "yên tâm"), ("v", "bẩn, dơ"), ("v", "tệ, quá đáng"),
-        ("v", "lạnh (đồ vật)"),
-        ("r", "suki"), ("r", "kirai"), ("r", "ureshii"), ("r", "kanashii"),
-        ("r", "tanoshii"), ("r", "kowai"), ("r", "kimochi"), ("r", "sabishii"),
-        ("r", "shinsetsu"), ("r", "yasashii"),
-        ("r", "anshin"), ("r", "shinpai"), ("r", "bikkuri"),
+        (r"\b(thích|ghét|vui mừng|vui vẻ|buồn|sợ hãi|cảm xúc|cô đơn|tức giận|lo lắng|ngạc nhiên|giật mình|tử tế|dễ chịu|khó chịu|hài lòng|bực bội|căng thẳng|hạnh phúc|tình yêu|yên tâm|táo bạo|gan dạ)\b", "v"),
+        (r"\b(suki|kirai|ureshii|kanashii|tanoshii|kowai|kimochi|sabishii|shinsetsu|yasashii|anshin|shinpai|bikkuri|daitan)\b", "r"),
     ]),
 
-    # Society
+    # 16. Society, Culture & Business
     ("society_culture_business", [
-        ("v", "xã hội"), ("v", "chính trị"), ("v", "chính phủ"),
-        ("v", "tin tức"), ("v", "báo chí"),
-        ("v", "lễ hội"), ("v", "ngày lễ"), ("v", "truyền thống"), ("v", "văn hóa"),
-        ("v", "kinh tế"), ("v", "quảng cáo"),
-        ("v", "phong tục"), ("v", "tôn giáo"),
-        ("r", "shakai"), ("r", "seiji"), ("r", "seifu"),
-        ("r", "nyuusu"), ("r", "shimbun"), ("r", "shinbun"),
-        ("r", "matsuri"), ("r", "shukujitsu"),
+        (r"\b(xã hội|chính trị|chính phủ|tin tức|báo chí|lễ hội|ngày lễ|truyền thống|văn hóa|kinh tế|quảng cáo|phong tục|tôn giáo|lời khuyên|khuyến cáo)\b", "v"),
+        (r"\b(shakai|seiji|seifu|nyuusu|shimbun|shinbun|matsuri|shukujitsu|chuukoku)\b", "r"),
     ]),
 
-    # Thinking & Abstract
+    # 17. Thinking & Abstract
     ("thinking_abstract", [
-        ("v", "suy nghĩ"), ("v", "hiểu rõ"), ("v", "quyết định"),
-        ("v", "khái niệm"), ("v", "ý tưởng"), ("v", "tin tưởng"),
-        ("v", "khác nhau"), ("v", "giống nhau"),
-        ("v", "điều kiện"), ("v", "khả năng"), ("v", "lý do"),
-        ("v", "mục đích"), ("v", "kết quả"), ("v", "nguyên nhân"),
-        ("v", "tâm, lòng"), ("v", "lỗi tại"),
-        ("r", "kangaeru"), ("r", "shiru"), ("r", "wakaru"),
-        ("r", "kimeru"),
+        (r"\b(suy nghĩ|hiểu rõ|quyết định|khái niệm|ý tưởng|tin tưởng|khác nhau|giống nhau|điều kiện|khả năng|lý do|mục đích|kết quả|nguyên nhân|tâm|lòng|lỗi tại)\b", "v"),
+        (r"\b(kangaeru|shiru|wakaru|kimeru)\b", "r"),
     ]),
 
-    # Actions (general verbs)
+    # 18. Actions (general verbs)
     ("actions_general", [
-        ("v", "vào"), ("v", "ra, đi ra"), ("v", "xem, nhìn"), ("v", "nghe"),
-        ("v", "đọc"), ("v", "nói, nói chuyện"), ("v", "nói"),
-        ("v", "mua"), ("v", "bán"), ("v", "làm, chế tạo"),
-        ("v", "rửa, giặt"), ("v", "rửa"),
-        ("v", "đứng"), ("v", "ngồi"), ("v", "chạy"), ("v", "đi bộ"),
-        ("v", "dừng"), ("v", "bắt đầu"), ("v", "kết thúc"),
-        ("v", "tạo ra"), ("v", "giúp đỡ"),
-        ("v", "sửa chữa"), ("v", "phá"), ("v", "mở"), ("v", "đóng"),
-        ("v", "tìm kiếm"), ("v", "cắt"), ("v", "ném"), ("v", "đẩy"), ("v", "kéo"),
-        ("v", "nhặt lên"), ("v", "đặt xuống"),
-        ("v", "nhớ"), ("v", "quên"), ("v", "cố gắng"), ("v", "thử"),
-        ("v", "nhận, được cho"), ("v", "cho, tặng"),
-        ("v", "cho (tôi)"), ("v", "cho, đưa"),
-        ("v", "nói chuyện phiếm"), ("v", "tán gẫu"),
-        ("v", "nói chuyện, tán gẫu"),
-        ("v", "chữ ký"),
-        ("v", "ở, có (khiêm nhường)"), ("v", "đến, ở (kính ngữ)"),
-        ("v", "làm (kính ngữ)"),
-        ("r", "miru"), ("r", "kiku"), ("r", "yomu"), ("r", "hanasu"),
-        ("r", "hairu"), ("r", "deru"),
-        ("r", "aruku"), ("r", "hashiru"), ("r", "tatsu"), ("r", "suwaru"),
-        ("r", "hajimeru"), ("r", "owaru"), ("r", "tsukuru"),
-        ("r", "ageru"), ("r", "morau"), ("r", "kureru"),
-        ("r", "arau"), ("r", "naosu"), ("r", "akeru"), ("r", "shimeru"),
-        ("r", "sagasu"), ("r", "miseru"), ("r", "kiru"),
-        ("r", "shaberu"), ("r", "oshaberi"),
-        ("r", "tsukau"),
-        ("r", "oru"), ("r", "irassharu"), ("r", "nasaru"),
+        (r"\b(vào|ra|đi ra|xem|nhìn|nghe|đọc|nói|nói chuyện|mua|bán|làm|chế tạo|rửa|giặt|đứng|ngồi|chạy|đi bộ|dừng|bắt đầu|kết thúc|tạo ra|giúp đỡ|sửa chữa|phá|mở|đóng|tìm kiếm|cắt|ném|đẩy|kéo|nhặt lên|đặt xuống|nhớ|quên|cố gắng|thử|nhận|cho|đưa|hạ xuống|xuống|trở về|về)\b", "v"),
+        (r"\b(miru|kiku|yomu|hanasu|hairu|deru|aruku|hashiru|tatsu|suwaru|hajimeru|owaru|tsukuru|ageru|morau|kureru|arau|naosu|akeru|shimeru|sagasu|miseru|kiru|shaberu|oshaberi|tsukau|oru|irassharu|nasaru|oriru|orosu|kaeru)\b", "r"),
+        (r"^(かえる|おりる|おろす)$", "w"),
     ]),
 
-    # Grammar words, adjectives, adverbs, particles, pronouns
+    # 19. Grammar words (greetings, particles, common pronouns, adverbs)
     ("grammar_words", [
-        # Colors
-        ("v", "màu đỏ"), ("v", "màu trắng"), ("v", "màu đen"), ("v", "màu xanh"),
-        ("v", "màu vàng"), ("v", "màu xanh lá"), ("v", "màu tím"),
-        ("v", "màu cam"), ("v", "màu hồng"), ("v", "màu nâu"), ("v", "màu"),
-        ("v", "trắng"), ("v", "đỏ"), ("v", "đen"), ("v", "xanh"), ("v", "vàng"), ("v", "nâu"),
-        # Size / shape adjectives
-        ("v", "to, lớn"), ("v", "nhỏ"), ("v", "mới"), ("v", "cũ"),
-        ("v", "dài"), ("v", "ngắn"), ("v", "rộng"), ("v", "hẹp, chật"), ("v", "to, mập"),
-        ("v", "thấp"), ("v", "nặng"), ("v", "nhẹ"), ("v", "mạnh"), ("v", "yếu"),
-        ("v", "gần"), ("v", "xa"), ("v", "tiện lợi"), ("v", "bất tiện"),
-        ("v", "tròn"), ("v", "dày"), ("v", "mỏng"),
-        ("v", "nhanh"), ("v", "chậm, muộn"),
-        # Sensory adjectives
-        ("v", "đẹp (phong cảnh)"), ("v", "đẹp"),
-        ("v", "nóng (thời tiết)"), ("v", "nóng"), ("v", "ấm"), ("v", "mát mẻ"),
-        ("v", "lạnh"),
-        # Adverbs
-        ("v", "nhiều"), ("v", "ít"), ("v", "rất"), ("v", "khá, tương đối"),
-        ("v", "thường xuyên"), ("v", "hay, thường"), ("v", "luôn luôn"),
-        ("v", "thỉnh thoảng"), ("v", "nếu, giả sử"),
-        ("v", "ngay lập tức"), ("v", "cuối cùng"), ("v", "sắp"), ("v", "vừa đúng"),
-        ("v", "hoàn toàn"), ("v", "hầu hết"), ("v", "khá"),
-        ("v", "rõ ràng"), ("v", "đàng hoàng"), ("v", "giữ nguyên"),
-        ("v", "quả nhiên"), ("v", "vẫn còn"),
-        ("v", "chỉ, chỉ có"), ("v", "hơn, so với"), ("v", "lại, nữa"),
-        ("v", "xin, làm ơn"), ("v", "và, rồi"),
-        ("v", "nhưng"), ("v", "vì vậy"), ("v", "tuy nhiên"),
-        ("v", "ồ, thế à"), ("v", "ơ, hả"), ("v", "à"),
-        ("v", "rất vui được gặp"),
-        # Greetings
-        ("v", "xin chào"), ("v", "tạm biệt"), ("v", "cảm ơn"), ("v", "xin lỗi"),
-        ("v", "chúc mừng"), ("v", "alô"), ("v", "thất lễ"),
-        ("v", "vâng"), ("v", "ừ"),
-        # Common particles/determiners
-        ("v", "như thế này"), ("v", "loại này"), ("v", "như thế nào"),
-        ("v", "loại nào"), ("v", "vị nào, ai"),
-        ("v", "...này"), ("v", "...nào"), ("v", "vậy, đúng vậy"),
-        # Objects often used as grammar examples
-        ("v", "đồng hồ"), ("v", "sách (cuốn)"), ("v", "ô, dù"),
-        ("v", "cơ hội"), ("v", "hẹn hò"), ("v", "nhóm"), ("v", "quả bóng"),
-        ("v", "đàn piano"), ("v", "cốc, ly"), ("v", "trò chơi"),
-        ("v", "đồ chơi"), ("v", "buổi hòa nhạc"), ("v", "câu lạc bộ"),
-        ("v", "cho đến nay"), ("v", "tốt, được"),
-        ("v", "bộ, tổ, cặp"), ("v", "bước (đi bộ)"),
-        # Adjectives about properties
-        ("v", "tốt"), ("v", "xấu (tính cách)"), ("v", "thật"),
-        ("v", "miễn phí"),
-        # Romaji catch-all for particles/common words
-        ("r", "kono"), ("r", "sono"), ("r", "ano"), ("r", "donna"), ("r", "konna"),
-        ("r", "sonna"),
-        ("r", "ookii"), ("r", "chiisai"), ("r", "atarashii"), ("r", "furui"),
-        ("r", "nagai"), ("r", "mijikai"), ("r", "hiroi"), ("r", "semai"),
-        ("r", "futoi"), ("r", "hikui"), ("r", "omoi"), ("r", "karui"),
-        ("r", "tsuyoi"), ("r", "yowai"), ("r", "chikai"), ("r", "tooi"),
-        ("r", "benri"), ("r", "fuben"),
-        ("r", "marui"), ("r", "amai"), ("r", "karai"), ("r", "nigai"),
-        ("r", "utsukushii"), ("r", "atatakai"), ("r", "suzushii"), ("r", "atsui"),
-        ("r", "samui"), ("r", "tsumetai"),
-        ("r", "hayai"), ("r", "osoi"),
-        ("r", "yoku"), ("r", "takusan"), ("r", "itsumo"), ("r", "tokidoki"),
-        ("r", "moshi"), ("r", "dake"), ("r", "yori"),
-        ("r", "aru"), ("r", "iru"), ("r", "ii"),
-        ("r", "kuroi"), ("r", "shiroi"), ("r", "aoi"), ("r", "kiiroi"),
-        ("r", "akai"), ("r", "chairoi"),
-        ("r", "hotondo"), ("r", "madamada"), ("r", "chanto"), ("r", "hakkiri"),
-        ("r", "yappari"), ("r", "naruhodo"), ("r", "sukkari"),
-        ("r", "nakanaka"), ("r", "zehi"), ("r", "kitto"),
-        ("r", "soshite"), ("r", "mata"), ("r", "douka"),
-        ("r", "hee"), ("r", "tada"),
-        ("r", "tokei"), ("r", "hon"), ("r", "kasa"),
-        ("r", "guruupu"), ("r", "booru"), ("r", "piano"),
-        ("r", "geemu"), ("r", "omocha"), ("r", "konsaato"), ("r", "kurabu"),
-        ("r", "chansu"), ("r", "deeto"),
-        ("r", "koremade"), ("r", "hidoi"), ("r", "yahari"),
-        ("r", "mama"), ("r", "sei"),
-        ("r", "biru"), ("r", "sain"),
-        ("r", "hajimemashite"), ("r", "yoroshiku"),
-        ("r", "dochira"), ("r", "dotchi"), ("r", "kotchi"),
-        ("r", "itsu"), ("r", "naze"), ("r", "doushite"),
-        ("r", "dou"), ("r", "sou"), ("r", "kou"),
-        ("r", "kouiu"), ("r", "douiu"),
-        ("r", "donata"),
-        ("r", "sorosoro"), ("r", "itsudemo"),
-        ("r", "kaeru"),  # return home
-        ("r", "mizu"),  # water - common word
-        ("r", "terebi"),
+        (r"\b(xin chào|tạm biệt|cảm ơn|xin lỗi|chúc mừng|alô|thất lễ|vâng|ừ|dạ)\b", "v"),
+        (r"\b(rất|nhiều|ít|khá|tương đối|thường xuyên|hay|luôn luôn|thỉnh thoảng|nếu|ngay|cuối cùng|sắp|hoàn toàn|hầu hết|rõ ràng|giữ nguyên|quả nhiên|vẫn|chỉ|hơn|lại|nữa|và|nhưng|vì vậy|tuy nhiên)\b", "v"),
+        (r"\b(kono|sono|ano|donna|konna|sonna|ookii|chiisai|atarashii|furui|nagai|mijikai|hiroi|semai|futoi|hikui|omoi|karui|tsuyoi|yowai|chikai|tooi|benri|fuben|marui|amai|karai|nigai|utsukushii|atatakai|suzushii|atsui|samui|tsumetai|hayai|osoi|yoku|takusan|itsumo|tokidoki|moshi|dake|yori|aru|iru|ii|kuroi|shiroi|aoi|kiiroi|akai|chairoi|hotondo|madamada|chanto|hakkiri|yappari|naruhodo|sukkari|nakanaka|zehi|kitto|soshite|mata|douka|hee|tada|tokei|hon|kasa|guruupu|booru|piano|geemu|omocha|konsaato|kurabu|chansu|deeto|koremade|hidoi|yahari|mama|sei|biru|sain|hajimemashite|yoroshiku|dochira|dotchi|kotchi|itsu|naze|doushite|dou|sou|kou|kouiu|douiu|donata|sorosoro|itsudemo)\b", "r"),
     ]),
 ]
 
-# ── flat lookup: (category, field, substring) ───────────────────────────────
+def classify_word(word):
+    m = word["meaning"].lower()
+    r = word["romaji"].lower()
+    w = word["word"]
 
-def build_index():
-    idx = []
     for cat, rules in RULES:
-        for field, substr in rules:
-            idx.append((cat, field, substr))
-    return idx
-
-INDEX = build_index()
-
-
-def assign_category(word: dict) -> str:
-    romaji = (word.get("romaji") or "").lower()
-    meaning = (word.get("meaning") or "").lower()
-    for cat, field, substr in INDEX:
-        if field == "v":
-            if substr in meaning:
-                return cat
-        else:  # 'r'
-            if substr in romaji:
+        for pattern, field in rules:
+            if field == "v":
+                target = m
+            elif field == "r":
+                target = r
+            else:
+                target = w
+            
+            if re.search(pattern, target, re.IGNORECASE):
                 return cat
     return "other"
 
-
 def main():
-    with open(DATA, encoding="utf-8") as f:
+    with open(DATA, "r", encoding="utf-8") as f:
         words = json.load(f)
 
-    counts = {}
-    for w in words:
-        cat = assign_category(w)
-        w["category"] = cat
-        counts[cat] = counts.get(cat, 0) + 1
+    updated = 0
+    cat_counts = {}
+    for word in words:
+        old_cat = word.get("category", "other")
+        new_cat = classify_word(word)
+        word["category"] = new_cat
+        if old_cat != new_cat:
+            updated += 1
+        cat_counts[new_cat] = cat_counts.get(new_cat, 0) + 1
 
     with open(DATA, "w", encoding="utf-8") as f:
         json.dump(words, f, ensure_ascii=False, indent=2)
 
-    print(f"✅  Categorised {len(words)} words.")
-    for cat, n in sorted(counts.items(), key=lambda x: -x[1]):
-        print(f"  {cat:<35} {n}")
-
-    other_words = [w for w in words if w["category"] == "other"]
-    if other_words:
-        print(f"\n⚠️  {len(other_words)} words still in 'other'. Sample (first 40):")
-        for w in other_words[:40]:
-            print(f"  {w['word']} ({w['romaji']}) = {w['meaning']}")
-
+    print(f"Successfully re-categorized {len(words)} words ({updated} entries changed).")
+    print("\nCategory Distribution:")
+    for cat, count in sorted(cat_counts.items(), key=lambda x: x[1], reverse=True):
+        print(f"  {cat}: {count}")
 
 if __name__ == "__main__":
     main()

@@ -21,7 +21,9 @@ import {
   type CategoryTheme,
   type WordDifficulty,
   type WordCategory,
+  type Word,
 } from "@/lib/words";
+
 import { useLanguage } from "@/lib/language-context";
 import { cn } from "@/lib/utils";
 
@@ -98,31 +100,66 @@ export default function VocabularyPage() {
   const filteredWords = useMemo(() => {
     let list = getWordsByDifficulty(difficulty, scope);
 
+    const q = query.trim().toLowerCase();
+
+    // If no search query, respect category, theme, and subCategory filters strictly
+    if (!q) {
+      if (category !== "all") {
+        list = list.filter((w) => w.category === category);
+      } else if (theme !== "all") {
+        const allowed = new Set(availableTopics);
+        list = list.filter((w) => allowed.has(w.category));
+      }
+
+      if (subCategory !== "all") {
+        list = list.filter((w) => getSubCategory(w) === subCategory);
+      }
+      return list;
+    }
+
+    // When search query is typed:
+    // First attempt filtering within active category selection
+    let categoryFiltered = list;
     if (category !== "all") {
-      list = list.filter((w) => w.category === category);
+      categoryFiltered = categoryFiltered.filter((w) => w.category === category);
     } else if (theme !== "all") {
       const allowed = new Set(availableTopics);
-      list = list.filter((w) => allowed.has(w.category));
+      categoryFiltered = categoryFiltered.filter((w) => allowed.has(w.category));
     }
-
     if (subCategory !== "all") {
-      list = list.filter((w) => getSubCategory(w) === subCategory);
+      categoryFiltered = categoryFiltered.filter((w) => getSubCategory(w) === subCategory);
     }
 
-    const q = query.trim().toLowerCase();
-    if (q) {
-      list = list.filter(
-        (w) =>
-          w.word.toLowerCase().includes(q) ||
-          (w.kanji && w.kanji.toLowerCase().includes(q)) ||
-          w.romaji.toLowerCase().includes(q) ||
-          getWordMeaning(w, language).toLowerCase().includes(q) ||
-          getSubCategory(w).toLowerCase().includes(q)
+    const matchesQuery = (w: Word) => {
+      const subCat = getSubCategory(w);
+      const subCatLabelEn = SUB_CATEGORY_LABELS[subCat]?.en || subCat;
+      const subCatLabelVi = SUB_CATEGORY_LABELS[subCat]?.vi || subCat;
+      const catLabelEn = CATEGORY_LABELS[w.category] || "";
+      const catLabelVi = CATEGORY_LABELS_VI[w.category] || "";
+      const meaning = getWordMeaning(w, language);
+
+      return (
+        w.word.toLowerCase().includes(q) ||
+        (w.kanji && w.kanji.toLowerCase().includes(q)) ||
+        w.romaji.toLowerCase().includes(q) ||
+        meaning.toLowerCase().includes(q) ||
+        subCatLabelEn.toLowerCase().includes(q) ||
+        subCatLabelVi.toLowerCase().includes(q) ||
+        catLabelEn.toLowerCase().includes(q) ||
+        catLabelVi.toLowerCase().includes(q)
       );
+    };
+
+    let result = categoryFiltered.filter(matchesQuery);
+
+    // If active category selection produced 0 results for the query, fallback to searching all words
+    if (result.length === 0 && (category !== "all" || subCategory !== "all" || theme !== "all")) {
+      result = list.filter(matchesQuery);
     }
 
-    return list;
+    return result;
   }, [difficulty, scope, category, theme, availableTopics, subCategory, query, language]);
+
 
   // Reset to page 1 whenever filters change
   const totalPages = Math.ceil(filteredWords.length / pageSize) || 1;
