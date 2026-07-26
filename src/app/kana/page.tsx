@@ -49,12 +49,13 @@ function KanaCard({ kana }: { kana: Kana }) {
       <button
         type="button"
         onClick={handleAudio}
-        className="absolute top-1 right-1 rounded-full p-1 text-muted-foreground/50 opacity-0 transition-opacity hover:bg-accent hover:text-primary group-hover:opacity-100 focus:opacity-100"
+        className="absolute top-1 right-1 rounded-full p-1 text-muted-foreground/70 transition-all hover:bg-accent hover:text-primary opacity-100 lg:opacity-0 lg:group-hover:opacity-100 focus:opacity-100"
         title={`Listen to ${kana.char}`}
         aria-label={`Listen to ${kana.char}`}
       >
         <Volume2 className="size-3.5" />
       </button>
+
 
       <span className="text-3xl font-medium tracking-tight text-foreground transition-colors group-hover:text-primary">
         {kana.char}
