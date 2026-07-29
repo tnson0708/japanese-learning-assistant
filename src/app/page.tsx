@@ -8,6 +8,7 @@ import {
   CheckCircle2,
   FileText,
   HelpCircle,
+  History,
   MessageSquare,
   PenTool,
   Sparkles,
@@ -27,12 +28,11 @@ import { getKanaById, kanaList, randomKana } from "@/lib/kana";
 import { useLanguage } from "@/lib/language-context";
 
 export default function Home() {
-  const { t } = useLanguage();
+  const { language, t } = useLanguage();
+  const isVi = language === "vi";
   const [featuredKana, setFeaturedKana] = useState(
     () => getKanaById("hiragana-a-3042") || kanaList[0]
   );
-
-
 
   const modules = [
     {
@@ -76,7 +76,6 @@ export default function Home() {
       description: t("mod_quiz_desc"),
     },
   ];
-
 
   const highlights = [
     {
@@ -225,6 +224,36 @@ export default function Home() {
               </Link>
             );
           })}
+        </div>
+      </div>
+
+      {/* Japanese Language History Teaser Banner */}
+      <div className="group relative overflow-hidden rounded-2xl border bg-gradient-to-r from-primary/10 via-card to-card p-6 sm:p-8 shadow-2xs transition-all hover:border-primary/50">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 relative z-10">
+          <div className="flex flex-col gap-2 max-w-2xl">
+            <div className="inline-flex items-center gap-2 rounded-full bg-primary/10 px-3 py-1 text-xs font-bold text-primary w-fit">
+              <History className="size-3.5" />
+              <span>{isVi ? "Lịch sử & Nguồn gốc" : "Language History"}</span>
+            </div>
+            <h3 className="text-xl font-bold tracking-tight text-foreground sm:text-2xl">
+              {isVi ? "Sự Hình Thành Tiếng Nhật & Hệ Thống 3 Chữ Viết" : "History & Evolution of the Japanese Language"}
+            </h3>
+            <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
+              {isVi
+                ? "Khám phá hành trình kỳ diệu từ ngôn ngữ nói Yamato cổ đại đến sự ra đời của Kanji, Hiragana và Katakana."
+                : "Discover the unique journey from ancient spoken Yamato language to the creation of Kanji, Hiragana, and Katakana."}
+            </p>
+          </div>
+
+          <Button
+            render={<Link href="/history" />}
+            nativeButton={false}
+            size="lg"
+            className="gap-2 font-semibold shrink-0"
+          >
+            <span>{isVi ? "Khám phá lịch sử" : "Explore History"}</span>
+            <ArrowRight className="size-4" />
+          </Button>
         </div>
       </div>
 

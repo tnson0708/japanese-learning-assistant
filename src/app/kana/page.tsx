@@ -17,6 +17,9 @@ import { speakJapanese } from "@/lib/speech";
 import { useLanguage } from "@/lib/language-context";
 import { cn } from "@/lib/utils";
 
+import { PronunciationGuide } from "@/components/kana/pronunciation-guide";
+
+type LearnTab = Script | "pronunciation";
 type SectionFilter = "all" | "main" | "dakuten" | "youon";
 
 const MAIN_GROUPS = new Set(["vowel", "k", "s", "t", "n", "h", "m", "y", "r", "w"]);
@@ -55,7 +58,6 @@ function KanaCard({ kana }: { kana: Kana }) {
       >
         <Volume2 className="size-3.5" />
       </button>
-
 
       <span className="text-3xl font-medium tracking-tight text-foreground transition-colors group-hover:text-primary">
         {kana.char}
@@ -203,7 +205,7 @@ function KanaGrid({ script, section, query }: { script: Script; section: Section
 
 export default function KanaPage() {
   const { t } = useLanguage();
-  const [script, setScript] = useState<Script>("hiragana");
+  const [activeTab, setActiveTab] = useState<LearnTab>("hiragana");
   const [section, setSection] = useState<SectionFilter>("all");
   const [search, setSearch] = useState("");
 
@@ -213,6 +215,8 @@ export default function KanaPage() {
     { value: "dakuten", label: t("kana_sec_dakuten") },
     { value: "youon", label: t("kana_sec_youon") },
   ];
+
+  const isKanaTab = activeTab === "hiragana" || activeTab === "katakana";
 
   return (
     <div className="mx-auto flex w-full max-w-6xl flex-1 flex-col gap-6 px-4 py-6 sm:px-6 lg:py-8">
@@ -230,61 +234,69 @@ export default function KanaPage() {
         {/* Filter Controls Card */}
         <div className="flex flex-col gap-4 rounded-xl border bg-card p-4 shadow-2xs sm:p-5">
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-            {/* Script Selector */}
+            {/* Main Learn Tab Selector */}
             <Tabs
-              value={script}
-              onValueChange={(v) => setScript(v as Script)}
+              value={activeTab}
+              onValueChange={(v) => setActiveTab(v as LearnTab)}
               className="w-full sm:w-auto"
             >
-              <TabsList className="grid w-full grid-cols-2 sm:w-80 md:w-[360px]">
-                <TabsTrigger value="hiragana">Hiragana (ひらがな)</TabsTrigger>
-                <TabsTrigger value="katakana">Katakana (カタカナ)</TabsTrigger>
+              <TabsList className="grid w-full grid-cols-3 sm:w-auto md:w-[500px]">
+                <TabsTrigger value="hiragana">{t("kana_tab_hiragana")}</TabsTrigger>
+                <TabsTrigger value="katakana">{t("kana_tab_katakana")}</TabsTrigger>
+                <TabsTrigger value="pronunciation">{t("kana_tab_pronunciation")}</TabsTrigger>
               </TabsList>
-
             </Tabs>
 
-            {/* Search Input */}
-            <div className="relative w-full sm:w-64">
-              <Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
-              <input
-                type="text"
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                placeholder={t("kana_search_placeholder")}
-                className="w-full rounded-lg border bg-background pl-9 pr-8 py-1.5 text-xs ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-              />
-              {search && (
-                <button
-                  type="button"
-                  onClick={() => setSearch("")}
-                  className="absolute right-2.5 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
-                >
-                  <X className="size-3.5" />
-                </button>
-              )}
-            </div>
+            {/* Search Input (Only shown for Kana tabs) */}
+            {isKanaTab && (
+              <div className="relative w-full sm:w-64">
+                <Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+                <input
+                  type="text"
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                  placeholder={t("kana_search_placeholder")}
+                  className="w-full rounded-lg border bg-background pl-9 pr-8 py-1.5 text-xs ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                />
+                {search && (
+                  <button
+                    type="button"
+                    onClick={() => setSearch("")}
+                    className="absolute right-2.5 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                  >
+                    <X className="size-3.5" />
+                  </button>
+                )}
+              </div>
+            )}
           </div>
 
-          {/* Section Filter Pills */}
-          <div className="flex flex-col gap-2 pt-2 border-t sm:flex-row sm:items-center sm:gap-3">
-            <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground whitespace-nowrap">
-              {t("kana_section")}:
-            </span>
-            <div className="overflow-x-auto pb-1 scrollbar-none sm:pb-0">
-              <OptionGroup
-                options={sectionOptions}
-                value={section}
-                onChange={setSection}
-                size="sm"
-                className="flex-nowrap"
-              />
+          {/* Section Filter Pills (Only shown for Kana tabs) */}
+          {isKanaTab && (
+            <div className="flex flex-col gap-2 pt-2 border-t sm:flex-row sm:items-center sm:gap-3">
+              <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground whitespace-nowrap">
+                {t("kana_section")}:
+              </span>
+              <div className="overflow-x-auto pb-1 scrollbar-none sm:pb-0">
+                <OptionGroup
+                  options={sectionOptions}
+                  value={section}
+                  onChange={setSection}
+                  size="sm"
+                  className="flex-nowrap"
+                />
+              </div>
             </div>
-          </div>
+          )}
         </div>
       </div>
 
-      {/* Kana Content Grid */}
-      <KanaGrid script={script} section={section} query={search} />
+      {/* Main Content Area */}
+      {isKanaTab ? (
+        <KanaGrid script={activeTab} section={section} query={search} />
+      ) : (
+        <PronunciationGuide />
+      )}
     </div>
   );
 }

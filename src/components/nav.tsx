@@ -5,7 +5,9 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import {
   BookOpen,
+  GraduationCap,
   HelpCircle,
+  History,
   Home,
   Menu,
   MessageSquare,
@@ -32,6 +34,7 @@ export function Nav() {
     { href: "/", label: t("nav_home"), icon: Home },
     { href: "/kana", label: t("nav_learn"), icon: BookOpen },
     { href: "/vocabulary", label: t("nav_vocabulary"), icon: Table },
+    { href: "/theory", label: t("nav_theory"), icon: GraduationCap },
     { href: "/phrases", label: t("nav_phrases"), icon: MessageSquare },
     { href: "/practice", label: t("nav_practice"), icon: PenTool },
     { href: "/quiz", label: t("nav_quiz"), icon: HelpCircle },
