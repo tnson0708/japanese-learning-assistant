@@ -89,12 +89,12 @@ export function Nav() {
         </div>
       </header>
 
-      {/* Mobile Bottom Navigation Bar (App-like Bottom Tab Bar for mobile devices) */}
+      {/* Floating Mobile Bottom Navigation Dock (App-like Bottom Tab Bar elevated for iPhone & mobile devices) */}
       <nav
         aria-label="Mobile Bottom Navigation"
-        className="fixed bottom-0 inset-x-0 z-50 md:hidden border-t bg-background/95 backdrop-blur-md shadow-lg pb-[env(safe-area-inset-bottom,0px)]"
+        className="fixed bottom-3 inset-x-3 z-50 md:hidden mx-auto max-w-md rounded-2xl border bg-background/95 backdrop-blur-xl shadow-xl ring-1 ring-border/50 p-1.5 mb-[env(safe-area-inset-bottom,0px)]"
       >
-        <div className="flex items-center justify-around overflow-x-auto scrollbar-none px-1 py-1.5 gap-1">
+        <div className="flex items-center justify-around overflow-x-auto scrollbar-none px-1 py-1 gap-1">
           {links.map((link) => {
             const Icon = link.icon;
             const active =
@@ -108,7 +108,7 @@ export function Nav() {
                 href={link.href}
                 ref={active ? activeTabRef : null}
                 className={cn(
-                  "group relative flex flex-1 min-w-[56px] flex-col items-center justify-center py-1 px-1 rounded-xl transition-all duration-200 text-center select-none active:scale-95",
+                  "group relative flex flex-1 min-w-[52px] flex-col items-center justify-center py-1.5 px-1 rounded-xl transition-all duration-200 text-center select-none active:scale-95",
                   active
                     ? "text-primary font-bold"
                     : "text-muted-foreground hover:text-foreground"
@@ -126,7 +126,7 @@ export function Nav() {
                   )}
                 />
 
-                <span className="mt-0.5 text-[10px] leading-tight font-medium tracking-tight whitespace-nowrap truncate max-w-[64px]">
+                <span className="mt-0.5 text-[10px] leading-tight font-medium tracking-tight whitespace-nowrap truncate max-w-[60px]">
                   {link.shortLabel}
                 </span>
               </Link>

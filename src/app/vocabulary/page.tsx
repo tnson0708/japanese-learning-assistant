@@ -354,8 +354,82 @@ export default function VocabularyPage() {
           </div>
         </div>
 
-        {/* 5-Column Table (English / Vietnamese) */}
-        <div className="overflow-x-auto rounded-xl border bg-card shadow-2xs">
+        {/* Mobile Card List View (Visible on < md screens - zero horizontal scrolling!) */}
+        <div className="flex flex-col gap-3 md:hidden">
+          {paginatedWords.map((word) => {
+            const subCatRaw = getSubCategory(word);
+            const subCatLabel = SUB_CATEGORY_LABELS[subCatRaw]?.[language] || subCatRaw;
+            const meaningText = getWordMeaning(word, language);
+            const notesText = getWordNotes(word, language);
+
+            return (
+              <div
+                key={word.id}
+                className="flex flex-col gap-2 rounded-xl border bg-card p-3.5 shadow-2xs transition-colors hover:border-primary/50"
+              >
+                {/* Header: Word + Kanji + Audio + Romaji */}
+                <div className="flex items-center justify-between gap-2 border-b pb-2">
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <span className="text-xl font-bold tracking-tight text-foreground">
+                      {word.word}
+                    </span>
+                    {word.kanji && (
+                      <span className="text-base font-semibold text-primary bg-primary/10 px-2 py-0.5 rounded-md">
+                        {word.kanji}
+                      </span>
+                    )}
+                  </div>
+
+                  <div className="flex items-center gap-1.5 shrink-0">
+                    <span className="text-xs font-semibold text-muted-foreground font-mono bg-secondary px-2 py-0.5 rounded-md">
+                      {word.romaji}
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => speakJapanese(word.word)}
+                      className="rounded-full p-1 text-muted-foreground/70 transition-colors hover:bg-accent hover:text-primary active:scale-95"
+                      title={`Listen to ${word.word}`}
+                      aria-label={`Listen to ${word.word}`}
+                    >
+                      <Volume2 className="size-4 text-primary" />
+                    </button>
+                  </div>
+                </div>
+
+                {/* Meaning */}
+                <div className="flex items-start gap-2 text-sm">
+                  <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground shrink-0 mt-0.5">
+                    {t("vocab_col_meaning")}:
+                  </span>
+                  <span className="font-semibold text-foreground">
+                    {meaningText}
+                  </span>
+                </div>
+
+                {/* Notes & Sub-category Badge */}
+                {(notesText || (subCatRaw && subCatRaw !== "General Words")) && (
+                  <div className="flex flex-wrap items-center justify-between gap-2 pt-1.5 text-xs text-muted-foreground border-t border-dashed border-border/60">
+                    {notesText && <span>{notesText}</span>}
+                    {subCatRaw && subCatRaw !== "General Words" && (
+                      <span className="rounded-full bg-secondary/80 px-2 py-0.5 text-[10px] font-medium text-muted-foreground ml-auto">
+                        {subCatLabel}
+                      </span>
+                    )}
+                  </div>
+                )}
+              </div>
+            );
+          })}
+
+          {filteredWords.length === 0 && (
+            <div className="rounded-xl border border-dashed p-8 text-center text-sm text-muted-foreground">
+              {t("vocab_no_words")}
+            </div>
+          )}
+        </div>
+
+        {/* Desktop 5-Column Table (Visible on md+ screens) */}
+        <div className="hidden md:block overflow-x-auto rounded-xl border bg-card shadow-2xs">
           <table className="w-full text-left text-sm">
             <thead className="border-b bg-muted/50 text-xs font-bold uppercase tracking-wider text-muted-foreground">
               <tr>
