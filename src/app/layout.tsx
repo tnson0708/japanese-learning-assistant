@@ -58,8 +58,8 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col bg-background text-foreground">
         <Providers>
           <Nav />
-          <main className="flex-1 flex flex-col">{children}</main>
-          <footer className="border-t px-4 py-4 text-center text-xs text-muted-foreground">
+          <main className="flex-1 flex flex-col pb-16 md:pb-0">{children}</main>
+          <footer className="border-t px-4 py-4 pb-20 md:pb-4 text-center text-xs text-muted-foreground">
             Stroke order data from{" "}
             <a
               href="https://kanjivg.tagaini.net/"
