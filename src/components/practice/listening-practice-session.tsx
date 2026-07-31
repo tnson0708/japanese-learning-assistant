@@ -17,7 +17,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { speakJapanese } from "@/lib/speech";
-import { playBeepSignal } from "@/lib/audio-signal";
+import { playBeepSignal, playCardTransitionSound } from "@/lib/audio-signal";
 import { useLanguage } from "@/lib/language-context";
 import { cn } from "@/lib/utils";
 
@@ -127,6 +127,7 @@ export function ListeningPracticeSession({
   };
 
   const handleNext = () => {
+    playCardTransitionSound();
     setCompletedCount((c) => c + 1);
     setCurrentIndex((idx) => (idx + 1) % items.length);
   };

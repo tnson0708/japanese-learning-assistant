@@ -8,6 +8,8 @@ interface StrokeOrderSvgProps {
   className?: string;
   autoPlay?: boolean;
   showNumbers?: boolean;
+  externalPlayKey?: number;
+  onReplay?: () => void;
 }
 
 const STROKE_DURATION_MS = 450;
@@ -18,6 +20,8 @@ export function StrokeOrderSvg({
   className,
   autoPlay = true,
   showNumbers = true,
+  externalPlayKey = 0,
+  onReplay,
 }: StrokeOrderSvgProps) {
   const { t } = useLanguage();
   const [playKey, setPlayKey] = useState(0);
@@ -39,7 +43,7 @@ export function StrokeOrderSvg({
       el.style.transitionDelay = `${i * (STROKE_DURATION_MS + STROKE_GAP_MS)}ms`;
       el.style.strokeDashoffset = "0";
     });
-  }, [kana.id, playKey, autoPlay]);
+  }, [kana.id, playKey, externalPlayKey, autoPlay]);
 
   return (
     <div className="flex flex-col items-center">
@@ -87,13 +91,19 @@ export function StrokeOrderSvg({
 
       <button
         type="button"
-        onClick={() => setPlayKey((k) => k + 1)}
-        className="mt-3 inline-flex items-center gap-1.5 rounded-full border bg-background px-3 py-1.5 text-xs font-semibold text-muted-foreground shadow-2xs transition-all duration-150 hover:border-primary/50 hover:bg-accent hover:text-foreground hover:shadow-xs active:scale-95"
+        onClick={() => {
+          setPlayKey((k) => k + 1);
+          onReplay?.();
+        }}
+        className="mt-3 inline-flex items-center gap-1.5 rounded-full border bg-background px-3 py-1.5 text-xs font-semibold text-muted-foreground shadow-2xs transition-all duration-150 hover:border-primary/50 hover:bg-accent hover:text-foreground hover:shadow-xs active:scale-95 cursor-pointer"
         title={t("detail_replay_strokes")}
         aria-label={t("detail_replay_strokes")}
       >
-        <RotateCcw className="size-3.5" />
+        <RotateCcw className="size-3.5 text-primary" />
         <span>{t("detail_replay_strokes")}</span>
+        <kbd className="hidden sm:inline-block rounded bg-muted border px-1.5 py-0.5 text-[10px] font-mono font-bold text-muted-foreground">
+          B
+        </kbd>
       </button>
     </div>
   );

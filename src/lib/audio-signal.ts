@@ -60,3 +60,37 @@ export function playBeepSignal(): void {
     console.warn("Audio signal trigger notice:", err);
   }
 }
+
+/**
+ * Synthesizes a subtle, pleasant mono "ting / pip" sound when moving to the next character card.
+ * Uses Web Audio API sine oscillator with exponential decay for instantaneous zero-latency playback.
+ */
+export function playCardTransitionSound(): void {
+  if (typeof window === "undefined") return;
+
+  try {
+    const ctx = getAudioContext();
+    if (!ctx) return;
+
+    const now = ctx.currentTime;
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+
+    // High, soft "ting" sound (C6 - 1046.5 Hz) with gentle exponential decay
+    osc.type = "sine";
+    osc.frequency.setValueAtTime(1046.5, now);
+    // Pitch drop slightly for a warm, soft pop feel
+    osc.frequency.exponentialRampToValueAtTime(880, now + 0.08);
+
+    gain.gain.setValueAtTime(0.08, now);
+    gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.09);
+
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+
+    osc.start(now);
+    osc.stop(now + 0.09);
+  } catch (err) {
+    console.warn("Card transition sound notice:", err);
+  }
+}

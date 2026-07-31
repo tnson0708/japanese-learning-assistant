@@ -1,7 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import { useSearchParams } from "next/navigation";
+import { Suspense, useEffect, useMemo, useState } from "react";
 import { Search, Volume2, X } from "lucide-react";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { OptionGroup } from "@/components/option-group";
@@ -203,11 +204,26 @@ function KanaGrid({ script, section, query }: { script: Script; section: Section
   );
 }
 
-export default function KanaPage() {
+function KanaPageContent() {
   const { t } = useLanguage();
-  const [activeTab, setActiveTab] = useState<LearnTab>("hiragana");
+  const searchParams = useSearchParams();
+  const tabParam = searchParams.get("tab") as LearnTab | null;
+
+  const initialTab: LearnTab =
+    tabParam === "katakana" || tabParam === "hiragana" || tabParam === "pronunciation"
+      ? tabParam
+      : "hiragana";
+
+  const [activeTab, setActiveTab] = useState<LearnTab>(initialTab);
   const [section, setSection] = useState<SectionFilter>("all");
   const [search, setSearch] = useState("");
+
+  // Sync activeTab when tab URL search param changes (e.g., navigating back)
+  useEffect(() => {
+    if (tabParam === "katakana" || tabParam === "hiragana" || tabParam === "pronunciation") {
+      setActiveTab(tabParam);
+    }
+  }, [tabParam]);
 
   const sectionOptions: { value: SectionFilter; label: string }[] = [
     { value: "all", label: t("kana_sec_all") },
@@ -298,5 +314,13 @@ export default function KanaPage() {
         <PronunciationGuide />
       )}
     </div>
+  );
+}
+
+export default function KanaPage() {
+  return (
+    <Suspense fallback={null}>
+      <KanaPageContent />
+    </Suspense>
   );
 }
