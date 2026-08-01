@@ -2,6 +2,7 @@
 
 import { Volume2 } from "lucide-react";
 import { speakJapanese } from "@/lib/speech";
+import { renderFurigana } from "@/lib/furigana";
 import { cn } from "@/lib/utils";
 
 /**
@@ -9,14 +10,22 @@ import { cn } from "@/lib/utils";
  * it aloud via the app's existing TTS pipeline (src/lib/speech.ts). Used
  * throughout the theory/grammar pages so every Japanese word or example
  * sentence is clickable-to-listen.
+ *
+ * When `reading` is given, `text` is treated as a single Kanji word and
+ * rendered with the reading as furigana (native <ruby>/<rt>) above it.
+ * Otherwise `text` is scanned against the lesson vocabulary so any Kanji
+ * word it recognizes (e.g. inside a full example sentence or table cell)
+ * gets the same floating furigana treatment automatically.
  */
 export function JapaneseText({
   text,
+  reading,
   className,
   iconClassName,
   rate,
 }: {
   text: string;
+  reading?: string;
   className?: string;
   iconClassName?: string;
   rate?: number;
@@ -29,7 +38,16 @@ export function JapaneseText({
 
   return (
     <span className={cn("inline-flex items-center gap-1.5", className)}>
-      <span>{text}</span>
+      {reading && reading !== text ? (
+        <ruby>
+          {text}
+          <rt className="text-[0.55em] font-normal text-muted-foreground">
+            {reading}
+          </rt>
+        </ruby>
+      ) : (
+        <span>{renderFurigana(text)}</span>
+      )}
       <button
         type="button"
         onClick={() => speakJapanese(spoken || text, undefined, rate)}

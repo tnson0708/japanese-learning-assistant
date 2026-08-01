@@ -8,10 +8,11 @@ function VocabRow({ item }: { item: VocabItem }) {
   return (
     <li className="flex flex-col gap-1 border-b border-border/60 py-3 last:border-b-0 sm:flex-row sm:items-start sm:gap-4">
       <div className="flex shrink-0 flex-wrap items-baseline gap-x-2 gap-y-0.5 sm:w-52">
-        <JapaneseText text={item.jp} className="text-lg font-medium" />
-        {item.kanji && (
-          <span className="text-sm text-muted-foreground">{item.kanji}</span>
-        )}
+        <JapaneseText
+          text={item.kanji ?? item.jp}
+          reading={item.kanji ? item.jp : undefined}
+          className="text-lg font-medium"
+        />
       </div>
       <div className="flex-1 text-sm text-foreground">
         <p>{item.meaning}</p>
