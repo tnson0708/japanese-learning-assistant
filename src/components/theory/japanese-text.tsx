@@ -50,7 +50,10 @@ export function JapaneseText({
       )}
       <button
         type="button"
-        onClick={() => speakJapanese(spoken || text, undefined, rate)}
+        onClick={(e) => {
+          e.stopPropagation();
+          speakJapanese(spoken || text, undefined, rate);
+        }}
         className={cn(
           "shrink-0 rounded-full p-0.5 text-muted-foreground/60 transition-colors hover:bg-accent hover:text-primary",
           iconClassName

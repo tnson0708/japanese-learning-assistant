@@ -293,17 +293,24 @@ export function MultipleChoiceExerciseBlock({
                     }
 
                     return (
-                      <button
+                      <div
                         key={optIdx}
-                        type="button"
+                        role="button"
+                        tabIndex={0}
                         onClick={() => handleSelect(q.id, optIdx)}
-                        className={`flex items-center gap-2 rounded-lg border p-2.5 text-left text-xs sm:text-sm transition-all ${styleClasses}`}
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter" || e.key === " ") {
+                            e.preventDefault();
+                            handleSelect(q.id, optIdx);
+                          }
+                        }}
+                        className={`flex items-center gap-2 rounded-lg border p-2.5 text-left text-xs sm:text-sm transition-all cursor-pointer select-none ${styleClasses}`}
                       >
                         <span className="flex size-5 shrink-0 items-center justify-center rounded-full border text-[11px] font-bold">
                           {String.fromCharCode(65 + optIdx)}
                         </span>
                         <JapaneseText text={optText} className="flex-1" />
-                      </button>
+                      </div>
                     );
                   })}
                 </div>
