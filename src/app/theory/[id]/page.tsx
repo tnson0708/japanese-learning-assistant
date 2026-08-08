@@ -2,11 +2,25 @@
 
 import Link from "next/link";
 import { useParams } from "next/navigation";
-import { ArrowLeft, ChevronLeft, ChevronRight } from "lucide-react";
+import { ArrowLeft, BookOpen, ChevronLeft, ChevronRight, FileText, GraduationCap, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { BlockRenderer } from "@/components/theory/blocks";
 import { getAdjacentLessons, getLessonById } from "@/lib/theory";
+
+const sectionIcons: Record<string, typeof BookOpen> = {
+  vocabulary: BookOpen,
+  reference: FileText,
+  grammar: GraduationCap,
+  exercises: Sparkles,
+};
+
+const shortTitles: Record<string, string> = {
+  vocabulary: "Từ vựng",
+  reference: "Tham khảo",
+  grammar: "Ngữ pháp",
+  exercises: "Bài tập",
+};
 
 export default function TheoryLessonPage() {
   const params = useParams<{ id: string }>();
@@ -40,12 +54,27 @@ export default function TheoryLessonPage() {
       </h1>
 
       <Tabs defaultValue={lesson.sections[0]?.id} className="gap-4">
-        <TabsList className="flex w-full overflow-x-auto justify-start sm:w-fit sm:justify-center gap-1">
-          {lesson.sections.map((section) => (
-            <TabsTrigger key={section.id} value={section.id} className="shrink-0 text-xs sm:text-sm">
-              {section.title}
-            </TabsTrigger>
-          ))}
+        <TabsList className="grid w-full grid-cols-4 gap-1 rounded-xl bg-muted p-1 sm:flex sm:w-fit sm:justify-center">
+          {lesson.sections.map((section) => {
+            const Icon = sectionIcons[section.id] || BookOpen;
+            const shortLabel = shortTitles[section.id] || section.title;
+
+            return (
+              <TabsTrigger
+                key={section.id}
+                value={section.id}
+                className="flex flex-col sm:flex-row items-center justify-center gap-1 py-1.5 px-1 sm:px-3 text-center transition-all"
+              >
+                <Icon className="size-3.5 sm:size-4 shrink-0" />
+                <span className="sm:hidden text-[10px] font-bold leading-tight truncate">
+                  {shortLabel}
+                </span>
+                <span className="hidden sm:inline text-xs sm:text-sm font-medium">
+                  {section.title}
+                </span>
+              </TabsTrigger>
+            );
+          })}
         </TabsList>
 
         {lesson.sections.map((section) => (
