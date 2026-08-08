@@ -21,6 +21,33 @@ export interface GrammarSubPoint {
   text: string;
 }
 
+export interface FillInBlankQuestion {
+  id: string;
+  promptPre: string;
+  promptPost?: string;
+  options: string[];
+  correctAnswer: string;
+  explanation?: string;
+  fullSentenceJp?: string;
+  fullSentenceVi?: string;
+}
+
+export interface MultipleChoiceQuestion {
+  id: string;
+  question: string;
+  options: string[];
+  correctAnswerIndex: number;
+  explanation?: string;
+}
+
+export interface SentencePracticeItem {
+  id: string;
+  vi: string;
+  jp: string;
+  hint?: string;
+  breakdown?: string;
+}
+
 /**
  * A single piece of lesson content. Every lesson section is just an ordered
  * list of these — lessons are free to mix, omit, or repeat block types as
@@ -47,9 +74,27 @@ export type ContentBlock =
     }
   | { type: "note"; text: string }
   | { type: "heading"; text: string }
-  | { type: "paragraph"; text: string };
+  | { type: "paragraph"; text: string }
+  | {
+      type: "exercise-fill-in-blank";
+      title: string;
+      instruction?: string;
+      questions: FillInBlankQuestion[];
+    }
+  | {
+      type: "exercise-multiple-choice";
+      title: string;
+      instruction?: string;
+      questions: MultipleChoiceQuestion[];
+    }
+  | {
+      type: "exercise-sentence-practice";
+      title: string;
+      instruction?: string;
+      items: SentencePracticeItem[];
+    };
 
-export type SectionId = "vocabulary" | "reference" | "grammar";
+export type SectionId = "vocabulary" | "reference" | "grammar" | "exercises";
 
 export interface LessonSection {
   id: SectionId;

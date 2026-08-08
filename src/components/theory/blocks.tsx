@@ -2,6 +2,11 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { JapaneseText } from "@/components/theory/japanese-text";
+import {
+  FillInBlankExerciseBlock,
+  MultipleChoiceExerciseBlock,
+  SentencePracticeBlock,
+} from "@/components/theory/exercise-blocks";
 import type { ContentBlock, VocabItem } from "@/lib/theory";
 
 function VocabRow({ item }: { item: VocabItem }) {
@@ -192,6 +197,30 @@ export function BlockRenderer({ block }: { block: ContentBlock }) {
       return <h3 className="text-lg font-semibold text-foreground">{block.text}</h3>;
     case "paragraph":
       return <p className="text-sm text-foreground">{block.text}</p>;
+    case "exercise-fill-in-blank":
+      return (
+        <FillInBlankExerciseBlock
+          title={block.title}
+          instruction={block.instruction}
+          questions={block.questions}
+        />
+      );
+    case "exercise-multiple-choice":
+      return (
+        <MultipleChoiceExerciseBlock
+          title={block.title}
+          instruction={block.instruction}
+          questions={block.questions}
+        />
+      );
+    case "exercise-sentence-practice":
+      return (
+        <SentencePracticeBlock
+          title={block.title}
+          instruction={block.instruction}
+          items={block.items}
+        />
+      );
     default:
       return null;
   }

@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Plus_Jakarta_Sans, Geist_Mono } from "next/font/google";
 import { Nav } from "@/components/nav";
+import { VisitCounter } from "@/components/visit-counter";
 import { Providers } from "@/app/providers";
 import "./globals.css";
 
@@ -59,17 +60,20 @@ export default function RootLayout({
         <Providers>
           <Nav />
           <main className="flex-1 flex flex-col pb-20 md:pb-0">{children}</main>
-          <footer className="border-t px-4 py-4 pb-24 md:pb-4 text-center text-xs text-muted-foreground">
-            Stroke order data from{" "}
-            <a
-              href="https://kanjivg.tagaini.net/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="underline underline-offset-2 hover:text-foreground"
-            >
-              KanjiVG
-            </a>
-            , licensed under CC BY-SA 3.0.
+          <footer className="flex flex-col sm:flex-row items-center justify-between gap-3 border-t px-4 py-4 pb-24 md:pb-4 text-xs text-muted-foreground max-w-6xl mx-auto w-full">
+            <div>
+              Stroke order data from{" "}
+              <a
+                href="https://kanjivg.tagaini.net/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="underline underline-offset-2 hover:text-foreground"
+              >
+                KanjiVG
+              </a>
+              , licensed under CC BY-SA 3.0.
+            </div>
+            <VisitCounter variant="footer" />
           </footer>
         </Providers>
       </body>

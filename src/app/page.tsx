@@ -26,6 +26,7 @@ import {
 import { speakJapanese } from "@/lib/speech";
 import { getKanaById, kanaList, randomKana } from "@/lib/kana";
 import { useLanguage } from "@/lib/language-context";
+import { VisitCounter } from "@/components/visit-counter";
 
 export default function Home() {
   const { language, t } = useLanguage();
@@ -256,6 +257,9 @@ export default function Home() {
           </Button>
         </div>
       </div>
+
+      {/* Website Visit Statistics Card */}
+      <VisitCounter variant="card" />
 
       {/* Feature Highlights */}
       <div className="rounded-2xl border bg-card p-6 sm:p-8 shadow-2xs">

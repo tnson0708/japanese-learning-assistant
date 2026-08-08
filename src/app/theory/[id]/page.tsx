@@ -40,9 +40,9 @@ export default function TheoryLessonPage() {
       </h1>
 
       <Tabs defaultValue={lesson.sections[0]?.id} className="gap-4">
-        <TabsList className="w-full sm:w-fit">
+        <TabsList className="flex w-full overflow-x-auto justify-start sm:w-fit sm:justify-center gap-1">
           {lesson.sections.map((section) => (
-            <TabsTrigger key={section.id} value={section.id}>
+            <TabsTrigger key={section.id} value={section.id} className="shrink-0 text-xs sm:text-sm">
               {section.title}
             </TabsTrigger>
           ))}
