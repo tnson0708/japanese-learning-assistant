@@ -10,6 +10,9 @@ import { lessonList } from "@/lib/theory";
 const MANUAL_READINGS: Record<string, string> = {
   人: "じん",
   歳: "さい",
+  "20歳": "はたち",
+  二十歳: "はたち",
+  何歳: "なんさい",
   語: "ご",
   土産: "みやげ",
   お土産: "おみやげ",

@@ -414,12 +414,29 @@ export const COLOR_WORDS: Word[] = [
   { id: "color-gin", word: "ぎんいろ", kanji: "銀色", romaji: "Giniro", level: "n5", script: "hiragana", category: "home_daily_life", meaning: "Silver", notes: "Màu bạc" },
 ];
 
+export const AGE_WORDS: Word[] = [
+  { id: "age-1", word: "いっさい", kanji: "1歳", romaji: "Issai", level: "n5", script: "hiragana", category: "numbers_counting", meaning: "1 year old", notes: "1 tuổi (biến âm xúc âm: いっさい)" },
+  { id: "age-2", word: "にさい", kanji: "2歳", romaji: "Nisai", level: "n5", script: "hiragana", category: "numbers_counting", meaning: "2 years old", notes: "2 tuổi" },
+  { id: "age-3", word: "さんさい", kanji: "3歳", romaji: "Sansai", level: "n5", script: "hiragana", category: "numbers_counting", meaning: "3 years old", notes: "3 tuổi" },
+  { id: "age-4", word: "よんさい", kanji: "4歳", romaji: "Yonsai", level: "n5", script: "hiragana", category: "numbers_counting", meaning: "4 years old", notes: "4 tuổi" },
+  { id: "age-5", word: "ごさい", kanji: "5歳", romaji: "Gosai", level: "n5", script: "hiragana", category: "numbers_counting", meaning: "5 years old", notes: "5 tuổi" },
+  { id: "age-6", word: "ろくさい", kanji: "6歳", romaji: "Rokusai", level: "n5", script: "hiragana", category: "numbers_counting", meaning: "6 years old", notes: "6 tuổi" },
+  { id: "age-7", word: "ななさい", kanji: "7歳", romaji: "Nanasai", level: "n5", script: "hiragana", category: "numbers_counting", meaning: "7 years old", notes: "7 tuổi" },
+  { id: "age-8", word: "はっさい", kanji: "8歳", romaji: "Hassai", level: "n5", script: "hiragana", category: "numbers_counting", meaning: "8 years old", notes: "8 tuổi (biến âm xúc âm: はっさい)" },
+  { id: "age-9", word: "きゅうさい", kanji: "9歳", romaji: "Kyūsai", level: "n5", script: "hiragana", category: "numbers_counting", meaning: "9 years old", notes: "9 tuổi" },
+  { id: "age-10", word: "じゅっさい", kanji: "10歳", romaji: "Jussai", level: "n5", script: "hiragana", category: "numbers_counting", meaning: "10 years old", notes: "10 tuổi (hoặc じっさい)" },
+  { id: "age-20", word: "はたち", kanji: "20歳", romaji: "Hatachi", level: "n5", script: "hiragana", category: "numbers_counting", meaning: "20 years old", notes: "20 tuổi (cách đọc đặc biệt: はたち)" },
+  { id: "age-nansai", word: "なんさい", kanji: "何歳", romaji: "Nansai", level: "n5", script: "hiragana", category: "numbers_counting", meaning: "How old?", notes: "Mấy tuổi, bao nhiêu tuổi" },
+  { id: "age-oikutsu", word: "おいくつ", kanji: "おいくつ", romaji: "Oikutsu", level: "n5", script: "hiragana", category: "numbers_counting", meaning: "How old? (Polite)", notes: "Bao nhiêu tuổi (dạng kính ngữ)" },
+];
+
 const dayWordsSet = new Set(DAYS_OF_THE_MONTH.map((d) => d.word));
 const countryWordsSet = new Set(COUNTRY_WORDS.map((c) => c.word));
 const colorWordsSet = new Set(COLOR_WORDS.map((c) => c.word));
+const ageWordsSet = new Set(AGE_WORDS.map((a) => a.word));
 
 const baseMappedWords: Word[] = (jlptWordsRaw as Word[])
-  .filter((w) => !dayWordsSet.has(w.word) && !countryWordsSet.has(w.word) && !colorWordsSet.has(w.word))
+  .filter((w) => !dayWordsSet.has(w.word) && !countryWordsSet.has(w.word) && !colorWordsSet.has(w.word) && !ageWordsSet.has(w.word))
   .map((w) => {
     const mappedKanji = KANJI_MAP[w.word];
     if (mappedKanji && !w.kanji) {
@@ -428,7 +445,7 @@ const baseMappedWords: Word[] = (jlptWordsRaw as Word[])
     return w;
   });
 
-export const wordList: Word[] = [...DAYS_OF_THE_MONTH, ...COUNTRY_WORDS, ...COLOR_WORDS, ...baseMappedWords];
+export const wordList: Word[] = [...AGE_WORDS, ...DAYS_OF_THE_MONTH, ...COUNTRY_WORDS, ...COLOR_WORDS, ...baseMappedWords];
 
 
 
@@ -518,7 +535,7 @@ export function getWordMeaning(word: Word, lang: "en" | "vi"): string {
     const dayNum = word.id.replace("day-", "");
     if (lang === "vi") return `Ngày ${dayNum} trong tháng`;
   }
-  if ((word.id.startsWith("country-") || word.id.startsWith("color-")) && word.notes && lang === "vi") {
+  if ((word.id.startsWith("country-") || word.id.startsWith("color-") || word.id.startsWith("age-")) && word.notes && lang === "vi") {
     return word.notes;
   }
   return word.meaning;
@@ -534,6 +551,9 @@ export function getWordNotes(word: Word, lang: "en" | "vi"): string | undefined 
   }
   if (word.id.startsWith("color-")) {
     return lang === "vi" ? "Từ vựng màu sắc" : "Color word";
+  }
+  if (word.id.startsWith("age-")) {
+    return lang === "vi" ? "Cách đếm tuổi (～歳)" : "Age counting";
   }
   return word.notes;
 }
