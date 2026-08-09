@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useParams } from "next/navigation";
-import { ArrowLeft, BookOpen, ChevronLeft, ChevronRight, FileText, GraduationCap, Sparkles } from "lucide-react";
+import { ArrowLeft, BookOpen, ChevronLeft, ChevronRight, FileText, GraduationCap, Languages, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { BlockRenderer } from "@/components/theory/blocks";
@@ -10,6 +10,7 @@ import { getAdjacentLessons, getLessonById } from "@/lib/theory";
 
 const sectionIcons: Record<string, typeof BookOpen> = {
   vocabulary: BookOpen,
+  translation: Languages,
   reference: FileText,
   grammar: GraduationCap,
   exercises: Sparkles,
@@ -17,6 +18,7 @@ const sectionIcons: Record<string, typeof BookOpen> = {
 
 const shortTitles: Record<string, string> = {
   vocabulary: "Từ vựng",
+  translation: "Bản dịch",
   reference: "Tham khảo",
   grammar: "Ngữ pháp",
   exercises: "Bài tập",
@@ -54,7 +56,7 @@ export default function TheoryLessonPage() {
       </h1>
 
       <Tabs defaultValue={lesson.sections[0]?.id} className="gap-4">
-        <TabsList className="grid w-full grid-cols-4 gap-1 rounded-xl bg-muted p-1 sm:flex sm:w-fit sm:justify-center">
+        <TabsList className="grid w-full grid-cols-5 gap-1 rounded-xl bg-muted p-1 sm:flex sm:w-fit sm:justify-center">
           {lesson.sections.map((section) => {
             const Icon = sectionIcons[section.id] || BookOpen;
             const shortLabel = shortTitles[section.id] || section.title;

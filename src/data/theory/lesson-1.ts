@@ -2,7 +2,7 @@ import type { Lesson } from "@/lib/theory";
 
 export const lesson1: Lesson = {
   id: 1,
-  title: "Bài 1",
+  title: "Bài 1: わたしは マイク・ミラーです — Giới thiệu bản thân, tên, quốc tịch & nghề nghiệp",
   sections: [
     {
       id: "vocabulary",
@@ -165,8 +165,110 @@ export const lesson1: Lesson = {
       ],
     },
     {
+      id: "translation",
+      title: "II. Bản dịch",
+      blocks: [
+        {
+          type: "translation-section",
+          title: "II. Phần dịch tiếng Việt → tiếng Nhật (Mẫu câu, Ví dụ & Hội thoại)",
+          instruction: "Đọc câu tiếng Việt và tự suy nghĩ/dịch sang tiếng Nhật. Bấm 'Xem đáp án' để kiểm tra câu tiếng Nhật chuẩn xác và nghe phát âm.",
+          sentences: [
+            {
+              id: "l1-t-s1",
+              num: 1,
+              vi: "Tôi là Mike Miller.",
+              jp: "わたしは マイク・ミラーです。",
+            },
+            {
+              id: "l1-t-s2",
+              num: 2,
+              vi: "Anh Santos không phải là sinh viên.",
+              jp: "サントスさんは 学生じゃ ありません。",
+            },
+            {
+              id: "l1-t-s3",
+              num: 3,
+              vi: "Anh Miller có phải là nhân viên công ty không?",
+              jp: "ミラーさんは 会社員ですか。",
+            },
+            {
+              id: "l1-t-s4",
+              num: 4,
+              vi: "Anh Santos cũng là nhân viên công ty.",
+              jp: "サントスさんも 会社員です。",
+            },
+          ],
+          examples: [
+            {
+              id: "l1-t-e1",
+              num: 1,
+              vi: "Anh có phải là anh Mike Miller không?\n…Vâng, tôi là Mike Miller.",
+              jp: "あなたは マイク・ミラーさんですか。\n……はい、［マイク・ミラー］です。",
+            },
+            {
+              id: "l1-t-e2",
+              num: 2,
+              vi: "Anh Miller, anh có phải là sinh viên không?\n…Không, tôi không phải là sinh viên.",
+              jp: "ミラーさんは 学生ですか。\n……いいえ、学生じゃ ありません。",
+            },
+            {
+              id: "l1-t-e3",
+              num: 3,
+              vi: "Ông Wang có phải là nhân viên ngân hàng không?\n…Không, ông Wang không phải là nhân viên ngân hàng. Ông ấy là bác sĩ.",
+              jp: "ワンさんは 銀行員ですか。\n……いいえ、［ワンさんは］ 銀行員じゃ ありません。医者です。",
+            },
+            {
+              id: "l1-t-e4",
+              num: 4,
+              vi: "Vị kia là ai?\n…Đó là ông Watt. Ông ấy là giảng viên của Trường Đại học Sakura.",
+              jp: "あの方は だれですか。（あの方は どなたですか。）\n……ワットさんです。さくら大学の 先生です。",
+            },
+            {
+              id: "l1-t-e5",
+              num: 5,
+              vi: "Anh Guputa có phải là nhân viên công ty không?\n…Vâng, (anh ấy) là nhân viên công ty.\nChị Karina cũng là nhân viên công ty à?\n…Không. (Chị Karina) là sinh viên.",
+              jp: "グプタさんは 会社員ですか。\n……はい、会社員です。\nカリナさんも 会社員ですか。\n……いいえ、［カリナさんは］ 学生です。",
+            },
+            {
+              id: "l1-t-e6",
+              num: 6,
+              vi: "Em Teresa mấy tuổi?\n…(Em ấy) 9 tuổi.",
+              jp: "テれサちゃんは 何歳ですか。（おいくつですか。）\n……9歳です。",
+            },
+          ],
+          dialogueTitle: "Rất vui được làm quen với chị (初めまして)",
+          dialogueLines: [
+            {
+              speakerVi: "Sato",
+              speakerJp: "佐藤",
+              vi: "Chào anh!",
+              jp: "おはよう ございます。",
+            },
+            {
+              speakerVi: "Yamada",
+              speakerJp: "山田",
+              vi: "Chào chị! Chị Sato, đây là anh Mike Miller.",
+              jp: "おはよう ございます。 佐藤さん、こちらは マイク・ミラーさんです。",
+            },
+            {
+              speakerVi: "Miller",
+              speakerJp: "ミラー",
+              vi: "Rất vui được làm quen với chị. Tôi là Mike Miller. Tôi đến từ Mỹ. Rất mong sẽ nhận được sự giúp đỡ của chị.",
+              jp: "初めまして。 マイク・ミラーです。 アメリカから 来ました。 どうぞ よろしく お願いします。",
+            },
+            {
+              speakerVi: "Sato",
+              speakerJp: "佐藤",
+              vi: "Tôi là Keiko Sato. Rất vui được làm quen với anh.",
+              jp: "佐藤恵子です。 こちらこそ よろしく お願いします。",
+            },
+          ],
+        },
+      ],
+    },
+    {
       id: "reference",
-      title: "II. Từ và thông tin tham khảo",
+      title: "III. Từ và thông tin tham khảo",
       blocks: [
         {
           type: "table",
@@ -277,7 +379,7 @@ export const lesson1: Lesson = {
     },
     {
       id: "grammar",
-      title: "III. Giải thích ngữ pháp",
+      title: "IV. Giải thích ngữ pháp",
       blocks: [
         {
           type: "grammar-pattern",
@@ -386,7 +488,7 @@ export const lesson1: Lesson = {
     },
     {
       id: "exercises",
-      title: "IV. Bài tập & Luyện tập",
+      title: "V. Bài tập & Luyện tập",
       blocks: [
         {
           type: "exercise-fill-in-blank",
@@ -644,6 +746,53 @@ export const lesson1: Lesson = {
               jp: "サントスさんは 東京大学の 研究者ではありません。ブラジルエアーの エンジニアです。",
               hint: "Dùng trợ từ の nối tên tổ chức với nghề nghiệp, và dạng phủ định ではありません.",
               breakdown: "サントスさん + は + 東京大学の 研究者 (nhà nghiên cứu Đại học Tokyo) + ではありません (không phải). ブラジルエアーの エンジニア (kỹ sư Brasil Air) + です.",
+            },
+          ],
+        },
+        {
+          type: "exercise-reorder-sentence",
+          title: "Bài tập 4: Sắp xếp từ thành câu hoàn chỉnh (Luyện tập cấu trúc Bài 1)",
+          instruction: "Bấm vào các từ gợi ý theo đúng thứ tự ngữ pháp để ghép thành câu tiếng Nhật hoàn chỉnh.",
+          questions: [
+            {
+              id: "l1-ro1",
+              words: ["です", "ミラー", "わたし", "は", "マイク"],
+              correctOrder: ["わたし", "は", "マイク", "ミラー", "です"],
+              fullSentenceJp: "わたし は マイク ミラー です。",
+              fullSentenceVi: "Tôi là Mike Miller.",
+              explanation: "Cấu trúc: Danh từ1 (わたし) + は + Danh từ2 (マイク・ミラー) + です.",
+            },
+            {
+              id: "l1-ro2",
+              words: ["じゃ", "です", "サントスさん", "学生", "は", "ありません"],
+              correctOrder: ["サントスさん", "は", "学生", "じゃ", "ありません"],
+              fullSentenceJp: "サントスさん は 学生 じゃ ありません。",
+              fullSentenceVi: "Anh Santos không phải là sinh viên.",
+              explanation: "Thể phủ định: Danh từ1 + は + Danh từ2 + じゃ ありません.",
+            },
+            {
+              id: "l1-ro3",
+              words: ["会社員", "ですか", "ミラーさん", "は"],
+              correctOrder: ["ミラーさん", "は", "会社員", "ですか"],
+              fullSentenceJp: "ミラーさん は 会社員 ですか。",
+              fullSentenceVi: "Anh Miller có phải là nhân viên công ty không?",
+              explanation: "Câu nghi vấn xác nhận: Thêm か vào cuối câu.",
+            },
+            {
+              id: "l1-ro4",
+              words: ["の", "社員", "です", "わたし", "IMC", "は"],
+              correctOrder: ["わたし", "は", "IMC", "の", "社員", "です"],
+              fullSentenceJp: "わたし は IMC の 社員 です。",
+              fullSentenceVi: "Tôi là nhân viên công ty IMC.",
+              explanation: "Danh từ1 (IMC) + の + Danh từ2 (社員): Nhân viên thuộc công ty IMC.",
+            },
+            {
+              id: "l1-ro5",
+              words: ["方", "だれ", "あ", "は", "ですか", "の"],
+              correctOrder: ["あ", "の", "方", "は", "だれ", "ですか"],
+              fullSentenceJp: "あ の 方 は だれ ですか。",
+              fullSentenceVi: "Vị kia là ai?",
+              explanation: "あの方 (vị kia) + は + だれ (ai) + ですか.",
             },
           ],
         },

@@ -48,6 +48,10 @@ export const translations = {
     mod_phrases_badge: "40+ Daily Phrases",
     mod_phrases_desc:
       "Learn essential daily Japanese conversation sentences grouped by themes, topics, and formality levels.",
+    mod_theory_title: "Lesson Theory",
+    mod_theory_badge: "Minna no Nihongo",
+    mod_theory_desc:
+      "Study vocabulary, full translation (sentence patterns, examples, dialogues), grammar explanations, and interactive exercises lesson by lesson.",
 
     // Phrases Page (/phrases)
     phrases_title: "Common Conversation Sentences",
@@ -282,6 +286,10 @@ export const translations = {
     mod_phrases_badge: "40+ Mẫu câu",
     mod_phrases_desc:
       "Học các mẫu câu giao tiếp tiếng Nhật hàng ngày được phân loại theo chủ đề, chủ đề phụ và cấp độ lịch sự.",
+    mod_theory_title: "Lý thuyết theo bài",
+    mod_theory_badge: "Minna no Nihongo",
+    mod_theory_desc:
+      "Học từ vựng, bản dịch (mẫu câu, ví dụ, hội thoại), giải thích ngữ pháp và bài tập thực hành theo từng bài học.",
 
     // Phrases Page (/phrases)
     phrases_title: "Mẫu câu giao tiếp thông dụng",

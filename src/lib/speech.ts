@@ -98,9 +98,9 @@ export function getBestJapaneseVoice(targetGender?: VoiceGender): { voice: Speec
   // 3. Filter voices matching target gender
   const genderVoices = pool.filter((v) => detectVoiceGender(v) === gender);
 
-  // Preferred high quality voice names by gender
+  // Preferred high quality voice names by gender (prioritizing clear, natural modern voices)
   const preferredFemale = ["kyoko", "nanami", "haruka", "ayumi", "google 日本語", "ja-jp", "ja_jp"];
-  const preferredMale = ["otoya", "hattori", "keita", "ichiro", "takumi", "naoki"];
+  const preferredMale = ["keita", "takumi", "ichiro", "hattori", "naoki", "otoya", "google 日本語"];
 
   const searchList = genderVoices.length > 0 ? genderVoices : pool;
   const preferredOrder = gender === "male" ? preferredMale : preferredFemale;
@@ -117,9 +117,46 @@ export function getBestJapaneseVoice(targetGender?: VoiceGender): { voice: Speec
 // mid-speech in Chrome/Chromium browsers, which causes SpeechSynthesis to permanently freeze.
 const activeUtterances = new Set<SpeechSynthesisUtterance>();
 
+/** Clean Japanese text for speech synthesis to prevent duplicate readings while preserving accurate hiragana pronunciation (e.g. "8階 (はちかい)" -> "はちかい"). */
+export function cleanJapaneseForSpeech(text: string): string {
+  if (!text) return "";
+
+  let cleaned = text.trim();
+
+  // 1. Remove leading item counters / numbers e.g. ①②③..., 1., 2., 例:
+  cleaned = cleaned.replace(/^[①-⑳\d\.\s例：:]+/, "").trim();
+
+  // 2. Check if the string matches: "Kanji/Number (Reading)" e.g. "8階 (はちかい)", "1歳 (いっさい)", "佐藤 (さとう)", "地下1階 (ちかいっかい)"
+  const parenMatch = cleaned.match(/^([^\(（]+)[\(（]([^\)）]+)[\)）]$/);
+  if (parenMatch) {
+    const mainText = parenMatch[1].trim();
+    const parenText = parenMatch[2].trim();
+
+    // If parenText is pure Hiragana/Katakana or contains slash options (e.g. "はちかい", "いっさい", "じゅっさい / じっさい")
+    if (/^[\u3040-\u30FF\s\/]+$/.test(parenText)) {
+      const firstReading = parenText.split("/")[0].trim();
+      if (firstReading) {
+        return firstReading;
+      }
+    }
+
+    // If parenText contains Latin characters e.g. "アメリカ (Mỹ)", keep mainText "アメリカ"
+    if (/[a-zA-Zàáảãạâầấẩẫậăằắẳẵặèéẻẽẹêềếểễệìíỉĩịòóỏõọôồốổỗộơờớởỡợùúủũụưừứửữựỳýỷỹỵđ]/i.test(parenText)) {
+      return mainText;
+    }
+  }
+
+  // 3. Fallback: remove any remaining parenthetical notes
+  cleaned = cleaned.replace(/[\(（][^）\)]*[\)）]/g, "");
+
+  return cleaned.replace(/[\s\t\n]+/g, " ").trim() || text;
+}
+
 /** Speak Japanese text aloud with selected voice, gender pitch modulation, and speed. */
 export function speakJapanese(text: string, overrideGender?: VoiceGender, rate = 0.9): void {
   if (typeof window === "undefined" || !("speechSynthesis" in window)) return;
+
+  const spokenText = cleanJapaneseForSpeech(text);
 
   try {
     const synth = window.speechSynthesis;
@@ -151,7 +188,7 @@ export function speakJapanese(text: string, overrideGender?: VoiceGender, rate =
 
     const doSpeak = () => {
       try {
-        const utter = new SpeechSynthesisUtterance(text);
+        const utter = new SpeechSynthesisUtterance(spokenText);
         activeUtterances.add(utter);
 
         utter.lang = "ja-JP";
@@ -162,11 +199,8 @@ export function speakJapanese(text: string, overrideGender?: VoiceGender, rate =
           utter.voice = voice;
         }
 
-        if (gender === "male") {
-          utter.pitch = 0.85;
-        } else {
-          utter.pitch = 1.05;
-        }
+        // Keep natural pitch (1.0) for maximum clarity and zero robotic audio distortion
+        utter.pitch = 1.0;
 
         let started = false;
         utter.onstart = () => {

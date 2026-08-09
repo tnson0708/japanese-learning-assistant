@@ -1,5 +1,6 @@
 import { lesson1 } from "@/data/theory/lesson-1";
 import { lesson2 } from "@/data/theory/lesson-2";
+import { lesson3 } from "@/data/theory/lesson-3";
 
 /** A single vocabulary/phrase entry: Japanese reading, optional Kanji, Vietnamese meaning, optional usage note. */
 export interface VocabItem {
@@ -48,6 +49,30 @@ export interface SentencePracticeItem {
   breakdown?: string;
 }
 
+export interface TranslationSentenceItem {
+  id: string;
+  num: number;
+  vi: string;
+  jp: string;
+  note?: string;
+}
+
+export interface TranslationDialogueLine {
+  speakerVi: string;
+  speakerJp?: string;
+  vi: string;
+  jp: string;
+}
+
+export interface ReorderQuestionItem {
+  id: string;
+  words: string[];
+  correctOrder: string[];
+  fullSentenceJp: string;
+  fullSentenceVi: string;
+  explanation?: string;
+}
+
 /**
  * A single piece of lesson content. Every lesson section is just an ordered
  * list of these — lessons are free to mix, omit, or repeat block types as
@@ -76,6 +101,15 @@ export type ContentBlock =
   | { type: "heading"; text: string }
   | { type: "paragraph"; text: string }
   | {
+      type: "translation-section";
+      title: string;
+      instruction?: string;
+      sentences?: TranslationSentenceItem[];
+      examples?: TranslationSentenceItem[];
+      dialogueTitle?: string;
+      dialogueLines?: TranslationDialogueLine[];
+    }
+  | {
       type: "exercise-fill-in-blank";
       title: string;
       instruction?: string;
@@ -92,9 +126,20 @@ export type ContentBlock =
       title: string;
       instruction?: string;
       items: SentencePracticeItem[];
+    }
+  | {
+      type: "exercise-reorder-sentence";
+      title: string;
+      instruction?: string;
+      questions: ReorderQuestionItem[];
     };
 
-export type SectionId = "vocabulary" | "reference" | "grammar" | "exercises";
+export type SectionId =
+  | "vocabulary"
+  | "translation"
+  | "reference"
+  | "grammar"
+  | "exercises";
 
 export interface LessonSection {
   id: SectionId;
@@ -109,7 +154,7 @@ export interface Lesson {
 }
 
 // Add each new lesson's file here as it's transcribed.
-export const lessonList: Lesson[] = [lesson1, lesson2];
+export const lessonList: Lesson[] = [lesson1, lesson2, lesson3];
 
 export function getLessonById(id: number): Lesson | undefined {
   return lessonList.find((l) => l.id === id);

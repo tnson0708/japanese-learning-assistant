@@ -52,7 +52,7 @@ export function JapaneseText({
         type="button"
         onClick={(e) => {
           e.stopPropagation();
-          speakJapanese(spoken || text, undefined, rate);
+          speakJapanese(reading || text, undefined, rate);
         }}
         className={cn(
           "shrink-0 rounded-full p-0.5 text-muted-foreground/60 transition-colors hover:bg-accent hover:text-primary",

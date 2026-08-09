@@ -7,6 +7,7 @@ import {
   BookOpen,
   CheckCircle2,
   FileText,
+  GraduationCap,
   HelpCircle,
   History,
   MessageSquare,
@@ -43,6 +44,14 @@ export default function Home() {
       icon: BookOpen,
       badge: t("mod_learn_badge"),
       description: t("mod_learn_desc"),
+    },
+    {
+      href: "/theory",
+      title: t("mod_theory_title"),
+      kicker: "文法",
+      icon: GraduationCap,
+      badge: t("mod_theory_badge"),
+      description: t("mod_theory_desc"),
     },
     {
       href: "/vocabulary",
@@ -198,7 +207,7 @@ export default function Home() {
           </p>
         </div>
 
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 lg:gap-5">
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 lg:gap-5">
           {modules.map((m) => {
             const Icon = m.icon;
             return (

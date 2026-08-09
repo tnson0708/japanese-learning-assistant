@@ -5,8 +5,10 @@ import { JapaneseText } from "@/components/theory/japanese-text";
 import {
   FillInBlankExerciseBlock,
   MultipleChoiceExerciseBlock,
+  ReorderSentenceExerciseBlock,
   SentencePracticeBlock,
 } from "@/components/theory/exercise-blocks";
+import { TranslationBlock } from "@/components/theory/translation-blocks";
 import type { ContentBlock, VocabItem } from "@/lib/theory";
 
 function VocabRow({ item }: { item: VocabItem }) {
@@ -197,6 +199,17 @@ export function BlockRenderer({ block }: { block: ContentBlock }) {
       return <h3 className="text-lg font-semibold text-foreground">{block.text}</h3>;
     case "paragraph":
       return <p className="text-sm text-foreground">{block.text}</p>;
+    case "translation-section":
+      return (
+        <TranslationBlock
+          title={block.title}
+          instruction={block.instruction}
+          sentences={block.sentences}
+          examples={block.examples}
+          dialogueTitle={block.dialogueTitle}
+          dialogueLines={block.dialogueLines}
+        />
+      );
     case "exercise-fill-in-blank":
       return (
         <FillInBlankExerciseBlock
@@ -219,6 +232,14 @@ export function BlockRenderer({ block }: { block: ContentBlock }) {
           title={block.title}
           instruction={block.instruction}
           items={block.items}
+        />
+      );
+    case "exercise-reorder-sentence":
+      return (
+        <ReorderSentenceExerciseBlock
+          title={block.title}
+          instruction={block.instruction}
+          questions={block.questions}
         />
       );
     default:

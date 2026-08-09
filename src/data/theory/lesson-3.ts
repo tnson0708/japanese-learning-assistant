@@ -1,0 +1,728 @@
+import type { Lesson } from "@/lib/theory";
+
+export const lesson3: Lesson = {
+  id: 3,
+  title: "Bài 3: ここ・そこ・あそこ — Hỏi và chỉ địa điểm, phương hướng & giá tiền",
+  sections: [
+    {
+      id: "vocabulary",
+      title: "I. Từ vựng",
+      blocks: [
+        {
+          type: "vocab-group",
+          heading: "Đại từ chỉ địa điểm & phương hướng",
+          items: [
+            {
+              jp: "ここ",
+              meaning: "chỗ này, đằng này, đây (gần người nói)",
+            },
+            {
+              jp: "そこ",
+              meaning: "chỗ đó, đó (gần người nghe)",
+            },
+            {
+              jp: "あそこ",
+              meaning: "chỗ kia, đằng kia, kia (xa cả người nói và người nghe)",
+            },
+            {
+              jp: "どこ",
+              meaning: "chỗ nào, đâu (nghi vấn từ hỏi địa điểm)",
+            },
+            {
+              jp: "こちら",
+              meaning: "phía này, đằng này, chỗ này, đây (cách nói lịch sự của ここ)",
+            },
+            {
+              jp: "そちら",
+              meaning: "phía đó, đằng đó, chỗ đó, đó (cách nói lịch sự của そこ)",
+            },
+            {
+              jp: "あちら",
+              meaning: "phía kia, đằng kia, chỗ kia, kia (cách nói lịch sự của あそこ)",
+            },
+            {
+              jp: "どちら",
+              meaning: "phía nào, đằng nào, chỗ nào, đâu (cách nói lịch sự của どこ)",
+            },
+          ],
+        },
+        {
+          type: "vocab-group",
+          heading: "Địa điểm & Phòng ban",
+          items: [
+            { jp: "きょうしつ", kanji: "教室", meaning: "lớp học, phòng học" },
+            { jp: "しょくどう", kanji: "食堂", meaning: "nhà ăn" },
+            { jp: "じむしょ", kanji: "事務所", meaning: "văn phòng" },
+            { jp: "かいぎしつ", kanji: "会議室", meaning: "phòng họp" },
+            { jp: "うけつけ", kanji: "受付", meaning: "quầy lễ tân, phòng thường trực" },
+            { jp: "ロビー", meaning: "hành lang, đại sảnh" },
+            { jp: "へや", kanji: "部屋", meaning: "căn phòng" },
+            {
+              jp: "トイレ（おてあらい）",
+              kanji: "［お手洗い］",
+              meaning: "toa-lét, nhà vệ sinh, phòng vệ sinh",
+            },
+            { jp: "かいだん", kanji: "階段", meaning: "cầu thang" },
+            { jp: "エレベーター", meaning: "thang máy" },
+            { jp: "エスカレーター", meaning: "thang cuốn" },
+            {
+              jp: "じどうはんばいき",
+              kanji: "自動販売機",
+              meaning: "máy bán hàng tự động",
+            },
+            { jp: "でんわ", kanji: "電話", meaning: "điện thoại" },
+            { jp: "［お］くに", kanji: "［お］国", meaning: "nước (của bạn/anh/chị)" },
+            { jp: "かいしゃ", kanji: "会社", meaning: "công ty" },
+            { jp: "うち", meaning: "nhà" },
+          ],
+        },
+        {
+          type: "vocab-group",
+          heading: "Đồ vật, Tầng nấc & Tiền tệ",
+          items: [
+            { jp: "くつ", kanji: "靴", meaning: "giày" },
+            { jp: "ネクタイ", meaning: "cà vạt" },
+            { jp: "ワイン", meaning: "rượu vang" },
+            { jp: "うりば", kanji: "売り場", meaning: "quầy bán (trong bách hóa)" },
+            { jp: "ちか", kanji: "地下", meaning: "tầng hầm, dưới mặt đất" },
+            { jp: "～かい（～がい）", kanji: "～階", meaning: "tầng thứ ~" },
+            { jp: "なんがい", kanji: "何階", meaning: "tầng mấy" },
+            { jp: "～えん", kanji: "～円", meaning: "~ yên" },
+            { jp: "いくら", meaning: "bao nhiêu tiền" },
+            { jp: "ひゃく", kanji: "百", meaning: "trăm" },
+            { jp: "せん", kanji: "千", meaning: "nghìn" },
+            { jp: "まん", kanji: "万", meaning: "mười nghìn, vạn" },
+          ],
+        },
+        {
+          type: "vocab-group",
+          heading: "Mẫu câu giao tiếp & Chào hỏi",
+          items: [
+            { jp: "すみません。", meaning: "Xin lỗi." },
+            { jp: "どうも。", meaning: "Cảm ơn." },
+            {
+              jp: "いらっしゃいませ。",
+              meaning: "Xin chào quý khách, mời quý khách vào.",
+            },
+            {
+              jp: "［～を］見せて ください。",
+              kanji: "［～を］みせて ください。",
+              meaning: "Cho tôi xem ［～］.",
+            },
+            { jp: "じゃ", meaning: "Thế thì, vậy thì" },
+            { jp: "［～を］ください。", meaning: "Cho tôi ［～］." },
+          ],
+        },
+        {
+          type: "vocab-group",
+          heading: "Tên quốc gia & Địa danh",
+          items: [
+            { jp: "イタリア", meaning: "Ý" },
+            { jp: "スイス", meaning: "Thụy Sĩ" },
+            { jp: "フランス", meaning: "Pháp" },
+            { jp: "ジャカルタ", meaning: "Gia-các-ta" },
+            { jp: "バンコク", meaning: "Băng-cốc" },
+            { jp: "ベルリン", meaning: "Béc-lin" },
+            { jp: "しんおおさか", kanji: "新大阪", meaning: "Tên một ga ở Osaka" },
+          ],
+        },
+      ],
+    },
+    {
+      id: "translation",
+      title: "II. Bản dịch",
+      blocks: [
+        {
+          type: "translation-section",
+          title: "II. Phần dịch tiếng Việt → tiếng Nhật (Mẫu câu, Ví dụ & Hội thoại)",
+          instruction:
+            "Đọc câu tiếng Việt và tự suy nghĩ/dịch sang tiếng Nhật. Bấm 'Xem đáp án' để kiểm tra câu tiếng Nhật chuẩn xác và nghe phát âm.",
+          sentences: [
+            {
+              id: "l3-t-s1",
+              num: 1,
+              vi: "Đây là nhà ăn.",
+              jp: "ここは 食堂です。",
+            },
+            {
+              id: "l3-t-s2",
+              num: 2,
+              vi: "Thang máy ở đằng kia.",
+              jp: "エレベーターは あそこです。",
+            },
+          ],
+          examples: [
+            {
+              id: "l3-t-e1",
+              num: 1,
+              vi: "Đây có phải là ga Shin-Osaka không?\n…Vâng, đúng rồi.",
+              jp: "ここは 新大阪ですか。\n……はい、そうです。",
+            },
+            {
+              id: "l3-t-e2",
+              num: 2,
+              vi: "Phòng vệ sinh ở đâu?\n…Ở đằng kia.",
+              jp: "お手洗いは どこですか。\n……あそこです。",
+            },
+            {
+              id: "l3-t-e3",
+              num: 3,
+              vi: "Anh Yamada ở đâu?\n…Ở phòng họp.",
+              jp: "山田さんは どこですか。\n……会議室です。",
+            },
+            {
+              id: "l3-t-e4",
+              num: 4,
+              vi: "Văn phòng ở đâu ạ?\n…Ở kia ạ.",
+              jp: "事務所は どちらですか。\n……あちらです。",
+            },
+            {
+              id: "l3-t-e5",
+              num: 5,
+              vi: "Anh đến từ nước nào?\n…Mỹ.",
+              jp: "［お］国は どちらですか。\n……アメリカです。",
+            },
+            {
+              id: "l3-t-e6",
+              num: 6,
+              vi: "Đó là giày nước nào?\n…Giày Ý.",
+              jp: "それは どこの 靴ですか。\n……イタリアの 靴です。",
+            },
+            {
+              id: "l3-t-e7",
+              num: 7,
+              vi: "Đồng hồ này bao nhiêu tiền?\n…18,600 yên.",
+              jp: "この 時計は いくらですか。\n……18,600円です。",
+            },
+          ],
+          dialogueTitle: "Chị cho tôi chai này (これを ください)",
+          dialogueLines: [
+            {
+              speakerVi: "Nhân viên bán hàng A",
+              speakerJp: "店員A",
+              vi: "Xin chào chị.",
+              jp: "いらっしゃいませ。",
+            },
+            {
+              speakerVi: "Maria",
+              speakerJp: "マリア",
+              vi: "Xin lỗi, quầy bán rượu vang ở đâu ạ?",
+              jp: "すみません。ワイン売り場は どこですか。",
+            },
+            {
+              speakerVi: "Nhân viên bán hàng A",
+              speakerJp: "店員A",
+              vi: "Ở dưới tầng hầm thứ nhất ạ.",
+              jp: "地下1階です。",
+            },
+            {
+              speakerVi: "Maria",
+              speakerJp: "マリア",
+              vi: "Cảm ơn chị.",
+              jp: "どうも ありがとう ございます。",
+            },
+            {
+              speakerVi: "Maria",
+              speakerJp: "マリア",
+              vi: "Xin lỗi, cho tôi xem chai rượu vang đó.",
+              jp: "すみません。その ワインを 見せて ください。",
+            },
+            {
+              speakerVi: "Nhân viên bán hàng B",
+              speakerJp: "店員B",
+              vi: "Vâng, xin mời chị.",
+              jp: "はい、どうぞ。",
+            },
+            {
+              speakerVi: "Maria",
+              speakerJp: "マリア",
+              vi: "Đây là rượu vang của nước nào?",
+              jp: "これは どこの ワインですか。",
+            },
+            {
+              speakerVi: "Nhân viên bán hàng B",
+              speakerJp: "店員B",
+              vi: "Của Nhật chị ạ.",
+              jp: "日本の です。",
+            },
+            {
+              speakerVi: "Maria",
+              speakerJp: "マリア",
+              vi: "Giá bao nhiêu?",
+              jp: "いくらですか。",
+            },
+            {
+              speakerVi: "Nhân viên bán hàng B",
+              speakerJp: "店員B",
+              vi: "2,500 yên.",
+              jp: "2,500円です。",
+            },
+            {
+              speakerVi: "Maria",
+              speakerJp: "マリア",
+              vi: "Vậy thì cho tôi chai này.",
+              jp: "じゃ、これを ください。",
+            },
+          ],
+        },
+      ],
+    },
+    {
+      id: "reference",
+      title: "III. Từ và thông tin tham khảo",
+      blocks: [
+        {
+          type: "table",
+          title: "デパートの売り場案内 — Sơ đồ quầy hàng trong Cửa hàng bách hóa",
+          columns: ["Tầng (階)", "Tiếng Nhật (Kanji / Hiragana)", "Loại hàng hóa / Dịch vụ"],
+          speakableColumns: [1],
+          rows: [
+            ["Tầng thượng (屋上)", "屋上 (おくじょう)", "Công viên giải trí (遊園地)"],
+            ["Tầng 8 (8階)", "8階 (はちかい)", "Nhà hàng & Phòng tổ chức sự kiện (レストラン・催し物会場)"],
+            ["Tầng 7 (7階)", "7階 (ななかい)", "Đồng hồ, Kính mắt, Máy ảnh (時計・眼鏡・カメラ)"],
+            ["Tầng 6 (6階)", "6階 (ろくかい)", "Dụng cụ thể thao & Đồ du lịch (スポーツ用品・旅行用品)"],
+            ["Tầng 5 (5階)", "5階 (ごかい)", "Quần áo trẻ em, Đồ chơi, Văn phòng phẩm (子ども服・おもちゃ・文房具)"],
+            ["Tầng 4 (4階)", "4階 (よんかい)", "Dụng cụ gia đình, Bát đĩa, Điện máy (家具・食器・電化製品)"],
+            ["Tầng 3 (3階)", "3階 (さんかい)", "Quần áo nam (紳士服)"],
+            ["Tầng 2 (2階)", "2階 (にかい)", "Quần áo nữ (婦人服)"],
+            ["Tầng 1 (1階)", "1階 (いっかい)", "Giày, Cặp sách, Đồ trang sức, Mỹ phẩm (靴・かばん・アクセサリー・化粧品)"],
+            ["Tầng hầm 1 (B1)", "地下1階 (ちかいっかい)", "Thực phẩm (食品)"],
+            ["Tầng hầm 2 (B2)", "地下2階 (ちかにかい)", "Bãi đỗ xe (駐車場)"],
+          ],
+        },
+      ],
+    },
+    {
+      id: "grammar",
+      title: "IV. Giải thích ngữ pháp",
+      blocks: [
+        {
+          type: "grammar-pattern",
+          pattern: "1. ここ ／ そこ ／ あそこ ／ こちら ／ そちら ／ あちら",
+          explanation:
+            "ここ, そこ, あそこ là những đại từ chỉ định địa điểm.",
+          subPoints: [
+            {
+              label: "1) ここ (chỗ này)",
+              text: "Chỉ vị trí nơi người nói đang ở.",
+            },
+            {
+              label: "2) そこ (chỗ đó)",
+              text: "Chỉ vị trí nơi người nghe đang ở.",
+            },
+            {
+              label: "3) あそこ (chỗ kia)",
+              text: "Chỉ vị trí ở xa cả người nói và người nghe.",
+            },
+            {
+              label: "4) こちら ／ そちら ／ あちら",
+              text: "Là những đại từ chỉ phương hướng, đồng thời dùng để chỉ địa điểm với sắc thái lịch sự hơn ここ, そこ, あそこ.",
+            },
+          ],
+          notes: [
+            "Chú ý: Khi người nói cho rằng người nghe cũng ở trong phạm vi vị trí của mình thì dùng ここ để chỉ vị trí cả hai người đang ở, dùng そこ để chỉ vị trí hơi xa hai người, và dùng あそこ để chỉ vị trí xa hẳn hai người.",
+          ],
+        },
+        {
+          type: "grammar-pattern",
+          pattern: "2. Danh từ は Địa điểm です",
+          explanation:
+            "Mẫu câu này dùng để diễn đạt một người, một vật hay một địa điểm đang ở đâu.",
+          examples: [
+            {
+              jp: "① お手洗いは あそこです。",
+              vi: "Nhà vệ sinh ở đằng kia.",
+            },
+            {
+              jp: "② 電話は 2階です。",
+              vi: "Điện thoại ở tầng 2.",
+            },
+            {
+              jp: "③ 山田さんは 事務所です。",
+              vi: "Anh Yamada ở văn phòng.",
+            },
+          ],
+        },
+        {
+          type: "grammar-pattern",
+          pattern: "3. どこ ／ どちら",
+          explanation:
+            "どこ là nghi vấn từ hỏi địa điểm (ở đâu). どちら là nghi vấn từ hỏi phương hướng (hướng nào), nhưng cũng có thể dùng để hỏi địa điểm với sắc thái lịch sự hơn.",
+          subPoints: [
+            {
+              label: "Hỏi nơi chốn/tổ chức",
+              text: "Khi hỏi tên của nơi chốn hay tổ chức trực thuộc (quốc gia, công ty, trường học...), dùng どこ hoặc どちら chứ không dùng なん.",
+            },
+          ],
+          examples: [
+            {
+              jp: "④ お手洗いは どこですか。 ……あそこです。",
+              vi: "Nhà vệ sinh ở đâu? …Ở đằng kia.",
+            },
+            {
+              jp: "⑤ エレベーターは どちらですか。 ……あちらです。",
+              vi: "Thang máy ở chỗ nào vậy? …Ở đằng kia ạ.",
+            },
+            {
+              jp: "⑥ 学校は どこですか。",
+              vi: "Anh/chị học ở trường nào?",
+            },
+            {
+              jp: "⑦ 会社は どちらですか。",
+              vi: "Chị làm việc ở công ty nào ạ?",
+            },
+          ],
+        },
+        {
+          type: "grammar-pattern",
+          pattern: "4. Danh từ₁ の Danh từ₂ (Xuất xứ / Nơi sản xuất)",
+          explanation:
+            "Khi Danh từ₁ là tên quốc gia hoặc tên công ty và Danh từ₂ là tên sản phẩm, trợ từ の thể hiện xuất xứ hoặc công ty sản xuất ra sản phẩm đó. Khi hỏi xuất xứ sản phẩm, dùng nghi vấn từ どこ.",
+          examples: [
+            {
+              jp: "⑧ これは どこの コンピューターですか。\n……日本の コンピューターです。\n……パワー電気の コンピューターです。",
+              vi: "Đây là máy vi tính của nước nào / hãng nào?\n…Là máy vi tính của Nhật Bản.\n…Là máy vi tính của công ty Power.",
+            },
+          ],
+        },
+        {
+          type: "grammar-pattern",
+          pattern: "5. Bảng tổng hợp đại từ chỉ thị こ／そ／あ／ど",
+          explanation: "Tóm tắt hệ thống đại từ chỉ thị trong tiếng Nhật:",
+          subPoints: [
+            {
+              label: "Chỉ đồ vật (đại từ)",
+              text: "これ (cái này) | それ (cái đó) | あれ (cái kia) | どれ (cái nào)",
+            },
+            {
+              label: "Chỉ đồ vật/người (tính từ)",
+              text: "この + N (này) | その + N (đó) | あの + N (kia) | どの + N (nào)",
+            },
+            {
+              label: "Chỉ địa điểm",
+              text: "ここ (chỗ này) | そこ (chỗ đó) | あそこ (chỗ kia) | どこ (chỗ nào)",
+            },
+            {
+              label: "Chỉ hướng / địa điểm lịch sự",
+              text: "こちら (phía này) | そちら (phía đó) | あちら (phía kia) | どちら (phía nào)",
+            },
+          ],
+        },
+        {
+          type: "grammar-pattern",
+          pattern: "6. Tiền tố lịch sự お～",
+          explanation:
+            "Tiền tố お được thêm vào trước một từ có liên quan đến người nghe hoặc người ở ngôi thứ ba để bày tỏ sự kính trọng của người nói.",
+          examples: [
+            {
+              jp: "⑨ ［お］国は どちらですか。",
+              vi: "Anh/Chị là người nước nào?",
+            },
+          ],
+        },
+      ],
+    },
+    {
+      id: "exercises",
+      title: "V. Bài tập & Luyện tập",
+      blocks: [
+        {
+          type: "exercise-fill-in-blank",
+          title: "Bài tập 1: Điền đại từ chỉ địa điểm (ここ, そこ, あそこ, どこ, こちら, どちら)",
+          instruction: "Chọn từ phù hợp nhất để hoàn thành các câu chỉ vị trí bên dưới.",
+          questions: [
+            {
+              id: "l3-q1",
+              promptPre: "お手洗いは ",
+              promptPost: "ですか。 - あそこです。",
+              options: ["どこ", "これ", "だれ", "なん"],
+              correctAnswer: "どこ",
+              explanation: "どこ là nghi vấn từ dùng để hỏi địa điểm (ở đâu).",
+              fullSentenceJp: "お手洗いは どこですか。 - あそこです。",
+              fullSentenceVi: "Nhà vệ sinh ở đâu? - Ở đằng kia.",
+            },
+            {
+              id: "l3-q2",
+              promptPre: "エレベーターは ",
+              promptPost: "ですか。 - あちらです。",
+              options: ["どちら", "どれ", "だれ", "なん"],
+              correctAnswer: "どちら",
+              explanation: "どちら là nghi vấn từ hỏi phương hướng/địa điểm lịch sự, tương ứng với trả lời あちら.",
+              fullSentenceJp: "エレベーターは どちらですか。 - あちらです。",
+              fullSentenceVi: "Thang máy ở chỗ nào vậy? - Ở đằng kia ạ.",
+            },
+            {
+              id: "l3-q3",
+              promptPre: "山田さんは ",
+              promptPost: "です。",
+              options: ["事務所", "靴", "ワイン", "いくら"],
+              correctAnswer: "事務所",
+              explanation: "Danh từ + は + Địa điểm + です biểu thị người/vật đang ở địa điểm đó.",
+              fullSentenceJp: "山田さんは 事務所です。",
+              fullSentenceVi: "Anh Yamada ở văn phòng.",
+            },
+            {
+              id: "l3-q4",
+              promptPre: "これは ",
+              promptPost: "の コンピューターですか。 - 日本の です。",
+              options: ["どこ", "だれ", "なん", "どちら"],
+              correctAnswer: "どこ",
+              explanation: "どこの + N dùng để hỏi xuất xứ/nơi sản xuất của sản phẩm.",
+              fullSentenceJp: "これは どこの コンピューターですか。 - 日本の です。",
+              fullSentenceVi: "Đây là máy vi tính của nước nào? - Của Nhật Bản.",
+            },
+            {
+              id: "l3-q5",
+              promptPre: "この 時計は ",
+              promptPost: "ですか。 - 18,600円です。",
+              options: ["いくら", "どこ", "なんかい", "だれ"],
+              correctAnswer: "いくら",
+              explanation: "いくら là nghi vấn từ dùng để hỏi giá tiền (bao nhiêu tiền).",
+              fullSentenceJp: "この 時計は いくらですか。 - 18,600円です。",
+              fullSentenceVi: "Cái đồng hồ này bao nhiêu tiền? - 18,600 yên.",
+            },
+            {
+              id: "l3-q6",
+              promptPre: "ネクタイ売り場は ",
+              promptPost: "ですか。 - 5階です。",
+              options: ["何階", "いくら", "どこ", "だれ"],
+              correctAnswer: "何階",
+              explanation: "何階 (なんがい) dùng để hỏi tầng mấy.",
+              fullSentenceJp: "ネクタイ売り場は 何階ですか。 - 5階です。",
+              fullSentenceVi: "Quầy bán cà vạt ở tầng mấy? - Tầng 5 ạ.",
+            },
+            {
+              id: "l3-q7",
+              promptPre: "会社は ",
+              promptPost: "ですか。 - IMCです。",
+              options: ["どちら", "なん", "だれ", "いくら"],
+              correctAnswer: "どちら",
+              explanation: "Hỏi tên công ty/trường học của đối phương dùng どちら hoặc どこ.",
+              fullSentenceJp: "会社は どちらですか。 - IMCです。",
+              fullSentenceVi: "Chị làm việc ở công ty nào ạ? - Công ty IMC.",
+            },
+            {
+              id: "l3-q8",
+              promptPre: "［お］国は ",
+              promptPost: "ですか。 - ベトナムです。",
+              options: ["どちら", "なん", "だれ", "どれ"],
+              correctAnswer: "どちら",
+              explanation: "［お］国は どちらですか là câu hỏi lịch sự về quốc tịch/quê hương.",
+              fullSentenceJp: "［お］国は どちらですか。 - ベトナムです。",
+              fullSentenceVi: "Anh/chị là người nước nào? - Nước Việt Nam.",
+            },
+            {
+              id: "l3-q9",
+              promptPre: "すみません。その ネクタイを ",
+              promptPost: "ください。",
+              options: ["見せて", "あげて", "いって", "たべて"],
+              correctAnswer: "見せて",
+              explanation: "［～を］見せて ください nghĩa là 'Cho tôi xem ［～］'.",
+              fullSentenceJp: "すみません。その ネクタイを 見せて ください。",
+              fullSentenceVi: "Xin lỗi. Cho tôi xem cái cà vạt đó.",
+            },
+            {
+              id: "l3-q10",
+              promptPre: "じゃ、これを ",
+              promptPost: "。",
+              options: ["ください", "ですか", "ありません", "みます"],
+              correctAnswer: "ください",
+              explanation: "［～を］ください nghĩa là 'Cho tôi lấy ［～］' khi mua hàng.",
+              fullSentenceJp: "じゃ、これを ください。",
+              fullSentenceVi: "Thế thì cho tôi lấy cái này.",
+            },
+          ],
+        },
+        {
+          type: "exercise-multiple-choice",
+          title: "Bài tập 2: Trắc nghiệm Từ vựng & Ngữ pháp Bài 3",
+          instruction: "Chọn phương án trả lời đúng nhất.",
+          questions: [
+            {
+              id: "l3-mc1",
+              question: "Khi mua hàng, mẫu câu 'Cho tôi xem cái này' trong tiếng Nhật nói như thế nào?",
+              options: [
+                "これを 見せて ください。",
+                "これを ください。",
+                "これは いくらですか。",
+                "いらっしゃいませ。",
+              ],
+              correctAnswerIndex: 0,
+              explanation: "［～を］見せて ください nghĩa là 'Cho tôi xem ［～］'.",
+            },
+            {
+              id: "l3-mc2",
+              question: "Nghi vấn từ dùng để hỏi giá tiền là gì?",
+              options: ["いくら", "どこ", "どちら", "なんかい"],
+              correctAnswerIndex: 0,
+              explanation: "いくら nghĩa là 'bao nhiêu tiền'.",
+            },
+            {
+              id: "l3-mc3",
+              question: "Để hỏi lịch sự về quốc gia quê hương của đối phương, ta dùng câu nào?",
+              options: [
+                "［お］国は どちらですか。",
+                "どこから きましたか。",
+                "お名前は 何ですか。",
+                "会社は どこですか。",
+              ],
+              correctAnswerIndex: 0,
+              explanation: "［お］国は どちらですか là câu hỏi trang trọng lịch sự về quốc tịch.",
+            },
+            {
+              id: "l3-mc4",
+              question: "Đại từ chỉ định địa điểm lịch sự tương ứng với 'あそこ' (đằng kia) là gì?",
+              options: ["あちら", "こちら", "そちら", "どちら"],
+              correctAnswerIndex: 0,
+              explanation: "あちら là thể lịch sự của あそこ.",
+            },
+            {
+              id: "l3-mc5",
+              question: "Trong bách hóa, tầng hầm 1 được đọc là gì?",
+              options: [
+                "地下1階 (ちかいっかい)",
+                "地下1階 (ちかにかい)",
+                "1階 (いっかい)",
+                "屋上 (おくじょう)",
+              ],
+              correctAnswerIndex: 0,
+              explanation: "地下1階 (ちかいっかい) là tầng hầm 1.",
+            },
+            {
+              id: "l3-mc6",
+              question: "Mẫu câu 'じゃ、これを ください' dùng khi nào?",
+              options: [
+                "Quyết định mua sản phẩm khi bán hàng",
+                "Chào mừng khách vào cửa hàng",
+                "Hỏi vị trí nhà vệ sinh",
+                "Xin lỗi người khác",
+              ],
+              correctAnswerIndex: 0,
+              explanation: "じゃ、これを ください (Thế thì cho tôi lấy cái này) dùng khi chốt mua hàng.",
+            },
+            {
+              id: "l3-mc7",
+              question: "Câu 'これは どこの 車ですか' hỏi về điều gì?",
+              options: [
+                "Xuất xứ / Nơi sản xuất của chiếc xe ô tô",
+                "Giá tiền của chiếc xe ô tô",
+                "Chủ sở hữu của chiếc xe ô tô",
+                "Màu sắc của chiếc xe ô tô",
+              ],
+              correctAnswerIndex: 0,
+              explanation: "どこの + N hỏi xuất xứ sản phẩm (của nước nào / hãng nào sản xuất).",
+            },
+            {
+              id: "l3-mc8",
+              question: "Cụm từ 'いらっしゃいませ' có nghĩa là gì?",
+              options: [
+                "Xin chào quý khách, mời quý khách vào",
+                "Xin lỗi đã làm phiền",
+                "Cảm ơn rất nhiều",
+                "Hẹn gặp lại quý khách",
+              ],
+              correctAnswerIndex: 0,
+              explanation: "いらっしゃいませ là lời chào khách hàng khi họ bước vào shop/nhà hàng.",
+            },
+          ],
+        },
+        {
+          type: "exercise-sentence-practice",
+          title: "Bài tập 3: Luyện tập mẫu câu & Hội thoại Bài 3",
+          instruction: "Tự nói câu tiếng Nhật dựa trên gợi ý tiếng Việt, sau đó bấm 'Xem đáp án' để kiểm tra phát âm.",
+          items: [
+            {
+              id: "l3-sp1",
+              vi: "Nhà vệ sinh ở đâu? - Ở đằng kia.",
+              jp: "お手洗いは どこですか。 - あそこです。",
+              hint: "Dùng お手洗い và どこ.",
+              breakdown: "お手洗い (nhà vệ sinh) + は + どこ (ở đâu) + ですか. あそこ (đằng kia) + です.",
+            },
+            {
+              id: "l3-sp2",
+              vi: "Thang máy ở chỗ nào vậy? - Ở đằng kia ạ.",
+              jp: "エレベーターは どちらですか。 - あちらです。",
+              hint: "Dùng thể lịch sự どちら và あちら.",
+              breakdown: "エレベーター (thang máy) + は + どちら (chỗ nào lịch sự) + ですか. あちら (đằng kia lịch sự) + です.",
+            },
+            {
+              id: "l3-sp3",
+              vi: "Chị làm việc ở công ty nào ạ? - Công ty IMC.",
+              jp: "会社は どちらですか。 - IMCです。",
+              hint: "Hỏi tên công ty dùng どちら.",
+              breakdown: "会社 (công ty) + は + どちら (nào/đâu) + ですか. IMC + です.",
+            },
+            {
+              id: "l3-sp4",
+              vi: "Cái đồng hồ này bao nhiêu tiền? - 18,600 yên.",
+              jp: "この 時計は いくらですか。 - 18,600円です。",
+              hint: "Dùng この + 時計 và いくら.",
+              breakdown: "この 時計 (đồng hồ này) + は + いくら (bao nhiêu tiền) + ですか. 18,600円 (18,600 yên) + です.",
+            },
+            {
+              id: "l3-sp5",
+              vi: "Xin lỗi. Cho tôi xem cái cà vạt đó.",
+              jp: "すみません。その ネクタイを 見せて ください。",
+              hint: "Dùng その + ネクタイ và 見せて ください.",
+              breakdown: "すみません (Xin lỗi). その ネクタイ (cà vạt đó) + を + 見せて ください (cho tôi xem).",
+            },
+            {
+              id: "l3-sp6",
+              vi: "Hơi đắt nhỉ. Thế thì cho tôi cái này.",
+              jp: "うーん、ちょっと 高いですね。 じゃ、これを ください。",
+              hint: "Dùng ちょっと 高い và これを ください.",
+              breakdown: "ちょっと (hơi) + 高いですね (đắt nhỉ). じゃ (thế thì) + これ (cái này) + を + ください (cho tôi).",
+            },
+          ],
+        },
+        {
+          type: "exercise-reorder-sentence",
+          title: "Bài tập 4: Sắp xếp từ thành câu hoàn chỉnh (Luyện tập cấu trúc Bài 3)",
+          instruction: "Bấm vào các từ gợi ý theo đúng thứ tự ngữ pháp để ghép thành câu tiếng Nhật hoàn chỉnh.",
+          questions: [
+            {
+              id: "l3-ro1",
+              words: ["食堂", "です", "は", "ここ"],
+              correctOrder: ["ここ", "は", "食堂", "です"],
+              fullSentenceJp: "ここ は 食堂 です。",
+              fullSentenceVi: "Ở đây là nhà ăn.",
+              explanation: "ここ (ở đây) + は + 食堂 (nhà ăn) + です.",
+            },
+            {
+              id: "l3-ro2",
+              words: ["あそこ", "は", "エレベーター", "です"],
+              correctOrder: ["エレベーター", "は", "あそこ", "です"],
+              fullSentenceJp: "エレベーター は あそこ です。",
+              fullSentenceVi: "Thang máy ở đằng kia.",
+              explanation: "Mẫu câu chỉ vị trí: Danh từ + は + Địa điểm (あそこ) + です.",
+            },
+            {
+              id: "l3-ro3",
+              words: ["ですか", "は", "お手洗い", "どこ"],
+              correctOrder: ["お手洗い", "は", "どこ", "ですか"],
+              fullSentenceJp: "お手洗い は どこ ですか。",
+              fullSentenceVi: "Nhà vệ sinh ở đâu?",
+              explanation: "Hỏi địa điểm: Danh từ + は + どこ + ですか.",
+            },
+            {
+              id: "l3-ro4",
+              words: ["の", "ですか", "ワイン", "どこの", "これ", "は"],
+              correctOrder: ["これ", "は", "どこの", "ワイン", "ですか"],
+              fullSentenceJp: "これ は どこの ワイン ですか。",
+              fullSentenceVi: "Đây là rượu vang của nước nào?",
+              explanation: "どこの + Danh từ dùng để hỏi xuất xứ sản phẩm.",
+            },
+            {
+              id: "l3-ro5",
+              words: ["ください", "を", "じゃ", "これ"],
+              correctOrder: ["じゃ", "これ", "を", "ください"],
+              fullSentenceJp: "じゃ これ を ください。",
+              fullSentenceVi: "Thế thì cho tôi cái này.",
+              explanation: "Mẫu câu chốt mua hàng: じゃ (thế thì) + これ (cái này) + を ください.",
+            },
+          ],
+        },
+      ],
+    },
+  ],
+};

@@ -2,7 +2,7 @@ import type { Lesson } from "@/lib/theory";
 
 export const lesson2: Lesson = {
   id: 2,
-  title: "Bài 2",
+  title: "Bài 2: これ・それ・あれ — Hỏi và chỉ đồ vật, sở hữu & sự vật",
   sections: [
     {
       id: "vocabulary",
@@ -97,11 +97,6 @@ export const lesson2: Lesson = {
             },
             { jp: "そうですか。", meaning: "Thế à." },
             {
-              jp: "ちがいます。",
-              kanji: "違います。",
-              meaning: "Không phải, không đúng, sai rồi.",
-            },
-            {
               jp: "あ",
               meaning: "Ôi! (dùng khi sực nhận ra điều gì)",
             },
@@ -126,8 +121,128 @@ export const lesson2: Lesson = {
       ],
     },
     {
+      id: "translation",
+      title: "II. Bản dịch",
+      blocks: [
+        {
+          type: "translation-section",
+          title: "II. Phần dịch tiếng Việt → tiếng Nhật (Mẫu câu, Ví dụ & Hội thoại)",
+          instruction: "Đọc câu tiếng Việt và tự suy nghĩ/dịch sang tiếng Nhật. Bấm 'Xem đáp án' để kiểm tra câu tiếng Nhật chuẩn xác và nghe phát âm.",
+          sentences: [
+            {
+              id: "l2-t-s1",
+              num: 1,
+              vi: "Đây là quyển từ điển.",
+              jp: "これは 辞書です。",
+            },
+            {
+              id: "l2-t-s2",
+              num: 2,
+              vi: "Đó là cái ô của tôi.",
+              jp: "それは わたしの 傘です。",
+            },
+            {
+              id: "l2-t-s3",
+              num: 3,
+              vi: "Quyển sách này là của tôi.",
+              jp: "この 本は わたしの です。",
+            },
+          ],
+          examples: [
+            {
+              id: "l2-t-e1",
+              num: 1,
+              vi: "Đây có phải là bút bi không?\n…Vâng, phải.",
+              jp: "これは ボールペンですか。\n……はい、そうです。",
+            },
+            {
+              id: "l2-t-e2",
+              num: 2,
+              vi: "Đó có phải là quyển vở không?\n…Không, (đây là) quyển sổ tay.",
+              jp: "それは ノートですか。\n……いいえ、［これは］ 手帳です。",
+            },
+            {
+              id: "l2-t-e3",
+              num: 3,
+              vi: "Đó là cái gì?\n…Đây là danh thiếp.",
+              jp: "それは 何ですか。\n……［これは］ 名刺です。",
+            },
+            {
+              id: "l2-t-e4",
+              num: 4,
+              vi: "Đây là \"9\" hay là \"7\"?\n…Là \"9\".",
+              jp: "これは 「9」ですか、「7」ですか。\n……「9」です。",
+            },
+            {
+              id: "l2-t-e5",
+              num: 5,
+              vi: "Đó là tạp chí gì?\n…Tạp chí về máy vi tính.",
+              jp: "それは 何の 雑誌ですか。\n……コンピューターの 雑誌です。",
+            },
+            {
+              id: "l2-t-e6",
+              num: 6,
+              vi: "Kia là cái cặp sách của ai?\n…(Đó là cái cặp sách) của chị Sato.",
+              jp: "あれは だれの かばんですか。\n……［あれは］ 佐藤さんのです。",
+            },
+            {
+              id: "l2-t-e7",
+              num: 7,
+              vi: "Cái này có phải là của anh không, anh Miller?\n…Không, không phải là của tôi.",
+              jp: "これは あなたのですか、ミラーさん。\n……いいえ、わたしのじゃ ありません。",
+            },
+            {
+              id: "l2-t-e8",
+              num: 8,
+              vi: "Chiếc chìa khóa này là của ai?\n…(Chiếc chìa khóa đó) là của tôi.",
+              jp: "この 鍵は だれのですか。\n……［その 鍵は］ わたしのです。",
+            },
+          ],
+          dialogueTitle: "Từ nay rất mong được sự giúp đỡ của anh (これから お世話に なります)",
+          dialogueLines: [
+            {
+              speakerVi: "Yamada Ichiro",
+              speakerJp: "山田一郎",
+              vi: "Vâng. Ai đấy ạ?",
+              jp: "はい。どなたですか。",
+            },
+            {
+              speakerVi: "Santos",
+              speakerJp: "サントス",
+              vi: "Tôi là Santos, phòng 408 đây ạ.",
+              jp: "408号室の サントスです。",
+            },
+            {
+              speakerVi: "Santos",
+              speakerJp: "サントス",
+              vi: "Chào anh. Tôi là Santos. Từ nay chắc tôi sẽ phải nhờ anh giúp đỡ nhiều. Rất mong được sự cộng tác của anh.",
+              jp: "こんにちは。サントスです。これから お世話に なります。どうぞ よろしく お願いします。",
+            },
+            {
+              speakerVi: "Yamada Ichiro",
+              speakerJp: "山田一郎",
+              vi: "Không, chính tôi mới phải nói thế.",
+              jp: "こちらこそ よろしく お願いします。",
+            },
+            {
+              speakerVi: "Santos",
+              speakerJp: "サントス",
+              vi: "À, đây là cà phê. Xin mời anh.",
+              jp: "あのう、これ、ほんの 気持ちです。……コーヒーです。どうぞ。",
+            },
+            {
+              speakerVi: "Yamada Ichiro",
+              speakerJp: "山田一郎",
+              vi: "Xin cảm ơn anh.",
+              jp: "あ、どうも……。ありがとう ございます。",
+            },
+          ],
+        },
+      ],
+    },
+    {
       id: "reference",
-      title: "II. Từ và thông tin tham khảo",
+      title: "III. Từ và thông tin tham khảo",
       blocks: [
         {
           type: "table",
@@ -177,7 +292,7 @@ export const lesson2: Lesson = {
     },
     {
       id: "grammar",
-      title: "III. Giải thích ngữ pháp",
+      title: "IV. Giải thích ngữ pháp",
       blocks: [
         {
           type: "grammar-pattern",
@@ -323,6 +438,33 @@ export const lesson2: Lesson = {
         },
         {
           type: "grammar-pattern",
+          pattern: "7. Tiền tố lịch sự お～",
+          explanation:
+            "Tiền tố お đi cùng trước một số danh từ để biểu thị tính lịch sự, trang trọng và thể hiện thái độ tôn trọng đối phương khi giao tiếp.",
+          examples: [
+            {
+              jp: "［お］みやげ",
+              vi: "Quà biếu / Quà lưu niệm",
+            },
+            {
+              jp: "［お］さけ",
+              vi: "Rượu",
+            },
+            {
+              jp: "［お］しごと",
+              vi: "Công việc",
+            },
+            {
+              jp: "［お］なまえ",
+              vi: "Tên (của anh/chị)",
+            },
+          ],
+          notes: [
+            "Tiền tố お～ được đặt trước danh từ để biểu thị tính lịch sự (ví dụ: ［お］みやげ, ［お］さけ, ［お］しごと, ［お］なまえ).",
+          ],
+        },
+        {
+          type: "grammar-pattern",
           pattern: "8. そうですか",
           explanation:
             "Khi người nói nhận được thông tin mới nào đó và muốn biểu thị là đã hiểu thì dùng cấu trúc này. Phát âm hạ giọng ở cuối câu (pitch accent drop).",
@@ -337,7 +479,7 @@ export const lesson2: Lesson = {
     },
     {
       id: "exercises",
-      title: "IV. Bài tập & Luyện tập",
+      title: "V. Bài tập & Luyện tập",
       blocks: [
         {
           type: "exercise-fill-in-blank",
@@ -595,6 +737,61 @@ export const lesson2: Lesson = {
               jp: "これから お世話に なります。 - こちらこそ よろしく お願いします。",
               hint: "Mẫu câu xã giao khi mới dọn đến nhà mới hoặc làm quen hàng xóm mới.",
               breakdown: "これから (Từ nay về sau) + お世話に なります (mong nhận sự giúp đỡ). こちらこそ (Chính tôi mới là) + よろしく お願いします (mong nhận sự giúp đỡ).",
+            },
+          ],
+        },
+        {
+          type: "exercise-reorder-sentence",
+          title: "Bài tập 4: Sắp xếp từ thành câu hoàn chỉnh (練習B - 7)",
+          instruction: "Bấm vào các từ gợi ý theo đúng thứ tự ngữ pháp để ghép thành câu tiếng Nhật hoàn chỉnh.",
+          questions: [
+            {
+              id: "l2-ro1",
+              words: ["です", "それ", "は", "の", "わたし", "かぎ"],
+              correctOrder: ["それ", "は", "わたし", "の", "かぎ", "です"],
+              fullSentenceJp: "それ は わたし の かぎ です。",
+              fullSentenceVi: "Đó là chìa khóa của tôi.",
+              explanation: "Cấu trúc: Trợ từ は đứng sau chủ ngữ (それ), trợ từ の nối わたし với かぎ (chìa khóa của tôi).",
+            },
+            {
+              id: "l2-ro2",
+              words: ["の", "です", "ミラーさん", "辞書", "は", "この"],
+              correctOrder: ["この", "辞書", "は", "ミラーさん", "の", "です"],
+              fullSentenceJp: "この 辞書 は ミラーさん の です。",
+              fullSentenceVi: "Cuốn từ điển này là của anh Miller.",
+              explanation: "この đi trực tiếp với 辞書 (cuốn từ điển này), の ở cuối câu thay thế cho danh từ 辞書 (của anh Miller).",
+            },
+            {
+              id: "l2-ro3",
+              words: ["だれ", "その", "の", "か", "傘", "です", "は"],
+              correctOrder: ["その", "傘", "は", "だれ", "の", "です", "か"],
+              fullSentenceJp: "その 傘 は だれ の です か。",
+              fullSentenceVi: "Cái ô đó là của ai?",
+              explanation: "その bổ nghĩa cho 傘 (cái ô đó), だれの hỏi chủ sở hữu, か kết thúc câu nghi vấn.",
+            },
+            {
+              id: "l2-ro4",
+              words: ["あれ", "です", "先生", "つくえ", "の", "は"],
+              correctOrder: ["あれ", "は", "先生", "の", "つくえ", "です"],
+              fullSentenceJp: "あれ は 先生 の つくえ です。",
+              fullSentenceVi: "Kia là cái bàn của thầy giáo.",
+              explanation: "あれ (kia), 先生のつくえ (cái bàn của thầy giáo).",
+            },
+            {
+              id: "l2-ro5",
+              words: ["か", "は", "です", "これ", "の", "雑誌", "何"],
+              correctOrder: ["これ", "は", "何", "の", "雑誌", "です", "か"],
+              fullSentenceJp: "これ は 何 の 雑誌 です か。",
+              fullSentenceVi: "Đây là tạp chí về cái gì?",
+              explanation: "何の + Danh từ dùng để hỏi nội dung của tạp chí/sách.",
+            },
+            {
+              id: "l2-ro6",
+              words: ["気持ち", "です", "これ", "ほんの", "は"],
+              correctOrder: ["これ", "は", "ほんの", "気持ち", "です"],
+              fullSentenceJp: "これ は ほんの 気持ち です。",
+              fullSentenceVi: "Đây chỉ là một chút tấm lòng thành.",
+              explanation: "Mẫu câu xã giao tặng quà: これ は ほんの 気持ち です.",
             },
           ],
         },
