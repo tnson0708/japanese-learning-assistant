@@ -1,11 +1,12 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Pause, Play, SkipForward, Volume2, X } from "lucide-react";
+import { Clock, Pause, Play, SkipForward, Volume2, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { cn } from "@/lib/utils";
 import { speakJapanese } from "@/lib/speech";
+import { useLanguage } from "@/lib/language-context";
 
 import { playCardTransitionSound } from "@/lib/audio-signal";
 
@@ -28,6 +29,7 @@ interface PaperPracticeSessionProps {
   promptSeconds: number;
   revealSeconds: number;
   autoPlayAudio: boolean;
+  onTimingChange?: (promptSec: number, revealSec: number) => void;
   /** Returns the next item, given the current item's id (to avoid immediate repeats). */
   pickNext: (excludeId: string) => PaperItem;
   onEnd: () => void;
@@ -44,17 +46,29 @@ export function PaperPracticeSession({
   promptSeconds,
   revealSeconds,
   autoPlayAudio,
+  onTimingChange,
   pickNext,
   onEnd,
 }: PaperPracticeSessionProps) {
+  const { t } = useLanguage();
   const [item, setItem] = useState<PaperItem>(() => pickNext(""));
   const [phase, setPhase] = useState<Phase>("prompt");
-  const [remainingMs, setRemainingMs] = useState(promptSeconds * 1000);
+
+  // Local speed / timing settings (editable on-the-fly)
+  const [localPromptSec, setLocalPromptSec] = useState(promptSeconds);
+  const [localRevealSec, setLocalRevealSec] = useState(revealSeconds);
+  const [showSpeedSettings, setShowSpeedSettings] = useState(false);
+
+  const currentPhaseSec = phase === "prompt" ? localPromptSec : localRevealSec;
+  const isManualMode = currentPhaseSec === 0;
+
+  const [remainingMs, setRemainingMs] = useState(
+    currentPhaseSec > 0 ? currentPhaseSec * 1000 : 0
+  );
   const [paused, setPaused] = useState(false);
   const [round, setRound] = useState(1);
 
-  const phaseTotalMs =
-    (phase === "prompt" ? promptSeconds : revealSeconds) * 1000;
+  const phaseTotalMs = currentPhaseSec * 1000;
 
   // The showing/asking side depends on direction: "write" asks from romaji
   // and reveals the kana/word to check against paper; "read" asks from the
@@ -67,14 +81,22 @@ export function PaperPracticeSession({
     playCardTransitionSound();
     setItem((prev) => pickNext(prev.id));
     setPhase("prompt");
-    setRemainingMs(promptSeconds * 1000);
+    setRemainingMs(localPromptSec > 0 ? localPromptSec * 1000 : 0);
     setRound((r) => r + 1);
   }
 
   function revealNow() {
     setPhase("reveal");
-    setRemainingMs(revealSeconds * 1000);
+    setRemainingMs(localRevealSec > 0 ? localRevealSec * 1000 : 0);
   }
+
+  const applyTiming = (newPromptSec: number, newRevealSec: number) => {
+    setLocalPromptSec(newPromptSec);
+    setLocalRevealSec(newRevealSec);
+    const targetSec = phase === "prompt" ? newPromptSec : newRevealSec;
+    setRemainingMs(targetSec > 0 ? targetSec * 1000 : 0);
+    onTimingChange?.(newPromptSec, newRevealSec);
+  };
 
   // Keyboard Shortcuts Listener
   useEffect(() => {
@@ -122,9 +144,9 @@ export function PaperPracticeSession({
   }, [phase, onEnd]);
 
   // Countdown: reschedule a tick each render until the phase's time is up,
-  // then advance to the next phase (or the next card).
+  // then advance to the next phase (or the next card). (Skipped in Manual Mode)
   useEffect(() => {
-    if (paused) return;
+    if (paused || isManualMode) return;
     const id = setTimeout(() => {
       if (remainingMs <= TICK_MS) {
         if (phase === "prompt") {
@@ -138,7 +160,7 @@ export function PaperPracticeSession({
     }, TICK_MS);
     return () => clearTimeout(id);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [remainingMs, paused, phase]);
+  }, [remainingMs, paused, phase, isManualMode, localPromptSec, localRevealSec]);
 
   useEffect(() => {
     if (autoPlayAudio && phase === "reveal") {
@@ -153,7 +175,7 @@ export function PaperPracticeSession({
       {/* Session Top Bar */}
       <div className="flex items-center justify-between">
         <span className="text-sm font-semibold text-muted-foreground">Card {round}</span>
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2 sm:gap-3">
           <span className="text-xs uppercase font-bold tracking-wider text-muted-foreground">
             {phase === "prompt"
               ? direction === "write"
@@ -161,6 +183,27 @@ export function PaperPracticeSession({
                 : "Read it"
               : "Check"}
           </span>
+
+          {/* Simple Speed Select Dropdown */}
+          <div className="flex items-center gap-1.5">
+            <Clock className="size-3.5 text-muted-foreground shrink-0" />
+            <select
+              value={`${localPromptSec}-${localRevealSec}`}
+              onChange={(e) => {
+                const [p, r] = e.target.value.split("-").map(Number);
+                applyTiming(p, r);
+              }}
+              className="rounded-full border bg-background px-2.5 py-1 text-xs font-semibold text-foreground focus:outline-none focus:ring-1 focus:ring-primary cursor-pointer"
+              title="Chỉnh tốc độ luyện tập (Adjust Speed)"
+            >
+              <option value="3-2">{t("paper_speed_option_fast")}</option>
+              <option value="5-3">{t("paper_speed_option_standard")}</option>
+              <option value="8-5">{t("paper_speed_option_relaxed")}</option>
+              <option value="12-8">{t("paper_speed_option_slow")}</option>
+              <option value="0-0">{t("paper_speed_option_manual")}</option>
+            </select>
+          </div>
+
           <button
             type="button"
             onClick={onEnd}
@@ -209,22 +252,36 @@ export function PaperPracticeSession({
       </div>
 
       {/* Progress Bar */}
-      <Progress value={((phaseTotalMs - remainingMs) / phaseTotalMs) * 100}>
-        <div className="flex w-full items-center justify-between text-xs text-muted-foreground">
+      {isManualMode ? (
+        <div className="flex w-full items-center justify-between text-xs text-muted-foreground py-1 px-1 rounded-lg bg-muted/40 border">
           <span>{phase === "prompt" ? "Time to write" : "Check & compare"}</span>
-          <span className="tabular-nums font-semibold">{seconds}s</span>
+          <span className="font-semibold text-primary">🖐️ Thủ công (Bấm Enter / Nút bên dưới)</span>
         </div>
-      </Progress>
+      ) : (
+        <Progress value={((phaseTotalMs - remainingMs) / phaseTotalMs) * 100}>
+          <div className="flex w-full items-center justify-between text-xs text-muted-foreground">
+            <span>{phase === "prompt" ? "Time to write" : "Check & compare"}</span>
+            <span className="tabular-nums font-semibold">{seconds}s</span>
+          </div>
+        </Progress>
+      )}
 
       {/* Controls Bar */}
       <div className="grid grid-cols-2 gap-2">
-        <Button variant="outline" onClick={() => setPaused((p) => !p)} className="gap-1.5 font-medium">
-          {paused ? <Play className="size-4 text-emerald-500" /> : <Pause className="size-4 text-amber-500" />}
-          <span>{paused ? "Resume" : "Pause"}</span>
-          <kbd className="hidden sm:inline-block rounded bg-muted border px-1.5 py-0.5 text-[10px] font-mono font-bold text-muted-foreground ml-0.5">
-            Space
-          </kbd>
-        </Button>
+        {!isManualMode ? (
+          <Button variant="outline" onClick={() => setPaused((p) => !p)} className="gap-1.5 font-medium">
+            {paused ? <Play className="size-4 text-emerald-500" /> : <Pause className="size-4 text-amber-500" />}
+            <span>{paused ? "Resume" : "Pause"}</span>
+            <kbd className="hidden sm:inline-block rounded bg-muted border px-1.5 py-0.5 text-[10px] font-mono font-bold text-muted-foreground ml-0.5">
+              Space
+            </kbd>
+          </Button>
+        ) : (
+          <Button variant="outline" onClick={() => setShowSpeedSettings((v) => !v)} className="gap-1.5 font-medium">
+            <Clock className="size-4 text-primary" />
+            <span>Tốc độ ({localPromptSec}s/{localRevealSec}s)</span>
+          </Button>
+        )}
         {phase === "prompt" ? (
           <Button onClick={revealNow} className="gap-1.5 font-semibold">
             <span>Reveal</span>

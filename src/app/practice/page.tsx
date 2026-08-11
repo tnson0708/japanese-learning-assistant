@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { Volume2, VolumeX, PenTool, FileText, Sparkles, Headphones } from "lucide-react";
+import { Volume2, VolumeX, PenTool, FileText, Sparkles, Headphones, Clock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { OptionGroup } from "@/components/option-group";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -740,6 +740,29 @@ function PaperPanel({ onSessionStateChange }: { onSessionStateChange?: (active: 
             onChange={setDirection}
             size="sm"
           />
+        </div>
+
+        {/* Drill Speed Selection */}
+        <div className="flex flex-col gap-2 lg:col-span-2">
+          <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground flex items-center gap-1.5">
+            <Clock className="size-3.5 text-primary" />
+            {t("practice_speed")}
+          </span>
+          <select
+            value={`${promptSeconds}-${revealSeconds}`}
+            onChange={(e) => {
+              const [p, r] = e.target.value.split("-").map(Number);
+              setPromptSeconds(p);
+              setRevealSeconds(r);
+            }}
+            className="w-full rounded-lg border bg-background px-3 py-2 text-xs sm:text-sm font-medium focus:outline-none focus:ring-2 focus:ring-primary cursor-pointer"
+          >
+            <option value="3-2">{t("paper_speed_option_fast")}</option>
+            <option value="5-3">{t("paper_speed_option_standard")}</option>
+            <option value="8-5">{t("paper_speed_option_relaxed")}</option>
+            <option value="12-8">{t("paper_speed_option_slow")}</option>
+            <option value="0-0">{t("paper_speed_option_manual")}</option>
+          </select>
         </div>
 
         {/* Audio Option */}
