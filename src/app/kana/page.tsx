@@ -3,7 +3,8 @@
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { Suspense, useEffect, useMemo, useState } from "react";
-import { Search, Volume2, X } from "lucide-react";
+import { Search, Volume2, X, Printer } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { OptionGroup } from "@/components/option-group";
 import {
@@ -48,22 +49,22 @@ function KanaCard({ kana }: { kana: Kana }) {
   return (
     <Link
       href={`/kana/${kana.id}`}
-      className="group relative flex flex-col items-center justify-center rounded-xl border bg-card py-3.5 px-1 transition-all duration-200 hover:-translate-y-0.5 hover:border-primary/60 hover:bg-accent/50 hover:shadow-sm active:translate-y-0"
+      className="group relative flex flex-col items-center justify-center rounded-xl border bg-card py-3.5 px-1 transition-all duration-200 hover:-translate-y-0.5 hover:border-primary/60 hover:bg-accent/50 hover:shadow-sm active:translate-y-0 print:py-2 print:border-gray-400 print:bg-white"
     >
       <button
         type="button"
         onClick={handleAudio}
-        className="absolute top-1 right-1 rounded-full p-1 text-muted-foreground/70 transition-all hover:bg-accent hover:text-primary opacity-100 lg:opacity-0 lg:group-hover:opacity-100 focus:opacity-100"
+        className="absolute top-1 right-1 rounded-full p-1 text-muted-foreground/70 transition-all hover:bg-accent hover:text-primary opacity-100 lg:opacity-0 lg:group-hover:opacity-100 focus:opacity-100 print:hidden"
         title={`Listen to ${kana.char}`}
         aria-label={`Listen to ${kana.char}`}
       >
         <Volume2 className="size-3.5" />
       </button>
 
-      <span className="text-3xl font-medium tracking-tight text-foreground transition-colors group-hover:text-primary">
+      <span className="text-3xl font-medium tracking-tight text-foreground transition-colors group-hover:text-primary print:text-2xl print:font-bold print:text-black">
         {kana.char}
       </span>
-      <span className="text-xs font-semibold uppercase text-muted-foreground transition-colors group-hover:text-foreground">
+      <span className="text-xs font-semibold uppercase text-muted-foreground transition-colors group-hover:text-foreground print:text-[11px] print:text-gray-700">
         {kana.romaji}
       </span>
     </Link>
@@ -80,12 +81,12 @@ function KanaGroupCard({
   const is5Cols = kanaItems.length === 5;
 
   return (
-    <div className="flex flex-col rounded-xl border bg-card/40 p-4 shadow-2xs transition-colors hover:border-border/80">
-      <div className="mb-3 flex items-center justify-between">
-        <h3 className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
+    <div className="flex flex-col rounded-xl border bg-card/40 p-4 shadow-2xs transition-colors hover:border-border/80 print:break-inside-avoid print:border-gray-400 print:bg-white print:p-3">
+      <div className="mb-3 flex items-center justify-between print:mb-1.5">
+        <h3 className="text-xs font-bold uppercase tracking-wider text-muted-foreground print:text-black print:font-extrabold">
           {GROUP_LABELS[groupKey] || groupKey}
         </h3>
-        <span className="rounded-full bg-secondary/80 px-2 py-0.5 text-[10px] font-medium text-muted-foreground">
+        <span className="rounded-full bg-secondary/80 px-2 py-0.5 text-[10px] font-medium text-muted-foreground print:border print:border-gray-300 print:bg-gray-100 print:text-gray-800">
           {kanaItems.length}
         </span>
       </div>
@@ -235,16 +236,49 @@ function KanaPageContent() {
   const isKanaTab = activeTab === "hiragana" || activeTab === "katakana";
 
   return (
-    <div className="mx-auto flex w-full max-w-6xl flex-1 flex-col gap-6 px-4 py-6 sm:px-6 lg:py-8">
-      {/* Header & Controls Bar */}
-      <div className="flex flex-col gap-4">
-        <div>
-          <h1 className="text-2xl font-bold tracking-tight sm:text-3xl lg:text-4xl">
-            {t("kana_title")}
+    <div className="mx-auto flex w-full max-w-6xl flex-1 flex-col gap-6 px-4 py-6 sm:px-6 lg:py-8 print:p-0 print:gap-4">
+      {/* Printable Header Banner (Only visible during print) */}
+      <div className="hidden print:flex flex-col gap-1 pb-3 mb-2 border-b border-gray-400">
+        <div className="flex items-center justify-between">
+          <h1 className="text-xl font-bold tracking-tight text-black">
+            {activeTab === "hiragana"
+              ? "Bảng chữ Hiragana (ひらがな) — Hiragana Alphabet Chart"
+              : activeTab === "katakana"
+              ? "Bảng chữ Katakana (カタカナ) — Katakana Alphabet Chart"
+              : "Quy tắc phát âm tiếng Nhật — Japanese Pronunciation Guide"}
           </h1>
-          <p className="text-sm text-muted-foreground">
-            {t("kana_subtitle")}
-          </p>
+          <span className="text-xs font-bold text-gray-700">仮名道場 • Kana Dojo</span>
+        </div>
+        <p className="text-xs text-gray-600">
+          Bảng tra cứu chữ cái tiếng Nhật (Khổ A4) • Hiragana & Katakana Reference Chart
+        </p>
+      </div>
+
+      {/* Header & Controls Bar */}
+      <div className="flex flex-col gap-4 print:hidden">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <h1 className="text-2xl font-bold tracking-tight sm:text-3xl lg:text-4xl">
+              {t("kana_title")}
+            </h1>
+            <p className="text-sm text-muted-foreground">
+              {t("kana_subtitle")}
+            </p>
+          </div>
+
+          {/* Print Chart Button */}
+          {isKanaTab && (
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => window.print()}
+              className="gap-2 shrink-0 font-semibold cursor-pointer border-primary/30 hover:border-primary hover:bg-primary/10 text-foreground"
+              title="In bảng chữ ra giấy A4 (Print Chart)"
+            >
+              <Printer className="size-4 text-primary" />
+              <span>{t("kana_print_btn")}</span>
+            </Button>
+          )}
         </div>
 
         {/* Filter Controls Card */}

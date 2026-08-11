@@ -96,6 +96,7 @@ export const translations = {
     kana_strokes: "strokes",
     kana_card_detail: "Stroke order",
     kana_no_results: "No characters match your search or filter.",
+    kana_print_btn: "Print Chart (A4 Paper)",
 
     // Kana Detail (/kana/[id])
     detail_back: "Back to Kana Chart",
@@ -346,6 +347,7 @@ export const translations = {
     kana_strokes: "nét",
     kana_card_detail: "Thứ tự nét viết",
     kana_no_results: "Không tìm thấy chữ cái nào phù hợp.",
+    kana_print_btn: "In bảng chữ (Khổ A4)",
 
     // Kana Detail (/kana/[id])
     detail_back: "Trở lại bảng Kana",
