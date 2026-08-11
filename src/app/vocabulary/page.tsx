@@ -1,7 +1,8 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { ChevronLeft, ChevronRight, Filter, Search, Volume2, X } from "lucide-react";
+import { ChevronLeft, ChevronRight, Filter, Search, Volume2, X, Printer, Scissors, Tag } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { OptionGroup } from "@/components/option-group";
 import { speakJapanese } from "@/lib/speech";
 import { type Script } from "@/lib/kana";
@@ -173,20 +174,217 @@ export default function VocabularyPage() {
     return filteredWords.slice(start, start + pageSize);
   }, [filteredWords, safePage, pageSize]);
 
+  const [showPrintModal, setShowPrintModal] = useState(false);
+  const [printRange, setPrintRange] = useState<"page" | "all">("page");
+
+  const wordsToPrint = useMemo(() => {
+    return printRange === "page" ? paginatedWords : filteredWords;
+  }, [printRange, paginatedWords, filteredWords]);
+
   return (
-    <div className="mx-auto flex w-full max-w-6xl flex-1 flex-col gap-6 px-4 py-6 sm:px-6 lg:py-8">
-      {/* Header */}
-      <div className="flex flex-col gap-1">
-        <h1 className="text-2xl font-bold tracking-tight sm:text-3xl lg:text-4xl">
-          {t("vocab_title")}
-        </h1>
-        <p className="text-sm text-muted-foreground">
-          {t("vocab_subtitle")}
-        </p>
+    <div className="mx-auto flex w-full max-w-6xl flex-1 flex-col gap-6 px-4 py-6 sm:px-6 lg:py-8 print:p-0 print:gap-4">
+      {/* Printable Cutout Labels Section (Only visible during print) */}
+      <div className="hidden print:block font-sans text-black">
+        {/* Printable Header Banner */}
+        <div className="flex items-center justify-between pb-3 mb-4 border-b border-gray-400">
+          <div>
+            <h1 className="text-xl font-bold tracking-tight text-black">
+              Bảng nhãn dán từ vựng (Vocabulary Cutout Tags Sheet)
+            </h1>
+            <p className="text-xs text-gray-600">
+              Dùng kéo cắt theo đường nét đứt ✂️ và dán lên các đồ vật thực tế xung quanh để học từ vựng nhanh thuộc!
+            </p>
+          </div>
+          <span className="text-xs font-bold text-gray-700">仮名道場 • Kana Dojo</span>
+        </div>
+
+        {/* Cutout Tags Grid (3 columns per row on A4 paper) */}
+        <div className="grid grid-cols-3 gap-3">
+          {wordsToPrint.map((word) => {
+            const meaningText = getWordMeaning(word, language);
+
+            return (
+              <div
+                key={`print-tag-${word.id}`}
+                className="flex flex-col justify-between rounded-lg border-2 border-dashed border-gray-400 bg-white p-3 shadow-none print:break-inside-avoid min-h-[110px]"
+              >
+
+                {/* Main Japanese Word & Kanji */}
+                <div className="flex flex-col gap-0.5 pt-1">
+                  <div className="flex items-baseline gap-1.5 flex-wrap">
+                    <span className="text-2xl font-bold tracking-tight text-black">
+                      {word.kanji || word.word}
+                    </span>
+                    {word.kanji && (
+                      <span className="text-xs font-semibold text-gray-600">
+                        ({word.word})
+                      </span>
+                    )}
+                  </div>
+                  <span className="text-xs font-bold text-gray-700 font-mono">
+                    {word.romaji}
+                  </span>
+                </div>
+
+                {/* Meaning */}
+                <div className="flex flex-col gap-0.5 border-t border-dashed border-gray-300 pt-1.5 mt-2">
+                  <span className="text-xs font-bold text-black leading-tight">
+                    {meaningText}
+                  </span>
+                </div>
+              </div>
+            );
+          })}
+        </div>
       </div>
 
-      {/* Filter & Controls Card */}
-      <div className="flex flex-col gap-5 rounded-xl border bg-card p-4 sm:p-6 shadow-2xs">
+      {/* Header (Hidden during print) */}
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between print:hidden">
+        <div className="flex flex-col gap-1">
+          <h1 className="text-2xl font-bold tracking-tight sm:text-3xl lg:text-4xl">
+            {t("vocab_title")}
+          </h1>
+          <p className="text-sm text-muted-foreground">
+            {t("vocab_subtitle")}
+          </p>
+        </div>
+
+        {/* Print Cutout Labels Button */}
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => setShowPrintModal(true)}
+          className="gap-2 shrink-0 font-semibold cursor-pointer border-primary/30 hover:border-primary hover:bg-primary/10 text-foreground"
+          title="In nhãn từ vựng dán đồ vật (Print Cutout Labels)"
+        >
+          <Printer className="size-4 text-primary" />
+          <Scissors className="size-3.5 text-primary -ml-1" />
+          <span>{t("vocab_print_btn")}</span>
+        </Button>
+      </div>
+
+      {/* Print Cutout Labels Options & Preview Modal */}
+      {showPrintModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-xs print:hidden">
+          <div className="flex w-full max-w-xl flex-col gap-5 rounded-2xl border bg-card p-5 sm:p-7 shadow-xl">
+            <div className="flex items-start justify-between">
+              <div className="flex flex-col gap-1">
+                <div className="flex items-center gap-2">
+                  <Printer className="size-5 text-primary" />
+                  <Scissors className="size-4 text-primary -ml-1" />
+                  <h2 className="text-lg font-bold tracking-tight text-foreground">
+                    {t("vocab_print_modal_title")}
+                  </h2>
+                </div>
+                <p className="text-xs text-muted-foreground leading-relaxed">
+                  {t("vocab_print_modal_desc")}
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={() => setShowPrintModal(false)}
+                className="rounded-full p-1 text-muted-foreground hover:bg-accent hover:text-foreground"
+              >
+                <X className="size-5" />
+              </button>
+            </div>
+
+            {/* Print Scope Selector Options */}
+            <div className="flex flex-col gap-2">
+              <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
+                Phạm vi nhãn từ vựng muốn in (Print Scope):
+              </span>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                <button
+                  type="button"
+                  onClick={() => setPrintRange("page")}
+                  className={cn(
+                    "flex flex-col gap-1 rounded-xl border p-3 text-left transition-all cursor-pointer",
+                    printRange === "page"
+                      ? "border-primary bg-primary/10 text-primary font-bold shadow-2xs"
+                      : "border-border bg-background text-muted-foreground hover:bg-accent"
+                  )}
+                >
+                  <span className="text-xs font-bold">📄 Trang hiện tại</span>
+                  <span className="text-[11px] font-normal opacity-80">
+                    In {paginatedWords.length} nhãn từ vựng đang hiển thị
+                  </span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => setPrintRange("all")}
+                  className={cn(
+                    "flex flex-col gap-1 rounded-xl border p-3 text-left transition-all cursor-pointer",
+                    printRange === "all"
+                      ? "border-primary bg-primary/10 text-primary font-bold shadow-2xs"
+                      : "border-border bg-background text-muted-foreground hover:bg-accent"
+                  )}
+                >
+                  <span className="text-xs font-bold">📚 Tất cả từ đã lọc</span>
+                  <span className="text-[11px] font-normal opacity-80">
+                    In toàn bộ {filteredWords.length} nhãn từ vựng trong bộ lọc
+                  </span>
+                </button>
+              </div>
+            </div>
+
+            {/* Cutout Label Sample Card Preview */}
+            <div className="flex flex-col gap-2 pt-2 border-t">
+              <span className="text-xs font-semibold text-muted-foreground">
+                Xem trước mẫu nhãn cắt dán (Label Tag Sample):
+              </span>
+              <div className="flex items-center justify-center p-4 bg-muted/40 rounded-xl">
+                {wordsToPrint[0] ? (
+                  <div className="w-64 flex flex-col justify-between rounded-lg border-2 border-dashed border-primary/60 bg-card p-3 shadow-2xs">
+                    <div className="flex flex-col gap-0.5">
+                      <div className="flex items-baseline gap-1.5">
+                        <span className="text-2xl font-bold tracking-tight text-foreground">
+                          {wordsToPrint[0].kanji || wordsToPrint[0].word}
+                        </span>
+                        {wordsToPrint[0].kanji && (
+                          <span className="text-xs font-semibold text-muted-foreground">
+                            ({wordsToPrint[0].word})
+                          </span>
+                        )}
+                      </div>
+                      <span className="text-xs font-mono font-bold text-primary">
+                        {wordsToPrint[0].romaji}
+                      </span>
+                    </div>
+                    <div className="flex flex-col gap-0.5 border-t border-dashed border-border pt-1.5 mt-2 text-xs font-semibold text-foreground">
+                      {getWordMeaning(wordsToPrint[0], language)}
+                    </div>
+                  </div>
+                ) : (
+                  <span className="text-xs text-muted-foreground">Không có từ nào để in</span>
+                )}
+              </div>
+            </div>
+
+            {/* Modal Actions */}
+            <div className="flex items-center justify-end gap-3 pt-2">
+              <Button variant="outline" onClick={() => setShowPrintModal(false)}>
+                Hủy (Cancel)
+              </Button>
+              <Button
+                disabled={wordsToPrint.length === 0}
+                onClick={() => {
+                  setShowPrintModal(false);
+                  setTimeout(() => window.print(), 150);
+                }}
+                className="gap-2 font-semibold cursor-pointer"
+              >
+                <Printer className="size-4" />
+                <span>{t("vocab_print_btn_confirm")} ({wordsToPrint.length} nhãn)</span>
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Filter & Controls Card (Hidden during print) */}
+      <div className="flex flex-col gap-5 rounded-xl border bg-card p-4 sm:p-6 shadow-2xs print:hidden">
         {/* Row 1: Script & Difficulty */}
         <div className="grid gap-4 md:grid-cols-2 lg:gap-6">
           <div className="flex flex-col gap-2">
@@ -322,8 +520,8 @@ export default function VocabularyPage() {
         )}
       </div>
 
-      {/* Vocabulary Table Container */}
-      <div className="flex flex-col gap-4">
+      {/* Vocabulary Table Container (Hidden during print) */}
+      <div className="flex flex-col gap-4 print:hidden">
         <div className="flex items-center justify-between text-xs text-muted-foreground px-1">
           <span>
             {t("vocab_showing")} <strong className="text-foreground">{filteredWords.length}</strong> {t("vocab_words")}

@@ -2,11 +2,12 @@
 
 import Link from "next/link";
 import { useParams } from "next/navigation";
-import { ArrowLeft, BookOpen, ChevronLeft, ChevronRight, FileText, GraduationCap, Languages, Sparkles } from "lucide-react";
+import { ArrowLeft, BookOpen, ChevronLeft, ChevronRight, FileText, GraduationCap, Languages, Sparkles, Printer } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { BlockRenderer } from "@/components/theory/blocks";
 import { getAdjacentLessons, getLessonById } from "@/lib/theory";
+import { useLanguage } from "@/lib/language-context";
 
 const sectionIcons: Record<string, typeof BookOpen> = {
   vocabulary: BookOpen,
@@ -25,6 +26,7 @@ const shortTitles: Record<string, string> = {
 };
 
 export default function TheoryLessonPage() {
+  const { t } = useLanguage();
   const params = useParams<{ id: string }>();
   const lessonId = Number(params.id);
   const lesson = getLessonById(lessonId);
@@ -43,20 +45,21 @@ export default function TheoryLessonPage() {
   const { prev, next } = getAdjacentLessons(lessonId);
 
   return (
-    <div className="mx-auto flex w-full max-w-3xl flex-1 flex-col gap-6 px-4 py-6 sm:px-6 lg:py-8">
+    <div className="mx-auto flex w-full max-w-3xl flex-1 flex-col gap-6 px-4 py-6 sm:px-6 lg:py-8 print:p-0 print:gap-4">
+
       <Link
         href="/theory"
-        className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground"
+        className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground print:hidden"
       >
         <ArrowLeft className="size-4" /> Danh sách bài học
       </Link>
 
-      <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">
+      <h1 className="text-2xl font-bold tracking-tight sm:text-3xl print:hidden">
         {lesson.title}
       </h1>
 
       <Tabs defaultValue={lesson.sections[0]?.id} className="gap-4">
-        <TabsList className="grid w-full grid-cols-5 gap-1 rounded-xl bg-muted p-1 sm:flex sm:w-fit sm:justify-center">
+        <TabsList className="grid w-full grid-cols-5 gap-1 rounded-xl bg-muted p-1 sm:flex sm:w-fit sm:justify-center print:hidden">
           {lesson.sections.map((section) => {
             const Icon = sectionIcons[section.id] || BookOpen;
             const shortLabel = shortTitles[section.id] || section.title;
@@ -85,6 +88,28 @@ export default function TheoryLessonPage() {
             value={section.id}
             className="flex flex-col gap-4"
           >
+            {/* If section is 'exercises', add a Print Button header bar */}
+            {section.id === "exercises" && (
+              <div className="flex items-center justify-between rounded-xl border bg-card p-3 shadow-2xs print:hidden">
+                <div className="flex items-center gap-2">
+                  <Sparkles className="size-4 text-primary" />
+                  <span className="text-xs font-semibold text-foreground">
+                    Luyện tập trực tiếp trên web hoặc in ra giấy A4
+                  </span>
+                </div>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => window.print()}
+                  className="gap-2 shrink-0 font-semibold cursor-pointer border-primary/30 hover:border-primary hover:bg-primary/10 text-foreground"
+                  title="In phiếu bài tập ra giấy A4"
+                >
+                  <Printer className="size-4 text-primary" />
+                  <span>{t("theory_print_btn")}</span>
+                </Button>
+              </div>
+            )}
+
             {section.blocks.map((block, i) => (
               <BlockRenderer key={i} block={block} />
             ))}
@@ -92,7 +117,7 @@ export default function TheoryLessonPage() {
         ))}
       </Tabs>
 
-      <div className="flex items-center justify-between border-t pt-4">
+      <div className="flex items-center justify-between border-t pt-4 print:hidden">
         {prev ? (
           <Button
             render={<Link href={`/theory/${prev.id}`} />}

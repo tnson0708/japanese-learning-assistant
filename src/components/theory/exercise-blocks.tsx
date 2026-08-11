@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { CheckCircle2, XCircle, RotateCcw, HelpCircle, Eye, EyeOff, Sparkles, Volume2 } from "lucide-react";
+import { CheckCircle2, XCircle, RotateCcw, HelpCircle, Eye, EyeOff, Sparkles, Volume2, Printer } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -12,6 +12,25 @@ import type {
   SentencePracticeItem,
   ReorderQuestionItem,
 } from "@/lib/theory";
+
+function printSingleExercise(blockId: string) {
+  const targetElem = document.getElementById(blockId);
+  if (targetElem) {
+    targetElem.classList.add("print-target-active");
+  }
+  document.body.setAttribute("data-print-target", blockId);
+
+  const cleanup = () => {
+    document.body.removeAttribute("data-print-target");
+    if (targetElem) {
+      targetElem.classList.remove("print-target-active");
+    }
+  };
+
+  window.addEventListener("afterprint", cleanup, { once: true });
+  window.print();
+  setTimeout(cleanup, 1000);
+}
 
 /**
  * 1. Fill-in-the-blank Exercise Component (e.g., choosing particles は, も, の, か)
@@ -41,27 +60,37 @@ export function FillInBlankExerciseBlock({
     (q) => userAnswers[q.id] === q.correctAnswer
   ).length;
 
+  const blockId = `exercise-fill-${questions[0]?.id || title.replace(/\s+/g, "-")}`;
+
   return (
-    <Card className="border-primary/20 shadow-xs">
-      <CardHeader className="pb-3">
+    <Card id={blockId} className="border-primary/20 shadow-xs exercise-card-block print:border-gray-400 print:shadow-none print:break-inside-avoid print:bg-white">
+      <CardHeader className="pb-3 print:pb-1">
         <div className="flex flex-wrap items-center justify-between gap-2">
           <div className="flex items-center gap-2">
-            <Sparkles className="size-4 text-primary" />
-            <CardTitle className="text-base font-semibold text-foreground">
+            <Sparkles className="size-4 text-primary print:hidden" />
+            <CardTitle className="text-base font-semibold text-foreground print:text-black print:font-bold">
               {title}
             </CardTitle>
+            <button
+              type="button"
+              onClick={() => printSingleExercise(blockId)}
+              className="rounded-full p-1 text-muted-foreground/70 transition-colors hover:bg-accent hover:text-primary cursor-pointer print:hidden"
+              title="In riêng bài tập này (Print only this exercise)"
+            >
+              <Printer className="size-3.5" />
+            </button>
           </div>
           {checked && (
-            <Badge variant={correctCount === questions.length ? "default" : "secondary"}>
+            <Badge variant={correctCount === questions.length ? "default" : "secondary"} className="print:hidden">
               {correctCount} / {questions.length} câu đúng
             </Badge>
           )}
         </div>
         {instruction && (
-          <p className="text-xs text-muted-foreground">{instruction}</p>
+          <p className="text-xs text-muted-foreground print:text-gray-700">{instruction}</p>
         )}
       </CardHeader>
-      <CardContent className="flex flex-col gap-4">
+      <CardContent className="flex flex-col gap-4 print:gap-3">
         <div className="flex flex-col gap-3">
           {questions.map((q, index) => {
             const selected = userAnswers[q.id];
@@ -70,22 +99,23 @@ export function FillInBlankExerciseBlock({
             return (
               <div
                 key={q.id}
-                className="flex flex-col gap-2 rounded-xl border bg-muted/20 p-3.5 transition-colors"
+                className="flex flex-col gap-2 rounded-xl border bg-muted/20 p-3.5 transition-colors print:border-gray-300 print:bg-white print:p-2.5"
               >
                 <div className="flex items-start justify-between gap-2">
-                  <div className="flex flex-wrap items-baseline gap-1 text-sm sm:text-base font-medium">
-                    <span className="text-muted-foreground text-xs font-semibold mr-1">
+                  <div className="flex flex-wrap items-baseline gap-1 text-sm sm:text-base font-medium print:text-black">
+                    <span className="text-muted-foreground text-xs font-semibold mr-1 print:text-black print:font-bold">
                       {index + 1}.
                     </span>
                     <JapaneseText text={q.promptPre} />
-                    <span className="inline-flex min-w-12 items-center justify-center rounded-md border border-dashed border-primary/50 bg-background px-2.5 py-0.5 text-primary font-bold">
-                      {selected ? selected : "_"}
+                    <span className="inline-flex min-w-12 items-center justify-center rounded-md border border-dashed border-primary/50 bg-background px-2.5 py-0.5 text-primary font-bold print:border-gray-400 print:bg-white print:text-black print:font-normal">
+                      <span className="print:hidden">{selected ? selected : "_"}</span>
+                      <span className="hidden print:inline font-mono">( &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; )</span>
                     </span>
                     {q.promptPost && <JapaneseText text={q.promptPost} />}
                   </div>
 
                   {checked && selected && (
-                    <div>
+                    <div className="print:hidden">
                       {isCorrect ? (
                         <CheckCircle2 className="size-5 shrink-0 text-emerald-500" />
                       ) : (
@@ -95,8 +125,9 @@ export function FillInBlankExerciseBlock({
                   )}
                 </div>
 
-                {/* Option Buttons */}
+                {/* Option Buttons (Web interactive & Print choices) */}
                 <div className="flex flex-wrap items-center gap-1.5 pt-1">
+                  <span className="hidden print:inline text-xs font-medium text-gray-700 mr-1">Các từ chọn:</span>
                   {q.options.map((option) => {
                     const isOptionSelected = selected === option;
                     let btnVariant: "outline" | "default" | "destructive" = "outline";
@@ -117,22 +148,23 @@ export function FillInBlankExerciseBlock({
                         type="button"
                         size="sm"
                         variant={btnVariant}
-                        className={`h-8 px-3 text-xs sm:text-sm font-semibold transition-all ${
+                        className={`h-8 px-3 text-xs sm:text-sm font-semibold transition-all print:h-auto print:px-2 print:py-0.5 print:border-gray-400 print:bg-white print:text-black ${
                           checked && option === q.correctAnswer && !isOptionSelected
                             ? "border-emerald-500 text-emerald-600 dark:text-emerald-400 bg-emerald-500/10"
                             : ""
                         }`}
                         onClick={() => handleSelect(q.id, option)}
                       >
+                        <span className="hidden print:inline mr-1 font-mono">[ &nbsp; ]</span>
                         {option}
                       </Button>
                     );
                   })}
                 </div>
 
-                {/* Feedback / Solution */}
+                {/* Feedback / Solution (Hidden during print) */}
                 {checked && (
-                  <div className="mt-1 flex flex-col gap-1.5 rounded-lg bg-background p-2.5 text-xs">
+                  <div className="mt-1 flex flex-col gap-1.5 rounded-lg bg-background p-2.5 text-xs print:hidden">
                     <div className="flex items-center justify-between gap-2">
                       <div className="flex items-center gap-1.5 text-foreground font-medium">
                         <span>Đáp án đúng:</span>
@@ -167,8 +199,8 @@ export function FillInBlankExerciseBlock({
           })}
         </div>
 
-        {/* Action controls */}
-        <div className="flex items-center justify-between border-t pt-3">
+        {/* Action controls (Hidden during print) */}
+        <div className="flex items-center justify-between border-t pt-3 print:hidden">
           <Button
             type="button"
             variant="outline"
@@ -230,29 +262,39 @@ export function MultipleChoiceExerciseBlock({
     (q) => selectedAnswers[q.id] === q.correctAnswerIndex
   ).length;
 
+  const blockId = `exercise-mc-${questions[0]?.id || title.replace(/\s+/g, "-")}`;
+
   return (
-    <Card className="border-primary/20 shadow-xs">
-      <CardHeader className="pb-3">
+    <Card id={blockId} className="border-primary/20 shadow-xs exercise-card-block print:border-gray-400 print:shadow-none print:break-inside-avoid print:bg-white">
+      <CardHeader className="pb-3 print:pb-1">
         <div className="flex flex-wrap items-center justify-between gap-2">
           <div className="flex items-center gap-2">
-            <HelpCircle className="size-4 text-primary" />
-            <CardTitle className="text-base font-semibold text-foreground">
+            <HelpCircle className="size-4 text-primary print:hidden" />
+            <CardTitle className="text-base font-semibold text-foreground print:text-black print:font-bold">
               {title}
             </CardTitle>
+            <button
+              type="button"
+              onClick={() => printSingleExercise(blockId)}
+              className="rounded-full p-1 text-muted-foreground/70 transition-colors hover:bg-accent hover:text-primary cursor-pointer print:hidden"
+              title="In riêng bài tập này (Print only this exercise)"
+            >
+              <Printer className="size-3.5" />
+            </button>
           </div>
           {checked && (
-            <Badge variant={correctCount === questions.length ? "default" : "secondary"}>
+            <Badge variant={correctCount === questions.length ? "default" : "secondary"} className="print:hidden">
               {correctCount} / {questions.length} đúng
             </Badge>
           )}
         </div>
         {instruction && (
-          <p className="text-xs text-muted-foreground">{instruction}</p>
+          <p className="text-xs text-muted-foreground print:text-gray-700">{instruction}</p>
         )}
       </CardHeader>
 
-      <CardContent className="flex flex-col gap-4">
-        <div className="flex flex-col gap-4">
+      <CardContent className="flex flex-col gap-4 print:gap-3">
+        <div className="flex flex-col gap-4 print:gap-3">
           {questions.map((q, qIndex) => {
             const selectedIdx = selectedAnswers[q.id];
             const isCorrect = selectedIdx === q.correctAnswerIndex;
@@ -260,15 +302,15 @@ export function MultipleChoiceExerciseBlock({
             return (
               <div
                 key={q.id}
-                className="flex flex-col gap-2 rounded-xl border bg-card p-3.5 shadow-2xs"
+                className="flex flex-col gap-2 rounded-xl border bg-card p-3.5 shadow-2xs print:border-gray-300 print:bg-white print:p-2.5"
               >
                 <div className="flex items-start justify-between gap-2">
-                  <p className="text-sm font-semibold text-foreground">
-                    <span className="text-primary mr-1 font-bold">{qIndex + 1}.</span>
+                  <p className="text-sm font-semibold text-foreground print:text-black">
+                    <span className="text-primary mr-1 font-bold print:text-black">{qIndex + 1}.</span>
                     {q.question}
                   </p>
                   {checked && selectedIdx !== undefined && (
-                    <div>
+                    <div className="print:hidden">
                       {isCorrect ? (
                         <CheckCircle2 className="size-5 shrink-0 text-emerald-500" />
                       ) : (
@@ -279,7 +321,7 @@ export function MultipleChoiceExerciseBlock({
                 </div>
 
                 {/* Option list */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1 print:gap-1.5">
                   {q.options.map((optText, optIdx) => {
                     const isOptionSelected = selectedIdx === optIdx;
                     let styleClasses =
@@ -309,9 +351,9 @@ export function MultipleChoiceExerciseBlock({
                             handleSelect(q.id, optIdx);
                           }
                         }}
-                        className={`flex items-center gap-2 rounded-lg border p-2.5 text-left text-xs sm:text-sm transition-all cursor-pointer select-none ${styleClasses}`}
+                        className={`flex items-center gap-2 rounded-lg border p-2.5 text-left text-xs sm:text-sm transition-all cursor-pointer select-none print:border-gray-400 print:bg-white print:text-black print:p-1.5 ${styleClasses}`}
                       >
-                        <span className="flex size-5 shrink-0 items-center justify-center rounded-full border text-[11px] font-bold">
+                        <span className="flex size-5 shrink-0 items-center justify-center rounded-full border text-[11px] font-bold print:border-gray-500 print:text-black">
                           {String.fromCharCode(65 + optIdx)}
                         </span>
                         <JapaneseText text={optText} className="flex-1" />
@@ -320,9 +362,9 @@ export function MultipleChoiceExerciseBlock({
                   })}
                 </div>
 
-                {/* Explanation */}
+                {/* Explanation (Hidden during print) */}
                 {checked && (
-                  <div className="mt-1 rounded-lg bg-muted/40 p-2.5 text-xs text-muted-foreground">
+                  <div className="mt-1 rounded-lg bg-muted/40 p-2.5 text-xs text-muted-foreground print:hidden">
                     <p className="font-medium text-foreground mb-0.5">
                       Đáp án đúng: <span className="text-emerald-600 dark:text-emerald-400 font-bold">{String.fromCharCode(65 + q.correctAnswerIndex)}. {q.options[q.correctAnswerIndex]}</span>
                     </p>
@@ -334,8 +376,8 @@ export function MultipleChoiceExerciseBlock({
           })}
         </div>
 
-        {/* Footer controls */}
-        <div className="flex items-center justify-between border-t pt-3">
+        {/* Footer controls (Hidden during print) */}
+        <div className="flex items-center justify-between border-t pt-3 print:hidden">
           <Button
             type="button"
             variant="outline"
@@ -399,17 +441,27 @@ export function SentencePracticeBlock({
     setRevealedItems({});
   };
 
+  const blockId = `exercise-sentence-${items[0]?.id || title.replace(/\s+/g, "-")}`;
+
   return (
-    <Card className="border-primary/20 shadow-xs">
-      <CardHeader className="pb-3">
+    <Card id={blockId} className="border-primary/20 shadow-xs exercise-card-block print:border-gray-400 print:shadow-none print:break-inside-avoid print:bg-white">
+      <CardHeader className="pb-3 print:pb-1">
         <div className="flex flex-wrap items-center justify-between gap-2">
           <div className="flex items-center gap-2">
-            <Volume2 className="size-4 text-primary" />
-            <CardTitle className="text-base font-semibold text-foreground">
+            <Volume2 className="size-4 text-primary print:hidden" />
+            <CardTitle className="text-base font-semibold text-foreground print:text-black print:font-bold">
               {title}
             </CardTitle>
+            <button
+              type="button"
+              onClick={() => printSingleExercise(blockId)}
+              className="rounded-full p-1 text-muted-foreground/70 transition-colors hover:bg-accent hover:text-primary cursor-pointer print:hidden"
+              title="In riêng bài tập này (Print only this exercise)"
+            >
+              <Printer className="size-3.5" />
+            </button>
           </div>
-          <div className="flex items-center gap-1.5">
+          <div className="flex items-center gap-1.5 print:hidden">
             <Button
               type="button"
               variant="ghost"
@@ -431,7 +483,7 @@ export function SentencePracticeBlock({
           </div>
         </div>
         {instruction && (
-          <p className="text-xs text-muted-foreground">{instruction}</p>
+          <p className="text-xs text-muted-foreground print:text-gray-700">{instruction}</p>
         )}
       </CardHeader>
 
@@ -442,14 +494,14 @@ export function SentencePracticeBlock({
           return (
             <div
               key={item.id}
-              className="flex flex-col gap-2 rounded-xl border bg-card p-3.5 shadow-2xs transition-all hover:border-primary/30"
+              className="flex flex-col gap-2 rounded-xl border bg-card p-3.5 shadow-2xs transition-all hover:border-primary/30 print:border-gray-300 print:bg-white print:p-2.5"
             >
               <div className="flex items-start justify-between gap-2">
                 <div className="flex flex-col gap-1">
-                  <span className="text-xs font-semibold text-primary">
-                    Mẫu câu {idx + 1}
+                  <span className="text-xs font-semibold text-primary print:text-black print:font-bold">
+                    Mẫu câu {idx + 1}:
                   </span>
-                  <p className="text-sm font-medium text-foreground leading-relaxed">
+                  <p className="text-sm font-medium text-foreground leading-relaxed print:text-black">
                     {item.vi}
                   </p>
                 </div>
@@ -458,7 +510,7 @@ export function SentencePracticeBlock({
                   variant="outline"
                   size="sm"
                   onClick={() => toggleReveal(item.id)}
-                  className="h-8 gap-1.5 text-xs font-medium shrink-0"
+                  className="h-8 gap-1.5 text-xs font-medium shrink-0 print:hidden"
                 >
                   {isRevealed ? (
                     <>
@@ -472,14 +524,19 @@ export function SentencePracticeBlock({
                 </Button>
               </div>
 
+              {/* Printable Writing Line */}
+              <div className="hidden print:block pt-1 text-xs text-gray-700 font-mono">
+                Trả lời: ____________________________________________________________________
+              </div>
+
               {item.hint && !isRevealed && (
-                <p className="text-xs text-muted-foreground italic bg-muted/30 p-2 rounded-lg">
+                <p className="text-xs text-muted-foreground italic bg-muted/30 p-2 rounded-lg print:hidden">
                   💡 Gợi ý: {item.hint}
                 </p>
               )}
 
               {isRevealed && (
-                <div className="mt-1 flex flex-col gap-2 rounded-lg bg-muted/40 p-3 text-sm">
+                <div className="mt-1 flex flex-col gap-2 rounded-lg bg-muted/40 p-3 text-sm print:hidden">
                   <div className="flex items-baseline gap-2">
                     <JapaneseText
                       text={item.jp}
@@ -557,28 +614,38 @@ export function ReorderSentenceExerciseBlock({
 
   const correctCount = questions.filter(isQuestionCorrect).length;
 
+  const blockId = `exercise-reorder-${questions[0]?.id || title.replace(/\s+/g, "-")}`;
+
   return (
-    <Card className="border-primary/20 shadow-xs">
-      <CardHeader className="pb-3">
+    <Card id={blockId} className="border-primary/20 shadow-xs exercise-card-block print:border-gray-400 print:shadow-none print:break-inside-avoid print:bg-white">
+      <CardHeader className="pb-3 print:pb-1">
         <div className="flex flex-wrap items-center justify-between gap-2">
           <div className="flex items-center gap-2">
-            <Sparkles className="size-4 text-primary" />
-            <CardTitle className="text-base font-semibold text-foreground">
+            <Sparkles className="size-4 text-primary print:hidden" />
+            <CardTitle className="text-base font-semibold text-foreground print:text-black print:font-bold">
               {title}
             </CardTitle>
+            <button
+              type="button"
+              onClick={() => printSingleExercise(blockId)}
+              className="rounded-full p-1 text-muted-foreground/70 transition-colors hover:bg-accent hover:text-primary cursor-pointer print:hidden"
+              title="In riêng bài tập này (Print only this exercise)"
+            >
+              <Printer className="size-3.5" />
+            </button>
           </div>
           {checked && (
-            <Badge variant={correctCount === questions.length ? "default" : "secondary"}>
+            <Badge variant={correctCount === questions.length ? "default" : "secondary"} className="print:hidden">
               {correctCount} / {questions.length} câu đúng
             </Badge>
           )}
         </div>
         {instruction && (
-          <p className="text-xs text-muted-foreground">{instruction}</p>
+          <p className="text-xs text-muted-foreground print:text-gray-700">{instruction}</p>
         )}
       </CardHeader>
-      <CardContent className="flex flex-col gap-4">
-        <div className="flex flex-col gap-4">
+      <CardContent className="flex flex-col gap-4 print:gap-3">
+        <div className="flex flex-col gap-4 print:gap-3">
           {questions.map((q, index) => {
             const userOrderIndexes = selectedTokens[q.id] || [];
             const isComplete = userOrderIndexes.length === q.words.length;
@@ -588,17 +655,17 @@ export function ReorderSentenceExerciseBlock({
             return (
               <div
                 key={q.id}
-                className="flex flex-col gap-3 rounded-xl border bg-muted/20 p-3.5 sm:p-4 transition-colors"
+                className="flex flex-col gap-3 rounded-xl border bg-muted/20 p-3.5 sm:p-4 transition-colors print:border-gray-300 print:bg-white print:p-2.5"
               >
                 <div className="flex flex-wrap items-center justify-between gap-2">
-                  <span className="text-xs font-semibold text-muted-foreground">
+                  <span className="text-xs font-semibold text-muted-foreground print:text-black print:font-bold">
                     Câu {index + 1}:
                   </span>
-                  <p className="text-sm font-medium text-foreground">
+                  <p className="text-sm font-medium text-foreground print:text-black">
                     {q.fullSentenceVi}
                   </p>
                   {checked && isComplete && (
-                    <div className="ml-auto">
+                    <div className="ml-auto print:hidden">
                       {isCorrect ? (
                         <Badge className="bg-emerald-500 text-white flex items-center gap-1">
                           <CheckCircle2 className="size-3.5" /> Chính xác!
@@ -612,8 +679,8 @@ export function ReorderSentenceExerciseBlock({
                   )}
                 </div>
 
-                {/* Selected constructed sentence zone */}
-                <div className="flex min-h-12 flex-wrap items-center gap-1.5 rounded-lg border border-dashed border-primary/40 bg-background p-2.5">
+                {/* Selected constructed sentence zone (Web only) */}
+                <div className="flex min-h-12 flex-wrap items-center gap-1.5 rounded-lg border border-dashed border-primary/40 bg-background p-2.5 print:hidden">
                   {userOrderIndexes.length === 0 ? (
                     <span className="text-xs text-muted-foreground italic">
                       Bấm vào các từ bên dưới để ghép thành câu...
@@ -634,9 +701,14 @@ export function ReorderSentenceExerciseBlock({
                   )}
                 </div>
 
+                {/* Printable Writing Line */}
+                <div className="hidden print:block pt-1 text-xs text-gray-700 font-mono">
+                  Viết lại câu hoàn chỉnh: ____________________________________________________________________
+                </div>
+
                 {/* Available word tokens pool */}
                 <div className="flex flex-wrap items-center gap-1.5 pt-1">
-                  <span className="text-xs text-muted-foreground font-medium mr-1">Từ gợi ý:</span>
+                  <span className="text-xs text-muted-foreground font-medium mr-1 print:text-black print:font-bold">Từ gợi ý:</span>
                   {q.words.map((word, wordIdx) => {
                     const isSelected = userOrderIndexes.includes(wordIdx);
                     return (
@@ -645,20 +717,20 @@ export function ReorderSentenceExerciseBlock({
                         type="button"
                         disabled={isSelected}
                         onClick={() => handleSelectToken(q.id, wordIdx)}
-                        className={`rounded-md border px-2.5 py-1 text-sm font-medium transition-all ${
+                        className={`rounded-md border px-2.5 py-1 text-sm font-medium transition-all print:border-gray-400 print:bg-white print:text-black print:opacity-100 ${
                           isSelected
                             ? "border-muted/50 bg-muted/40 text-muted-foreground opacity-40 cursor-not-allowed"
                             : "border-primary/30 bg-background text-foreground hover:bg-primary/10 hover:border-primary cursor-pointer active:scale-95"
                         }`}
                       >
-                        <span className="font-japanese font-medium">{word}</span>
+                        <span className="font-japanese font-medium">[{word}]</span>
                       </button>
                     );
                   })}
                 </div>
 
-                {/* Item Actions */}
-                <div className="flex items-center justify-between pt-1">
+                {/* Item Actions (Hidden during print) */}
+                <div className="flex items-center justify-between pt-1 print:hidden">
                   <button
                     type="button"
                     onClick={() => handleResetItem(q.id)}
@@ -684,9 +756,9 @@ export function ReorderSentenceExerciseBlock({
                   </Button>
                 </div>
 
-                {/* Answer reveal section */}
+                {/* Answer reveal section (Hidden during print) */}
                 {(isShowAnswer || (checked && isCorrect)) && (
-                  <div className="flex flex-col gap-2 rounded-lg bg-emerald-500/10 border border-emerald-500/20 p-3 text-sm">
+                  <div className="flex flex-col gap-2 rounded-lg bg-emerald-500/10 border border-emerald-500/20 p-3 text-sm print:hidden">
                     <div className="flex items-baseline gap-2">
                       <span className="text-xs font-semibold text-emerald-600 dark:text-emerald-400">Đáp án chuẩn:</span>
                       <JapaneseText
@@ -706,8 +778,8 @@ export function ReorderSentenceExerciseBlock({
           })}
         </div>
 
-        {/* Global Action Buttons */}
-        <div className="flex flex-wrap items-center justify-between gap-3 border-t pt-4">
+        {/* Global Action Buttons (Hidden during print) */}
+        <div className="flex flex-wrap items-center justify-between gap-3 border-t pt-4 print:hidden">
           <Button
             onClick={() => setChecked(true)}
             disabled={Object.keys(selectedTokens).length === 0}

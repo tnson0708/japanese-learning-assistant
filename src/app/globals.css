@@ -173,4 +173,12 @@
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
   }
+
+  /* Single exercise targeting rule */
+  body[data-print-target] .exercise-card-block {
+    display: none !important;
+  }
+  body[data-print-target] .exercise-card-block.print-target-active {
+    display: flex !important;
+  }
 }
