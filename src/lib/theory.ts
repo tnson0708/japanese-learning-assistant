@@ -1,6 +1,7 @@
 import { lesson1 } from "@/data/theory/lesson-1";
 import { lesson2 } from "@/data/theory/lesson-2";
 import { lesson3 } from "@/data/theory/lesson-3";
+import { lesson4 } from "@/data/theory/lesson-4";
 
 /** A single vocabulary/phrase entry: Japanese reading, optional Kanji, Vietnamese meaning, optional usage note. */
 export interface VocabItem {
@@ -154,7 +155,7 @@ export interface Lesson {
 }
 
 // Add each new lesson's file here as it's transcribed.
-export const lessonList: Lesson[] = [lesson1, lesson2, lesson3];
+export const lessonList: Lesson[] = [lesson1, lesson2, lesson3, lesson4];
 
 export function getLessonById(id: number): Lesson | undefined {
   return lessonList.find((l) => l.id === id);

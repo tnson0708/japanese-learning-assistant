@@ -1,0 +1,822 @@
+import type { Lesson } from "@/lib/theory";
+
+export const lesson4: Lesson = {
+  id: 4,
+  title: "Bài 4: 今 －時 －分です — Thời gian, Ngày tháng, Động từ ます & Cấu trúc から～まで",
+  sections: [
+    {
+      id: "vocabulary",
+      title: "I. Từ vựng",
+      blocks: [
+        {
+          type: "vocab-group",
+          heading: "Động từ (動作を表す動詞)",
+          items: [
+            {
+              jp: "おきます",
+              kanji: "起きます",
+              meaning: "dậy, thức dậy",
+            },
+            {
+              jp: "ねます",
+              kanji: "寝ます",
+              meaning: "ngủ, đi ngủ",
+            },
+            {
+              jp: "はたらきます",
+              kanji: "働きます",
+              meaning: "làm việc",
+            },
+            {
+              jp: "やすみます",
+              kanji: "休みます",
+              meaning: "nghỉ, nghỉ ngơi",
+            },
+            {
+              jp: "べんきょうします",
+              kanji: "勉強します",
+              meaning: "học",
+            },
+            {
+              jp: "おわります",
+              kanji: "終わります",
+              meaning: "hết, kết thúc, xong",
+            },
+          ],
+        },
+        {
+          type: "vocab-group",
+          heading: "Địa điểm & Cơ quan (場所・施設)",
+          items: [
+            { jp: "デパート", meaning: "bách hóa, cửa hàng bách hóa" },
+            { jp: "ぎんこう", kanji: "銀行", meaning: "ngân hàng" },
+            { jp: "ゆうびんきょく", kanji: "郵便局", meaning: "bưu điện" },
+            { jp: "としょかん", kanji: "図書館", meaning: "thư viện" },
+            { jp: "びじゅつかん", kanji: "美術館", meaning: "bảo tàng mỹ thuật" },
+          ],
+        },
+        {
+          type: "vocab-group",
+          heading: "Thời gian & Đơn vị giờ giấc (時間・時刻)",
+          items: [
+            { jp: "いま", kanji: "今", meaning: "bây giờ" },
+            { jp: "―じ", kanji: "―時", meaning: "― giờ" },
+            { jp: "―ふん（―ぷん）", kanji: "―分", meaning: "― phút" },
+            { jp: "はん", kanji: "半", meaning: "rưỡi, nửa (30 phút)" },
+            { jp: "なんじ", kanji: "何時", meaning: "mấy giờ" },
+            { jp: "なんぷん", kanji: "何分", meaning: "mấy phút" },
+            {
+              jp: "ごぜん",
+              kanji: "午前",
+              meaning: "sáng, trước 12 giờ trưa (AM)",
+            },
+            {
+              jp: "ごご",
+              kanji: "午後",
+              meaning: "chiều, sau 12 giờ trưa (PM)",
+            },
+            { jp: "あさ", kanji: "朝", meaning: "buổi sáng, sáng" },
+            { jp: "ひる", kanji: "昼", meaning: "buổi trưa, trưa" },
+            { jp: "ばん（よる）", kanji: "晩（夜）", meaning: "buổi tối, tối" },
+            { jp: "おとtoi", meaning: "hôm kia" },
+            { jp: "きのう", meaning: "hôm qua" },
+            { jp: "きょう", meaning: "hôm nay" },
+            { jp: "あした", meaning: "ngày mai" },
+            { jp: "あさって", meaning: "ngày kia" },
+            { jp: "けさ", meaning: "sáng nay" },
+            { jp: "こんばん", kanji: "今晩", meaning: "tối nay" },
+            { jp: "やすみ", kanji: "休み", meaning: "nghỉ, nghỉ phép, ngày nghỉ" },
+            { jp: "ひるやすみ", kanji: "昼休み", meaning: "nghỉ trưa" },
+          ],
+        },
+        {
+          type: "vocab-group",
+          heading: "Kỳ thi, Cuộc họp & Thứ trong tuần (行事・曜日)",
+          items: [
+            { jp: "しけん", kanji: "試験", meaning: "thi, kỳ thi, kiểm tra" },
+            {
+              jp: "かいぎ",
+              kanji: "会議",
+              meaning: "cuộc họp, hội nghị (～を します: tổ chức cuộc họp)",
+            },
+            { jp: "えいが", kanji: "映画", meaning: "phim, điện ảnh" },
+            { jp: "まいあさ", kanji: "毎朝", meaning: "hàng sáng, mỗi sáng" },
+            { jp: "まいばん", kanji: "毎晩", meaning: "hàng tối, mỗi tối" },
+            { jp: "まいにち", kanji: "毎日", meaning: "hàng ngày, mỗi ngày" },
+            { jp: "げつようび", kanji: "月曜日", meaning: "thứ hai" },
+            { jp: "かようび", kanji: "火曜日", meaning: "thứ ba" },
+            { jp: "すいようび", kanji: "水曜日", meaning: "thứ tư" },
+            { jp: "もくようび", kanji: "木曜日", meaning: "thứ năm" },
+            { jp: "きんようび", kanji: "金曜日", meaning: "thứ sáu" },
+            { jp: "どようび", kanji: "土曜日", meaning: "thứ bảy" },
+            { jp: "にちようび", kanji: "日曜日", meaning: "chủ nhật" },
+            { jp: "なんようび", kanji: "何曜日", meaning: "thứ mấy" },
+            { jp: "～から", meaning: "～ từ" },
+            { jp: "～まで", meaning: "～ đến" },
+            { jp: "～と ～", meaning: "～ và ～ (dùng để nối danh từ)" },
+          ],
+        },
+        {
+          type: "vocab-group",
+          heading: "Giao tiếp & Số hiệu (会話表現・番号)",
+          items: [
+            {
+              jp: "たいへんですね。",
+              kanji: "大変ですね。",
+              meaning: "Anh/Chị vất vả quá. (dùng để bày tỏ sự thông cảm)",
+            },
+            { jp: "ばんごう", kanji: "番号", meaning: "số" },
+            { jp: "なんばん", kanji: "何番", meaning: "số bao nhiêu, số mấy" },
+            { jp: "そちら", meaning: "ông/bà, phía ông/phía bà" },
+          ],
+        },
+        {
+          type: "vocab-group",
+          heading: "Tên địa danh & Tên riêng (固有名詞)",
+          items: [
+            { jp: "ニューヨーク", meaning: "New York" },
+            { jp: "ペキン", kanji: "北京", meaning: "Bắc Kinh" },
+            { jp: "ロサンゼルス", meaning: "Los Angeles" },
+            { jp: "ロンドン", meaning: "Luân Đôn" },
+            { jp: "あすか", meaning: "tên giả định của một nhà hàng Nhật" },
+            {
+              jp: "アップルぎんこう",
+              kanji: "アップル銀行",
+              meaning: "Ngân hàng Apple (tên giả định)",
+            },
+            {
+              jp: "みどりとしょかん",
+              kanji: "みどり図書館",
+              meaning: "Thư viện Midori (tên giả định)",
+            },
+            {
+              jp: "やまとびじゅつかん",
+              kanji: "やまと美術館",
+              meaning: "Bảo tàng mỹ thuật Yamato (tên giả định)",
+            },
+          ],
+        },
+      ],
+    },
+    {
+      id: "translation",
+      title: "II. Bản dịch",
+      blocks: [
+        {
+          type: "translation-section",
+          title: "II. Phần dịch tiếng Việt → tiếng Nhật (Mẫu câu, Ví dụ & Hội thoại)",
+          instruction:
+            "Đọc câu tiếng Việt và tự suy nghĩ/dịch sang tiếng Nhật. Bấm 'Xem đáp án' để kiểm tra câu tiếng Nhật chuẩn xác và nghe phát âm.",
+          sentences: [
+            {
+              id: "l4-t-s1",
+              num: 1,
+              vi: "Bây giờ là 4 giờ 5 phút.",
+              jp: "いま 4時 5分です。",
+            },
+            {
+              id: "l4-t-s2",
+              num: 2,
+              vi: "Mỗi sáng tôi thức dậy vào lúc 6 giờ.",
+              jp: "わたしは 毎朝 6時に 起きます。",
+            },
+            {
+              id: "l4-t-s3",
+              num: 3,
+              vi: "Tôi (đã) học hôm qua.",
+              jp: "わたしは きのう 勉強しました。",
+            },
+          ],
+          examples: [
+            {
+              id: "l4-t-e1",
+              num: 1,
+              vi: "Bây giờ là mấy giờ?\n…2 giờ 10 phút.\nỞ New York bây giờ là mấy giờ?\n…0 giờ 10 phút sáng.",
+              jp: "いま 何時ですか。\n……2時 10分です。\nニューヨークは いま 何時ですか。\n……午前 0時 10分です。",
+            },
+            {
+              id: "l4-t-e2",
+              num: 2,
+              vi: "Ngày nghỉ là thứ mấy?\n…Thứ bảy và chủ nhật.",
+              jp: "休みは 何曜日ですか。\n……土曜日と 日曜日です。",
+            },
+            {
+              id: "l4-t-e3",
+              num: 3,
+              vi: "Ngân hàng Apple mở cửa từ mấy giờ đến mấy giờ?\n…Từ 9 giờ đến 3 giờ.",
+              jp: "アップル銀行は 何時から 何時までですか。\n……9時から 3時までです。",
+            },
+            {
+              id: "l4-t-e4",
+              num: 4,
+              vi: "Hàng tối anh/chị đi ngủ vào lúc mấy giờ?\n…Tôi đi ngủ lúc 11 giờ.",
+              jp: "毎晩 何時に 寝ますか。\n……11時に 寝ます。",
+            },
+            {
+              id: "l4-t-e5",
+              num: 5,
+              vi: "Hàng ngày anh/chị học từ mấy giờ đến mấy giờ?\n…Tôi học từ 9 giờ sáng đến 3 giờ chiều.",
+              jp: "毎日 何時から 何時まで 勉強しますか。\n……午前 9時から 午後 3時まで 勉強します。",
+            },
+            {
+              id: "l4-t-e6",
+              num: 6,
+              vi: "Thứ bảy anh/chị có làm việc không?\n…Không, tôi không làm việc.",
+              jp: "土曜日 働きますか。\n……いいえ、働きません。",
+            },
+            {
+              id: "l4-t-e7",
+              num: 7,
+              vi: "Hôm qua anh/chị có học không?\n…Không, tôi không học.",
+              jp: "きのう 勉強しましたか。\n……いいえ、勉強しませんでした。",
+            },
+          ],
+          dialogueTitle: "Nhà hàng mình mở cửa đến mấy giờ vậy ạ? (そちらは 何時までですか)",
+          dialogueLines: [
+            {
+              speakerVi: "Miller",
+              speakerJp: "ミラー",
+              vi: "Xin lỗi, số điện thoại nhà hàng Asuka là số mấy?",
+              jp: "すみません。 あすかの 電話番号は 何番ですか。",
+            },
+            {
+              speakerVi: "Sato",
+              speakerJp: "佐藤",
+              vi: "Nhà hàng Asuka à? Là 5275-2725.",
+              jp: "あすかですか。 5275-2725です。",
+            },
+            {
+              speakerVi: "Miller",
+              speakerJp: "ミラー",
+              vi: "Cảm ơn anh.",
+              jp: "どうも ありがとう ございます。",
+            },
+            {
+              speakerVi: "Nhân viên nhà hàng Asuka",
+              speakerJp: "あすかのスタッフ",
+              vi: "Vâng, nhà hàng Asuka nghe đây ạ.",
+              jp: "はい、あすかです。",
+            },
+            {
+              speakerVi: "Miller",
+              speakerJp: "ミラー",
+              vi: "Xin lỗi. Nhà hàng mình mở cửa đến mấy giờ vậy ạ?",
+              jp: "すみません。そちらは 何時までですか。",
+            },
+            {
+              speakerVi: "Nhân viên nhà hàng Asuka",
+              speakerJp: "あすかのスタッフ",
+              vi: "Đến 10 giờ ạ.",
+              jp: "10時までです。",
+            },
+            {
+              speakerVi: "Miller",
+              speakerJp: "ミラー",
+              vi: "Ngày nghỉ bán là thứ mấy ạ?",
+              jp: "休みは 何曜日ですか。",
+            },
+            {
+              speakerVi: "Nhân viên nhà hàng Asuka",
+              speakerJp: "あすかのスタッフ",
+              vi: "Chủ nhật ạ.",
+              jp: "日曜日です。",
+            },
+            {
+              speakerVi: "Miller",
+              speakerJp: "ミラー",
+              vi: "Thế à. Cảm ơn chị.",
+              jp: "そうですか。 どうも ありがとう ございます。",
+            },
+          ],
+        },
+      ],
+    },
+    {
+      id: "reference",
+      title: "III. Từ và thông tin tham khảo",
+      blocks: [
+        {
+          type: "table",
+          title: "時刻の読み方 — Cách đọc Giờ (1時 ～ 12時 & 何時)",
+          columns: ["Giờ", "Tiếng Nhật (Kanji / Hiragana)", "Romaji", "Lưu ý phát âm"],
+          speakableColumns: [1],
+          rows: [
+            ["1 giờ", "1時 (いちじ)", "ichiji", "Đọc bình thường (いちじ)"],
+            ["2 giờ", "2時 (にじ)", "niji", "Đọc bình thường (にじ)"],
+            ["3 giờ", "3時 (さんじ)", "sanji", "Đọc bình thường (さんじ)"],
+            ["4 giờ", "4時 (よじ)", "yoji", "Đặc biệt: đọc là よじ (KHÔNG đọc là よんじ!)"],
+            ["5 giờ", "5時 (ごじ)", "goji", "Đọc bình thường (ごじ)"],
+            ["6 giờ", "6時 (ろくじ)", "rokuji", "Đọc bình thường (ろくじ)"],
+            ["7 giờ", "7時 (しちじ)", "shichiji", "Đặc biệt: đọc là しちじ (KHÔNG đọc là ななじ!)"],
+            ["8 giờ", "8時 (はちじ)", "hachiji", "Đọc bình thường (はちじ)"],
+            ["9 giờ", "9時 (くじ)", "kuji", "Đặc biệt: đọc là くじ (KHÔNG đọc là きゅうじ!)"],
+            ["10 giờ", "10時 (じゅうじ)", "jūji", "Đọc bình thường (じゅうじ)"],
+            ["11 giờ", "11時 (じゅういちじ)", "jūichiji", "Đọc bình thường (じゅういちじ)"],
+            ["12 giờ", "12時 (じゅうにじ)", "jūniji", "Đọc bình thường (じゅうにじ)"],
+            ["Mấy giờ?", "何時 (なんじ)", "nanji", "Nghi vấn từ hỏi giờ (なんじ)"],
+          ],
+        },
+        {
+          type: "table",
+          title: "分の読み方 — Cách đọc Phút (1分 ～ 10分 & 何分)",
+          columns: ["Phút", "Tiếng Nhật (Kanji / Hiragana)", "Romaji", "Biến âm ふん / ぷん"],
+          speakableColumns: [1],
+          rows: [
+            ["1 phút", "1分 (いっぷん)", "ippun", "Biến âm 促音 ぷん (ippun)"],
+            ["2 phút", "2分 (にふん)", "nifun", "Đọc ふん (nifun)"],
+            ["3 phút", "3分 (さんぷん)", "sanpun", "Biến âm ぷん (sanpun)"],
+            ["4 phút", "4分 (よんぷん)", "yonpun", "Biến âm ぷん (yonpun)"],
+            ["5 phút", "5分 (ごふん)", "gofun", "Đọc ふん (gofun)"],
+            ["6 phút", "6分 (ろっぷん)", "roppun", "Biến âm 促音 ぷん (roppun)"],
+            ["7 phút", "7分 (ななふん)", "nanafun", "Đọc ふん (nanafun)"],
+            ["8 phút", "8分 (はっぷん / はちふん)", "happun / hachifun", "Thường biến âm 促音 ぷん (happun)"],
+            ["9 phút", "9分 (きゅうふん)", "kyūfun", "Đọc ふん (kyūfun)"],
+            ["10 phút", "10分 (じゅっぷん / じっぷん)", "juppun / jippun", "Biến âm 促音 ぷん (juppun / jippun)"],
+            ["15 phút", "15分 (じゅうごふん)", "jūgofun", "Đọc ふん (jūgofun)"],
+            ["30 phút / rưỡi", "30分 (さんじゅっぷん) / 半 (はん)", "sanjuppun / han", "30分 hoặc 半 (はん)"],
+            ["Mấy phút?", "何分 (なんぷん)", "nanpun", "Nghi vấn từ hỏi phút (なんぷん)"],
+          ],
+        },
+        {
+          type: "table",
+          title: "曜日の名前 — Tên các Thứ trong tuần",
+          columns: ["Thứ", "Tiếng Nhật (Kanji / Hiragana)", "Romaji", "Ý nghĩa nguồn gốc"],
+          speakableColumns: [1],
+          rows: [
+            ["Thứ hai", "月曜日 (げつようび)", "getsuyōbi", "Nguyệt (Mặt trăng - Moon)"],
+            ["Thứ ba", "火曜日 (かようび)", "kayōbi", "Hỏa (Lửa - Fire)"],
+            ["Thứ tư", "水曜日 (すいようび)", "suiyōbi", "Thủy (Nước - Water)"],
+            ["Thứ năm", "木曜日 (もくようび)", "mokuyōbi", "Mộc (Cây - Wood)"],
+            ["Thứ sáu", "金曜日 (きんようび)", "kin'yōbi", "Kim (Vàng/Kim loại - Gold)"],
+            ["Thứ bảy", "土曜日 (どようび)", "doyōbi", "Thổ (Đất - Earth)"],
+            ["Chủ nhật", "日曜日 (にちようび)", "nichiyōbi", "Nhật (Mặt trời - Sun)"],
+            ["Thứ mấy?", "何曜日 (なんようび)", "nan'yōbi", "Nghi vấn từ hỏi thứ trong tuần"],
+          ],
+        },
+        {
+          type: "table",
+          title: "電話・手紙 — Cách gọi điện thoại công cộng (公衆電話の使い方)",
+          columns: ["Thứ tự", "Các bước thực hiện", "Nội dung chi tiết & Ghi chú"],
+          rows: [
+            ["Bước ①", "Nhắc ống nghe", "Nhấc ống nghe của máy điện thoại công cộng."],
+            ["Bước ②", "Đút tiền / Thẻ điện thoại", "Cho đồng xu 10 yên, 100 yên hoặc thẻ điện thoại vào máy."],
+            ["Bước ③", "Ấn số điện thoại", "Ấn số điện thoại cần gọi. (Nếu máy có nút bắt đầu thì ấn nút này sau khi bấm số)."],
+            ["Bước ④", "Dập máy / Gác ống nghe", "Sau khi trò chuyện xong, gác ống nghe về vị trí ban đầu."],
+            ["Bước ⑤", "Lấy lại tiền thừa / Thẻ", "Nhận lại thẻ điện thoại hoặc tiền xu thừa (nếu có)."],
+          ],
+        },
+        {
+          type: "note",
+          text: "Ghi chú: Các máy điện thoại công cộng chỉ dùng được thẻ điện thoại, hoặc các đồng xu 10 yên và 100 yên. Nếu cho đồng 100 yên vào thì máy sẽ không trả lại tiền thừa.",
+        },
+        {
+          type: "table",
+          title: "特別な電話番号 — Các số điện thoại đặc biệt tại Nhật Bản",
+          columns: ["Số điện thoại", "Tên tiếng Nhật (Kanji / Hiragana)", "Chức năng / Dịch vụ"],
+          speakableColumns: [1],
+          rows: [
+            ["110", "警察署 (けいさつしょ)", "Gọi cảnh sát (Báo án, tai nạn, khẩn cấp)"],
+            ["119", "消防署 (しょうぼうしょ)", "Gọi cứu hỏa & cấp cứu y tế"],
+            ["117", "時報 (じほう)", "Dịch vụ hỏi giờ chuẩn xác"],
+            ["177", "天気予報 (てんきよほう)", "Dịch vụ thông tin dự báo thời tiết"],
+            ["104", "電話番号案内 (でんわばんごうあんない)", "Dịch vụ hướng dẫn & tra cứu số điện thoại"],
+          ],
+        },
+        {
+          type: "table",
+          title: "住所の書き方 — Cách viết địa chỉ ở Nhật Bản (Ví dụ: 〒658-0063 兵庫県 神戸市 中央区 三宮 1-23 コウベハイツ 405号)",
+          columns: ["Cấu trúc phần địa chỉ", "Ví dụ trong thực tế", "Giải thích ý nghĩa"],
+          speakableColumns: [1],
+          rows: [
+            ["Mã số bưu điện", "〒658-0063", "Ký hiệu bưu điện 〒 + 7 chữ số (郵便番号)"],
+            ["Tỉnh", "兵庫県 (ひょうごけん)", "Tên Tỉnh (県 - Prefecture)"],
+            ["Thành phố", "神戸市 (こうべし)", "Tên Thành phố (市 - City)"],
+            ["Quận", "中央区 (ちゅうおうく)", "Tên Quận (区 - Ward/District)"],
+            ["Khu phố", "三宮 (さんのみや)", "Tên Khu phố / Phường (町・丁目)"],
+            ["Số nhà / Số đất", "1-23", "Số lô đất & số nhà (番地)"],
+            ["Tên tòa nhà", "コウベハイツ", "Tên chung cư / tòa nhà (マンション名)"],
+            ["Số phòng", "405号", "Số phòng ở (部屋番号)"],
+          ],
+        },
+      ],
+    },
+    {
+      id: "grammar",
+      title: "IV. Giải thích ngữ pháp",
+      blocks: [
+        {
+          type: "grammar-pattern",
+          pattern: "1. 今 ―時 ―分です (Bây giờ là ― giờ ― phút)",
+          explanation:
+            "Để biểu thị thời gian, sau số từ chúng ta thêm trợ số từ 時 (giờ) và 分 (phút). Để hỏi thời gian, đặt nghi vấn từ 何 (なん) trước 時 và 分 (今 何時何分ですか).",
+          subPoints: [
+            {
+              label: "1) Trợ số từ 時 (じ)",
+              text: "Lưu ý 4時 đọc là よじ, 7時 đọc là しちじ, 9時 đọc là くじ.",
+            },
+            {
+              label: "2) Trợ số từ 分 (ふん / ぷん)",
+              text: "Đọc là ふん sau các số 2, 5, 7, 9. Đọc là ぷん (biến âm) sau các số 1, 3, 4, 6, 8, 10 (いっぷん, さんぷん, よんぷん, ろっぷん, はっぷん, じゅっぷん).",
+            },
+            {
+              label: "3) 午前 (AM) và 午後 (PM)",
+              text: "午前 (sáng, trước 12h trưa) và 午後 (chiều, sau 12h trưa) được đặt trước số giờ.",
+            },
+          ],
+          examples: [
+            {
+              jp: "① 今 何時ですか。 ……7時 10分です。",
+              vi: "Bây giờ là mấy giờ? … 7 giờ 10 phút.",
+            },
+            {
+              jp: "② ニューヨークは 今 午前 0時 10分です。",
+              vi: "Ở New York bây giờ là 0 giờ 10 phút sáng.",
+            },
+          ],
+        },
+        {
+          type: "grammar-pattern",
+          pattern: "2. Động từ ます ／ ません ／ ました ／ ませんでした",
+          explanation:
+            "Động từ ます làm vị ngữ của câu, thể hiện thái độ lịch sự của người nói với người nghe.",
+          subPoints: [
+            {
+              label: "1) Thì hiện tại / tương lai & Chân lý, tập quán",
+              text: "Động từ ます dùng để diễn tả chân lý, tập quán ở hiện tại hoặc hành động sẽ xảy ra trong tương lai.",
+            },
+            {
+              label: "2) Bảng chia thời thể của Động từ",
+              text: "• Khẳng định hiện tại/tương lai: ～ます (起きます)\n• Phủ định hiện tại/tương lai: ～ません (起きません)\n• Khẳng định quá khứ: ～ました (起きました)\n• Phủ định quá khứ: ～ませんでした (起きませんでした)",
+            },
+            {
+              label: "3) Câu hỏi nghi vấn động từ",
+              text: "Thêm か vào cuối câu nghi vấn. Trả lời bằng cách nhắc lại động từ nghi vấn (không dùng そうです / ちがいます).",
+            },
+          ],
+          examples: [
+            {
+              jp: "③ わたしは 毎日 勉強します。",
+              vi: "Tôi học hàng ngày.",
+            },
+            {
+              jp: "④ 毎朝 6時に 起きます。",
+              vi: "Mỗi sáng tôi thức dậy vào lúc 6 giờ.",
+            },
+            {
+              jp: "⑤ あした 6時に 起きます。",
+              vi: "Ngày mai tôi (sẽ) thức dậy vào lúc 6 giờ.",
+            },
+            {
+              jp: "⑥ けさ 6時に 起きました。",
+              vi: "Sáng nay tôi (đã) thức dậy vào lúc 6 giờ.",
+            },
+            {
+              jp: "⑦ きのう 勉強しましたか。 ……はい、勉強しました。 ／ いいえ、勉強しませんでした。",
+              vi: "Hôm qua anh/chị có học không? …Có, tôi có học. / …Không, tôi không học.",
+            },
+          ],
+        },
+        {
+          type: "grammar-pattern",
+          pattern: "3. Danh từ (thời gian) に Động từ",
+          explanation:
+            "Thêm trợ từ に vào sau danh từ chỉ thời gian con số cụ thể để biểu thị thời điểm diễn ra hành động.",
+          subPoints: [
+            {
+              label: "1) Khi nào BẮT BUỘC dùng に?",
+              text: "Dùng に khi thời gian chứa số đếm cụ thể (giờ, phút, ngày, tháng): 6時に, 7月2日に.",
+            },
+            {
+              label: "2) Khi nào KHÔNG dùng に?",
+              text: "Không dùng に với danh từ thời gian tương đối: きょう, あした, あさって, きのう, おととい, けさ, こんばん, いま, まいあさ, まいばん, まいにち, いつ, v.v.",
+            },
+            {
+              label: "3) Khi nào CÓ THỂ dùng hoặc KHÔNG dùng に?",
+              text: "Có thể dùng hoặc bỏ に với thứ trong tuần (～曜日) và các buổi (朝, 昼, 晩, 夜).",
+            },
+          ],
+          examples: [
+            {
+              jp: "⑧ 6時半に 起きます。",
+              vi: "Tôi thức dậy vào lúc 6 giờ rưỡi.",
+            },
+            {
+              jp: "⑨ 7月 2日に 日本へ 来ました。",
+              vi: "Tôi (đã) đến Nhật Bản vào ngày mồng 2 tháng 7.",
+            },
+            {
+              jp: "⑩ きのう 勉強しました。",
+              vi: "Hôm qua tôi (đã) học. (Không dùng に)",
+            },
+            {
+              jp: "⑪ 日曜日［に］ 奈良へ 行きます。",
+              vi: "Chủ nhật tôi (sẽ) đi Nara.",
+            },
+          ],
+        },
+        {
+          type: "grammar-pattern",
+          pattern: "4. Danh từ₁ から Danh từ₂ まで (Từ ～ Đến ～)",
+          explanation:
+            "から biểu thị điểm bắt đầu của thời gian hoặc địa điểm. まで biểu thị điểm kết thúc của thời gian hoặc địa điểm.",
+          subPoints: [
+            {
+              label: "1) Đi cặp hoặc đi riêng biệt",
+              text: "から và まで có thể đi cùng nhau (から～まで) hoặc đi riêng lẻ (から / まで).",
+            },
+            {
+              label: "2) Kết hợp với です",
+              text: "Có thể đặt です ngay sau ～から, ～まで, ～から ～まで để làm vị ngữ trong câu.",
+            },
+          ],
+          examples: [
+            {
+              jp: "⑫ 9時から 5時まで 勉強します。",
+              vi: "Tôi học từ 9 giờ đến 5 giờ.",
+            },
+            {
+              jp: "⑬ 大阪から 東京まで 3時間 かかります。",
+              vi: "Từ Osaka đến Tokyo mất 3 tiếng.",
+            },
+            {
+              jp: "⑭ 9時から 働きます。",
+              vi: "Tôi làm việc từ 9 giờ.",
+            },
+            {
+              jp: "⑮ 銀行は 9時から 3時までです。",
+              vi: "Ngân hàng mở cửa từ 9 giờ đến 3 giờ.",
+            },
+            {
+              jp: "⑯ 昼休みは 12時からです。",
+              vi: "Giờ nghỉ trưa bắt đầu từ 12 giờ.",
+            },
+          ],
+        },
+        {
+          type: "grammar-pattern",
+          pattern: "5. Danh từ₁ と Danh từ₂ (Danh từ₁ và Danh từ₂)",
+          explanation:
+            "Trợ từ と dùng để nối hai danh từ đồng cách với nhau, mang nghĩa là 'và'.",
+          examples: [
+            {
+              jp: "⑰ 銀行の 休みは 土曜日と 日曜日です。",
+              vi: "Ngân hàng đóng cửa vào thứ bảy và chủ nhật.",
+            },
+          ],
+        },
+        {
+          type: "grammar-pattern",
+          pattern: "6. Trợ từ ～ね (Thắc mắc / Kỳ vọng sự đồng cảm, xác nhận)",
+          explanation:
+            "Trợ từ ね đặt ở cuối câu thể hiện sự kỳ vọng của người nói vào sự đồng ý của người nghe, hoặc dùng để xác nhận, nhắc nhở.",
+          examples: [
+            {
+              jp: "⑱ 毎日 10時まで 勉強します。 ……大変ですね。",
+              vi: "Hàng ngày tôi học đến 10 giờ. …Vất vả quá nhỉ!",
+            },
+            {
+              jp: "⑲ 山田さんの 電話番号は 871の 6813です。 ……871の 6813ですね。",
+              vi: "Số điện thoại của ông Yamada là 871-6813. …871-6813 đúng không ạ.",
+            },
+          ],
+        },
+      ],
+    },
+    {
+      id: "exercises",
+      title: "V. Bài tập & Luyện tập",
+      blocks: [
+        {
+          type: "exercise-fill-in-blank",
+          title: "Bài tập 1: Điền trợ từ & Đơn vị thời gian (に, から, まで, と, 時, 分)",
+          instruction: "Chọn từ/trợ từ thích hợp nhất để điền vào chỗ trống.",
+          questions: [
+            {
+              id: "l4-q1",
+              promptPre: "今 ",
+              promptPost: "ですか。 - 7時10分です。",
+              options: ["何時", "何分", "何曜日", "何番"],
+              correctAnswer: "何時",
+              explanation: "何時 (なんじ) dùng để hỏi mấy giờ.",
+              fullSentenceJp: "今 何時ですか。 - 7時10分です。",
+              fullSentenceVi: "Bây giờ là mấy giờ? - 7 giờ 10 phút.",
+            },
+            {
+              id: "l4-q2",
+              promptPre: "毎朝 6時",
+              promptPost: " 起きます。",
+              options: ["に", "から", "まで", "と"],
+              correctAnswer: "に",
+              explanation: "Sau danh từ chỉ thời gian có con số cụ thể (6時) dùng trợ từ に.",
+              fullSentenceJp: "毎朝 6時に 起きます。",
+              fullSentenceVi: "Mỗi sáng tôi thức dậy vào lúc 6 giờ.",
+            },
+            {
+              id: "l4-q3",
+              promptPre: "銀行は 9時",
+              promptPost: " 3時までです。",
+              options: ["から", "まで", "に", "と"],
+              correctAnswer: "から",
+              explanation: "から (từ) chỉ điểm bắt đầu thời gian.",
+              fullSentenceJp: "銀行は 9時から 3時までです。",
+              fullSentenceVi: "Ngân hàng mở cửa từ 9 giờ đến 3 giờ.",
+            },
+            {
+              id: "l4-q4",
+              promptPre: "休みは 土曜日",
+              promptPost: " 日曜日です。",
+              options: ["と", "に", "から", "まで"],
+              correctAnswer: "と",
+              explanation: "Trợ từ と dùng để nối hai danh từ (thứ 7 và chủ nhật).",
+              fullSentenceJp: "休みは 土曜日と 日曜日です。",
+              fullSentenceVi: "Ngày nghỉ là thứ bảy và chủ nhật.",
+            },
+            {
+              id: "l4-q5",
+              promptPre: "きのう 勉強し",
+              promptPost: "か。 - いいえ、勉強しませんでした。",
+              options: ["ました", "ます", "ません", "ませんでした"],
+              correctAnswer: "ました",
+              explanation: "Câu hỏi nghi vấn quá khứ dùng Động từ ましたか.",
+              fullSentenceJp: "きのう 勉強しましたか。 - いいえ、勉強しませんでした。",
+              fullSentenceVi: "Hôm qua anh/chị có học không? - Không, tôi không học.",
+            },
+            {
+              id: "l4-q6",
+              promptPre: "あすかの 電話番号は ",
+              promptPost: "ですか。 - 5275-2725です。",
+              options: ["何番", "何時", "何曜日", "いくら"],
+              correctAnswer: "何番",
+              explanation: "何番 (なんばん) dùng để hỏi số điện thoại / số hiệu.",
+              fullSentenceJp: "あすかの 電話番号は 何番ですか。 - 5275-2725です。",
+              fullSentenceVi: "Số điện thoại của Asuka là số mấy? - Là 5275-2725.",
+            },
+            {
+              id: "l4-q7",
+              promptPre: "毎日 10時まで 勉強します。 - 大変です",
+              promptPost: "。",
+              options: ["ね", "か", "よ", "の"],
+              correctAnswer: "ね",
+              explanation: "Trợ từ ね ở cuối câu bày tỏ sự đồng cảm (Vất vả quá nhỉ!).",
+              fullSentenceJp: "毎日 10時まで 勉強します。 - 大変ですね。",
+              fullSentenceVi: "Hàng ngày tôi học đến 10 giờ. - Vất vả quá nhỉ!",
+            },
+            {
+              id: "l4-q8",
+              promptPre: "昼休みは 12時",
+              promptPost: "です。",
+              options: ["から", "に", "と", "まで"],
+              correctAnswer: "から",
+              explanation: "12時からです nghĩa là 'bắt đầu từ 12 giờ'.",
+              fullSentenceJp: "昼休みは 12時からです。",
+              fullSentenceVi: "Giờ nghỉ trưa bắt đầu từ 12 giờ.",
+            },
+          ],
+        },
+        {
+          type: "exercise-multiple-choice",
+          title: "Bài tập 2: Trắc nghiệm Từ vựng & Ngữ pháp Bài 4",
+          instruction: "Chọn phương án trả lời đúng nhất.",
+          questions: [
+            {
+              id: "l4-mc1",
+              question: "Cách đọc giờ của '4時' và '9時' trong tiếng Nhật lần lượt là gì?",
+              options: [
+                "よじ và くじ",
+                "よんじ và きゅうじ",
+                "しちじ và くじ",
+                "よじ và きゅうじ",
+              ],
+              correctAnswerIndex: 0,
+              explanation: "4時 đọc đặc biệt là よじ, 9時 đọc đặc biệt là くじ.",
+            },
+            {
+              id: "l4-mc2",
+              question: "Động từ '起きます' ở thể phủ định quá khứ là gì?",
+              options: [
+                "起きませんでした",
+                "起きません",
+                "起きました",
+                "起きない",
+              ],
+              correctAnswerIndex: 0,
+              explanation: "Phủ định quá khứ của động từ ます là ～ませんでした (起きませんでした).",
+            },
+            {
+              id: "l4-mc3",
+              question: "Danh từ thời gian nào sau đây KHÔNG dùng trợ từ 'に'?",
+              options: ["きのう", "6時", "7月2日", "日曜日"],
+              correctAnswerIndex: 0,
+              explanation: "きのう (hôm qua) là từ thời gian tương đối nên không đi kèm trợ từ に.",
+            },
+            {
+              id: "l4-mc4",
+              question: "'Thứ tư' và 'Thứ sáu' trong tiếng Nhật là gì?",
+              options: [
+                "水曜日 và 金曜日",
+                "火曜日 và 木曜日",
+                "月曜日 và 土曜日",
+                "木曜日 và 日曜日",
+              ],
+              correctAnswerIndex: 0,
+              explanation: "Thứ 4 là 水曜日 (すいようび), Thứ 6 là 金曜日 (きんようび).",
+            },
+            {
+              id: "l4-mc5",
+              question: "Số điện thoại báo tin báo án, sự cố cho Cảnh sát Nhật Bản là số nào?",
+              options: ["110", "119", "117", "177"],
+              correctAnswerIndex: 0,
+              explanation: "110 (110番) là số cảnh sát 警察 tại Nhật Bản.",
+            },
+            {
+              id: "l4-mc6",
+              question: "Cách đọc phút của '1分' và '6分' là gì?",
+              options: [
+                "いっぷん và ろっぷん",
+                "いちふん và ろくふん",
+                "いっぷん và ろくふん",
+                "いちふん và ろっぷん",
+              ],
+              correctAnswerIndex: 0,
+              explanation: "1分 đọc là いっぷん, 6分 đọc là ろっぷん (biến âm 促音 ぷん).",
+            },
+          ],
+        },
+        {
+          type: "exercise-sentence-practice",
+          title: "Bài tập 3: Luyện tập mẫu câu & Hội thoại Bài 4",
+          instruction: "Tự nói câu tiếng Nhật dựa trên gợi ý tiếng Việt, sau đó bấm 'Xem đáp án' để kiểm tra phát âm.",
+          items: [
+            {
+              id: "l4-sp1",
+              vi: "Bây giờ là mấy giờ? - 2 giờ 10 phút.",
+              jp: "いま 何時ですか。 - 2時 10分です。",
+              hint: "Dùng いま, 何時 và 10分 (じゅっぷん).",
+              breakdown: "いま (bây giờ) + 何時 (mấy giờ) + ですか. 2時 10分 (2 giờ 10 phút) + です.",
+            },
+            {
+              id: "l4-sp2",
+              vi: "Ngân hàng mở cửa từ mấy giờ đến mấy giờ? - Từ 9 giờ đến 3 giờ.",
+              jp: "銀行は 何時から 何時までですか。 - 9時から 3時までです。",
+              hint: "Dùng 何時から 何時まで.",
+              breakdown: "銀行 (ngân hàng) + は + 何時から 何時まで + ですか. 9時から 3時まで + です.",
+            },
+            {
+              id: "l4-sp3",
+              vi: "Hôm qua anh/chị có học không? - Không, tôi không học.",
+              jp: "きのう 勉強しましたか。 - いいえ、勉強しませんでした。",
+              hint: "Dùng きのう và 勉強しませんでした.",
+              breakdown: "きのう (hôm qua) + 勉強しましたか (đã học không). いいえ (không) + 勉強しませんでした (đã không học).",
+            },
+            {
+              id: "l4-sp4",
+              vi: "Xin lỗi. Nhà hàng mình mở cửa đến mấy giờ vậy ạ? - Đến 10 giờ ạ.",
+              jp: "すみません。そちらは 何時までですか。 - 10時までです。",
+              hint: "Dùng そちら và 何時まで.",
+              breakdown: "すみません (xin lỗi). そちら (nhà hàng quý vị) + は + 何時まで (đến mấy giờ) + ですか. 10時まで (đến 10 giờ) + です.",
+            },
+          ],
+        },
+        {
+          type: "exercise-reorder-sentence",
+          title: "Bài tập 4: Sắp xếp từ thành câu hoàn chỉnh (Luyện tập cấu trúc Bài 4)",
+          instruction: "Bấm vào các từ gợi ý theo đúng thứ tự ngữ pháp để ghép thành câu tiếng Nhật hoàn chỉnh.",
+          questions: [
+            {
+              id: "l4-ro1",
+              words: ["おきます", "に", "6時", "まいあさ", "わたし は"],
+              correctOrder: ["わたし は", "まいあさ", "6時", "に", "おきます"],
+              fullSentenceJp: "わたし は まいあさ 6時 に おきます。",
+              fullSentenceVi: "Mỗi sáng tôi thức dậy vào lúc 6 giờ.",
+              explanation: "Chủ ngữ (わたしは) + Thời gian (まいあさ) + Thời điểm (6時に) + Động từ (おきます).",
+            },
+            {
+              id: "l4-ro2",
+              words: ["です", "なんじ", "いま", "ですか"],
+              correctOrder: ["いま", "なんじ", "ですか"],
+              fullSentenceJp: "いま なんじ ですか。",
+              fullSentenceVi: "Bây giờ là mấy giờ?",
+              explanation: "いま (bây giờ) + なんじ (mấy giờ) + ですか.",
+            },
+            {
+              id: "l4-ro3",
+              words: ["なんじ まで", "です か", "ぎんこう は", "なんじ から"],
+              correctOrder: ["ぎんこう は", "なんじ から", "なんじ まで", "です か"],
+              fullSentenceJp: "ぎんこう は なんじ から なんじ まで です か。",
+              fullSentenceVi: "Ngân hàng mở cửa từ mấy giờ đến mấy giờ?",
+              explanation: "Danh từ (ぎんこうは) + 何時から 何時まで + ですか.",
+            },
+            {
+              id: "l4-ro4",
+              words: ["べんきょう しました か", "きのう", "いいえ", "べんきょう しませんでした"],
+              correctOrder: ["きのう", "べんきょう しました か", "いいえ", "べんきょう しませんでした"],
+              fullSentenceJp: "きのう べんきょう しました か。 いいえ べんきょう しませんでした。",
+              fullSentenceVi: "Hôm qua bạn có học không? - Không, tôi không học.",
+              explanation: "Hỏi quá khứ dùng ましたか, trả lời phủ định quá khứ dùng ませんでした.",
+            },
+          ],
+        },
+      ],
+    },
+  ],
+};
