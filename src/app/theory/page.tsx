@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ChevronRight } from "lucide-react";
+import { ChevronRight, NotebookText } from "lucide-react";
 import { lessonList } from "@/lib/theory";
 
 export default function TheoryListPage() {
@@ -14,6 +14,26 @@ export default function TheoryListPage() {
           trong giáo trình.
         </p>
       </div>
+
+      <Link
+        href="/theory/summary"
+        className="flex items-center justify-between gap-3 rounded-xl border border-primary/30 bg-primary/5 px-4 py-4 shadow-2xs transition-colors hover:bg-primary/10"
+      >
+        <div className="flex items-center gap-3">
+          <span className="flex size-9 shrink-0 items-center justify-center rounded-full bg-primary/15 text-primary">
+            <NotebookText className="size-5" />
+          </span>
+          <div className="flex flex-col">
+            <span className="font-semibold text-foreground">
+              Tổng hợp ngữ pháp · Bài 1–25
+            </span>
+            <span className="text-xs text-muted-foreground">
+              Sổ tay ôn tập nhanh tất cả mẫu câu, cấu trúc ngữ pháp
+            </span>
+          </div>
+        </div>
+        <ChevronRight className="size-4 shrink-0 text-muted-foreground" />
+      </Link>
 
       <div className="flex flex-col gap-2">
         {lessonList.map((lesson) => (
