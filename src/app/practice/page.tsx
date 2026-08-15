@@ -732,7 +732,7 @@ function PaperPanel({ onSessionStateChange }: { onSessionStateChange?: (active: 
         {/* Direction */}
         <div className="flex flex-col gap-2 lg:col-span-2">
           <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-            {t("quiz_direction")}
+            {t("practice_direction")}
           </span>
           <OptionGroup
             options={directionOptions}

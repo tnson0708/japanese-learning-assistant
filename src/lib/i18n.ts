@@ -10,7 +10,7 @@ export const translations = {
     nav_history: "History",
     nav_phrases: "Common Sentences",
     nav_practice: "Practice",
-    nav_quiz: "Quiz",
+    nav_teaching: "Teaching",
     footer_stroke_data: "Stroke order data from",
 
 
@@ -27,7 +27,7 @@ export const translations = {
     spotlight_btn_view: "View Stroke Order",
     modules_title: "Learning Modules",
     modules_subtitle:
-      "Pick a module to start learning, practicing, or testing your knowledge.",
+      "Pick a module to start learning, practicing, or teaching.",
     mod_learn_title: "Learn Kana",
     mod_learn_badge: "104 Characters",
     mod_learn_desc:
@@ -40,10 +40,10 @@ export const translations = {
     mod_practice_badge: "2 Modes",
     mod_practice_desc:
       "Score your handwriting digitally with stroke recognition, or step away from the screen for timed paper drills.",
-    mod_quiz_title: "Quiz Yourself",
-    mod_quiz_badge: "Multiple-Choice",
-    mod_quiz_desc:
-      "Test Kana & Romaji recognition with customizable drills, instant feedback, and session score tracking.",
+    mod_teaching_title: "Teaching Slides",
+    mod_teaching_badge: "Online Classes",
+    mod_teaching_desc:
+      "Interactive teaching suite for online Japanese tutors — a 25-lesson grammar deck (Minna no Nihongo style) with editable slides, laser pointer, and speaker notes.",
     mod_phrases_title: "Common Sentences",
     mod_phrases_badge: "40+ Daily Phrases",
     mod_phrases_desc:
@@ -140,6 +140,7 @@ export const translations = {
     practice_section: "Section",
     practice_content: "Content",
     practice_difficulty: "Difficulty",
+    practice_direction: "Prompt Direction",
     practice_speed: "Speed",
     practice_pool_count: "characters in pool",
     practice_word_pool_count: "words in pool",
@@ -187,28 +188,12 @@ export const translations = {
     digital_next: "Next →",
     digital_score: "Accuracy Match",
 
-    // Quiz Tab (/quiz)
-    quiz_title: "Quiz",
-    quiz_subtitle:
-      "Multiple-choice drills to lock in Kana & Romaji recognition.",
-    quiz_direction: "Direction",
-    quiz_dir_k2r: "Kana → Romaji",
-    quiz_dir_r2k: "Romaji → Kana",
-    quiz_dir_mixed: "Mixed",
-    quiz_count: "Question Count",
-    quiz_count_items: "items",
-    quiz_time_limit: "Time Limit",
-    quiz_time_none: "No limit",
-    quiz_btn_start: "Start Quiz",
-    quiz_exit: "Exit Quiz",
-    quiz_question_num: "Question",
-    quiz_score: "Score",
-    quiz_completed: "Quiz Completed",
-    quiz_time_out: "Time ran out",
-    quiz_unanswered: "question(s) unanswered",
-    quiz_review_missed: "Review Missed Characters",
-    quiz_btn_retry: "Retry Same Settings",
-    quiz_btn_change: "Change Settings",
+    // Teaching Tab (/teaching)
+    teaching_title: "Online Teaching Suite",
+    teaching_subtitle:
+      "A 25-lesson grammar deck for Japanese online tutors — present slide by slide, annotate live with the laser pointer, and edit any slide on the fly.",
+
+    // Vocabulary Tab (/vocabulary)
 
     // Vocabulary Tab (/vocabulary)
     vocab_title: "Vocabulary Table",
@@ -269,7 +254,7 @@ export const translations = {
     nav_history: "Lịch sử",
     nav_phrases: "Mẫu câu thông dụng",
     nav_practice: "Luyện tập",
-    nav_quiz: "Kiểm tra",
+    nav_teaching: "Giảng dạy",
     footer_stroke_data: "Dữ liệu thứ tự nét viết từ",
 
 
@@ -286,7 +271,7 @@ export const translations = {
     spotlight_btn_view: "Xem thứ tự nét viết",
     modules_title: "Các mục học tập",
     modules_subtitle:
-      "Chọn một mục để bắt đầu học, luyện tập hoặc kiểm tra kiến thức của bạn.",
+      "Chọn một mục để bắt đầu học, luyện tập hoặc giảng dạy.",
     mod_learn_title: "Học Kana",
     mod_learn_badge: "104 Chữ cái",
     mod_learn_desc:
@@ -299,10 +284,10 @@ export const translations = {
     mod_practice_badge: "2 Chế độ",
     mod_practice_desc:
       "Chấm điểm nét chữ cảm ứng trực tiếp hoặc luyện viết trên giấy thực tế có đếm giờ.",
-    mod_quiz_title: "Trắc nghiệm",
-    mod_quiz_badge: "Trắc nghiệm",
-    mod_quiz_desc:
-      "Kiểm tra phản xạ Kana ↔ Romaji với các bài trắc nghiệm tùy chỉnh và theo dõi điểm số.",
+    mod_teaching_title: "Giáo án Giảng dạy",
+    mod_teaching_badge: "Dạy trực tuyến",
+    mod_teaching_desc:
+      "Bộ công cụ trình chiếu bài giảng cho giáo viên — trọn bộ ngữ pháp 25 bài (theo Minna no Nihongo) với slide có thể chỉnh sửa, bút chỉ laser và ghi chú giảng dạy.",
     mod_phrases_title: "Mẫu câu giao tiếp",
     mod_phrases_badge: "40+ Mẫu câu",
     mod_phrases_desc:
@@ -399,6 +384,7 @@ export const translations = {
     practice_section: "Phân loại",
     practice_content: "Nội dung",
     practice_difficulty: "Độ khó",
+    practice_direction: "Chiều hiển thị",
     practice_speed: "Tốc độ",
     practice_pool_count: "chữ cái trong kho",
     practice_word_pool_count: "từ vựng trong kho",
@@ -446,28 +432,10 @@ export const translations = {
     digital_next: "Tiếp theo →",
     digital_score: "Độ chính xác",
 
-    // Quiz Tab (/quiz)
-    quiz_title: "Trắc nghiệm",
-    quiz_subtitle:
-      "Bài tập trắc nghiệm giúp tăng phản xạ ghi nhớ Kana ↔ Romaji.",
-    quiz_direction: "Chiều câu hỏi",
-    quiz_dir_k2r: "Kana → Romaji",
-    quiz_dir_r2k: "Romaji → Kana",
-    quiz_dir_mixed: "Hỗn hợp",
-    quiz_count: "Số lượng câu hỏi",
-    quiz_count_items: "câu",
-    quiz_time_limit: "Thời gian",
-    quiz_time_none: "Không giới hạn",
-    quiz_btn_start: "Bắt đầu kiểm tra",
-    quiz_exit: "Thoát trắc nghiệm",
-    quiz_question_num: "Câu hỏi",
-    quiz_score: "Điểm số",
-    quiz_completed: "Hoàn thành bài test",
-    quiz_time_out: "Hết giờ làm bài",
-    quiz_unanswered: "câu hỏi chưa trả lời",
-    quiz_review_missed: "Xem lại các câu làm sai",
-    quiz_btn_retry: "Thử lại cài đặt này",
-    quiz_btn_change: "Thay đổi cài đặt",
+    // Teaching Tab (/teaching)
+    teaching_title: "Công cụ Giảng dạy Trực tuyến",
+    teaching_subtitle:
+      "Bộ slide ngữ pháp trọn 25 bài dành cho giáo viên tiếng Nhật — trình chiếu từng slide, dùng bút laser để chú thích trực tiếp, và chỉnh sửa nội dung ngay khi cần.",
 
     // Vocabulary Tab (/vocabulary)
     vocab_title: "Bảng từ vựng",

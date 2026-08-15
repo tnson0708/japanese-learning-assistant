@@ -23,11 +23,14 @@ function pool(scope: QuizScope, section: KanaSection = "all"): Kana[] {
   return filterKana(scope, section);
 }
 
-/** Kana whose romaji doesn't collide with another kana in the same pool (e.g. じ/ぢ both "ji"). */
+/** Kana whose romaji doesn't collide with another kana in the same script (e.g. じ/ぢ both "ji"). */
 function unambiguousRomajiPool(candidates: Kana[]): Kana[] {
   const counts = new Map<string, number>();
-  for (const k of candidates) counts.set(k.romaji, (counts.get(k.romaji) ?? 0) + 1);
-  return candidates.filter((k) => counts.get(k.romaji) === 1);
+  for (const k of candidates) {
+    const key = `${k.script}:${k.romaji}`;
+    counts.set(key, (counts.get(key) ?? 0) + 1);
+  }
+  return candidates.filter((k) => counts.get(`${k.script}:${k.romaji}`) === 1);
 }
 
 function pickDistractors<T>(
@@ -54,8 +57,10 @@ export function generateQuestions(
   section: KanaSection = "all"
 ): QuizQuestion[] {
   const basePool = pool(scope, section);
-  const romajiToKanaPool = unambiguousRomajiPool(basePool);
+  if (basePool.length === 0) return [];
 
+  const romajiToKanaPool = unambiguousRomajiPool(basePool);
+  const effectiveRomajiPool = romajiToKanaPool.length > 0 ? romajiToKanaPool : basePool;
 
   const questions: QuizQuestion[] = [];
   let lastChar: string | null = null;
@@ -68,10 +73,13 @@ export function generateQuestions(
           : "romaji-to-kana"
         : direction;
 
-    const sourcePool = dir === "romaji-to-kana" ? romajiToKanaPool : basePool;
+    const sourcePool = dir === "romaji-to-kana" ? effectiveRomajiPool : basePool;
     let candidates = sourcePool.filter((k) => k.char !== lastChar);
     if (candidates.length === 0) candidates = sourcePool;
+    if (candidates.length === 0) break;
+
     const target = candidates[Math.floor(Math.random() * candidates.length)];
+    if (!target) break;
     lastChar = target.char;
 
     if (dir === "kana-to-romaji") {
@@ -89,9 +97,11 @@ export function generateQuestions(
         correctAnswer: target.romaji,
       });
     } else {
+      const sameScriptPool = effectiveRomajiPool.filter((k) => k.script === target.script);
+      const distractorPool = sameScriptPool.length >= 4 ? sameScriptPool : effectiveRomajiPool;
       const distractors = pickDistractors(
         target,
-        romajiToKanaPool,
+        distractorPool,
         3,
         (k) => k.char
       );
