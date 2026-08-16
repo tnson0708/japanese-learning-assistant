@@ -8,10 +8,10 @@ import {
   CheckCircle2,
   FileText,
   GraduationCap,
-  HelpCircle,
   History,
   MessageSquare,
   PenTool,
+  Presentation,
   Sparkles,
   Table,
   Volume2,
@@ -78,12 +78,14 @@ export default function Home() {
       description: t("mod_practice_desc"),
     },
     {
-      href: "/quiz",
-      title: t("mod_quiz_title"),
-      kicker: "テスト",
-      icon: HelpCircle,
-      badge: t("mod_quiz_badge"),
-      description: t("mod_quiz_desc"),
+      href: "/slides",
+      title: isVi ? "Slide bài giảng" : "Presentation Slides",
+      kicker: "スライド",
+      icon: Presentation,
+      badge: "Google Slides",
+      description: isVi
+        ? "Xem trực tiếp slide bài giảng và tài liệu học tiếng Nhật tương tác."
+        : "Browse interactive Google Slides presentations and course material.",
     },
   ];
 

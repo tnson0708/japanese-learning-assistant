@@ -11,6 +11,7 @@ export const translations = {
     nav_phrases: "Common Sentences",
     nav_practice: "Practice",
     nav_quiz: "Quiz",
+    nav_slides: "Slides",
     footer_stroke_data: "Stroke order data from",
 
 
@@ -270,6 +271,7 @@ export const translations = {
     nav_phrases: "Mẫu câu thông dụng",
     nav_practice: "Luyện tập",
     nav_quiz: "Kiểm tra",
+    nav_slides: "Slide bài giảng",
     footer_stroke_data: "Dữ liệu thứ tự nét viết từ",
 
 

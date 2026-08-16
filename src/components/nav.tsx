@@ -6,10 +6,10 @@ import { useEffect, useRef } from "react";
 import {
   BookOpen,
   GraduationCap,
-  HelpCircle,
   Home,
   MessageSquare,
   PenTool,
+  Presentation,
   Table,
 } from "lucide-react";
 import { LanguageToggle } from "@/components/language-toggle";
@@ -30,7 +30,7 @@ export function Nav() {
     { href: "/theory", label: t("nav_theory"), shortLabel: isVi ? "Lý thuyết" : "Theory", icon: GraduationCap },
     { href: "/phrases", label: t("nav_phrases"), shortLabel: isVi ? "Mẫu câu" : "Phrases", icon: MessageSquare },
     { href: "/practice", label: t("nav_practice"), shortLabel: isVi ? "Luyện tập" : "Practice", icon: PenTool },
-    { href: "/quiz", label: t("nav_quiz"), shortLabel: isVi ? "Trắc nghiệm" : "Quiz", icon: HelpCircle },
+    { href: "/slides", label: t("nav_slides"), shortLabel: isVi ? "Slide" : "Slides", icon: Presentation },
   ];
 
   // Auto-scroll active mobile bottom tab into view on route change
