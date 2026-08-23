@@ -7,6 +7,7 @@ import {
   MultipleChoiceExerciseBlock,
   ReorderSentenceExerciseBlock,
   SentencePracticeBlock,
+  PictureCardsExerciseBlock,
 } from "@/components/theory/exercise-blocks";
 import { TranslationBlock } from "@/components/theory/translation-blocks";
 import type { ContentBlock, VocabItem } from "@/lib/theory";
@@ -215,6 +216,7 @@ export function BlockRenderer({ block }: { block: ContentBlock }) {
         <FillInBlankExerciseBlock
           title={block.title}
           instruction={block.instruction}
+          audioUrl={block.audioUrl}
           questions={block.questions}
         />
       );
@@ -223,6 +225,7 @@ export function BlockRenderer({ block }: { block: ContentBlock }) {
         <MultipleChoiceExerciseBlock
           title={block.title}
           instruction={block.instruction}
+          audioUrl={block.audioUrl}
           questions={block.questions}
         />
       );
@@ -231,6 +234,7 @@ export function BlockRenderer({ block }: { block: ContentBlock }) {
         <SentencePracticeBlock
           title={block.title}
           instruction={block.instruction}
+          audioUrl={block.audioUrl}
           items={block.items}
         />
       );
@@ -239,7 +243,17 @@ export function BlockRenderer({ block }: { block: ContentBlock }) {
         <ReorderSentenceExerciseBlock
           title={block.title}
           instruction={block.instruction}
+          audioUrl={block.audioUrl}
           questions={block.questions}
+        />
+      );
+    case "exercise-picture-cards":
+      return (
+        <PictureCardsExerciseBlock
+          title={block.title}
+          instruction={block.instruction}
+          people={block.people}
+          groups={block.groups}
         />
       );
     default:

@@ -4,6 +4,8 @@ import { lesson3 } from "@/data/theory/lesson-3";
 import { lesson4 } from "@/data/theory/lesson-4";
 import { lesson5 } from "@/data/theory/lesson-5";
 import { lesson6 } from "@/data/theory/lesson-6";
+import { lesson7 } from "@/data/theory/lesson-7";
+import { lesson8 } from "@/data/theory/lesson-8";
 
 /** A single vocabulary/phrase entry: Japanese reading, optional Kanji, Vietnamese meaning, optional usage note. */
 export interface VocabItem {
@@ -77,6 +79,28 @@ export interface ReorderQuestionItem {
 }
 
 /**
+ * One "character card" used by picture-based textbook drills (e.g. 練習B),
+ * where the original book shows a photo + country map. Here the photo is
+ * replaced by a flag emoji + structured attributes so the drill stays fully
+ * data-driven instead of embedding scanned images.
+ */
+export interface DrillCardPerson {
+  id: string;
+  name: string;
+  flag: string;
+  countryJp: string;
+  jobJp: string;
+  jobVi: string;
+  age?: number;
+}
+
+/** A sub-drill (e.g. 練習B's numbered items 1-7), grouped under one instruction. */
+export interface PictureDrillGroup {
+  heading: string;
+  items: SentencePracticeItem[];
+}
+
+/**
  * A single piece of lesson content. Every lesson section is just an ordered
  * list of these — lessons are free to mix, omit, or repeat block types as
  * needed, so differently-structured lessons don't require a schema change.
@@ -116,25 +140,36 @@ export type ContentBlock =
       type: "exercise-fill-in-blank";
       title: string;
       instruction?: string;
+      audioUrl?: string;
       questions: FillInBlankQuestion[];
     }
   | {
       type: "exercise-multiple-choice";
       title: string;
       instruction?: string;
+      audioUrl?: string;
       questions: MultipleChoiceQuestion[];
     }
   | {
       type: "exercise-sentence-practice";
       title: string;
       instruction?: string;
+      audioUrl?: string;
       items: SentencePracticeItem[];
     }
   | {
       type: "exercise-reorder-sentence";
       title: string;
       instruction?: string;
+      audioUrl?: string;
       questions: ReorderQuestionItem[];
+    }
+  | {
+      type: "exercise-picture-cards";
+      title: string;
+      instruction?: string;
+      people: DrillCardPerson[];
+      groups: PictureDrillGroup[];
     };
 
 export type SectionId =
@@ -157,7 +192,7 @@ export interface Lesson {
 }
 
 // Add each new lesson's file here as it's transcribed.
-export const lessonList: Lesson[] = [lesson1, lesson2, lesson3, lesson4, lesson5, lesson6];
+export const lessonList: Lesson[] = [lesson1, lesson2, lesson3, lesson4, lesson5, lesson6, lesson7, lesson8];
 
 export function getLessonById(id: number): Lesson | undefined {
   return lessonList.find((l) => l.id === id);

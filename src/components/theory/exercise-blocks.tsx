@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { CheckCircle2, XCircle, RotateCcw, HelpCircle, Eye, EyeOff, Sparkles, Volume2, Printer } from "lucide-react";
+import { CheckCircle2, XCircle, RotateCcw, HelpCircle, Eye, EyeOff, Sparkles, Volume2, Printer, Users } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -11,6 +11,8 @@ import type {
   MultipleChoiceQuestion,
   SentencePracticeItem,
   ReorderQuestionItem,
+  DrillCardPerson,
+  PictureDrillGroup,
 } from "@/lib/theory";
 
 function printSingleExercise(blockId: string) {
@@ -32,16 +34,31 @@ function printSingleExercise(blockId: string) {
   setTimeout(cleanup, 1000);
 }
 
+export function ExerciseAudioPlayer({ audioUrl }: { audioUrl?: string }) {
+  if (!audioUrl) return null;
+  return (
+    <div className="mb-2 flex flex-col gap-1.5 rounded-lg border bg-muted/40 p-3 print:hidden">
+      <div className="flex items-center gap-2 text-xs font-semibold text-primary">
+        <Volume2 className="size-4 shrink-0" />
+        <span>Bài nghe (Listening Audio Track)</span>
+      </div>
+      <audio controls src={audioUrl} className="h-9 w-full rounded-md" />
+    </div>
+  );
+}
+
 /**
  * 1. Fill-in-the-blank Exercise Component (e.g., choosing particles は, も, の, か)
  */
 export function FillInBlankExerciseBlock({
   title,
   instruction,
+  audioUrl,
   questions,
 }: {
   title: string;
   instruction?: string;
+  audioUrl?: string;
   questions: FillInBlankQuestion[];
 }) {
   const [userAnswers, setUserAnswers] = useState<Record<string, string>>({});
@@ -91,6 +108,7 @@ export function FillInBlankExerciseBlock({
         )}
       </CardHeader>
       <CardContent className="flex flex-col gap-4 print:gap-3">
+        <ExerciseAudioPlayer audioUrl={audioUrl} />
         <div className="flex flex-col gap-3">
           {questions.map((q, index) => {
             const selected = userAnswers[q.id];
@@ -240,10 +258,12 @@ export function FillInBlankExerciseBlock({
 export function MultipleChoiceExerciseBlock({
   title,
   instruction,
+  audioUrl,
   questions,
 }: {
   title: string;
   instruction?: string;
+  audioUrl?: string;
   questions: MultipleChoiceQuestion[];
 }) {
   const [selectedAnswers, setSelectedAnswers] = useState<Record<string, number>>({});
@@ -294,6 +314,7 @@ export function MultipleChoiceExerciseBlock({
       </CardHeader>
 
       <CardContent className="flex flex-col gap-4 print:gap-3">
+        <ExerciseAudioPlayer audioUrl={audioUrl} />
         <div className="flex flex-col gap-4 print:gap-3">
           {questions.map((q, qIndex) => {
             const selectedIdx = selectedAnswers[q.id];
@@ -417,10 +438,12 @@ export function MultipleChoiceExerciseBlock({
 export function SentencePracticeBlock({
   title,
   instruction,
+  audioUrl,
   items,
 }: {
   title: string;
   instruction?: string;
+  audioUrl?: string;
   items: SentencePracticeItem[];
 }) {
   const [revealedItems, setRevealedItems] = useState<Record<string, boolean>>({});
@@ -488,6 +511,7 @@ export function SentencePracticeBlock({
       </CardHeader>
 
       <CardContent className="flex flex-col gap-3">
+        <ExerciseAudioPlayer audioUrl={audioUrl} />
         {items.map((item, idx) => {
           const isRevealed = !!revealedItems[item.id];
 
@@ -565,10 +589,12 @@ export function SentencePracticeBlock({
 export function ReorderSentenceExerciseBlock({
   title,
   instruction,
+  audioUrl,
   questions,
 }: {
   title: string;
   instruction?: string;
+  audioUrl?: string;
   questions: ReorderQuestionItem[];
 }) {
   const [selectedTokens, setSelectedTokens] = useState<Record<string, number[]>>({});
@@ -645,6 +671,7 @@ export function ReorderSentenceExerciseBlock({
         )}
       </CardHeader>
       <CardContent className="flex flex-col gap-4 print:gap-3">
+        <ExerciseAudioPlayer audioUrl={audioUrl} />
         <div className="flex flex-col gap-4 print:gap-3">
           {questions.map((q, index) => {
             const userOrderIndexes = selectedTokens[q.id] || [];
@@ -794,6 +821,149 @@ export function ReorderSentenceExerciseBlock({
             </Button>
           )}
         </div>
+      </CardContent>
+    </Card>
+  );
+}
+
+function PersonCard({ person }: { person: DrillCardPerson }) {
+  return (
+    <div className="flex flex-col items-center gap-1 rounded-xl border bg-card p-3 text-center shadow-2xs print:border-gray-300 print:bg-white">
+      <span className="text-3xl leading-none">{person.flag}</span>
+      <JapaneseText text={person.name} className="text-sm font-semibold" />
+      <span className="text-[11px] text-muted-foreground">
+        {person.countryJp} · {person.jobVi}
+        {person.age !== undefined ? ` · ${person.age} tuổi` : ""}
+      </span>
+    </div>
+  );
+}
+
+/**
+ * 5. Picture-card Drill Block (練習B style) — replaces the textbook's
+ * photo/map illustrations with flag-emoji person cards, so the "who is
+ * what nationality/job/age" pattern drills stay fully data-driven.
+ */
+export function PictureCardsExerciseBlock({
+  title,
+  instruction,
+  people,
+  groups,
+}: {
+  title: string;
+  instruction?: string;
+  people: DrillCardPerson[];
+  groups: PictureDrillGroup[];
+}) {
+  const [revealedItems, setRevealedItems] = useState<Record<string, boolean>>({});
+
+  const toggleReveal = (id: string) => {
+    setRevealedItems((prev) => ({ ...prev, [id]: !prev[id] }));
+  };
+
+  const revealAll = () => {
+    const allRevealed: Record<string, boolean> = {};
+    groups.forEach((g) => g.items.forEach((item) => { allRevealed[item.id] = true; }));
+    setRevealedItems(allRevealed);
+  };
+
+  const hideAll = () => setRevealedItems({});
+
+  const blockId = `exercise-picture-${groups[0]?.items[0]?.id || title.replace(/\s+/g, "-")}`;
+
+  return (
+    <Card id={blockId} className="border-primary/20 shadow-xs exercise-card-block print:border-gray-400 print:shadow-none print:break-inside-avoid print:bg-white">
+      <CardHeader className="pb-3 print:pb-1">
+        <div className="flex flex-wrap items-center justify-between gap-2">
+          <div className="flex items-center gap-2">
+            <Users className="size-4 text-primary print:hidden" />
+            <CardTitle className="text-base font-semibold text-foreground print:text-black print:font-bold">
+              {title}
+            </CardTitle>
+            <button
+              type="button"
+              onClick={() => printSingleExercise(blockId)}
+              className="rounded-full p-1 text-muted-foreground/70 transition-colors hover:bg-accent hover:text-primary cursor-pointer print:hidden"
+              title="In riêng bài tập này (Print only this exercise)"
+            >
+              <Printer className="size-3.5" />
+            </button>
+          </div>
+          <div className="flex items-center gap-1.5 print:hidden">
+            <Button type="button" variant="ghost" size="sm" onClick={revealAll} className="h-7 px-2 text-xs">
+              Hiện tất cả
+            </Button>
+            <Button type="button" variant="ghost" size="sm" onClick={hideAll} className="h-7 px-2 text-xs">
+              Ẩn tất cả
+            </Button>
+          </div>
+        </div>
+        {instruction && (
+          <p className="text-xs text-muted-foreground print:text-gray-700">{instruction}</p>
+        )}
+      </CardHeader>
+
+      <CardContent className="flex flex-col gap-5">
+        <div className="grid grid-cols-3 gap-2 sm:grid-cols-5">
+          {people.map((p) => (
+            <PersonCard key={p.id} person={p} />
+          ))}
+        </div>
+
+        {groups.map((group, gi) => (
+          <div key={gi} className="flex flex-col gap-2">
+            <h4 className="text-xs font-bold uppercase tracking-wider text-muted-foreground print:text-black">
+              {group.heading}
+            </h4>
+            <div className="flex flex-col gap-2">
+              {group.items.map((item, idx) => {
+                const isRevealed = !!revealedItems[item.id];
+                return (
+                  <div
+                    key={item.id}
+                    className="flex flex-col gap-2 rounded-xl border bg-muted/20 p-3 transition-colors print:border-gray-300 print:bg-white print:p-2.5"
+                  >
+                    <div className="flex items-start justify-between gap-2">
+                      <p className="text-sm font-medium text-foreground print:text-black">
+                        <span className="text-muted-foreground text-xs font-semibold mr-1 print:text-black">
+                          {idx + 1}.
+                        </span>
+                        {item.vi}
+                      </p>
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        onClick={() => toggleReveal(item.id)}
+                        className="h-7 shrink-0 gap-1.5 text-xs font-medium print:hidden"
+                      >
+                        {isRevealed ? (
+                          <>
+                            <EyeOff className="size-3.5" /> Ẩn
+                          </>
+                        ) : (
+                          <>
+                            <Eye className="size-3.5" /> Xem đáp án
+                          </>
+                        )}
+                      </Button>
+                    </div>
+
+                    <div className="hidden print:block pt-0.5 text-xs text-gray-700 font-mono">
+                      Trả lời: ________________________________________________
+                    </div>
+
+                    {isRevealed && (
+                      <div className="rounded-lg bg-background p-2.5 print:hidden">
+                        <JapaneseText text={item.jp} className="text-sm font-semibold text-primary" />
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        ))}
       </CardContent>
     </Card>
   );

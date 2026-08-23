@@ -796,6 +796,89 @@ export const lesson1: Lesson = {
             },
           ],
         },
+        {
+          type: "exercise-picture-cards",
+          title: "Bài tập 5: Luyện tập theo tranh nhân vật — 練習B (Quốc tịch, Nghề nghiệp & Tuổi)",
+          instruction:
+            "Bản chuyển thể của bài 練習B trong sách: các tấm ảnh nhân vật được thay bằng thẻ dữ liệu (cờ quốc gia + tên + nghề + tuổi) để không cần nhúng ảnh scan. Đọc gợi ý tiếng Việt rồi bấm 'Xem đáp án' để kiểm tra câu tiếng Nhật.",
+          people: [
+            { id: "miller", name: "ミラー", flag: "🇺🇸", countryJp: "アメリカ", jobJp: "会社員", jobVi: "nhân viên công ty", age: 28 },
+            { id: "yamada", name: "山田", flag: "🇯🇵", countryJp: "日本", jobJp: "銀行員", jobVi: "nhân viên ngân hàng", age: 38 },
+            { id: "watt", name: "ワット", flag: "🇬🇧", countryJp: "イギリス", jobJp: "先生", jobVi: "giáo viên", age: 45 },
+            { id: "tawapon", name: "タワポン", flag: "🇹🇭", countryJp: "タイ", jobJp: "学生", jobVi: "học sinh/sinh viên", age: 19 },
+            { id: "schmidt", name: "シュミット", flag: "🇩🇪", countryJp: "ドイツ", jobJp: "会社員", jobVi: "nhân viên công ty", age: 52 },
+            { id: "gupta", name: "グプタ", flag: "🇮🇳", countryJp: "インド", jobJp: "会社員", jobVi: "nhân viên công ty (IMCの社員)", age: 42 },
+            { id: "lee", name: "イー", flag: "🇰🇷", countryJp: "韓国", jobJp: "研究者", jobVi: "nhà nghiên cứu (AKC)", age: 35 },
+            { id: "wang", name: "ワン", flag: "🇨🇳", countryJp: "中国", jobJp: "医者", jobVi: "bác sĩ (神戸病院)", age: 29 },
+            { id: "karina", name: "カリナ", flag: "🇮🇩", countryJp: "インドネシア", jobJp: "学生", jobVi: "sinh viên (富士大学)", age: 24 },
+            { id: "santos", name: "サントス", flag: "🇧🇷", countryJp: "ブラジル", jobJp: "会社員", jobVi: "nhân viên (ブラジルエアー)", age: 39 },
+          ],
+          groups: [
+            {
+              heading: "1) Nói quốc tịch — mẫu: ミラーさんは アメリカ人です。",
+              items: [
+                { id: "l1-pc-1-1", vi: "Anh Yamada là người Nhật.", jp: "山田さんは 日本人です。" },
+                { id: "l1-pc-1-2", vi: "Anh Watt là người Anh.", jp: "ワットさんは イギリス人です。" },
+                { id: "l1-pc-1-3", vi: "Anh Thawaphon là người Thái.", jp: "タワポンさんは タイ人です。" },
+                { id: "l1-pc-1-4", vi: "Anh Schmidt là người Đức.", jp: "シュミットさんは ドイツ人です。" },
+              ],
+            },
+            {
+              heading: "2) Nói nghề nghiệp — mẫu: ミラーさんは 会社員です。",
+              items: [
+                { id: "l1-pc-2-1", vi: "Anh Yamada là nhân viên ngân hàng.", jp: "山田さんは 銀行員です。" },
+                { id: "l1-pc-2-2", vi: "Anh Watt là giáo viên.", jp: "ワットさんは 先生です。" },
+                { id: "l1-pc-2-3", vi: "Anh Thawaphon là học sinh/sinh viên.", jp: "タワポンさんは 学生です。" },
+                { id: "l1-pc-2-4", vi: "Anh Schmidt là nhân viên công ty.", jp: "シュミットさんは 会社員です。" },
+              ],
+            },
+            {
+              heading: "3) Phủ định thông tin SAI được đưa ra — mẫu: ミラーさん・銀行員 → ミラーさんは 銀行員じゃ ありません。",
+              items: [
+                { id: "l1-pc-3-1", vi: "(Đưa ra: 山田さん・学生 — SAI, anh ấy là 銀行員) Hãy phủ định lại.", jp: "山田さんは 学生じゃ ありません。" },
+                { id: "l1-pc-3-2", vi: "(Đưa ra: ワットさん・ドイツ人 — SAI, anh ấy là người Anh) Hãy phủ định lại.", jp: "ワットさんは ドイツ人じゃ ありません。" },
+                { id: "l1-pc-3-3", vi: "(Đưa ra: タワポンさん・先生 — SAI, anh ấy là học sinh/sinh viên) Hãy phủ định lại.", jp: "タワポンさんは 先生じゃ ありません。" },
+                { id: "l1-pc-3-4", vi: "(Đưa ra: シュミットさん・アメリカ人 — SAI, anh ấy là người Đức) Hãy phủ định lại.", jp: "シュミットさんは アメリカ人じゃ ありません。" },
+              ],
+            },
+            {
+              heading: "4) Hỏi có/không rồi tự trả lời — mẫu: ミラーさん・アメリカ人 → ミラーさんは アメリカ人ですか。……はい、アメリカ人です。",
+              items: [
+                { id: "l1-pc-4-1", vi: "Hỏi & trả lời: Anh Yamada có phải là nhân viên ngân hàng không? (Đúng)", jp: "山田さんは 銀行員ですか。 ……はい、銀行員です。" },
+                { id: "l1-pc-4-2", vi: "Hỏi & trả lời: Anh Watt có phải là nhân viên công ty không? (Sai, anh ấy là giáo viên)", jp: "ワットさんは 会社員ですか。 ……いいえ、会社員じゃ ありません。先生です。" },
+                { id: "l1-pc-4-3", vi: "Hỏi & trả lời: Anh Thawaphon có phải là giáo viên không? (Sai, anh ấy là học sinh/sinh viên)", jp: "タワポンさんは 先生ですか。 ……いいえ、先生じゃ ありません。学生です。" },
+                { id: "l1-pc-4-4", vi: "Hỏi & trả lời: Anh Schmidt có phải là người Đức không? (Đúng)", jp: "シュミットさんは ドイツ人ですか。 ……はい、ドイツ人です。" },
+              ],
+            },
+            {
+              heading: "5) Hỏi 'vị đó là ai' rồi trả lời bằng tổ chức — mẫu: あの方は どなたですか。……グプタさんです。IMCの 社員です。",
+              items: [
+                { id: "l1-pc-5-1", vi: "Vị đó là ai? — Là chị Lee, nhà nghiên cứu của AKC.", jp: "あの方は どなたですか。 ……イーさんです。AKCの 研究者です。" },
+                { id: "l1-pc-5-2", vi: "Vị đó là ai? — Là anh Wang, bác sĩ của Bệnh viện Kobe.", jp: "あの方は どなたですか。 ……ワンさんです。神戸病院の 医者です。" },
+                { id: "l1-pc-5-3", vi: "Vị đó là ai? — Là chị Karina, sinh viên trường Đại học Fuji.", jp: "あの方は どなたですか。 ……カリナさんです。富士大学の 学生です。" },
+                { id: "l1-pc-5-4", vi: "Vị đó là ai? — Là anh Santos, nhân viên của hãng Brazil Air.", jp: "あの方は どなたですか。 ……サントスさんです。ブラジルエアーの 社員です。" },
+              ],
+            },
+            {
+              heading: "6) So sánh bằng も — mẫu: ミラーさん・会社員, グプタさん → グプタさんも 会社員ですか。……はい/いいえ",
+              items: [
+                { id: "l1-pc-6-1", vi: "Anh Yamada là nhân viên ngân hàng. Chị Lee cũng vậy à? (Sai, chị ấy là nhà nghiên cứu)", jp: "山田さんは 銀行員です。イーさんも 銀行員ですか。 ……いいえ、イーさんは 銀行員じゃ ありません。研究者です。" },
+                { id: "l1-pc-6-2", vi: "Anh Watt là giáo viên. Anh Wang cũng vậy à? (Sai, anh ấy là bác sĩ)", jp: "ワットさんは 先生です。ワンさんも 先生ですか。 ……いいえ、ワンさんは 先生じゃ ありません。医者です。" },
+                { id: "l1-pc-6-3", vi: "Anh Thawaphon là học sinh/sinh viên. Chị Karina cũng vậy à? (Đúng)", jp: "タワポンさんは 学生です。カリナさんも 学生ですか。 ……はい、カリナさんも 学生です。" },
+                { id: "l1-pc-6-4", vi: "Anh Schmidt là người Đức. Anh Santos cũng vậy à? (Sai, anh ấy là người Brazil)", jp: "シュミットさんは ドイツ人です。サントスさんも ドイツ人ですか。 ……いいえ、サントスさんは ドイツ人じゃ ありません。ブラジル人です。" },
+              ],
+            },
+            {
+              heading: "7) Hỏi tuổi — mẫu: ミラーさんは 何歳ですか。……28歳です。",
+              items: [
+                { id: "l1-pc-7-1", vi: "Anh Yamada bao nhiêu tuổi?", jp: "山田さんは 何歳ですか。 ……38歳です。" },
+                { id: "l1-pc-7-2", vi: "Anh Watt bao nhiêu tuổi?", jp: "ワットさんは 何歳ですか。 ……45歳です。" },
+                { id: "l1-pc-7-3", vi: "Anh Thawaphon bao nhiêu tuổi?", jp: "タワポンさんは 何歳ですか。 ……19歳です。" },
+                { id: "l1-pc-7-4", vi: "Anh Schmidt bao nhiêu tuổi?", jp: "シュミットさんは 何歳ですか。 ……52歳です。" },
+              ],
+            },
+          ],
+        },
       ],
     },
   ],
