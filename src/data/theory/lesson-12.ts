@@ -1,0 +1,663 @@
+import type { Lesson } from "@/lib/theory";
+
+export const lesson12: Lesson = {
+  id: 12,
+  title: "Bài 12: 昨日は 雨でした — Quá khứ của Danh từ & Tính từ, So sánh より / ほうが / 一番",
+  sections: [
+    {
+      id: "vocabulary",
+      title: "I. Từ vựng",
+      blocks: [
+        {
+          type: "vocab-group",
+          heading: "Tính từ (形容詞)",
+          items: [
+            { jp: "かんたん［な］", kanji: "簡単［な］", meaning: "đơn giản, dễ" },
+            { jp: "ちかい", kanji: "近い", meaning: "gần" },
+            { jp: "とおい", kanji: "遠い", meaning: "xa" },
+            { jp: "はやい", kanji: "早い", meaning: "nhanh, sớm" },
+            { jp: "おそい", kanji: "遅い", meaning: "chậm, muộn" },
+            { jp: "おおい［人が～］", kanji: "多い［人が～］", meaning: "nhiều ［người］" },
+            { jp: "すくない［人が～］", kanji: "少ない［人が～］", meaning: "ít ［người］" },
+            { jp: "あたたかい", kanji: "暖かい", meaning: "ấm áp" },
+            { jp: "すずしい", kanji: "涼しい", meaning: "mát mẻ" },
+            { jp: "あまい", kanji: "甘い", meaning: "ngọt" },
+            { jp: "からい", kanji: "辛い", meaning: "cay" },
+            { jp: "おもい", kanji: "重い", meaning: "nặng" },
+            { jp: "かるい", kanji: "軽い", meaning: "nhẹ" },
+            { jp: "いい［コーヒーが～］", meaning: "thích, chọn, dùng ［cà phê］" },
+          ],
+        },
+        {
+          type: "vocab-group",
+          heading: "Danh từ & Mùa & Thời tiết (季節・天気)",
+          items: [
+            { jp: "きせつ", kanji: "季節", meaning: "mùa" },
+            { jp: "はる", kanji: "春", meaning: "mùa xuân" },
+            { jp: "なつ", kanji: "夏", meaning: "mùa hè" },
+            { jp: "あき", kanji: "秋", meaning: "mùa thu" },
+            { jp: "ふゆ", kanji: "冬", meaning: "mùa đông" },
+            { jp: "てんき", kanji: "天気", meaning: "thời tiết" },
+            { jp: "あめ", kanji: "雨", meaning: "mưa" },
+            { jp: "ゆき", kanji: "雪", meaning: "tuyết" },
+            { jp: "くもり", kanji: "曇り", meaning: "mây mù, nhiều mây" },
+            { jp: "ホテル", meaning: "khách sạn" },
+            { jp: "くうこう", kanji: "空港", meaning: "sân bay" },
+            { jp: "うみ", kanji: "海", meaning: "biển, đại dương" },
+            { jp: "せかい", kanji: "世界", meaning: "thế giới" },
+            { jp: "パーティー", meaning: "tiệc (～を します: tổ chức tiệc, mở tiệc)" },
+            { jp: "［お］まつり", kanji: "［お］祭り", meaning: "lễ hội" },
+          ],
+        },
+        {
+          type: "vocab-group",
+          heading: "Ẩm thực Nhật Bản (日本料理)",
+          items: [
+            { jp: "すきやき", meaning: "Sukiyaki (món lẩu thịt bò, rau)" },
+            { jp: "さしみ", kanji: "刺身", meaning: "Sashimi (món gỏi cá sống)" },
+            { jp: "［お］すし", meaning: "Sushi (món cơm trộn giấm có cá tươi ở trên)" },
+            { jp: "てんぷら", meaning: "Tempura (món hải sản và rau chiên tẩm bột)" },
+            { jp: "ぶたにく", kanji: "豚肉", meaning: "thịt heo, thịt lợn" },
+            { jp: "とりにく", kanji: "とり肉", meaning: "thịt gà" },
+            { jp: "ぎゅうにく", kanji: "牛肉", meaning: "thịt bò" },
+            { jp: "レモン", meaning: "chanh" },
+          ],
+        },
+        {
+          type: "vocab-group",
+          heading: "Văn hóa & Từ so sánh (文化・比較)",
+          items: [
+            { jp: "いけばな", kanji: "生け花", meaning: "nghệ thuật cắm hoa (～を します: cắm hoa)" },
+            { jp: "もみじ", kanji: "紅葉", meaning: "cây lá đỏ, lá đỏ (mùa thu)" },
+            { jp: "どちら", meaning: "cái nào (trong hai cái)" },
+            { jp: "どちらも", meaning: "cả hai" },
+            { jp: "いちばん", meaning: "nhất" },
+            { jp: "ずっと", meaning: "hơn (hẳn), suốt" },
+            { jp: "はじめて", kanji: "初めて", meaning: "lần đầu tiên" },
+          ],
+        },
+        {
+          type: "vocab-group",
+          heading: "Giao tiếp & Thể hiện thoại (会話表現)",
+          items: [
+            { jp: "ただいま。", meaning: "Con/Cháu đã về đây. (nói khi mình vừa về đến nhà)" },
+            {
+              jp: "お帰りなさい。",
+              kanji: "お帰りなさい。",
+              meaning: "Anh/Chị đã về rồi đấy à. (nói với ai đó khi họ về đến nhà)",
+            },
+            {
+              jp: "わあ、すごい 人ですね。疲れました。",
+              meaning: "Ôi, (người) đông quá nhỉ! Tôi mệt rồi.",
+            },
+          ],
+        },
+        {
+          type: "vocab-group",
+          heading: "Tên riêng (固有名詞)",
+          items: [
+            {
+              jp: "祇園祭",
+              kanji: "祇園祭",
+              meaning: "Lễ hội Gi-ôn (lễ hội nổi tiếng nhất ở Kyoto)",
+            },
+            { jp: "ホンコン", kanji: "香港", meaning: "Hồng Kông" },
+            { jp: "シンガポール", meaning: "Singapore" },
+            { jp: "ABCストア", meaning: "tên siêu thị giả định" },
+            { jp: "ジャパン", meaning: "tên siêu thị giả định" },
+          ],
+        },
+      ],
+    },
+    {
+      id: "translation",
+      title: "II. Bản dịch",
+      blocks: [
+        {
+          type: "translation-section",
+          title: "Mẫu câu & Ví dụ",
+          instruction:
+            "Trang sách gốc chỉ in phần tiếng Việt để luyện dịch; câu tiếng Nhật dưới đây được biên soạn lại theo đúng từ vựng và ngữ pháp đã học trong bài để làm đáp án tham khảo.",
+          sentences: [
+            { id: "l12-s1", num: 1, jp: "昨日は 雨でした。", vi: "Hôm qua trời mưa." },
+            { id: "l12-s2", num: 2, jp: "昨日は 寒かったです。", vi: "Hôm qua trời lạnh." },
+            {
+              id: "l12-s3",
+              num: 3,
+              jp: "北海道は 九州より 大きいです。",
+              vi: "Hokkaido lớn hơn Kyushu.",
+            },
+            {
+              id: "l12-s4",
+              num: 4,
+              jp: "1年［の中］で 夏が 一番 好きです。",
+              vi: "Trong một năm, tôi thích nhất mùa hè.",
+            },
+          ],
+          examples: [
+            {
+              id: "l12-e1",
+              num: 1,
+              jp: "京都は 静かですか。\n……いいえ、静かじゃ ありません。",
+              vi: "Kyoto có yên tĩnh không?\n…Không, không yên tĩnh.",
+            },
+            {
+              id: "l12-e2",
+              num: 2,
+              jp: "旅行は 楽しかったですか。\n……はい、とても 楽しかったです。\n天気は よかったですか。\n……いいえ、あまり よくなかったです。",
+              vi: "Chuyến du lịch có vui không?\n…Vâng, rất vui.\nThời tiết có đẹp không?\n…Không, không đẹp lắm.",
+            },
+            {
+              id: "l12-e3",
+              num: 3,
+              jp: "昨日の パーティーは どうでしたか。\n……とても にぎやかでした。大勢の 人に 会いました。",
+              vi: "Bữa tiệc hôm qua thế nào?\n…Rất náo nhiệt. Tôi đã gặp nhiều người.",
+            },
+            {
+              id: "l12-e4",
+              num: 4,
+              jp: "ニューヨークは 大阪より 寒いですか。\n……はい、ずっと 寒いです。",
+              vi: "New York có lạnh hơn Osaka không?\n…Vâng, lạnh hơn nhiều.",
+            },
+            {
+              id: "l12-e5",
+              num: 5,
+              jp: "空港まで バスと 電車と どちらが 速いですか。\n……電車の ほうが 速いです。",
+              vi: "Đến sân bay thì xe buýt và tàu điện, cái nào nhanh hơn?\n…Tàu điện nhanh hơn.",
+            },
+            {
+              id: "l12-e6",
+              num: 6,
+              jp: "海と 山と どちらが 好きですか。\n……どちらも 好きです。",
+              vi: "Biển và núi, anh/chị thích nơi nào hơn?\n…Tôi thích cả hai.",
+            },
+            {
+              id: "l12-e7",
+              num: 7,
+              jp: "日本料理［の中］で 何が 一番 好きですか。\n……てんぷらが 一番 好きです。",
+              vi: "Trong các món ăn Nhật Bản, anh/chị thích món nào nhất?\n…Tôi thích món Tempura nhất.",
+            },
+          ],
+          dialogueTitle: "祇園祭は どうでしたか (Lễ hội Gi-ôn thế nào?)",
+          dialogueLines: [
+            {
+              speakerVi: "Miller",
+              speakerJp: "ミラー",
+              vi: "Chào bác, cháu đã về rồi đây.",
+              jp: "ただいま。",
+            },
+            {
+              speakerVi: "Người quản lý",
+              speakerJp: "管理人",
+              vi: "Anh về rồi đấy à.",
+              jp: "お帰りなさい。",
+            },
+            {
+              speakerVi: "Miller",
+              speakerJp: "ミラー",
+              vi: "Đây là quà Kyoto ạ.",
+              jp: "京都の おみやげです。",
+            },
+            {
+              speakerVi: "Người quản lý",
+              speakerJp: "管理人",
+              vi: "Cám ơn cháu. Lễ hội Gi-ôn thế nào?",
+              jp: "ありがとう。祇園祭は どうでしたか。",
+            },
+            {
+              speakerVi: "Miller",
+              speakerJp: "ミラー",
+              vi: "Thú vị ạ. Rất náo nhiệt.",
+              jp: "おもしろかったです。とても にぎやかでした。",
+            },
+            {
+              speakerVi: "Người quản lý",
+              speakerJp: "管理人",
+              vi: "Lễ hội Gi-ôn nổi tiếng nhất trong các lễ hội ở Kyoto mà.",
+              jp: "祇園祭は 京都の 祭りの 中で 一番 有名ですからね。",
+            },
+            {
+              speakerVi: "Miller",
+              speakerJp: "ミラー",
+              vi: "Thế ạ. Cháu chụp rất nhiều ảnh. Đây này bác.",
+              jp: "そうですか。写真を たくさん 撮りました。これですよ。",
+            },
+            {
+              speakerVi: "Người quản lý",
+              speakerJp: "管理人",
+              vi: "Ôi, người đông quá ghê nhỉ!",
+              jp: "わあ、すごい 人ですね。",
+            },
+            {
+              speakerVi: "Miller",
+              speakerJp: "ミラー",
+              vi: "Vâng. Cháu hơi mệt rồi ạ.",
+              jp: "ええ。ちょっと 疲れました。",
+            },
+          ],
+        },
+      ],
+    },
+    {
+      id: "reference",
+      title: "III. Từ và thông tin tham khảo",
+      blocks: [
+        {
+          type: "vocab-group",
+          heading: "祭りと名所 — Danh lam thắng cảnh (名所)",
+          items: [
+            { jp: "とうしょうぐう", kanji: "東照宮", meaning: "Đền Tosho-gu (ở Nikko)" },
+            { jp: "こうきょ", kanji: "皇居", meaning: "Hoàng cung (Cung điện Hoàng gia, ở Tokyo)" },
+            { jp: "ふじさん", kanji: "富士山", meaning: "Núi Phú Sĩ" },
+            {
+              jp: "ろくおんじ（きんかくじ）",
+              kanji: "鹿苑寺（金閣寺）",
+              meaning: "Chùa Rokuon-ji (Chùa Vàng - Kinkaku-ji, ở Kyoto)",
+            },
+            { jp: "ひめじじょう", kanji: "姫路城", meaning: "Thành Himeji" },
+            {
+              jp: "げんばくドーム",
+              kanji: "原爆ドーム",
+              meaning: "Mái vòm Bom nguyên tử (Genbaku Dome, ở Hiroshima)",
+            },
+            {
+              jp: "とうだいじ・だいぶつ",
+              kanji: "東大寺・大仏",
+              meaning: "Chùa Todai-ji và Tượng Đại Phật (ở Nara)",
+            },
+          ],
+        },
+        {
+          type: "vocab-group",
+          heading: "Lễ hội (祭り)",
+          items: [
+            { jp: "ぎおんまつり", kanji: "祇園祭", meaning: "Lễ hội Gion (ở Kyoto)" },
+            { jp: "てんじんまつり", kanji: "天神祭", meaning: "Lễ hội Tenjin (ở Osaka)" },
+            { jp: "かんだまつり", kanji: "神田祭", meaning: "Lễ hội Kanda (ở Tokyo)" },
+          ],
+        },
+      ],
+    },
+    {
+      id: "grammar",
+      title: "IV. Giải thích ngữ pháp",
+      blocks: [
+        {
+          type: "grammar-pattern",
+          pattern: "1. Thời, thể khẳng định/phủ định của câu Danh từ và câu Tính từ đuôi な",
+          explanation:
+            "Danh từ và Tính từ đuôi な chia thời/thể như sau: Phi quá khứ khẳng định: ［danh từ／tính từ な］です. Phi quá khứ phủ định: ［danh từ／tính từ な］じゃ（では） ありません. Quá khứ khẳng định: ［danh từ／tính từ な］でした. Quá khứ phủ định: ［danh từ／tính từ な］じゃ（では） ありませんでした.",
+          examples: [
+            { jp: "① きのうは 雨でした。", vi: "Hôm qua trời mưa." },
+            {
+              jp: "② きのうの 試験は 簡単じゃ ありませんでした。",
+              vi: "Bài thi hôm qua không dễ.",
+            },
+          ],
+        },
+        {
+          type: "grammar-pattern",
+          pattern: "2. Thời, thể khẳng định/phủ định của câu Tính từ đuôi い",
+          explanation:
+            "Tính từ đuôi い chia thời/thể như sau: Phi quá khứ khẳng định: ～いです. Phi quá khứ phủ định: bỏ い thêm くないです. Quá khứ khẳng định: bỏ い thêm かったです. Quá khứ phủ định: bỏ い thêm くなかったです.",
+          examples: [
+            { jp: "③ きのうは 暑かったです。", vi: "Hôm qua trời nóng." },
+            {
+              jp: "④ きのうの パーティーは あまり 楽しくなかったです。",
+              vi: "Bữa tiệc hôm qua không vui lắm.",
+            },
+          ],
+        },
+        {
+          type: "grammar-pattern",
+          pattern: "3. Danh từ1は Danh từ2より Tính từ です",
+          explanation: "Đây là cách nói lấy Danh từ2 làm chuẩn để nói về tính chất, trạng thái của Danh từ1.",
+          examples: [
+            {
+              jp: "⑤ この 車は あの 車より 大きいです。",
+              vi: "Chiếc xe ô-tô này lớn hơn chiếc xe ô-tô kia.",
+            },
+          ],
+        },
+        {
+          type: "grammar-pattern",
+          pattern:
+            "4. Danh từ1と Danh từ2と どちらが Tính từ ですか ……Danh từ1／Danh từ2の ほうが Tính từ です",
+          explanation:
+            "Trường hợp so sánh giữa hai chủ thể cho dù đối tượng nào cũng sử dụng nghi vấn từ どちら.",
+          examples: [
+            {
+              jp: "⑥ サッカーと 野球と どちらが おもしろいですか。 ……サッカーの ほうが おもしろいです。",
+              vi: "Bóng đá và bóng chày, môn nào thú vị hơn? …Bóng đá thú vị hơn.",
+            },
+            {
+              jp: "⑦ ミラーさんと サントスさんと、どちらが テニスが 上手ですか。",
+              vi: "Anh Miller và anh Santos, ai chơi quần vợt giỏi hơn?",
+            },
+            {
+              jp: "⑧ 北海道と 大阪と どちらが 涼しいですか。",
+              vi: "Hokkaido và Osaka, nơi nào mát hơn?",
+            },
+            {
+              jp: "⑨ 春と 秋と どちらが 好きですか。",
+              vi: "Mùa xuân và mùa thu, anh/chị thích mùa nào hơn?",
+            },
+          ],
+        },
+        {
+          type: "grammar-pattern",
+          pattern:
+            "5. Danh từ［の 中］で 何／どこ／だれ／いつが いちばん Tính từ ですか ……Danh từ2が いちばん Tính từ です",
+          explanation:
+            "Trợ từ で biểu thị phạm vi. Từ phạm vi của Danh từ, khi hỏi tính chất, trạng thái của đối tượng (đồ vật, địa điểm, người, thời gian, v.v.) được biểu thị qua tính từ ở mức độ cao nhất, chúng ta dùng nghi vấn từ tương ứng với đối tượng đó.",
+          subPoints: [
+            {
+              label: "[Chú ý]",
+              text: "Kể cả trong câu tính từ khi hỏi về chủ ngữ thì chúng ta cũng dùng trợ từ が sau nghi vấn từ (xem Bài 10).",
+            },
+          ],
+          examples: [
+            {
+              jp: "⑩ 日本料理［の中］で 何が いちばん おいしいですか。 ……てんぷらが いちばん おいしいです。",
+              vi: "Trong các món ăn Nhật Bản, món nào ngon nhất? …Món Tempura ngon nhất.",
+            },
+            {
+              jp: "⑪ ヨーロッパで どこが いちばん よかったですか。 ……スイスが いちばん よかったです。",
+              vi: "Trong những địa điểm ở châu Âu, chỗ nào anh/chị thích nhất? …Tôi thích nhất Thuỵ Sĩ.",
+            },
+            {
+              jp: "⑫ 家族で だれが いちばん 背が 高いですか。 ……弟が いちばん 背が 高いです。",
+              vi: "Trong gia đình anh/chị, ai cao nhất? …Em trai tôi cao nhất.",
+            },
+            {
+              jp: "⑬ 1年で いつが いちばん 寒いですか。 ……2月が いちばん 寒いです。",
+              vi: "Trong một năm, thời điểm nào lạnh nhất? …Tháng 2 lạnh nhất.",
+            },
+          ],
+        },
+        {
+          type: "grammar-pattern",
+          pattern: "6. Tính từ の （の với vai trò thay thế danh từ）",
+          explanation:
+            "Ở Bài 2 chúng ta đã học の được dùng với vai trò thay thế cho một danh từ đã xuất hiện trước đó, dưới hình thức 'Danh từ の'. の đứng sau hình thức 'Tính từ の' trong ví dụ của bài này cũng có vai trò thay thế danh từ tương tự như vậy.",
+          examples: [
+            {
+              jp: "⑭ カリナさんの かばんは どれですか。 ……あの 赤くて、大きいのです。",
+              vi: "Cặp của chị Karina là cái nào? …Là cái lớn, màu đỏ kia.",
+            },
+          ],
+        },
+      ],
+    },
+    {
+      id: "exercises",
+      title: "V. Bài tập & Luyện tập",
+      blocks: [
+        {
+          type: "exercise-fill-in-blank",
+          title: "Bài tập 1: Điền thì quá khứ của Danh từ/Tính từ và so sánh より／ほうが／いちばん",
+          instruction: "Chọn từ hoặc đuôi chia thích hợp để hoàn thành câu.",
+          questions: [
+            {
+              id: "l12-q1",
+              promptPre: "きのうは 雨",
+              promptPost: "。",
+              options: ["でした", "です", "じゃありません", "でしょう"],
+              correctAnswer: "でした",
+              explanation: "Quá khứ khẳng định của danh từ: Danh từ + でした.",
+              fullSentenceJp: "きのうは 雨でした。",
+              fullSentenceVi: "Hôm qua trời mưa.",
+            },
+            {
+              id: "l12-q2",
+              promptPre: "きのうの 試験は 簡単じゃ ",
+              promptPost: "。",
+              options: ["ありませんでした", "ないでした", "なかったです", "ありません"],
+              correctAnswer: "ありませんでした",
+              explanation: "Quá khứ phủ định của tính từ な (簡単): 簡単じゃ ありませんでした.",
+              fullSentenceJp: "きのうの 試験は 簡単じゃ ありませんでした。",
+              fullSentenceVi: "Bài thi hôm qua không dễ.",
+            },
+            {
+              id: "l12-q3",
+              promptPre: "きのうは 暑",
+              promptPost: "。",
+              options: ["かったです", "いです", "くなかったです", "かったでした"],
+              correctAnswer: "かったです",
+              explanation: "Quá khứ khẳng định của tính từ い: bỏ い thêm かったです (暑い→暑かったです).",
+              fullSentenceJp: "きのうは 暑かったです。",
+              fullSentenceVi: "Hôm qua trời nóng.",
+            },
+            {
+              id: "l12-q4",
+              promptPre: "きのうの パーティーは あまり 楽し",
+              promptPost: "。",
+              options: ["くなかったです", "かったです", "くないです", "くなかった"],
+              correctAnswer: "くなかったです",
+              explanation: "Quá khứ phủ định của tính từ い: bỏ い thêm くなかったです (楽しい→楽しくなかったです).",
+              fullSentenceJp: "きのうの パーティーは あまり 楽しくなかったです。",
+              fullSentenceVi: "Bữa tiệc hôm qua không vui lắm.",
+            },
+            {
+              id: "l12-q5",
+              promptPre: "この 車は あの 車",
+              promptPost: " 大きいです。",
+              options: ["より", "ほうが", "ぐらい", "と"],
+              correctAnswer: "より",
+              explanation: "Danh từ1は Danh từ2より Tính từ です: lấy Danh từ2 làm chuẩn so sánh.",
+              fullSentenceJp: "この 車は あの 車より 大きいです。",
+              fullSentenceVi: "Chiếc xe ô-tô này lớn hơn chiếc xe ô-tô kia.",
+            },
+            {
+              id: "l12-q6",
+              promptPre: "サッカーと 野球と ",
+              promptPost: " おもしろいですか。……サッカーの ほうが おもしろいです。",
+              options: ["どちらが", "どれが", "なにが", "どこが"],
+              correctAnswer: "どちらが",
+              explanation: "Khi so sánh giữa HAI đối tượng, dùng nghi vấn từ どちら, dù đối tượng là gì.",
+              fullSentenceJp: "サッカーと 野球と どちらが おもしろいですか。……サッカーの ほうが おもしろいです。",
+              fullSentenceVi: "Bóng đá và bóng chày, môn nào thú vị hơn? …Bóng đá thú vị hơn.",
+            },
+            {
+              id: "l12-q7",
+              promptPre: "空港まで バスと 電車と どちらが 速いですか。……電車の ",
+              promptPost: " 速いです。",
+              options: ["ほうが", "のが", "ほど", "より"],
+              correctAnswer: "ほうが",
+              explanation: "Câu trả lời cho どちらが dùng mẫu Danh từの ほうが Tính từ です.",
+              fullSentenceJp: "空港まで バスと 電車と どちらが 速いですか。……電車の ほうが 速いです。",
+              fullSentenceVi: "Đến sân bay thì xe buýt và tàu điện, cái nào nhanh hơn? …Tàu điện nhanh hơn.",
+            },
+            {
+              id: "l12-q8",
+              promptPre: "日本料理の 中で 何が いちばん ",
+              promptPost: "ですか。……てんぷらが いちばん おいしいです。",
+              options: ["おいしい", "おいしくて", "おいしいの", "おいしかった"],
+              correctAnswer: "おいしい",
+              explanation: "Mẫu 何が いちばん Tính từ ですか dùng tính từ ở thể từ điển (phi quá khứ), không chia.",
+              fullSentenceJp: "日本料理の 中で 何が いちばん おいしいですか。……てんぷらが いちばん おいしいです。",
+              fullSentenceVi: "Trong các món ăn Nhật Bản, món nào ngon nhất? …Món Tempura ngon nhất.",
+            },
+            {
+              id: "l12-q9",
+              promptPre: "あの 赤くて、大きい",
+              promptPost: " です。",
+              options: ["の", "こと", "もの", "か"],
+              correctAnswer: "の",
+              explanation: "の đứng sau tính từ có vai trò thay thế cho một danh từ đã nhắc đến trước đó (かばん).",
+              fullSentenceJp: "あの 赤くて、大きいのです。",
+              fullSentenceVi: "Là cái lớn, màu đỏ kia.",
+            },
+          ],
+        },
+        {
+          type: "exercise-multiple-choice",
+          title: "Bài tập 2: Trắc nghiệm Từ vựng & Ngữ pháp Bài 12",
+          instruction: "Chọn phương án trả lời đúng nhất.",
+          questions: [
+            {
+              id: "l12-mc1",
+              question: "Quá khứ khẳng định của tính từ đuôi い 'さむい' (lạnh) là gì?",
+              options: ["さむかったです", "さむいでした", "さむくないです", "さむいです"],
+              correctAnswerIndex: 0,
+              explanation: "Bỏ い ở cuối tính từ, thêm かったです: さむい→さむかったです.",
+            },
+            {
+              id: "l12-mc2",
+              question: "Quá khứ phủ định (đặc biệt) của 'いいです' (tốt) là gì?",
+              options: ["よくなかったです", "いくなかったです", "いいじゃなかったです", "いいくなかったです"],
+              correctAnswerIndex: 0,
+              explanation: "いい chia đặc biệt dựa trên từ gốc よい: phủ định quá khứ là よくなかったです.",
+            },
+            {
+              id: "l12-mc3",
+              question: "Từ nào có nghĩa là 'mát mẻ'?",
+              options: ["涼しい", "暖かい", "寒い", "暑い"],
+              correctAnswerIndex: 0,
+              explanation: "涼しい (すずしい) nghĩa là mát mẻ; 暖かい là ấm áp, 寒い là lạnh, 暑い là nóng.",
+            },
+            {
+              id: "l12-mc4",
+              question: "どちらも có nghĩa là gì?",
+              options: ["Cả hai (đều)", "Cái nào (trong hai cái)", "Không cái nào", "Chỉ một trong hai"],
+              correctAnswerIndex: 0,
+              explanation: "どちらも nghĩa là 'cả hai đều', dùng để trả lời khi không thiên vị đối tượng nào.",
+            },
+            {
+              id: "l12-mc5",
+              question: "Trong mẫu câu 'Danh từ［の中］で いちばん Tính từ ですか', trợ từ で có vai trò gì?",
+              options: [
+                "Biểu thị phạm vi so sánh",
+                "Biểu thị phương tiện",
+                "Biểu thị địa điểm hành động",
+                "Biểu thị nguyên nhân",
+              ],
+              correctAnswerIndex: 0,
+              explanation: "で ở đây biểu thị phạm vi mà trong đó đối tượng đạt mức độ cao nhất (いちばん).",
+            },
+            {
+              id: "l12-mc6",
+              question: "Câu '北海道は 九州より 大きいです。' có nghĩa là gì?",
+              options: [
+                "Hokkaido lớn hơn Kyushu",
+                "Kyushu lớn hơn Hokkaido",
+                "Hokkaido và Kyushu bằng nhau",
+                "Hokkaido nhỏ hơn Kyushu",
+              ],
+              correctAnswerIndex: 0,
+              explanation: "Danh từ1は Danh từ2より Tính từ: Danh từ1 (Hokkaido) có tính chất đó hơn Danh từ2 (Kyushu).",
+            },
+            {
+              id: "l12-mc7",
+              question: "Trong câu so sánh, từ ずっと có nghĩa là gì?",
+              options: [
+                "Hơn hẳn, hơn nhiều",
+                "Hơi hơn một chút",
+                "Bằng nhau",
+                "Kém hơn",
+              ],
+              correctAnswerIndex: 0,
+              explanation: "ずっと nhấn mạnh mức độ chênh lệch lớn khi so sánh, nghĩa là 'hơn hẳn, hơn nhiều'.",
+            },
+          ],
+        },
+        {
+          type: "exercise-sentence-practice",
+          title: "Bài tập 3: Luyện tập dịch câu Bài 12 (Quá khứ & So sánh)",
+          instruction: "Tự nói câu tiếng Nhật dựa trên gợi ý tiếng Việt, sau đó bấm 'Xem đáp án' để kiểm tra phát âm.",
+          items: [
+            {
+              id: "l12-sp1",
+              vi: "Hôm qua trời mưa.",
+              jp: "きのうは 雨でした。",
+              hint: "Quá khứ khẳng định của danh từ: Danh từ + でした.",
+              breakdown: "きのうは (hôm qua) + 雨でした (đã mưa).",
+            },
+            {
+              id: "l12-sp2",
+              vi: "Bài thi hôm qua không dễ.",
+              jp: "きのうの 試験は 簡単じゃ ありませんでした。",
+              hint: "Quá khứ phủ định của tính từ な: ～じゃ ありませんでした.",
+              breakdown: "きのうの 試験は (bài thi hôm qua) + 簡単じゃ ありませんでした (không dễ).",
+            },
+            {
+              id: "l12-sp3",
+              vi: "Chuyến du lịch rất vui.",
+              jp: "旅行は とても 楽しかったです。",
+              hint: "Quá khứ khẳng định của tính từ い: 楽しい→楽しかったです.",
+              breakdown: "旅行は (chuyến du lịch) + とても (rất) + 楽しかったです (đã vui).",
+            },
+            {
+              id: "l12-sp4",
+              vi: "Mùa xuân và mùa thu, anh/chị thích mùa nào hơn? - Tôi thích cả hai.",
+              jp: "春と 秋と どちらが 好きですか。……どちらも 好きです。",
+              hint: "Dùng どちらが để hỏi so sánh, どちらも để trả lời 'cả hai'.",
+              breakdown: "春と 秋と どちらが 好きですか (mùa xuân và mùa thu, thích mùa nào hơn). どちらも 好きです (thích cả hai).",
+            },
+            {
+              id: "l12-sp5",
+              vi: "Trong các món ăn Nhật Bản, tôi thích món Tempura nhất.",
+              jp: "日本料理の中で てんぷらが 一番 好きです。",
+              hint: "Dùng Danh từの中で + Đối tượng + が いちばん + Tính từ／Động từ.",
+              breakdown: "日本料理の中で (trong các món ăn Nhật Bản) + てんぷらが (Tempura) + 一番 好きです (thích nhất).",
+            },
+            {
+              id: "l12-sp6",
+              vi: "New York lạnh hơn Osaka nhiều.",
+              jp: "ニューヨークは 大阪より ずっと 寒いです。",
+              hint: "Dùng より kết hợp với ずっと để nhấn mạnh mức chênh lệch.",
+              breakdown: "ニューヨークは (New York) + 大阪より (hơn Osaka) + ずっと 寒いです (lạnh hơn nhiều).",
+            },
+          ],
+        },
+        {
+          type: "exercise-reorder-sentence",
+          title: "Bài tập 4: Sắp xếp từ thành câu hoàn chỉnh (Luyện tập cấu trúc Bài 12)",
+          instruction: "Bấm vào các từ gợi ý theo đúng thứ tự ngữ pháp để ghép thành câu tiếng Nhật hoàn chỉnh.",
+          questions: [
+            {
+              id: "l12-ro1",
+              words: ["暑かったです", "きのうは"],
+              correctOrder: ["きのうは", "暑かったです"],
+              fullSentenceJp: "きのうは 暑かったです。",
+              fullSentenceVi: "Hôm qua trời nóng.",
+              explanation: "Chủ đề + は (きのうは) + Tính từ quá khứ (暑かったです).",
+            },
+            {
+              id: "l12-ro2",
+              words: ["大きいです", "北海道は", "九州より"],
+              correctOrder: ["北海道は", "九州より", "大きいです"],
+              fullSentenceJp: "北海道は 九州より 大きいです。",
+              fullSentenceVi: "Hokkaido lớn hơn Kyushu.",
+              explanation: "Danh từ1は (北海道は) + Danh từ2より (九州より) + Tính từ (大きいです).",
+            },
+            {
+              id: "l12-ro3",
+              words: ["おもしろいですか", "サッカーと", "野球と", "どちらが"],
+              correctOrder: ["サッカーと", "野球と", "どちらが", "おもしろいですか"],
+              fullSentenceJp: "サッカーと 野球と どちらが おもしろいですか。",
+              fullSentenceVi: "Bóng đá và bóng chày, môn nào thú vị hơn?",
+              explanation: "Danh từ1と Danh từ2と (サッカーと 野球と) + どちらが + Tính từ ですか.",
+            },
+            {
+              id: "l12-ro4",
+              words: ["おいしいですか", "日本料理の中で", "何が", "いちばん"],
+              correctOrder: ["日本料理の中で", "何が", "いちばん", "おいしいですか"],
+              fullSentenceJp: "日本料理の中で 何が いちばん おいしいですか。",
+              fullSentenceVi: "Trong các món ăn Nhật Bản, món nào ngon nhất?",
+              explanation: "Phạm vi + で (日本料理の中で) + 何が + いちばん + Tính từ ですか.",
+            },
+            {
+              id: "l12-ro5",
+              words: ["楽しくなかったです", "きのうの", "パーティーは", "あまり"],
+              correctOrder: ["きのうの", "パーティーは", "あまり", "楽しくなかったです"],
+              fullSentenceJp: "きのうの パーティーは あまり 楽しくなかったです。",
+              fullSentenceVi: "Bữa tiệc hôm qua không vui lắm.",
+              explanation: "Chủ đề + は (きのうの パーティーは) + あまり + Tính từ phủ định quá khứ (楽しくなかったです).",
+            },
+          ],
+        },
+      ],
+    },
+  ],
+};

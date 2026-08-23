@@ -6,6 +6,23 @@ import { lesson5 } from "@/data/theory/lesson-5";
 import { lesson6 } from "@/data/theory/lesson-6";
 import { lesson7 } from "@/data/theory/lesson-7";
 import { lesson8 } from "@/data/theory/lesson-8";
+import { lesson9 } from "@/data/theory/lesson-9";
+import { lesson10 } from "@/data/theory/lesson-10";
+import { lesson11 } from "@/data/theory/lesson-11";
+import { lesson12 } from "@/data/theory/lesson-12";
+import { lesson13 } from "@/data/theory/lesson-13";
+import { lesson14 } from "@/data/theory/lesson-14";
+import { lesson15 } from "@/data/theory/lesson-15";
+import { lesson16 } from "@/data/theory/lesson-16";
+import { lesson17 } from "@/data/theory/lesson-17";
+import { lesson18 } from "@/data/theory/lesson-18";
+import { lesson19 } from "@/data/theory/lesson-19";
+import { lesson20 } from "@/data/theory/lesson-20";
+import { lesson21 } from "@/data/theory/lesson-21";
+import { lesson22 } from "@/data/theory/lesson-22";
+import { lesson23 } from "@/data/theory/lesson-23";
+import { lesson24 } from "@/data/theory/lesson-24";
+import { lesson25 } from "@/data/theory/lesson-25";
 
 /** A single vocabulary/phrase entry: Japanese reading, optional Kanji, Vietnamese meaning, optional usage note. */
 export interface VocabItem {
@@ -192,7 +209,33 @@ export interface Lesson {
 }
 
 // Add each new lesson's file here as it's transcribed.
-export const lessonList: Lesson[] = [lesson1, lesson2, lesson3, lesson4, lesson5, lesson6, lesson7, lesson8];
+export const lessonList: Lesson[] = [
+  lesson1,
+  lesson2,
+  lesson3,
+  lesson4,
+  lesson5,
+  lesson6,
+  lesson7,
+  lesson8,
+  lesson9,
+  lesson10,
+  lesson11,
+  lesson12,
+  lesson13,
+  lesson14,
+  lesson15,
+  lesson16,
+  lesson17,
+  lesson18,
+  lesson19,
+  lesson20,
+  lesson21,
+  lesson22,
+  lesson23,
+  lesson24,
+  lesson25,
+];
 
 export function getLessonById(id: number): Lesson | undefined {
   return lessonList.find((l) => l.id === id);
