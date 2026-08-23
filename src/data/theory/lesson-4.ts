@@ -78,7 +78,7 @@ export const lesson4: Lesson = {
             { jp: "あさ", kanji: "朝", meaning: "buổi sáng, sáng" },
             { jp: "ひる", kanji: "昼", meaning: "buổi trưa, trưa" },
             { jp: "ばん（よる）", kanji: "晩（夜）", meaning: "buổi tối, tối" },
-            { jp: "おとtoi", meaning: "hôm kia" },
+            { jp: "おととい", meaning: "hôm kia" },
             { jp: "きのう", meaning: "hôm qua" },
             { jp: "きょう", meaning: "hôm nay" },
             { jp: "あした", meaning: "ngày mai" },

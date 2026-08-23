@@ -1,22 +1,23 @@
 "use client";
 
-import { ExternalLink, Maximize2, Presentation } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { useState } from "react";
+import { Maximize2, Presentation, Ratio } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 import { useLanguage } from "@/lib/language-context";
 
 const SLIDE_ID = "1TwhygwDZOs-8lI-nSzYdnzX_KrRqXV9iZjz2C4THsrI";
 const EMBED_URL = `https://docs.google.com/presentation/d/${SLIDE_ID}/embed?start=false&loop=false&delayms=3000`;
-const EXTERNAL_URL = `https://docs.google.com/presentation/d/${SLIDE_ID}/edit`;
 
 export default function SlidesPage() {
   const { language } = useLanguage();
   const isVi = language === "vi";
+  const [aspectRatio, setAspectRatio] = useState<"4:3" | "16:9">("4:3");
 
   return (
-    <div className="mx-auto flex w-full max-w-5xl flex-1 flex-col gap-6 px-4 py-6 sm:px-6 lg:py-8">
+    <div className="mx-auto flex w-full max-w-4xl flex-1 flex-col gap-6 px-4 py-6 sm:px-6 lg:py-8">
       {/* Header Banner */}
-      <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex flex-col gap-1">
           <div className="flex items-center gap-2">
             <Presentation className="size-6 text-primary" />
@@ -31,16 +32,27 @@ export default function SlidesPage() {
           </p>
         </div>
 
-        {/* Action Controls */}
-        <div className="flex items-center gap-2 pt-2 sm:pt-0">
+        {/* Aspect Ratio Selector */}
+        <div className="flex items-center gap-1 rounded-lg border bg-muted p-1 text-xs shrink-0 self-start sm:self-auto">
+          <span className="px-2 text-muted-foreground font-medium flex items-center gap-1">
+            <Ratio className="size-3.5" />
+            {isVi ? "Tỉ lệ:" : "Ratio:"}
+          </span>
           <Button
-            variant="outline"
+            variant={aspectRatio === "4:3" ? "default" : "ghost"}
             size="sm"
-            onClick={() => window.open(EXTERNAL_URL, "_blank")}
-            className="gap-2 font-medium"
+            onClick={() => setAspectRatio("4:3")}
+            className="h-7 px-2.5 text-xs font-semibold"
           >
-            <ExternalLink className="size-4" />
-            {isVi ? "Mở trong Google Slides ↗" : "Open in Google Slides ↗"}
+            4:3 (Chuẩn)
+          </Button>
+          <Button
+            variant={aspectRatio === "16:9" ? "default" : "ghost"}
+            size="sm"
+            onClick={() => setAspectRatio("16:9")}
+            className="h-7 px-2.5 text-xs font-semibold"
+          >
+            16:9 (Rộng)
           </Button>
         </div>
       </div>
@@ -48,7 +60,11 @@ export default function SlidesPage() {
       {/* Main Google Slides Embed Frame */}
       <Card className="overflow-hidden border-primary/20 shadow-md">
         <CardContent className="p-0">
-          <div className="relative w-full pt-[56.25%] bg-black/90">
+          <div
+            className={`relative w-full bg-black/90 transition-all ${
+              aspectRatio === "4:3" ? "aspect-[4/3]" : "aspect-[16/9]"
+            }`}
+          >
             <iframe
               src={EMBED_URL}
               title={isVi ? "Slide bài giảng Tiếng Nhật" : "Japanese Presentation Slides"}
@@ -65,8 +81,8 @@ export default function SlidesPage() {
           <Maximize2 className="size-4 shrink-0 text-primary" />
           <span>
             {isVi
-              ? "Mẹo: Bạn có thể bấm biểu tượng Toàn màn hình (Full screen) ở góc dưới thanh công cụ slide để trình chiếu tràn màn hình."
-              : "Tip: Click the full screen icon inside the slide toolbar for full presentation view."}
+              ? "Mẹo: Khung hiển thị đã được điều chỉnh về tỉ lệ 4:3 khớp 100% với slide của bạn để loại bỏ 2 vệt đen 2 bên."
+              : "Tip: Frame aspect ratio is set to 4:3 matching your slides to eliminate black side bars."}
           </span>
         </div>
       </div>
