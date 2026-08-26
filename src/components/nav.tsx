@@ -7,10 +7,10 @@ import {
   BookOpen,
   GraduationCap,
   Home,
+  LayoutGrid,
   MessageSquare,
   PenTool,
   Presentation,
-  Table,
 } from "lucide-react";
 import { LanguageToggle } from "@/components/language-toggle";
 import { VoiceToggle } from "@/components/voice-toggle";
@@ -26,7 +26,7 @@ export function Nav() {
   const links = [
     { href: "/", label: t("nav_home"), shortLabel: isVi ? "Trang chủ" : "Home", icon: Home },
     { href: "/kana", label: t("nav_learn"), shortLabel: isVi ? "Học Kana" : "Learn", icon: BookOpen },
-    { href: "/vocabulary", label: t("nav_vocabulary"), shortLabel: isVi ? "Từ vựng" : "Vocab", icon: Table },
+    { href: "/vocabulary", label: t("nav_vocabulary"), shortLabel: isVi ? "Từ vựng" : "Vocab", icon: LayoutGrid },
     { href: "/theory", label: t("nav_theory"), shortLabel: isVi ? "Lý thuyết" : "Theory", icon: GraduationCap },
     { href: "/phrases", label: t("nav_phrases"), shortLabel: isVi ? "Mẫu câu" : "Phrases", icon: MessageSquare },
     { href: "/practice", label: t("nav_practice"), shortLabel: isVi ? "Luyện tập" : "Practice", icon: PenTool },

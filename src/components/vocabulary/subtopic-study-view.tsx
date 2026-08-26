@@ -1,0 +1,56 @@
+"use client";
+
+import { useState } from "react";
+import Link from "next/link";
+import { ChevronRight, Target } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { WordCard } from "@/components/vocabulary/word-card";
+import { KatakanaQuizSession } from "@/components/vocabulary/katakana-quiz-session";
+import { useLanguage } from "@/lib/language-context";
+import type { Domain, Subtopic } from "@/lib/vocabulary";
+
+export function SubtopicStudyView({ domain, subtopic }: { domain: Domain; subtopic: Subtopic }) {
+  const { t } = useLanguage();
+  const [mode, setMode] = useState<"study" | "quiz">("study");
+  const katakanaWords = subtopic.words.filter((w) => w.wordType === "katakana" && w.englishSource);
+
+  if (mode === "quiz") {
+    return (
+      <div className="flex flex-col gap-4">
+        <KatakanaQuizSession words={katakanaWords} onEnd={() => setMode("study")} />
+      </div>
+    );
+  }
+
+  return (
+    <div className="flex flex-col gap-5">
+      <nav className="flex flex-wrap items-center gap-1.5 text-xs text-muted-foreground">
+        <Link href="/vocabulary" className="hover:text-foreground hover:underline">
+          {t("vocab_breadcrumb_vocabulary")}
+        </Link>
+        <ChevronRight className="size-3.5" />
+        <Link href={`/vocabulary?domain=${domain.id}`} className="hover:text-foreground hover:underline">
+          {domain.name}
+        </Link>
+        <ChevronRight className="size-3.5" />
+        <span className="font-medium text-foreground">{subtopic.name}</span>
+      </nav>
+
+      <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+        <h1 className="text-xl font-bold tracking-tight sm:text-2xl">{subtopic.name}</h1>
+        {katakanaWords.length > 0 && (
+          <Button onClick={() => setMode("quiz")} variant="outline" className="gap-2 font-semibold shrink-0">
+            <Target className="size-4" />
+            {t("vocab_quiz_entry")}
+          </Button>
+        )}
+      </div>
+
+      <div className="flex flex-col gap-3">
+        {subtopic.words.map((word) => (
+          <WordCard key={word.id} word={word} />
+        ))}
+      </div>
+    </div>
+  );
+}
