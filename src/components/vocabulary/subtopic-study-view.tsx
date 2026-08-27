@@ -6,6 +6,8 @@ import { ChevronRight, Target } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { WordCard } from "@/components/vocabulary/word-card";
 import { KatakanaQuizSession } from "@/components/vocabulary/katakana-quiz-session";
+import { PrintCutoutSheet } from "@/components/vocabulary/print-cutout-sheet";
+import { PrintLabelsButton } from "@/components/vocabulary/print-labels-button";
 import { useLanguage } from "@/lib/language-context";
 import type { Domain, Subtopic } from "@/lib/vocabulary";
 
@@ -24,7 +26,9 @@ export function SubtopicStudyView({ domain, subtopic }: { domain: Domain; subtop
 
   return (
     <div className="flex flex-col gap-5">
-      <nav className="flex flex-wrap items-center gap-1.5 text-xs text-muted-foreground">
+      <PrintCutoutSheet title={subtopic.name} groups={[{ words: subtopic.words }]} />
+
+      <nav className="flex flex-wrap items-center gap-1.5 text-xs text-muted-foreground print:hidden">
         <Link href="/vocabulary" className="hover:text-foreground hover:underline">
           {t("vocab_breadcrumb_vocabulary")}
         </Link>
@@ -36,17 +40,20 @@ export function SubtopicStudyView({ domain, subtopic }: { domain: Domain; subtop
         <span className="font-medium text-foreground">{subtopic.name}</span>
       </nav>
 
-      <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+      <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between print:hidden">
         <h1 className="text-xl font-bold tracking-tight sm:text-2xl">{subtopic.name}</h1>
-        {katakanaWords.length > 0 && (
-          <Button onClick={() => setMode("quiz")} variant="outline" className="gap-2 font-semibold shrink-0">
-            <Target className="size-4" />
-            {t("vocab_quiz_entry")}
-          </Button>
-        )}
+        <div className="flex shrink-0 flex-wrap gap-2">
+          <PrintLabelsButton />
+          {katakanaWords.length > 0 && (
+            <Button onClick={() => setMode("quiz")} variant="outline" className="gap-2 font-semibold">
+              <Target className="size-4" />
+              {t("vocab_quiz_entry")}
+            </Button>
+          )}
+        </div>
       </div>
 
-      <div className="flex flex-col gap-3">
+      <div className="flex flex-col gap-3 print:hidden">
         {subtopic.words.map((word) => (
           <WordCard key={word.id} word={word} />
         ))}

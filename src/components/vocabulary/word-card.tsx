@@ -1,21 +1,17 @@
 "use client";
 
-import { Volume2, Check } from "lucide-react";
+import { Volume2 } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { useLanguage } from "@/lib/language-context";
-import { useVocabProgress } from "@/lib/vocab-progress-context";
 import { speakJapanese } from "@/lib/speech";
-import { cn } from "@/lib/utils";
 import type { VocabWord } from "@/lib/vocabulary";
 
 export function WordCard({ word }: { word: VocabWord }) {
   const { t } = useLanguage();
-  const { isWordLearned, toggleWordLearned } = useVocabProgress();
-  const learned = isWordLearned(word.id);
 
   return (
-    <Card className={cn("shadow-2xs transition-colors", learned && "border-emerald-500/40 bg-emerald-500/5")}>
+    <Card className="shadow-2xs">
       <CardContent className="flex flex-col gap-2.5">
         <div className="flex items-start justify-between gap-2">
           <div className="flex items-baseline gap-2">
@@ -66,20 +62,6 @@ export function WordCard({ word }: { word: VocabWord }) {
           </div>
           <p className="text-xs italic text-muted-foreground/80">{word.exampleSentenceMeaning}</p>
         </div>
-
-        <button
-          type="button"
-          onClick={() => toggleWordLearned(word.id)}
-          className={cn(
-            "inline-flex w-fit items-center gap-1.5 rounded-full border px-2.5 py-1 text-xs font-medium transition-colors",
-            learned
-              ? "border-emerald-500 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400"
-              : "border-border text-muted-foreground hover:text-foreground"
-          )}
-        >
-          <Check className={cn("size-3.5", learned ? "opacity-100" : "opacity-40")} />
-          {learned ? t("vocab_marked_learned") : t("vocab_mark_learned")}
-        </button>
       </CardContent>
     </Card>
   );

@@ -13,9 +13,7 @@ import {
   Layers,
   type LucideIcon,
 } from "lucide-react";
-import { Progress } from "@/components/ui/progress";
 import { useLanguage } from "@/lib/language-context";
-import { useVocabProgress } from "@/lib/vocab-progress-context";
 import { domainWordCount, type Domain } from "@/lib/vocabulary";
 import { cn } from "@/lib/utils";
 
@@ -41,9 +39,7 @@ export function DomainCard({
   onClick: () => void;
 }) {
   const { t } = useLanguage();
-  const { getDomainProgress } = useVocabProgress();
   const Icon = DOMAIN_ICON_MAP[domain.icon] ?? Layers;
-  const progress = getDomainProgress(domain);
 
   return (
     <button
@@ -78,15 +74,6 @@ export function DomainCard({
       {!matchesFilters && (
         <p className="text-[11px] text-muted-foreground italic">{t("vocab_no_matching_domain")}</p>
       )}
-
-      <Progress value={progress.percent} className="w-full flex-col-reverse gap-1.5">
-        <div className="flex w-full items-center justify-between text-[11px] text-muted-foreground">
-          <span>
-            {progress.learned}/{progress.total}
-          </span>
-          <span className="font-semibold text-primary">{progress.percent}%</span>
-        </div>
-      </Progress>
     </button>
   );
 }

@@ -5,7 +5,6 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { VocabFilterBar } from "@/components/vocabulary/vocab-filter-bar";
 import { DomainGrid } from "@/components/vocabulary/domain-grid";
 import { SubtopicGrid } from "@/components/vocabulary/subtopic-grid";
-import { ContinueLearningButton } from "@/components/vocabulary/continue-learning-button";
 import { DOMAINS, getDomainById } from "@/data/vocabulary";
 import type { LevelFilter, TypeFilter } from "@/lib/vocabulary";
 
@@ -32,9 +31,8 @@ export function VocabularyExplorer() {
 
   return (
     <div className="flex flex-col gap-5">
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+      <div className="print:hidden">
         <VocabFilterBar level={level} onLevelChange={setLevel} type={type} onTypeChange={setType} />
-        <ContinueLearningButton />
       </div>
 
       {selectedDomain ? (

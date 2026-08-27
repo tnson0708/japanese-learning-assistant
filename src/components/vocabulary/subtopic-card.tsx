@@ -3,16 +3,12 @@
 import { useRouter } from "next/navigation";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Progress } from "@/components/ui/progress";
 import { useLanguage } from "@/lib/language-context";
-import { useVocabProgress } from "@/lib/vocab-progress-context";
-import type { Subtopic } from "@/lib/vocabulary";
+import { subtopicWordCount, type Subtopic } from "@/lib/vocabulary";
 
 export function SubtopicCard({ domainId, subtopic }: { domainId: string; subtopic: Subtopic }) {
   const { t } = useLanguage();
   const router = useRouter();
-  const { getSubtopicProgress } = useVocabProgress();
-  const progress = getSubtopicProgress(subtopic);
 
   const levels = Array.from(new Set(subtopic.words.map((w) => w.jlptLevel))).sort();
   const types = Array.from(new Set(subtopic.words.map((w) => w.wordType)));
@@ -41,14 +37,9 @@ export function SubtopicCard({ domainId, subtopic }: { domainId: string; subtopi
           ))}
         </div>
 
-        <Progress value={progress.percent} className="w-full flex-col-reverse gap-1.5">
-          <div className="flex w-full items-center justify-between text-xs text-muted-foreground">
-            <span>
-              {progress.learned}/{progress.total} {t("vocab_words_learned")}
-            </span>
-            <span className="font-semibold text-primary">{progress.percent}%</span>
-          </div>
-        </Progress>
+        <span className="text-xs text-muted-foreground">
+          {subtopicWordCount(subtopic)} {t("vocab_words_count")}
+        </span>
       </CardContent>
     </Card>
   );
