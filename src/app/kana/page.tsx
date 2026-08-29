@@ -20,8 +20,53 @@ import { useLanguage } from "@/lib/language-context";
 import { cn } from "@/lib/utils";
 
 import { PronunciationGuide } from "@/components/kana/pronunciation-guide";
+import { KanjiRadicalGuide } from "@/components/kana/kanji-radical-guide";
+import { BasicKanjiGuide } from "@/components/kana/basic-kanji-guide";
+import { BookOpen, Sparkles } from "lucide-react";
 
-type LearnTab = Script | "pronunciation";
+type LearnTab = Script | "pronunciation" | "kanji";
+
+function KanjiSection() {
+  const [subTab, setSubTab] = useState<"radicals" | "basic">("radicals");
+  const { language } = useLanguage();
+  const isVi = language === "vi";
+
+  return (
+    <div className="flex flex-col gap-6">
+      <div className="flex items-center justify-center border-b pb-4">
+        <div className="inline-flex items-center rounded-xl border bg-muted p-1 text-xs sm:text-sm shadow-2xs">
+          <button
+            type="button"
+            onClick={() => setSubTab("radicals")}
+            className={`flex items-center gap-2 rounded-lg px-4 py-2 font-bold transition-colors cursor-pointer ${
+              subTab === "radicals"
+                ? "bg-background text-foreground shadow-2xs"
+                : "text-muted-foreground hover:text-foreground"
+            }`}
+          >
+            <BookOpen className="size-4 text-primary" />
+            <span>{isVi ? "Bộ thủ Kanji (87 bộ)" : "Kanji Radicals"}</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setSubTab("basic")}
+            className={`flex items-center gap-2 rounded-lg px-4 py-2 font-bold transition-colors cursor-pointer ${
+              subTab === "basic"
+                ? "bg-background text-foreground shadow-2xs"
+                : "text-muted-foreground hover:text-foreground"
+            }`}
+          >
+            <Sparkles className="size-4 text-amber-500" />
+            <span>{isVi ? "Chữ Kanji cơ bản (100 chữ)" : "Basic Kanji Words"}</span>
+          </button>
+        </div>
+      </div>
+
+      {subTab === "radicals" ? <KanjiRadicalGuide /> : <BasicKanjiGuide />}
+    </div>
+  );
+}
 type SectionFilter = "all" | "main" | "dakuten" | "youon";
 
 const MAIN_GROUPS = new Set(["vowel", "k", "s", "t", "n", "h", "m", "y", "r", "w"]);
@@ -211,7 +256,7 @@ function KanaPageContent() {
   const tabParam = searchParams.get("tab") as LearnTab | null;
 
   const initialTab: LearnTab =
-    tabParam === "katakana" || tabParam === "hiragana" || tabParam === "pronunciation"
+    tabParam === "katakana" || tabParam === "hiragana" || tabParam === "pronunciation" || tabParam === "kanji"
       ? tabParam
       : "hiragana";
 
@@ -221,7 +266,7 @@ function KanaPageContent() {
 
   // Sync activeTab when tab URL search param changes (e.g., navigating back)
   useEffect(() => {
-    if (tabParam === "katakana" || tabParam === "hiragana" || tabParam === "pronunciation") {
+    if (tabParam === "katakana" || tabParam === "hiragana" || tabParam === "pronunciation" || tabParam === "kanji") {
       setActiveTab(tabParam);
     }
   }, [tabParam]);
@@ -245,7 +290,9 @@ function KanaPageContent() {
               ? "Bảng chữ Hiragana (ひらがな) — Hiragana Alphabet Chart"
               : activeTab === "katakana"
               ? "Bảng chữ Katakana (カタカナ) — Katakana Alphabet Chart"
-              : "Quy tắc phát âm tiếng Nhật — Japanese Pronunciation Guide"}
+              : activeTab === "pronunciation"
+              ? "Quy tắc phát âm tiếng Nhật — Japanese Pronunciation Guide"
+              : "Bộ thủ Kanji (漢字部首) — Essential Kanji Radicals"}
           </h1>
           <span className="text-xs font-bold text-gray-700">仮名道場 • Kana Dojo</span>
         </div>
@@ -290,10 +337,11 @@ function KanaPageContent() {
               onValueChange={(v) => setActiveTab(v as LearnTab)}
               className="w-full sm:w-auto"
             >
-              <TabsList className="grid w-full grid-cols-3 sm:w-auto md:w-[500px]">
+              <TabsList className="grid w-full grid-cols-2 sm:grid-cols-4 sm:w-auto md:w-[680px]">
                 <TabsTrigger value="hiragana">{t("kana_tab_hiragana")}</TabsTrigger>
                 <TabsTrigger value="katakana">{t("kana_tab_katakana")}</TabsTrigger>
                 <TabsTrigger value="pronunciation">{t("kana_tab_pronunciation")}</TabsTrigger>
+                <TabsTrigger value="kanji">{t("kana_tab_kanji")}</TabsTrigger>
               </TabsList>
             </Tabs>
 
@@ -344,8 +392,10 @@ function KanaPageContent() {
       {/* Main Content Area */}
       {isKanaTab ? (
         <KanaGrid script={activeTab} section={section} query={search} />
-      ) : (
+      ) : activeTab === "pronunciation" ? (
         <PronunciationGuide />
+      ) : (
+        <KanjiSection />
       )}
     </div>
   );
