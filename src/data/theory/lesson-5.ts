@@ -52,7 +52,7 @@ export const lesson5: Lesson = {
               meaning: "tàu Shinkansen (tàu điện cao tốc của Nhật)",
             },
             { jp: "バス", meaning: "xe buýt" },
-            { jp: "タクシー", meaning: "tác-xi" },
+            { jp: "タクシー", meaning: "taxi" },
             { jp: "じてんしゃ", kanji: "自転車", meaning: "xe đạp" },
             { jp: "あるいて", kanji: "歩いて", meaning: "đi bộ" },
           ],
@@ -164,7 +164,7 @@ export const lesson5: Lesson = {
             {
               id: "l5-t-s2",
               num: 2,
-              vi: "Tôi (sẽ) về nhà bằng tác-xi.",
+              vi: "Tôi (sẽ) về nhà bằng taxi.",
               jp: "わたしは タクシーで うちへ 帰ります。",
             },
             {
@@ -380,7 +380,7 @@ export const lesson5: Lesson = {
             },
             {
               jp: "⑧ タクシーで 来ました。",
-              vi: "Tôi (đã) đến bằng tác-xi.",
+              vi: "Tôi (đã) đến bằng taxi.",
             },
             {
               jp: "⑨ 駅から 歩いて 帰りました。",
@@ -485,9 +485,9 @@ export const lesson5: Lesson = {
               promptPost: " うちへ 帰ります。",
               options: ["で", "へ", "と", "も"],
               correctAnswer: "で",
-              explanation: "Trợ từ で chỉ phương tiện giao thông (đi bằng tác-xi).",
+              explanation: "Trợ từ で chỉ phương tiện giao thông (đi bằng taxi).",
               fullSentenceJp: "タクシーで うちへ 帰ります。",
-              fullSentenceVi: "Tôi về nhà bằng tác-xi.",
+              fullSentenceVi: "Tôi về nhà bằng taxi.",
             },
             {
               id: "l5-q3",
@@ -661,7 +661,7 @@ export const lesson5: Lesson = {
               words: ["かえります", "で", "タクシー", "うち へ"],
               correctOrder: ["タクシー", "で", "うち へ", "かえります"],
               fullSentenceJp: "タクシー で うち へ かえります。",
-              fullSentenceVi: "Tôi về nhà bằng tác-xi.",
+              fullSentenceVi: "Tôi về nhà bằng taxi.",
               explanation: "Phương tiện (タクシーで) + Địa điểm hướng đi (うちへ) + かえります.",
             },
             {
