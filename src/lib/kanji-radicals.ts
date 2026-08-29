@@ -1021,6 +1021,20 @@ export const KANJI_RADICALS: KanjiRadical[] = [
       { char: "句", pinyin: "jù", hanViet: "Cú", meaning: "Câu văn (文句)" },
     ],
   },
+  {
+    id: "rad-chuoc",
+    char: "勺",
+    hanViet: "Bộ chước",
+    meaningVi: "Cái muôi, cái thìa múc rượu, đong lường thể tích.",
+    meaningEn: "Ladle / Spoon / Unit of volume",
+    strokes: 2,
+    strokeGuide: "Nét 1: phẩy trái nghiêng; Nét 2: ngang gập móc bao ngoài và nét chấm bên trong.",
+    strokePaths: ["M 38 18 C 30 35, 22 55, 12 78", "M 32 30 L 78 30 L 68 85 C 62 92, 50 92, 42 85", "M 48 52 C 52 52, 55 55, 55 58 C 55 62, 52 65, 48 65 C 44 65, 41 62, 41 58 C 41 55, 44 52, 48 52"],
+    exampleKanji: [
+      { char: "約", pinyin: "yuē", hanViet: "Ước", meaning: "Giao ước, khoảng (約束)" },
+      { char: "酌", pinyin: "zhuó", hanViet: "Chước", meaning: "Rót rượu, chuốc rượu" },
+    ],
+  },
 
   // --- BẢNG BỔ SUNG 2 - HÀNG 3 ---
   {

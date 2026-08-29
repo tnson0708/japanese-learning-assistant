@@ -22,6 +22,8 @@ import { cn } from "@/lib/utils";
 import { PronunciationGuide } from "@/components/kana/pronunciation-guide";
 import { KanjiRadicalGuide } from "@/components/kana/kanji-radical-guide";
 import { BasicKanjiGuide } from "@/components/kana/basic-kanji-guide";
+import { KANJI_RADICALS } from "@/lib/kanji-radicals";
+import { BASIC_KANJI_WORDS } from "@/lib/basic-kanji";
 import { BookOpen, Sparkles } from "lucide-react";
 
 type LearnTab = Script | "pronunciation" | "kanji";
@@ -45,7 +47,7 @@ function KanjiSection() {
             }`}
           >
             <BookOpen className="size-4 text-primary" />
-            <span>{isVi ? "Bộ thủ Kanji (87 bộ)" : "Kanji Radicals"}</span>
+            <span>{isVi ? `Bộ thủ Kanji (${KANJI_RADICALS.length} bộ)` : "Kanji Radicals"}</span>
           </button>
 
           <button
@@ -58,7 +60,7 @@ function KanjiSection() {
             }`}
           >
             <Sparkles className="size-4 text-amber-500" />
-            <span>{isVi ? "Chữ Kanji cơ bản (100 chữ)" : "Basic Kanji Words"}</span>
+            <span>{isVi ? `Chữ Kanji cơ bản (${BASIC_KANJI_WORDS.length} chữ)` : "Basic Kanji Words"}</span>
           </button>
         </div>
       </div>
