@@ -11,6 +11,7 @@ import {
   MessageSquare,
   PenTool,
   Presentation,
+  Shield,
 } from "lucide-react";
 import { LanguageToggle } from "@/components/language-toggle";
 import { VoiceToggle } from "@/components/voice-toggle";
@@ -81,8 +82,20 @@ export function Nav() {
             })}
           </nav>
 
-          {/* Header Right Controls (Voice & Language Toggles) */}
+          {/* Header Right Controls (Voice & Language Toggles & Admin Link) */}
           <div className="flex items-center gap-2 shrink-0">
+            <Link
+              href="/admin"
+              className={cn(
+                "flex size-9 items-center justify-center rounded-lg border transition-colors cursor-pointer",
+                pathname.startsWith("/admin")
+                  ? "bg-amber-500 text-white border-amber-500"
+                  : "border-input bg-background hover:bg-accent hover:text-accent-foreground text-muted-foreground"
+              )}
+              title="Trang quản trị (Admin Panel)"
+            >
+              <Shield className="size-4" />
+            </Link>
             <VoiceToggle />
             <LanguageToggle />
           </div>
