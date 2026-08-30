@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Shield,
   Lock,
@@ -15,7 +15,7 @@ import {
   Repeat,
   CalendarDays,
 } from "lucide-react";
-import { useMaintenance } from "@/lib/maintenance-context";
+import { useMaintenance, parseVietnamDateTime } from "@/lib/maintenance-context";
 import { useLanguage } from "@/lib/language-context";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -44,6 +44,29 @@ export default function AdminPage() {
 
   const { language } = useLanguage();
   const isVi = language === "vi";
+
+  // Live Vietnam Time Clock State
+  const [vnClock, setVnClock] = useState<string>("");
+
+  useEffect(() => {
+    const update = () => {
+      setVnClock(
+        new Date().toLocaleString(isVi ? "vi-VN" : "en-US", {
+          timeZone: "Asia/Ho_Chi_Minh",
+          weekday: "short",
+          year: "numeric",
+          month: "2-digit",
+          day: "2-digit",
+          hour: "2-digit",
+          minute: "2-digit",
+          second: "2-digit",
+        })
+      );
+    };
+    update();
+    const timer = setInterval(update, 1000);
+    return () => clearInterval(timer);
+  }, [isVi]);
 
   // PIN Form State
   const [inputPin, setInputPin] = useState("");
@@ -120,7 +143,7 @@ export default function AdminPage() {
       recurringStartTime: recurringStart,
       recurringEndTime: recurringEnd,
     });
-    setScheduleMsg(isVi ? "Đã lưu lịch trình tự động!" : "Auto schedule saved!");
+    setScheduleMsg(isVi ? "Đã lưu lịch trình tự động (Giờ VN - UTC+7)!" : "Auto schedule saved (Vietnam Time - UTC+7)!");
     setTimeout(() => setScheduleMsg(""), 3000);
   };
 
@@ -226,21 +249,29 @@ export default function AdminPage() {
             </div>
             <p className="text-xs text-muted-foreground">
               {isVi
-                ? "Cấu hình tạm ngưng website, cài đặt lịch trình tự động bật/tắt (một lần hoặc định kỳ) và quản lý mã PIN."
-                : "Manage maintenance mode, one-time or recurring automated schedules, and security PIN."}
+                ? "Cấu hình tạm ngưng website, cài đặt lịch trình tự động bật/tắt theo Giờ Việt Nam (UTC+7) và quản lý mã PIN."
+                : "Manage maintenance mode, automated schedules in Vietnam Time (UTC+7), and security PIN."}
             </p>
           </div>
         </div>
 
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={logoutAdmin}
-          className="gap-2 shrink-0 font-semibold cursor-pointer border-destructive/30 text-destructive hover:bg-destructive/10"
-        >
-          <LogOut className="size-4" />
-          <span>{isVi ? "Đăng xuất Admin" : "Logout Admin"}</span>
-        </Button>
+        <div className="flex items-center gap-3">
+          {/* Vietnam Time Clock Pill */}
+          <div className="flex items-center gap-2 rounded-xl border border-amber-500/30 bg-amber-500/10 px-3 py-1.5 text-xs font-bold text-amber-700 dark:text-amber-300">
+            <Clock className="size-4 shrink-0 animate-pulse text-amber-500" />
+            <span>{vnClock || "Giờ Việt Nam (UTC+7)"}</span>
+          </div>
+
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={logoutAdmin}
+            className="gap-2 shrink-0 font-semibold cursor-pointer border-destructive/30 text-destructive hover:bg-destructive/10"
+          >
+            <LogOut className="size-4" />
+            <span>{isVi ? "Đăng xuất Admin" : "Logout Admin"}</span>
+          </Button>
+        </div>
       </div>
 
       {/* Main Grid Controls */}
@@ -339,7 +370,7 @@ export default function AdminPage() {
         <div className="flex flex-col gap-5 rounded-2xl border bg-card p-6 shadow-2xs">
           <div className="flex items-center gap-2 font-bold text-base">
             <Calendar className="size-5 text-amber-500" />
-            <span>{isVi ? "Lịch Trình Tự Động Bật/Tắt" : "Automated Schedule"}</span>
+            <span>{isVi ? "Lịch Trình Tự Động Bật/Tắt (Giờ VN - UTC+7)" : "Automated Schedule (Vietnam Time - UTC+7)"}</span>
           </div>
 
           {/* Schedule Type Selector Switcher */}
@@ -354,7 +385,7 @@ export default function AdminPage() {
               }`}
             >
               <CalendarDays className="size-3.5" />
-              <span>{isVi ? "Một lần (Ngày/Giờ cụ thể)" : "One-time (Specific Date)"}</span>
+              <span>{isVi ? "Một lần (Ngày/Giờ VN)" : "One-time (Vietnam Time)"}</span>
             </button>
 
             <button
@@ -367,7 +398,7 @@ export default function AdminPage() {
               }`}
             >
               <Repeat className="size-3.5" />
-              <span>{isVi ? "Lặp lại định kỳ (Hàng tuần)" : "Recurring (Weekly)"}</span>
+              <span>{isVi ? "Lặp lại (Giờ VN UTC+7)" : "Recurring (Vietnam Time)"}</span>
             </button>
           </div>
 
@@ -377,15 +408,15 @@ export default function AdminPage() {
               <div className="flex flex-col gap-4">
                 <p className="text-xs text-muted-foreground">
                   {isVi
-                    ? "Cấu hình ngày giờ cụ thể để website TỰ ĐỘNG TẮT và TỰ ĐỘNG BẬT LẠI."
-                    : "Set specific date and time for site to turn OFF and turn ON."}
+                    ? "Cấu hình ngày giờ (theo Giờ Việt Nam - UTC+7) để website TỰ ĐỘNG TẮT và TỰ ĐỘNG BẬT LẠI."
+                    : "Set specific date & time (in Vietnam Time - UTC+7) for site to turn OFF and turn ON."}
                 </p>
 
                 {/* Auto Off Date Time */}
                 <div className="flex flex-col gap-1.5">
                   <label className="text-xs font-bold text-muted-foreground flex items-center gap-1.5">
                     <Clock className="size-3.5 text-destructive" />
-                    <span>{isVi ? "Thời gian TỰ ĐỘNG TẮT website:" : "Auto Turn OFF Date & Time:"}</span>
+                    <span>{isVi ? "Thời gian TỰ ĐỘNG TẮT (Giờ VN - UTC+7):" : "Auto Turn OFF (Vietnam Time UTC+7):"}</span>
                   </label>
                   <input
                     type="datetime-local"
@@ -399,7 +430,7 @@ export default function AdminPage() {
                 <div className="flex flex-col gap-1.5">
                   <label className="text-xs font-bold text-muted-foreground flex items-center gap-1.5">
                     <Clock className="size-3.5 text-emerald-500" />
-                    <span>{isVi ? "Thời gian TỰ ĐỘNG BẬT LẠI website:" : "Auto Turn ON Date & Time:"}</span>
+                    <span>{isVi ? "Thời gian TỰ ĐỘNG BẬT LẠI (Giờ VN - UTC+7):" : "Auto Turn ON (Vietnam Time UTC+7):"}</span>
                   </label>
                   <input
                     type="datetime-local"
@@ -414,8 +445,8 @@ export default function AdminPage() {
               <div className="flex flex-col gap-4">
                 <p className="text-xs text-muted-foreground">
                   {isVi
-                    ? "Tự động tắt website vào các ngày trong tuần trong khung giờ nhất định (Ví dụ: Thứ 7, Chủ Nhật từ 15:00 - 17:00)."
-                    : "Automatically turn off site on selected days during a daily time window (e.g., Sat, Sun 15:00 - 17:00)."}
+                    ? "Tự động tắt website vào các ngày trong tuần theo Giờ Việt Nam (UTC+7) trong khung giờ nhất định (Ví dụ: Thứ 7, Chủ Nhật từ 15:00 - 17:00)."
+                    : "Automatically turn off site on selected days in Vietnam Time (UTC+7) during a daily time window (e.g., Sat, Sun 15:00 - 17:00)."}
                 </p>
 
                 {/* Weekday Selection Pills */}
@@ -450,7 +481,7 @@ export default function AdminPage() {
                   <div className="flex flex-col gap-1.5">
                     <label className="text-xs font-bold text-muted-foreground flex items-center gap-1">
                       <Clock className="size-3 text-destructive" />
-                      <span>{isVi ? "Giờ tắt hàng ngày:" : "Turn Off Time:"}</span>
+                      <span>{isVi ? "Giờ tắt (Giờ VN):" : "Turn Off Time (VN):"}</span>
                     </label>
                     <input
                       type="time"
@@ -463,7 +494,7 @@ export default function AdminPage() {
                   <div className="flex flex-col gap-1.5">
                     <label className="text-xs font-bold text-muted-foreground flex items-center gap-1">
                       <Clock className="size-3 text-emerald-500" />
-                      <span>{isVi ? "Giờ mở hàng ngày:" : "Turn On Time:"}</span>
+                      <span>{isVi ? "Giờ mở lại (Giờ VN):" : "Turn On Time (VN):"}</span>
                     </label>
                     <input
                       type="time"

@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { Shield, Clock, Lock, Sparkles, RefreshCw, Repeat } from "lucide-react";
-import { useMaintenance } from "@/lib/maintenance-context";
+import { useMaintenance, parseVietnamDateTime, getVietnamTimeParts } from "@/lib/maintenance-context";
 import { useLanguage } from "@/lib/language-context";
 import { Button } from "@/components/ui/button";
 
@@ -40,23 +40,22 @@ export function MaintenanceGuard({ children }: { children: React.ReactNode }) {
   const isAdminRoute = pathname?.startsWith("/admin");
   const shouldBlock = isMaintenanceActive && !isAdminRoute && !isAdminLoggedIn;
 
-  // Calculate target reopening time
+  // Calculate target reopening time in Vietnam Time (UTC+7)
   useEffect(() => {
     let targetTime: number | null = null;
 
     if (config.scheduleType === "one_time" && config.autoOnDateTime) {
-      targetTime = new Date(config.autoOnDateTime).getTime();
+      targetTime = parseVietnamDateTime(config.autoOnDateTime);
     } else if (config.scheduleType === "recurring" && config.recurringEndTime) {
-      const now = new Date();
-      const [endH, endM] = config.recurringEndTime.split(":").map(Number);
-      const targetDate = new Date(now);
-      targetDate.setHours(endH || 0, endM || 0, 0, 0);
+      const vnNow = getVietnamTimeParts(new Date());
+      const endStr = `${vnNow.dateString}T${config.recurringEndTime}`;
+      let targetMs = parseVietnamDateTime(endStr);
 
-      // If end time already passed today, set to tomorrow
-      if (targetDate.getTime() <= now.getTime()) {
-        targetDate.setDate(targetDate.getDate() + 1);
+      // If end time in Vietnam has already passed today, target tomorrow's end time
+      if (targetMs <= Date.now()) {
+        targetMs += 24 * 60 * 60 * 1000;
       }
-      targetTime = targetDate.getTime();
+      targetTime = targetMs;
     }
 
     if (!targetTime) {
@@ -150,6 +149,7 @@ export function MaintenanceGuard({ children }: { children: React.ReactNode }) {
               </div>
               <span className="text-sm font-extrabold text-foreground">
                 {formattedDays} ({config.recurringStartTime} - {config.recurringEndTime})
+                <span className="ml-1 text-xs font-normal text-muted-foreground">(Giờ VN UTC+7)</span>
               </span>
 
               {timeLeft && (
@@ -169,10 +169,12 @@ export function MaintenanceGuard({ children }: { children: React.ReactNode }) {
                   <span>{isVi ? "Dự kiến mở lại lúc:" : "Estimated reopening:"}</span>
                 </div>
                 <span className="text-sm font-extrabold text-foreground">
-                  {new Date(config.autoOnDateTime).toLocaleString(isVi ? "vi-VN" : "en-US", {
+                  {new Date(parseVietnamDateTime(config.autoOnDateTime)).toLocaleString(isVi ? "vi-VN" : "en-US", {
+                    timeZone: "Asia/Ho_Chi_Minh",
                     dateStyle: "full",
                     timeStyle: "short",
-                  })}
+                  })}{" "}
+                  <span className="text-xs font-normal text-muted-foreground">(Giờ VN UTC+7)</span>
                 </span>
 
                 {timeLeft && (
