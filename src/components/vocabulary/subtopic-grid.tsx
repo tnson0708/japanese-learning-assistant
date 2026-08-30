@@ -5,7 +5,7 @@ import { SubtopicCard } from "@/components/vocabulary/subtopic-card";
 import { PrintCutoutSheet } from "@/components/vocabulary/print-cutout-sheet";
 import { PrintLabelsButton } from "@/components/vocabulary/print-labels-button";
 import { useLanguage } from "@/lib/language-context";
-import { subtopicMatchesFilters, type Domain, type LevelFilter, type TypeFilter } from "@/lib/vocabulary";
+import { getDomainName, getSubtopicName, subtopicMatchesFilters, type Domain, type LevelFilter, type TypeFilter } from "@/lib/vocabulary";
 
 export function SubtopicGrid({
   domain,
@@ -18,27 +18,28 @@ export function SubtopicGrid({
   type: TypeFilter;
   onBack: () => void;
 }) {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const visibleSubtopics = domain.subtopics.filter((s) => subtopicMatchesFilters(s, level, type));
+  const domainName = getDomainName(domain, language);
 
   return (
     <div className="flex flex-col gap-4">
       <PrintCutoutSheet
-        title={domain.name}
-        groups={domain.subtopics.map((s) => ({ heading: s.name, words: s.words }))}
+        title={domainName}
+        groups={domain.subtopics.map((s) => ({ heading: getSubtopicName(s, language), words: s.words }))}
       />
 
       <div className="flex flex-wrap items-center gap-3 print:hidden">
         <button
           type="button"
           onClick={onBack}
-          className="inline-flex items-center gap-1 rounded-lg border bg-background px-2.5 py-1.5 text-xs font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
+          className="inline-flex items-center gap-1 rounded-lg border bg-background px-2.5 py-1.5 text-xs font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-foreground cursor-pointer"
         >
           <ChevronLeft className="size-3.5" />
           {t("vocab_back_to_domains")}
         </button>
         <h2 className="text-sm font-bold uppercase tracking-wider text-muted-foreground/80">
-          {domain.name}
+          {domainName}
         </h2>
         <div className="h-px flex-1 bg-border/60" />
         <PrintLabelsButton />

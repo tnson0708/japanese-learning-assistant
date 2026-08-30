@@ -26,8 +26,8 @@ export function WordCard({ word }: { word: VocabWord }) {
 
           <button
             type="button"
-            onClick={() => speakJapanese(word.word)}
-            className="shrink-0 rounded-full p-1.5 text-muted-foreground/70 transition-colors hover:bg-accent hover:text-primary"
+            onClick={() => speakJapanese(word.reading || word.word)}
+            className="shrink-0 rounded-full p-1.5 text-muted-foreground/70 transition-colors hover:bg-accent hover:text-primary cursor-pointer"
             title={`Listen to ${word.word}`}
             aria-label={`Listen to ${word.word}`}
           >

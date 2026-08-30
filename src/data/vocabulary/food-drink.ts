@@ -3,11 +3,13 @@ import type { Domain } from "@/lib/vocabulary";
 export const foodDrinkDomain: Domain = {
   id: "food-drink",
   name: "Food & Drink",
+  nameVi: "Ẩm thực & Đồ uống",
   icon: "utensils",
   subtopics: [
     {
       id: "meals-restaurants",
       name: "Meals & Restaurants",
+      nameVi: "Bữa ăn & Nhà hàng",
       domainId: "food-drink",
       order: 70,
       words: [
@@ -223,6 +225,7 @@ export const foodDrinkDomain: Domain = {
     {
       id: "fruits-vegetables",
       name: "Fruits & Vegetables",
+      nameVi: "Hoa quả & Rau củ",
       domainId: "food-drink",
       order: 80,
       words: [
@@ -417,6 +420,7 @@ export const foodDrinkDomain: Domain = {
     {
       id: "drinks-snacks",
       name: "Drinks & Snacks",
+      nameVi: "Đồ uống & Ăn vặt",
       domainId: "food-drink",
       order: 90,
       words: [
@@ -619,6 +623,7 @@ export const foodDrinkDomain: Domain = {
     {
       id: "cooking-kitchen",
       name: "Cooking & Kitchen",
+      nameVi: "Nấu ăn & Nhà bếp",
       domainId: "food-drink",
       order: 100,
       words: [

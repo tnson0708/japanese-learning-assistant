@@ -3,11 +3,13 @@ import type { Domain } from "@/lib/vocabulary";
 export const travelTransportationDomain: Domain = {
   id: "travel-transportation",
   name: "Travel & Transportation",
+  nameVi: "Du lịch & Giao thông",
   icon: "plane",
   subtopics: [
     {
       id: "transportation-methods",
       name: "Transportation Methods",
+      nameVi: "Phương tiện giao thông",
       domainId: "travel-transportation",
       order: 170,
       words: [
@@ -207,6 +209,7 @@ export const travelTransportationDomain: Domain = {
     {
       id: "travel-accommodation",
       name: "Travel & Accommodation",
+      nameVi: "Du lịch & Khách sạn",
       domainId: "travel-transportation",
       order: 180,
       words: [
@@ -411,6 +414,7 @@ export const travelTransportationDomain: Domain = {
     {
       id: "airport-directions",
       name: "Airport & Directions",
+      nameVi: "Sân bay & Chỉ đường",
       domainId: "travel-transportation",
       order: 190,
       words: [

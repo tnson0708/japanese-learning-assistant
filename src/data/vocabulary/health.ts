@@ -3,11 +3,13 @@ import type { Domain } from "@/lib/vocabulary";
 export const healthDomain: Domain = {
   id: "health",
   name: "Health",
+  nameVi: "Sức khỏe & Cơ thể",
   icon: "heart-pulse",
   subtopics: [
     {
       id: "body-parts",
       name: "Body Parts",
+      nameVi: "Các bộ phận cơ thể",
       domainId: "health",
       order: 110,
       words: [
@@ -176,6 +178,7 @@ export const healthDomain: Domain = {
     {
       id: "illness-symptoms",
       name: "Illness & Symptoms",
+      nameVi: "Bệnh tật & Triệu chứng",
       domainId: "health",
       order: 120,
       words: [
@@ -349,6 +352,7 @@ export const healthDomain: Domain = {
     {
       id: "hospital-medicine",
       name: "Hospital & Medicine",
+      nameVi: "Bệnh viện & Thuốc",
       domainId: "health",
       order: 130,
       words: [

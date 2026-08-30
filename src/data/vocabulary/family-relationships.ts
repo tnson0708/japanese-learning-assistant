@@ -3,11 +3,13 @@ import type { Domain } from "@/lib/vocabulary";
 export const familyRelationshipsDomain: Domain = {
   id: "family-relationships",
   name: "Family & Relationships",
+  nameVi: "Gia đình & Mối quan hệ",
   icon: "users",
   subtopics: [
     {
       id: "immediate-family",
       name: "Immediate Family",
+      nameVi: "Gia đình ruột thịt",
       domainId: "family-relationships",
       order: 40,
       words: [
@@ -185,6 +187,7 @@ export const familyRelationshipsDomain: Domain = {
     {
       id: "extended-family-in-laws",
       name: "Extended Family & In-laws",
+      nameVi: "Họ hàng & Gia đình hai bên",
       domainId: "family-relationships",
       order: 50,
       words: [
@@ -361,6 +364,7 @@ export const familyRelationshipsDomain: Domain = {
     {
       id: "friends-social-relationships",
       name: "Friends & Social Relationships",
+      nameVi: "Bạn bè & Mối quan hệ xã hội",
       domainId: "family-relationships",
       order: 60,
       words: [

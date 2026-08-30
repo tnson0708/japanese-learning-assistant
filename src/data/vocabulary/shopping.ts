@@ -3,11 +3,13 @@ import type { Domain } from "@/lib/vocabulary";
 export const shoppingDomain: Domain = {
   id: "shopping",
   name: "Shopping",
+  nameVi: "Mua sắm & Thời trang",
   icon: "shopping-bag",
   subtopics: [
     {
       id: "clothing-accessories",
       name: "Clothing & Accessories",
+      nameVi: "Quần áo & Phụ kiện",
       domainId: "shopping",
       order: 140,
       words: [
@@ -208,6 +210,7 @@ export const shoppingDomain: Domain = {
     {
       id: "money-payment",
       name: "Money & Payment",
+      nameVi: "Tiền bạc & Thanh toán",
       domainId: "shopping",
       order: 150,
       words: [
@@ -385,6 +388,7 @@ export const shoppingDomain: Domain = {
     {
       id: "stores-shopping-actions",
       name: "Stores & Shopping Actions",
+      nameVi: "Cửa hàng & Mua sắm",
       domainId: "shopping",
       order: 160,
       words: [

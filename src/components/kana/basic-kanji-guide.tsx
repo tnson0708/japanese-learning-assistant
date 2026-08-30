@@ -314,7 +314,7 @@ export function BasicKanjiGuide() {
                     {selectedKanji.exampleWords.map((ex, idx) => (
                       <div
                         key={idx}
-                        onClick={() => speak(ex.word)}
+                        onClick={() => speak(ex.reading || ex.word)}
                         className="flex items-center justify-between rounded-xl border bg-card p-3 px-4 transition-all hover:border-amber-500/50 hover:bg-amber-500/5 cursor-pointer shadow-2xs"
                       >
                         <div className="flex items-center gap-3 min-w-0">

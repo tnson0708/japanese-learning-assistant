@@ -3,11 +3,13 @@ import type { Domain } from "@/lib/vocabulary";
 export const emotionsPersonalityDomain: Domain = {
   id: "emotions-personality",
   name: "Emotions & Personality",
+  nameVi: "Cảm xúc & Tính cách",
   icon: "smile",
   subtopics: [
     {
       id: "emotions-feelings",
       name: "Emotions & Feelings",
+      nameVi: "Cảm xúc & Tâm trạng",
       domainId: "emotions-personality",
       order: 260,
       words: [
@@ -200,6 +202,7 @@ export const emotionsPersonalityDomain: Domain = {
     {
       id: "personality-traits",
       name: "Personality Traits",
+      nameVi: "Tính cách & Phẩm chất",
       domainId: "emotions-personality",
       order: 270,
       words: [
@@ -378,6 +381,7 @@ export const emotionsPersonalityDomain: Domain = {
     {
       id: "opinions-reactions",
       name: "Opinions & Reactions",
+      nameVi: "Ý kiến & Phản ứng",
       domainId: "emotions-personality",
       order: 280,
       words: [

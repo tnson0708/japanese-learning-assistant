@@ -3,11 +3,13 @@ import type { Domain } from "@/lib/vocabulary";
 export const weatherNatureDomain: Domain = {
   id: "weather-nature",
   name: "Weather & Nature",
+  nameVi: "Thời tiết & Tự nhiên",
   icon: "cloud-sun",
   subtopics: [
     {
       id: "weather-seasons",
       name: "Weather & Seasons",
+      nameVi: "Thời tiết & Các mùa",
       domainId: "weather-nature",
       order: 230,
       words: [
@@ -178,6 +180,7 @@ export const weatherNatureDomain: Domain = {
     {
       id: "nature-landscape",
       name: "Nature & Landscape",
+      nameVi: "Thiên nhiên & Cảnh quan",
       domainId: "weather-nature",
       order: 240,
       words: [
@@ -350,6 +353,7 @@ export const weatherNatureDomain: Domain = {
     {
       id: "sky-climate-phenomena",
       name: "Sky & Climate Phenomena",
+      nameVi: "Bầu trời & Hiện tượng khí hậu",
       domainId: "weather-nature",
       order: 250,
       words: [

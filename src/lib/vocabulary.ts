@@ -27,6 +27,7 @@ export interface VocabWord {
 export interface Subtopic {
   id: string; // kebab-case, unique within its domain
   name: string;
+  nameVi?: string;
   domainId: string;
   /** Global study-order index across all domains/subtopics — drives "Continue Learning". */
   order: number;
@@ -36,9 +37,20 @@ export interface Subtopic {
 export interface Domain {
   id: string;
   name: string;
+  nameVi?: string;
   /** Key into DOMAIN_ICON_MAP in the component layer. */
   icon: string;
   subtopics: Subtopic[];
+}
+
+export function getDomainName(domain: Domain, language: string): string {
+  if (language === "vi" && domain.nameVi) return domain.nameVi;
+  return domain.name;
+}
+
+export function getSubtopicName(subtopic: Subtopic, language: string): string {
+  if (language === "vi" && subtopic.nameVi) return subtopic.nameVi;
+  return subtopic.name;
 }
 
 export type LevelFilter = JlptLevel | "all";

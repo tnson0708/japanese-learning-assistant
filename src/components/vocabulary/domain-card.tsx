@@ -14,7 +14,7 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import { useLanguage } from "@/lib/language-context";
-import { domainWordCount, type Domain } from "@/lib/vocabulary";
+import { domainWordCount, getDomainName, type Domain } from "@/lib/vocabulary";
 import { cn } from "@/lib/utils";
 
 export const DOMAIN_ICON_MAP: Record<string, LucideIcon> = {
@@ -38,7 +38,7 @@ export function DomainCard({
   matchesFilters: boolean;
   onClick: () => void;
 }) {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const Icon = DOMAIN_ICON_MAP[domain.icon] ?? Layers;
 
   return (
@@ -64,7 +64,7 @@ export function DomainCard({
 
       <div className="flex flex-col gap-0.5">
         <h3 className="text-sm font-semibold text-foreground transition-colors group-hover:text-primary">
-          {domain.name}
+          {getDomainName(domain, language)}
         </h3>
         <span className="text-xs text-muted-foreground">
           {domainWordCount(domain)} {t("vocab_words_count")}

@@ -9,12 +9,15 @@ import { KatakanaQuizSession } from "@/components/vocabulary/katakana-quiz-sessi
 import { PrintCutoutSheet } from "@/components/vocabulary/print-cutout-sheet";
 import { PrintLabelsButton } from "@/components/vocabulary/print-labels-button";
 import { useLanguage } from "@/lib/language-context";
-import type { Domain, Subtopic } from "@/lib/vocabulary";
+import { getDomainName, getSubtopicName, type Domain, type Subtopic } from "@/lib/vocabulary";
 
 export function SubtopicStudyView({ domain, subtopic }: { domain: Domain; subtopic: Subtopic }) {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const [mode, setMode] = useState<"study" | "quiz">("study");
   const katakanaWords = subtopic.words.filter((w) => w.wordType === "katakana" && w.englishSource);
+
+  const domainName = getDomainName(domain, language);
+  const subtopicName = getSubtopicName(subtopic, language);
 
   if (mode === "quiz") {
     return (
@@ -26,7 +29,7 @@ export function SubtopicStudyView({ domain, subtopic }: { domain: Domain; subtop
 
   return (
     <div className="flex flex-col gap-5">
-      <PrintCutoutSheet title={subtopic.name} groups={[{ words: subtopic.words }]} />
+      <PrintCutoutSheet title={subtopicName} groups={[{ words: subtopic.words }]} />
 
       <nav className="flex flex-wrap items-center gap-1.5 text-xs text-muted-foreground print:hidden">
         <Link href="/vocabulary" className="hover:text-foreground hover:underline">
@@ -34,14 +37,14 @@ export function SubtopicStudyView({ domain, subtopic }: { domain: Domain; subtop
         </Link>
         <ChevronRight className="size-3.5" />
         <Link href={`/vocabulary?domain=${domain.id}`} className="hover:text-foreground hover:underline">
-          {domain.name}
+          {domainName}
         </Link>
         <ChevronRight className="size-3.5" />
-        <span className="font-medium text-foreground">{subtopic.name}</span>
+        <span className="font-medium text-foreground">{subtopicName}</span>
       </nav>
 
       <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between print:hidden">
-        <h1 className="text-xl font-bold tracking-tight sm:text-2xl">{subtopic.name}</h1>
+        <h1 className="text-xl font-bold tracking-tight sm:text-2xl">{subtopicName}</h1>
         <div className="flex shrink-0 flex-wrap gap-2">
           <PrintLabelsButton />
           {katakanaWords.length > 0 && (

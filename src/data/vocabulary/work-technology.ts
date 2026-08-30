@@ -3,11 +3,13 @@ import type { Domain } from "@/lib/vocabulary";
 export const workTechnologyDomain: Domain = {
   id: "work-technology",
   name: "Work & Technology",
+  nameVi: "Công việc & Công nghệ",
   icon: "briefcase",
   subtopics: [
     {
       id: "office-jobs",
       name: "Office & Jobs",
+      nameVi: "Văn phòng & Nghề nghiệp",
       domainId: "work-technology",
       order: 200,
       words: [
@@ -210,6 +212,7 @@ export const workTechnologyDomain: Domain = {
     {
       id: "computers-internet",
       name: "Computers & Internet",
+      nameVi: "Máy tính & Internet",
       domainId: "work-technology",
       order: 210,
       words: [
@@ -438,6 +441,7 @@ export const workTechnologyDomain: Domain = {
     {
       id: "phones-gadgets",
       name: "Phones & Gadgets",
+      nameVi: "Điện thoại & Thiết bị",
       domainId: "work-technology",
       order: 220,
       words: [

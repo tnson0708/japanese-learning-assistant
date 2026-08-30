@@ -4,10 +4,10 @@ import { useRouter } from "next/navigation";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { useLanguage } from "@/lib/language-context";
-import { subtopicWordCount, type Subtopic } from "@/lib/vocabulary";
+import { getSubtopicName, subtopicWordCount, type Subtopic } from "@/lib/vocabulary";
 
 export function SubtopicCard({ domainId, subtopic }: { domainId: string; subtopic: Subtopic }) {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const router = useRouter();
 
   const levels = Array.from(new Set(subtopic.words.map((w) => w.jlptLevel))).sort();
@@ -20,7 +20,7 @@ export function SubtopicCard({ domainId, subtopic }: { domainId: string; subtopi
     >
       <CardHeader>
         <CardTitle className="text-sm font-semibold transition-colors group-hover:text-primary">
-          {subtopic.name}
+          {getSubtopicName(subtopic, language)}
         </CardTitle>
       </CardHeader>
       <CardContent className="flex flex-col gap-3">
