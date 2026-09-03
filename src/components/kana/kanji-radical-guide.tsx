@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { Search, RotateCcw, PencilLine, Volume2, X, Sparkles, BookOpen } from "lucide-react";
+import { Search, RotateCcw, PencilLine, Volume2, X, Sparkles, BookOpen, Printer } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { KANJI_RADICALS, type KanjiRadical } from "@/lib/kanji-radicals";
@@ -50,9 +50,21 @@ export function KanjiRadicalGuide() {
   ];
 
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-6 print:gap-3">
+      {/* Printable Sheet Header (Only visible on paper print) */}
+      <div className="hidden print:flex flex-col gap-1 pb-3 mb-2 border-b border-black">
+        <h1 className="text-xl font-extrabold text-black uppercase tracking-tight">
+          {isVi ? `BẢNG ${KANJI_RADICALS.length} BỘ THỦ KANJI TIẾNG NHẬT` : `JAPANESE KANJI RADICALS SHEET (${KANJI_RADICALS.length} RADICALS)`}
+        </h1>
+        <p className="text-xs text-gray-700">
+          {isVi
+            ? "Tên Hán-Việt chính thức, số nét, ý nghĩa tượng hình & ví dụ chữ Kanji tiêu biểu."
+            : "Official Sino-Vietnamese names, stroke counts, meanings, and example Kanji."}
+        </p>
+      </div>
+
       {/* Header Info Banner */}
-      <div className="flex flex-col gap-2 rounded-xl border bg-card/60 p-4 sm:p-5 shadow-2xs">
+      <div className="flex flex-col gap-2 rounded-xl border bg-card/60 p-4 sm:p-5 shadow-2xs print:hidden">
         <div className="flex items-center gap-2 text-primary font-bold text-sm sm:text-base">
           <BookOpen className="size-5 shrink-0" />
           <span>
@@ -122,7 +134,7 @@ export function KanjiRadicalGuide() {
             : "No Kanji radicals match your search query or stroke filter."}
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3.5 sm:gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3.5 sm:gap-4 print:grid-cols-3 print:gap-3 print:p-0">
           {filteredRadicals.map((rad) => (
             <div
               key={rad.id}
@@ -131,19 +143,19 @@ export function KanjiRadicalGuide() {
                 setIsPracticing(false);
                 setReplayKey((k) => k + 1);
               }}
-              className="group relative flex flex-col justify-between rounded-xl border bg-card p-4 transition-all duration-200 hover:-translate-y-0.5 hover:border-primary/60 hover:shadow-md cursor-pointer"
+              className="group relative flex flex-col justify-between rounded-xl border bg-card p-4 transition-all duration-200 hover:-translate-y-0.5 hover:border-primary/60 hover:shadow-md cursor-pointer print:break-inside-avoid print:border-gray-400 print:shadow-none print:bg-white print:p-3 print:rounded-lg"
             >
               {/* Card Top: Big Radical Char + Han-Viet Badge */}
               <div className="flex items-start justify-between gap-2">
                 <div className="flex items-center gap-3">
-                  <span className="text-4xl font-extrabold text-foreground transition-colors group-hover:text-primary font-serif">
+                  <span className="text-4xl font-extrabold text-foreground transition-colors group-hover:text-primary font-serif print:text-black print:text-3xl">
                     {rad.char}
                   </span>
                   <div className="flex flex-col">
-                    <span className="text-sm font-bold text-primary tracking-tight">
+                    <span className="text-sm font-bold text-primary tracking-tight print:text-black print:font-extrabold">
                       {rad.hanViet}
                     </span>
-                    <span className="text-[11px] font-semibold text-muted-foreground">
+                    <span className="text-[11px] font-semibold text-muted-foreground print:text-gray-700">
                       {rad.strokes} {isVi ? "nét" : "strokes"}
                     </span>
                   </div>
@@ -155,7 +167,7 @@ export function KanjiRadicalGuide() {
                     e.stopPropagation();
                     speakJapanese(rad.char);
                   }}
-                  className="rounded-full p-1.5 text-muted-foreground/70 transition-colors hover:bg-accent hover:text-primary cursor-pointer"
+                  className="rounded-full p-1.5 text-muted-foreground/70 transition-colors hover:bg-accent hover:text-primary cursor-pointer print:hidden"
                   title={`Listen to ${rad.char}`}
                 >
                   <Volume2 className="size-4" />
@@ -164,7 +176,7 @@ export function KanjiRadicalGuide() {
 
               {/* Card Middle: Meaning & Guide */}
               <div className="my-3 flex flex-col gap-1 text-xs text-muted-foreground">
-                <p className="line-clamp-2 leading-relaxed text-foreground/90 font-normal">
+                <p className="line-clamp-2 leading-relaxed text-foreground/90 font-normal print:line-clamp-none print:text-gray-900 print:text-[11px]">
                   {rad.meaningVi}
                 </p>
               </div>
@@ -199,7 +211,7 @@ export function KanjiRadicalGuide() {
       {/* Radical Detail & Stroke Writer Modal */}
       {activeRadical && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-xs p-4 animate-in fade-in duration-200"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-xs p-4 animate-in fade-in duration-200 print:hidden"
           onClick={() => setActiveRadical(null)}
         >
           <div

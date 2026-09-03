@@ -35,7 +35,7 @@ function KanjiSection() {
 
   return (
     <div className="flex flex-col gap-6">
-      <div className="flex items-center justify-center border-b pb-4">
+      <div className="flex items-center justify-between border-b pb-4 print:hidden">
         <div className="inline-flex items-center rounded-xl border bg-muted p-1 text-xs sm:text-sm shadow-2xs">
           <button
             type="button"
@@ -63,6 +63,24 @@ function KanjiSection() {
             <span>{isVi ? `Chữ Kanji cơ bản (${BASIC_KANJI_WORDS.length} chữ)` : "Basic Kanji Words"}</span>
           </button>
         </div>
+
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => window.print()}
+          className="gap-2 font-semibold text-xs border-amber-500/30 text-amber-700 dark:text-amber-300 hover:bg-amber-500/10 cursor-pointer shrink-0"
+          title={isVi ? "In trang này ra giấy" : "Print Sheet"}
+        >
+          <Printer className="size-4" />
+          <span className="hidden sm:inline">
+            {isVi
+              ? subTab === "radicals"
+                ? "In bảng bộ thủ"
+                : "In 100 chữ Kanji"
+              : "Print Sheet"}
+          </span>
+          <span className="sm:hidden">{isVi ? "In" : "Print"}</span>
+        </Button>
       </div>
 
       {subTab === "radicals" ? <KanjiRadicalGuide /> : <BasicKanjiGuide />}

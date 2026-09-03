@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import { Search, Volume2, RotateCw, PenTool, BookOpen, Layers, Sparkles } from "lucide-react";
+import { Search, Volume2, RotateCw, PenTool, BookOpen, Layers, Sparkles, Printer } from "lucide-react";
 import { BASIC_KANJI_WORDS, type BasicKanjiWord } from "@/lib/basic-kanji";
 import { BasicKanjiStrokeSvg } from "@/components/kana/basic-kanji-stroke-svg";
 import { BasicKanjiHandwritingCanvas } from "@/components/kana/basic-kanji-handwriting-canvas";
@@ -50,9 +50,19 @@ export function BasicKanjiGuide() {
   const strokeCounts = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12];
 
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-6 print:gap-3">
+      {/* Printable Sheet Header (Only visible on paper print) */}
+      <div className="hidden print:flex flex-col gap-1 pb-3 mb-2 border-b border-black">
+        <h1 className="text-xl font-extrabold text-black uppercase tracking-tight">
+          {isVi ? "BẢNG 100 CHỮ KANJI CƠ BẢN (N5/N4)" : "100 ESSENTIAL KANJI CHARACTERS (N5/N4)"}
+        </h1>
+        <p className="text-xs text-gray-700">
+          Tên Hán-Việt, âm đọc Hiragana & ý nghĩa tiếng Việt chi tiết.
+        </p>
+      </div>
+
       {/* Header Banner */}
-      <div className="relative overflow-hidden rounded-2xl border bg-gradient-to-br from-amber-500/10 via-orange-500/5 to-background p-6 md:p-8 shadow-xs">
+      <div className="relative overflow-hidden rounded-2xl border bg-gradient-to-br from-amber-500/10 via-orange-500/5 to-background p-6 md:p-8 shadow-xs print:hidden">
         <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
           <div className="flex flex-col gap-1.5">
             <div className="flex items-center gap-2">
@@ -81,7 +91,7 @@ export function BasicKanjiGuide() {
       </div>
 
       {/* Filter Controls Bar */}
-      <div className="flex flex-col gap-4 rounded-xl border bg-card p-4 shadow-2xs md:flex-row md:items-center md:justify-between">
+      <div className="flex flex-col gap-4 rounded-xl border bg-card p-4 shadow-2xs md:flex-row md:items-center md:justify-between print:hidden">
         {/* Search Bar */}
         <div className="relative w-full md:w-80">
           <Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
@@ -122,7 +132,7 @@ export function BasicKanjiGuide() {
       </div>
 
       {/* Kanji Cards Grid */}
-      <div className="grid grid-cols-2 gap-3.5 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6">
+      <div className="grid grid-cols-2 gap-3.5 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 print:grid-cols-6 print:gap-2 print:p-0">
         {filteredKanji.map((item) => (
           <div
             key={item.id}
@@ -131,11 +141,11 @@ export function BasicKanjiGuide() {
               setAnimKey((prev) => prev + 1);
               setPracticeMode("animation");
             }}
-            className="group relative flex flex-col items-center justify-between rounded-xl border bg-card p-4 transition-all duration-200 hover:-translate-y-1 hover:border-amber-500/50 hover:shadow-md cursor-pointer"
+            className="group relative flex flex-col items-center justify-between rounded-xl border bg-card p-4 transition-all duration-200 hover:-translate-y-1 hover:border-amber-500/50 hover:shadow-md cursor-pointer print:break-inside-avoid print:border-gray-400 print:shadow-none print:bg-white print:p-2"
           >
             {/* Top Row: Stroke Badge & Sound Button */}
             <div className="flex w-full items-center justify-between">
-              <span className="text-[11px] font-semibold text-muted-foreground">
+              <span className="text-[11px] font-semibold text-muted-foreground print:text-gray-600 print:text-[10px]">
                 {item.strokes} {isVi ? "nét" : "str"}
               </span>
 
@@ -145,7 +155,7 @@ export function BasicKanjiGuide() {
                   e.stopPropagation();
                   speakKanji(item);
                 }}
-                className="rounded-full p-1 text-muted-foreground transition-colors hover:bg-amber-500/10 hover:text-amber-600"
+                className="rounded-full p-1 text-muted-foreground transition-colors hover:bg-amber-500/10 hover:text-amber-600 print:hidden"
                 title="Phát âm"
               >
                 <Volume2 className="size-3.5" />
@@ -153,8 +163,8 @@ export function BasicKanjiGuide() {
             </div>
 
             {/* Kanji Character Display */}
-            <div className="my-3 flex flex-col items-center justify-center">
-              <span className="text-4xl font-black tracking-tight text-foreground transition-transform duration-200 group-hover:scale-110 font-serif">
+            <div className="my-3 flex flex-col items-center justify-center print:my-1">
+              <span className="text-4xl font-black tracking-tight text-foreground transition-transform duration-200 group-hover:scale-110 font-serif print:text-black print:text-3xl">
                 {item.char}
               </span>
             </div>
@@ -190,7 +200,7 @@ export function BasicKanjiGuide() {
       {/* Kanji Detail & Practice Modal */}
       {selectedKanji && (
         <Dialog open={!!selectedKanji} onOpenChange={(open) => !open && setSelectedKanji(null)}>
-          <DialogContent className="sm:max-w-2xl md:max-w-3xl overflow-hidden p-0 rounded-2xl border bg-card shadow-2xl">
+          <DialogContent className="sm:max-w-2xl md:max-w-3xl overflow-hidden p-0 rounded-2xl border bg-card shadow-2xl print:hidden">
             <DialogHeader className="border-b p-5 sm:p-6 pb-4 bg-gradient-to-r from-amber-500/10 via-orange-500/5 to-transparent">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3.5">
