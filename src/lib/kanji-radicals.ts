@@ -338,7 +338,7 @@ export const KANJI_RADICALS: KanjiRadical[] = [
   {
     id: "rad-nghiem",
     char: "广",
-    hanViet: "Bộ nghiêm",
+    hanViet: "Bộ Nghiễm",
     meaningVi: "Tòa nhà, ngôi nhà tựa vào sườn núi, hiên nhà rộng.",
     meaningEn: "Dotted cliff / House on hill",
     strokes: 3,
@@ -437,7 +437,7 @@ export const KANJI_RADICALS: KanjiRadical[] = [
   {
     id: "rad-to",
     char: "糸",
-    hanViet: "Bộ tơ (mịch)",
+    hanViet: "Bộ Ty (Mịch)",
     meaningVi: "Sợi tơ, dây dợ, tơ lụa, sự liên kết.",
     meaningEn: "Silk / Thread",
     strokes: 6,
@@ -513,20 +513,6 @@ export const KANJI_RADICALS: KanjiRadical[] = [
       { char: "技", pinyin: "jì", hanViet: "Kỹ", meaning: "Kỹ năng, kỹ thuật" },
     ],
   },
-  {
-    id: "rad-chi-heo",
-    char: "彐",
-    hanViet: "Bộ Ký (đầu heo)",
-    meaningVi: "Đầu con heo (lợn), hình bàn tay nắm.",
-    meaningEn: "Pig's head / Hand",
-    strokes: 3,
-    strokeGuide: "Nét 1: khung gập trên; Nét 2: ngang giữa; Nét 3: ngang đáy.",
-    strokePaths: ["M 30 25 L 75 25 L 75 80 L 30 80", "M 30 52 L 70 52", "M 30 80 L 75 80"],
-    exampleKanji: [
-      { char: "帰", pinyin: "guī", hanViet: "Quy", meaning: "Trở về (帰ります)" },
-      { char: "尋", pinyin: "xún", hanViet: "Tầm", meaning: "Hỏi thăm, tìm kiếm" },
-    ],
-  },
 
   // --- HÀNG 9 ---
   {
@@ -572,17 +558,17 @@ export const KANJI_RADICALS: KanjiRadical[] = [
     ],
   },
   {
-    id: "rad-ky",
-    char: "己",
-    hanViet: "Bộ kỷ",
-    meaningVi: "Bản thân, góc riêng tư cá nhân.",
-    meaningEn: "Self",
+    id: "rad-ky-dau-heo",
+    char: "彐",
+    hanViet: "Bộ Ký (đầu heo)",
+    meaningVi: "Đầu con heo (lợn), hình bàn tay nắm.",
+    meaningEn: "Pig's head / Hand",
     strokes: 3,
-    strokeGuide: "Nét 1: ngang gập; Nét 2: ngang; Nét 3: cong móc lên.",
-    strokePaths: ["M 30 22 L 70 22 L 35 48", "M 35 48 L 70 48", "M 70 48 L 70 78 C 70 88, 78 88, 85 82"],
+    strokeGuide: "Nét 1: khung gập trên; Nét 2: ngang giữa; Nét 3: ngang đáy.",
+    strokePaths: ["M 30 25 L 75 25 L 75 80 L 30 80", "M 30 52 L 70 52", "M 30 80 L 75 80"],
     exampleKanji: [
-      { char: "己", pinyin: "jǐ", hanViet: "Kỷ", meaning: "Tự bản thân" },
-      { char: "記", pinyin: "jì", hanViet: "Ký", meaning: "Ghi chép (日記)" },
+      { char: "帰", pinyin: "guī", hanViet: "Quy", meaning: "Trở về (帰ります)" },
+      { char: "尋", pinyin: "xún", hanViet: "Tầm", meaning: "Hỏi thăm, tìm kiếm" },
     ],
   },
 
@@ -930,6 +916,21 @@ export const KANJI_RADICALS: KanjiRadical[] = [
     ],
   },
   {
+    id: "rad-lao",
+    char: "耂",
+    hanViet: "Bộ Lão",
+    meaningVi: "Người già, người cao tuổi, sống lâu, già cỗi.",
+    meaningEn: "Old / Elderly",
+    strokes: 4,
+    strokeGuide: "Nét 1: ngang ngắn; Nét 2: sổ đứng; Nét 3: ngang dài; Nét 4: phẩy xiên qua nét ngang.",
+    strokePaths: ["M 28 35 L 72 35", "M 50 18 L 50 48", "M 18 55 L 82 55", "M 65 22 L 25 85"],
+    exampleKanji: [
+      { char: "老", pinyin: "lǎo", hanViet: "Lão", meaning: "Người già (老人)" },
+      { char: "孝", pinyin: "xiào", hanViet: "Hiếu", meaning: "Hiếu thảo (親孝行)" },
+      { char: "考", pinyin: "kǎo", hanViet: "Khảo", meaning: "Suy nghĩ, thi khảo (考える)" },
+    ],
+  },
+  {
     id: "rad-thi-ten",
     char: "矢",
     hanViet: "Bộ thỉ (mũi tên)",
@@ -1033,21 +1034,6 @@ export const KANJI_RADICALS: KanjiRadical[] = [
     exampleKanji: [
       { char: "包", pinyin: "bāo", hanViet: "Bao", meaning: "Gói lại, bao bọc" },
       { char: "句", pinyin: "jù", hanViet: "Cú", meaning: "Câu văn (文句)" },
-    ],
-  },
-  {
-    id: "rad-lao",
-    char: "耂",
-    hanViet: "Bộ Lão",
-    meaningVi: "Người già, người cao tuổi, sống lâu, già cỗi.",
-    meaningEn: "Old / Elderly",
-    strokes: 4,
-    strokeGuide: "Nét 1: ngang ngắn; Nét 2: sổ đứng; Nét 3: ngang dài; Nét 4: phẩy xiên qua nét ngang.",
-    strokePaths: ["M 28 35 L 72 35", "M 50 18 L 50 48", "M 18 55 L 82 55", "M 65 22 L 25 85"],
-    exampleKanji: [
-      { char: "老", pinyin: "lǎo", hanViet: "Lão", meaning: "Người già (老人)" },
-      { char: "孝", pinyin: "xiào", hanViet: "Hiếu", meaning: "Hiếu thảo (親孝行)" },
-      { char: "考", pinyin: "kǎo", hanViet: "Khảo", meaning: "Suy nghĩ, thi khảo (考える)" },
     ],
   },
 
@@ -1358,6 +1344,20 @@ export const KANJI_RADICALS: KanjiRadical[] = [
     exampleKanji: [
       { char: "卜", pinyin: "bǔ", hanViet: "Bốc", meaning: "Bói toán" },
       { char: "外", pinyin: "wài", hanViet: "Ngoại", meaning: "Bên ngoài (外国)" },
+    ],
+  },
+  {
+    id: "rad-triet",
+    char: "屮",
+    hanViet: "Bộ Triết (Triệt)",
+    meaningVi: "Mầm cây, mầm cỏ mới mọc đâm qua mặt đất.",
+    meaningEn: "Sprout / Grass growing",
+    strokes: 3,
+    strokeGuide: "Nét 1: sổ ngắn trái gập ngang; Nét 2: sổ ngắn phải; Nét 3: sổ đứng dài xuyên qua giữa.",
+    strokePaths: ["M 28 32 L 28 58 L 72 58 L 72 32", "M 50 15 L 50 85"],
+    exampleKanji: [
+      { char: "屯", pinyin: "tún", hanViet: "Truân", meaning: "Tụ tập, đồn trú" },
+      { char: "徹", pinyin: "chè", hanViet: "Triệt", meaning: "Triệt để, thông suốt" },
     ],
   },
   {
