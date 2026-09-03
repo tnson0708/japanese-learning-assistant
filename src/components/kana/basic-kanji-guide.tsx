@@ -9,6 +9,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useLanguage } from "@/lib/language-context";
+import { speakJapanese } from "@/lib/speech";
 
 export function BasicKanjiGuide() {
   const { language } = useLanguage();
@@ -37,13 +38,13 @@ export function BasicKanjiGuide() {
     });
   }, [search, selectedStrokes]);
 
-  const speak = (text: string) => {
-    if (typeof window === "undefined" || !("speechSynthesis" in window)) return;
-    window.speechSynthesis.cancel();
-    const u = new SpeechSynthesisUtterance(text);
-    u.lang = "ja-JP";
-    u.rate = 0.85;
-    window.speechSynthesis.speak(u);
+  const speakKanji = (item: BasicKanjiWord) => {
+    const primaryReading = item.hiragana.split("/")[0].split("・")[0].trim();
+    speakJapanese(primaryReading || item.char);
+  };
+
+  const speakWord = (text: string) => {
+    speakJapanese(text);
   };
 
   const strokeCounts = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12];
@@ -142,7 +143,7 @@ export function BasicKanjiGuide() {
                 type="button"
                 onClick={(e) => {
                   e.stopPropagation();
-                  speak(item.char);
+                  speakKanji(item);
                 }}
                 className="rounded-full p-1 text-muted-foreground transition-colors hover:bg-amber-500/10 hover:text-amber-600"
                 title="Phát âm"
@@ -214,7 +215,7 @@ export function BasicKanjiGuide() {
                 <Button
                   variant="outline"
                   size="icon"
-                  onClick={() => speak(selectedKanji.char)}
+                  onClick={() => speakKanji(selectedKanji)}
                   className="rounded-full border-amber-500/30 text-amber-600 hover:bg-amber-500/10 cursor-pointer"
                   title="Nghe phát âm"
                 >
@@ -314,7 +315,7 @@ export function BasicKanjiGuide() {
                     {selectedKanji.exampleWords.map((ex, idx) => (
                       <div
                         key={idx}
-                        onClick={() => speak(ex.reading || ex.word)}
+                        onClick={() => speakWord(ex.reading || ex.word)}
                         className="flex items-center justify-between rounded-xl border bg-card p-3 px-4 transition-all hover:border-amber-500/50 hover:bg-amber-500/5 cursor-pointer shadow-2xs"
                       >
                         <div className="flex items-center gap-3 min-w-0">
