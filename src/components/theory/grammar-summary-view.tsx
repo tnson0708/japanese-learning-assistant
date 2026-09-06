@@ -1,8 +1,9 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import { Search, Volume2, X, Sparkles, BookOpen } from "lucide-react";
+import { Search, Volume2, X, Sparkles, BookOpen, Printer, CheckSquare, Square } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 import { speakJapanese } from "@/lib/speech";
 import { cn } from "@/lib/utils";
 import {
@@ -243,6 +244,39 @@ export function GrammarSummaryView() {
   const [selectedFilterId, setSelectedFilterId] = useState<number | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
 
+  // Print selection states
+  const [isPrintModalOpen, setIsPrintModalOpen] = useState(false);
+  const [selectedPrintLessons, setSelectedPrintLessons] = useState<Set<number>>(
+    new Set(Array.from({ length: 25 }, (_, i) => i + 1))
+  );
+
+  const togglePrintLesson = (id: number) => {
+    setSelectedPrintLessons((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) {
+        next.delete(id);
+      } else {
+        next.add(id);
+      }
+      return next;
+    });
+  };
+
+  const selectAllPrintLessons = () => {
+    setSelectedPrintLessons(new Set(Array.from({ length: 25 }, (_, i) => i + 1)));
+  };
+
+  const deselectAllPrintLessons = () => {
+    setSelectedPrintLessons(new Set());
+  };
+
+  const handleTriggerPrint = () => {
+    setIsPrintModalOpen(false);
+    setTimeout(() => {
+      window.print();
+    }, 100);
+  };
+
   const sectionRefs = useRef<Record<number, HTMLElement | null>>({});
   const navRefs = useRef<Record<number, HTMLAnchorElement | null>>({});
 
@@ -321,52 +355,115 @@ export function GrammarSummaryView() {
   };
 
   return (
-    <div className="flex flex-col gap-6">
-      {/* Sticky top control header: Search + Lesson selector pills */}
-      <div className="sticky top-14 z-20 flex flex-col gap-2.5 rounded-xl border bg-background/95 p-3 shadow-xs backdrop-blur-md">
-        <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-          <div className="relative flex-1">
-            <Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
-            <input
-              type="text"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Tìm kiếm mẫu câu, ví dụ, từ khóa (VD: ください, たい, Bài 5)..."
-              className="w-full rounded-lg border bg-muted/30 py-1.5 pl-9 pr-8 text-sm placeholder:text-muted-foreground focus:border-primary focus:bg-background focus:outline-hidden focus:ring-1 focus:ring-primary"
-            />
-            {searchQuery && (
-              <button
-                type="button"
-                onClick={() => setSearchQuery("")}
-                className="absolute right-2.5 top-1/2 -translate-y-1/2 rounded-full p-0.5 text-muted-foreground hover:bg-accent hover:text-foreground"
-                aria-label="Xóa tìm kiếm"
-              >
-                <X className="size-3.5" />
-              </button>
-            )}
-          </div>
+    <>
+      {/* Printable Sheet (Only visible when sending to printer) */}
+      <div className="only-print flex-col gap-6 font-sans text-black w-full">
+        <div className="pb-3 border-b-2 border-black">
+          <h1 className="text-xl font-extrabold uppercase tracking-tight text-black">
+            SỔ TAY TỔNG HỢP NGỮ PHÁP MINNA NO NIHONGO (BÀI 1 – 25)
+          </h1>
+          <p className="text-xs text-gray-700 mt-1">
+            {selectedPrintLessons.size === 25
+              ? "Nội dung in: Toàn bộ 25 bài học từ Bài 1 đến Bài 25"
+              : `Nội dung in (${selectedPrintLessons.size}/25 bài): ${Array.from(selectedPrintLessons)
+                  .sort((a: number, b: number) => a - b)
+                  .map((id) => `Bài ${id}`)
+                  .join(", ")}`}
+          </p>
+        </div>
 
-          <div className="flex items-center justify-between text-xs text-muted-foreground sm:justify-end sm:gap-2">
-            <span>
-              {searchQuery ? (
-                <>Tìm thấy <strong className="font-bold text-foreground">{totalCardsCount}</strong> mục</>
-              ) : (
-                <>Tổng cộng <strong className="font-bold text-foreground">25</strong> Bài học</>
+        <div className="flex flex-col gap-6">
+          {grammarSummaryLessons
+            .filter((lesson) => selectedPrintLessons.has(lesson.id))
+            .map((lesson) => (
+              <div key={lesson.id} className="flex flex-col gap-3">
+                <div className="border-b border-black pb-1">
+                  <h2 className="text-base font-extrabold text-black">
+                    {lesson.badge}: {lesson.heading}
+                  </h2>
+                </div>
+
+                <div className="grid grid-cols-2 gap-3">
+                  {lesson.cards.map((card, i) => (
+                    <div
+                      key={i}
+                      className="break-inside-avoid rounded-lg border border-gray-400 p-3 bg-white text-black text-xs"
+                    >
+                      <div className="mb-2">
+                        <span className="inline-block rounded border border-gray-400 bg-gray-100 px-2 py-0.5 text-[10px] font-bold text-black">
+                          {getCardHeaderBadge(card).label}
+                        </span>
+                      </div>
+                      {card.blocks.map((block, bi) => (
+                        <BlockView key={bi} block={block} />
+                      ))}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ))}
+        </div>
+      </div>
+
+      {/* Screen On-Screen View (Hidden during paper print) */}
+      <div className="no-print flex flex-col gap-6">
+        {/* Sticky top control header: Search + Lesson selector pills + Print Button */}
+        <div className="sticky top-14 z-20 flex flex-col gap-2.5 rounded-xl border bg-background/95 p-3 shadow-xs backdrop-blur-md">
+          <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+            <div className="relative flex-1">
+              <Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Tìm kiếm mẫu câu, ví dụ, từ khóa (VD: ください, たい, Bài 5)..."
+                className="w-full rounded-lg border bg-muted/30 py-1.5 pl-9 pr-8 text-sm placeholder:text-muted-foreground focus:border-primary focus:bg-background focus:outline-hidden focus:ring-1 focus:ring-primary"
+              />
+              {searchQuery && (
+                <button
+                  type="button"
+                  onClick={() => setSearchQuery("")}
+                  className="absolute right-2.5 top-1/2 -translate-y-1/2 rounded-full p-0.5 text-muted-foreground hover:bg-accent hover:text-foreground"
+                  aria-label="Xóa tìm kiếm"
+                >
+                  <X className="size-3.5" />
+                </button>
               )}
-            </span>
+            </div>
 
-            {(selectedFilterId !== null || searchQuery !== "") && (
-              <button
-                type="button"
-                onClick={() => {
-                  setSelectedFilterId(null);
-                  setSearchQuery("");
-                }}
-                className="text-primary hover:underline font-medium"
+            <div className="flex items-center justify-between text-xs text-muted-foreground sm:justify-end sm:gap-2.5">
+              <span>
+                {searchQuery ? (
+                  <>Tìm thấy <strong className="font-bold text-foreground">{totalCardsCount}</strong> mục</>
+                ) : (
+                  <>Tổng cộng <strong className="font-bold text-foreground">25</strong> Bài học</>
+                )}
+              </span>
+
+              {(selectedFilterId !== null || searchQuery !== "") && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setSelectedFilterId(null);
+                    setSearchQuery("");
+                  }}
+                  className="text-primary hover:underline font-medium"
+                >
+                  Xem tất cả
+                </button>
+              )}
+
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setIsPrintModalOpen(true)}
+                className="gap-1.5 font-semibold text-xs border-primary/30 text-primary hover:bg-primary/10 cursor-pointer shrink-0"
+                title="In ngữ pháp Bài 1–25 ra giấy"
               >
-                Xem tất cả
-              </button>
-            )}
+                <Printer className="size-3.5" />
+                <span>In ngữ pháp</span>
+              </Button>
+            </div>
           </div>
         </div>
 
@@ -419,7 +516,7 @@ export function GrammarSummaryView() {
 
       {/* Empty search results state */}
       {filteredLessons.length === 0 && (
-        <div className="flex flex-col items-center justify-center gap-3 rounded-2xl border border-dashed py-12 text-center">
+        <div className="no-print flex flex-col items-center justify-center gap-3 rounded-2xl border border-dashed py-12 text-center">
           <BookOpen className="size-10 text-muted-foreground/50" />
           <div className="flex flex-col gap-1">
             <h3 className="font-semibold text-foreground">Không tìm thấy nội dung phù hợp</h3>
@@ -441,7 +538,7 @@ export function GrammarSummaryView() {
       )}
 
       {/* Main lessons masonry cards view */}
-      <div className="flex flex-col gap-8">
+      <div className="no-print flex flex-col gap-8">
         {filteredLessons.map((lesson) => (
           <section
             key={lesson.id}
@@ -476,6 +573,114 @@ export function GrammarSummaryView() {
           </section>
         ))}
       </div>
-    </div>
+
+    {/* Interactive Lesson Selection Dialog for Printing */}
+    {isPrintModalOpen && (
+      <div
+        className="no-print fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-xs p-4 animate-in fade-in duration-150"
+        onClick={() => setIsPrintModalOpen(false)}
+      >
+        <div
+          className="relative flex w-full max-w-xl flex-col gap-4 rounded-2xl border bg-card p-5 sm:p-6 shadow-2xl animate-in zoom-in-95 duration-150 max-h-[90vh] overflow-hidden"
+          onClick={(e) => e.stopPropagation()}
+        >
+          {/* Modal Header */}
+          <div className="flex items-center justify-between border-b pb-3">
+            <div className="flex items-center gap-2.5">
+              <div className="flex size-9 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                <Printer className="size-5" />
+              </div>
+              <div className="flex flex-col">
+                <h3 className="text-base font-bold text-foreground">In Ngữ Pháp Minna (Bài 1–25)</h3>
+                <p className="text-xs text-muted-foreground">Chọn các bài học bạn muốn in ra giấy</p>
+              </div>
+            </div>
+            <button
+              type="button"
+              onClick={() => setIsPrintModalOpen(false)}
+              className="rounded-full p-1 text-muted-foreground hover:bg-accent hover:text-foreground cursor-pointer"
+            >
+              <X className="size-4" />
+            </button>
+          </div>
+
+          {/* Select All / Deselect All Bar */}
+          <div className="flex items-center justify-between text-xs pt-1">
+            <span className="font-semibold text-muted-foreground">
+              Đã chọn: <strong className="text-primary font-bold">{selectedPrintLessons.size}</strong> / 25 bài
+            </span>
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={selectAllPrintLessons}
+                className="text-primary hover:underline font-semibold cursor-pointer"
+              >
+                Chọn tất cả
+              </button>
+              <span className="text-border">|</span>
+              <button
+                type="button"
+                onClick={deselectAllPrintLessons}
+                className="text-muted-foreground hover:text-foreground font-medium cursor-pointer"
+              >
+                Bỏ chọn tất cả
+              </button>
+            </div>
+          </div>
+
+          {/* 25 Lesson Checkboxes Grid */}
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 overflow-y-auto max-h-[50vh] p-2 border rounded-xl bg-muted/20">
+            {grammarSummaryLessons.map((lesson) => {
+              const isChecked = selectedPrintLessons.has(lesson.id);
+              return (
+                <button
+                  key={lesson.id}
+                  type="button"
+                  onClick={() => togglePrintLesson(lesson.id)}
+                  className={cn(
+                    "flex items-center gap-2 rounded-lg border p-2.5 text-xs font-semibold transition-all cursor-pointer text-left select-none",
+                    isChecked
+                      ? "bg-primary/10 border-primary text-primary shadow-2xs"
+                      : "bg-card border-border/70 text-muted-foreground hover:border-foreground/30 hover:bg-accent/50"
+                  )}
+                >
+                  <div className="shrink-0">
+                    {isChecked ? (
+                      <CheckSquare className="size-4 text-primary" />
+                    ) : (
+                      <Square className="size-4 text-muted-foreground/60" />
+                    )}
+                  </div>
+                  <span className="truncate">{lesson.badge}</span>
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Modal Action Buttons */}
+          <div className="flex items-center justify-end gap-2 border-t pt-3">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setIsPrintModalOpen(false)}
+              className="cursor-pointer text-xs"
+            >
+              Hủy
+            </Button>
+            <Button
+              variant="default"
+              size="sm"
+              disabled={selectedPrintLessons.size === 0}
+              onClick={handleTriggerPrint}
+              className="gap-2 cursor-pointer font-bold text-xs"
+            >
+              <Printer className="size-4" />
+              <span>In {selectedPrintLessons.size} bài đã chọn</span>
+            </Button>
+          </div>
+        </div>
+      </div>
+    )}
+  </>
   );
 }

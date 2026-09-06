@@ -9,8 +9,8 @@ export const metadata = {
 
 export default function GrammarSummaryPage() {
   return (
-    <div className="mx-auto flex w-full max-w-5xl flex-1 flex-col gap-5 px-4 py-5 sm:px-6 lg:py-6">
-      <div className="flex flex-col gap-3">
+    <div className="mx-auto flex w-full max-w-5xl flex-1 flex-col gap-5 px-4 py-5 sm:px-6 lg:py-6 print:p-0 print:max-w-none">
+      <div className="flex flex-col gap-3 print:hidden">
         <Link
           href="/theory"
           className="inline-flex items-center gap-1.5 text-xs font-medium text-muted-foreground transition-colors hover:text-foreground w-fit"
