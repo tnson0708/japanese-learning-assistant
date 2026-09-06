@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   BookOpen,
   GraduationCap,
@@ -12,17 +12,34 @@ import {
   PenTool,
   Presentation,
   Shield,
+  Search,
 } from "lucide-react";
 import { LanguageToggle } from "@/components/language-toggle";
 import { VoiceToggle } from "@/components/voice-toggle";
 import { useLanguage } from "@/lib/language-context";
 import { cn } from "@/lib/utils";
+import { GlobalSearchModal } from "@/components/global-search-modal";
 
 export function Nav() {
   const pathname = usePathname();
   const { t, language } = useLanguage();
   const isVi = language === "vi";
   const activeTabRef = useRef<HTMLAnchorElement | null>(null);
+
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+
+  // Global keyboard shortcut for Cmd+K / Ctrl+K
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
+        e.preventDefault();
+        setIsSearchOpen((prev) => !prev);
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, []);
 
   const links = [
     { href: "/", label: t("nav_home"), shortLabel: isVi ? "Trang chủ" : "Home", icon: Home },
@@ -82,8 +99,22 @@ export function Nav() {
             })}
           </nav>
 
-          {/* Header Right Controls (Voice & Language Toggles & Admin Link) */}
+          {/* Header Right Controls (Search Trigger, Voice & Language Toggles & Admin Link) */}
           <div className="flex items-center gap-2 shrink-0">
+            {/* Global Spotlight Search Trigger Button */}
+            <button
+              type="button"
+              onClick={() => setIsSearchOpen(true)}
+              className="flex h-9 items-center gap-2 rounded-lg border border-input bg-background/80 px-2.5 sm:px-3 text-xs text-muted-foreground transition-all hover:bg-accent hover:text-accent-foreground cursor-pointer shadow-2xs"
+              title="Tìm kiếm toàn hệ thống (⌘K / Ctrl+K)"
+            >
+              <Search className="size-4 text-primary shrink-0" />
+              <span className="hidden sm:inline-block font-medium">{isVi ? "Tìm kiếm..." : "Search..."}</span>
+              <kbd className="hidden md:inline-flex items-center gap-0.5 rounded border bg-muted px-1.5 py-0.5 text-[10px] font-mono font-bold text-muted-foreground">
+                <span>⌘</span>K
+              </kbd>
+            </button>
+
             <Link
               href="/admin"
               className={cn(
@@ -147,6 +178,9 @@ export function Nav() {
           })}
         </div>
       </nav>
+
+      {/* Global Spotlight Search Modal */}
+      <GlobalSearchModal isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />
     </>
   );
 }
