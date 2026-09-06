@@ -582,20 +582,24 @@ export const BASIC_KANJI_WORDS: BasicKanjiWord[] = [
       { word: "子犬", reading: "こいぬ", meaning: "Chó con" },
     ],
   },
-  // --- 36. 文 ---
+  // --- 36. 丈 ---
   {
-    id: "kanji-van",
-    char: "文",
-    hanViet: "Văn",
-    hiragana: "ふみ / ぶん・もん",
-    meaningVi: "Văn bản, chữ viết, văn hóa",
-    meaningEn: "Literature / Text",
-    strokes: 4,
-    strokePaths: ["M 50 15 L 50 28", "M 20 28 L 80 28", "M 55 28 C 42 48, 28 68, 12 85", "M 42 38 C 55 52, 70 70, 88 85"],
+    id: "kanji-truong",
+    char: "丈",
+    hanViet: "Trượng",
+    hiragana: "たけ / じょう",
+    meaningVi: "Chiều cao, trượng phu, chắc chắn",
+    meaningEn: "Height / Sturdy",
+    strokes: 3,
+    strokePaths: [
+      "M 25 35 L 75 35",
+      "M 50 15 C 48 40, 42 65, 18 88",
+      "M 38 48 C 52 62, 70 78, 85 88",
+    ],
     exampleWords: [
-      { word: "文学", reading: "ぶんがく", meaning: "Văn học" },
-      { word: "作文", reading: "さくぶん", meaning: "Bài tập làm văn" },
-      { word: "文字", reading: "もじ", meaning: "Ký tự, chữ viết" },
+      { word: "丈夫", reading: "じょうぶ", meaning: "Chắc chắn, khỏe mạnh" },
+      { word: "大丈夫", reading: "だいじょうぶ", meaning: "Không sao, an toàn" },
+      { word: "背丈", reading: "せたけ", meaning: "Chiều cao cơ thể" },
     ],
   },
   // --- 37. 天 ---
