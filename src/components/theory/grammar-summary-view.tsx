@@ -50,7 +50,7 @@ function SpeakableLine({ text, className }: { text: string; className?: string }
             e.stopPropagation();
             speakJapanese(spoken);
           }}
-          className="shrink-0 rounded-full p-1 text-muted-foreground/60 transition-colors hover:bg-primary/10 hover:text-primary"
+          className="print:hidden shrink-0 rounded-full p-1 text-muted-foreground/60 transition-colors hover:bg-primary/10 hover:text-primary"
           aria-label={`Nghe phát âm: ${spoken}`}
           title="Nghe phát âm"
         >
