@@ -394,6 +394,17 @@ export const dailyLifeDomain: Domain = {
           exampleSentence: "新しい家具を買いました。",
           exampleSentenceMeaning: "Tôi đã mua đồ nội thất mới.",
         },
+        {
+          id: "daily-life.household-items-furniture.radio",
+          word: "ラジオ",
+          reading: "ラジオ",
+          meaning: "radio",
+          wordType: "katakana",
+          jlptLevel: "N5",
+          englishSource: "radio",
+          exampleSentence: "朝ラジオを聞きます。",
+          exampleSentenceMeaning: "Buổi sáng tôi nghe radio.",
+        },
       ],
     },
     {

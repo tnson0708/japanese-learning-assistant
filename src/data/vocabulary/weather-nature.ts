@@ -348,6 +348,16 @@ export const weatherNatureDomain: Domain = {
           exampleSentence: "海岸に大きな岩がたくさんあります。",
           exampleSentenceMeaning: "Có rất nhiều tảng đá lớn ở bờ biển.",
         },
+        {
+          id: "weather-nature.nature-landscape.cherry-blossom",
+          word: "桜",
+          reading: "さくら",
+          meaning: "anh đào (hoa, cây)",
+          wordType: "kanji",
+          jlptLevel: "N5",
+          exampleSentence: "四月に桜が咲きます。",
+          exampleSentenceMeaning: "Vào tháng Tư hoa anh đào nở.",
+        },
       ],
     },
     {
