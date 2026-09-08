@@ -159,6 +159,8 @@ export type ContentBlock =
       examples?: TranslationSentenceItem[];
       dialogueTitle?: string;
       dialogueLines?: TranslationDialogueLine[];
+      /** Full conversation recording from the textbook, played above the dialogue lines. */
+      dialogueAudioUrl?: string;
     }
   | {
       type: "exercise-fill-in-blank";

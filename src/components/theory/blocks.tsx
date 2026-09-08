@@ -210,6 +210,7 @@ export function BlockRenderer({ block }: { block: ContentBlock }) {
           examples={block.examples}
           dialogueTitle={block.dialogueTitle}
           dialogueLines={block.dialogueLines}
+          dialogueAudioUrl={block.dialogueAudioUrl}
         />
       );
     case "exercise-fill-in-blank":

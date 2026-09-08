@@ -221,6 +221,7 @@ export const lesson6: Lesson = {
             },
           ],
           dialogueTitle: "Anh có đi cùng với tôi không? (いっしょに 行きませんか)",
+          dialogueAudioUrl: "/audio/lessons/lesson-6/第6課-Conversation.mp3",
           dialogueLines: [
             {
               speakerVi: "Sato",
@@ -531,11 +532,11 @@ export const lesson6: Lesson = {
           items: [
             {
               label: "問題 1 (Mondai 1)",
-              url: "/audio/lessons/lesson-6/第6課 問題 1 Mondai 1.mp3",
+              url: "/audio/lessons/lesson-6/第6課-問題-1-Mondai-1.mp3",
             },
             {
               label: "問題 2 (Mondai 2)",
-              url: "/audio/lessons/lesson-6/第6課 問題 2 Mondai 2.mp3",
+              url: "/audio/lessons/lesson-6/第6課-問題-2-Mondai-2.mp3",
             },
           ],
         },

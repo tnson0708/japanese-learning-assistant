@@ -244,6 +244,7 @@ export const lesson8: Lesson = {
             },
           ],
           dialogueTitle: "Đã đến lúc tôi phải về (そろそろ 失礼します)",
+          dialogueAudioUrl: "/audio/lessons/lesson-8/第8課-Conversation.mp3",
           dialogueLines: [
             {
               speakerVi: "Yamada Ichiro",
@@ -504,6 +505,25 @@ export const lesson8: Lesson = {
       id: "exercises",
       title: "V. Bài tập & Luyện tập",
       blocks: [
+        {
+          type: "listening-audio-list",
+          title: "Bài nghe trong sách giáo trình (Bài 8)",
+          instruction: "Nghe và làm các bài tập nghe hiểu (問題) tương ứng trong sách.",
+          items: [
+            {
+              label: "問題 1 (Mondai 1)",
+              url: "/audio/lessons/lesson-8/第8課-問題-1-Mondai-1.mp3",
+            },
+            {
+              label: "問題 2 (Mondai 2)",
+              url: "/audio/lessons/lesson-8/第8課-問題-2-Mondai-2.mp3",
+            },
+            {
+              label: "問題 3 (Mondai 3)",
+              url: "/audio/lessons/lesson-8/第8課-問題-3-Mondai-3.mp3",
+            },
+          ],
+        },
         {
           type: "exercise-fill-in-blank",
           title: "Bài tập 1: Điền tính từ / phó từ / trợ từ (な, い, くない, とても, あまり, が, どう)",

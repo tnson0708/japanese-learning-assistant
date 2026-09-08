@@ -280,6 +280,7 @@ export const lesson4: Lesson = {
             },
           ],
           dialogueTitle: "Nhà hàng mình mở cửa đến mấy giờ vậy ạ? (そちらは 何時までですか)",
+          dialogueAudioUrl: "/audio/lessons/lesson-4/第4課-Conversation.mp3",
           dialogueLines: [
             {
               speakerVi: "Miller",
@@ -743,19 +744,19 @@ export const lesson4: Lesson = {
           items: [
             {
               label: "問題 1 (Mondai 1)",
-              url: "/audio/lessons/lesson-4/第4課 問題 1 Mondai 1.mp3",
+              url: "/audio/lessons/lesson-4/第4課-問題-1-Mondai-1.mp3",
             },
             {
               label: "問題 2 (Mondai 2)",
-              url: "/audio/lessons/lesson-4/第4課 問題 2 Mondai 2.mp3",
+              url: "/audio/lessons/lesson-4/第4課-問題-2-Mondai-2.mp3",
             },
             {
               label: "問題 3 (Mondai 3)",
-              url: "/audio/lessons/lesson-4/第4課 問題 3 Mondai 3.mp3",
+              url: "/audio/lessons/lesson-4/第4課-問題-3-Mondai-3.mp3",
             },
             {
               label: "問題 4 (Mondai 4)",
-              url: "/audio/lessons/lesson-4/第4課 問題 4 Mondai 4.mp3",
+              url: "/audio/lessons/lesson-4/第4課-問題-4-Mondai-4.mp3",
             },
           ],
         },

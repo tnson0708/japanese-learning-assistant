@@ -43,7 +43,7 @@ export function ExerciseAudioPlayer({ audioUrl }: { audioUrl?: string }) {
         <Volume2 className="size-4 shrink-0" />
         <span>Bài nghe (Listening Audio Track)</span>
       </div>
-      <audio controls src={audioUrl} className="h-9 w-full rounded-md" />
+      <audio controls src={encodeURI(audioUrl)} className="h-9 w-full rounded-md" />
     </div>
   );
 }

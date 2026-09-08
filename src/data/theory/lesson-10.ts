@@ -154,6 +154,7 @@ export const lesson10: Lesson = {
             },
           ],
           dialogueTitle: "ナンプラーが ありますか。 — Có nampla không ạ?",
+          dialogueAudioUrl: "/audio/lessons/lesson-10/第10課-Conversation.mp3",
           dialogueLines: [
             {
               speakerVi: "Miller",
@@ -357,6 +358,25 @@ export const lesson10: Lesson = {
       id: "exercises",
       title: "V. Bài tập & Luyện tập",
       blocks: [
+        {
+          type: "listening-audio-list",
+          title: "Bài nghe trong sách giáo trình (Bài 10)",
+          instruction: "Nghe và làm các bài tập nghe hiểu (問題) tương ứng trong sách.",
+          items: [
+            {
+              label: "問題 1 (Mondai 1)",
+              url: "/audio/lessons/lesson-10/第10課-問題-1-Mondai-1.mp3",
+            },
+            {
+              label: "問題 2 (Mondai 2)",
+              url: "/audio/lessons/lesson-10/第10課-問題-2-Mondai-2.mp3",
+            },
+            {
+              label: "問題 3 (Mondai 3)",
+              url: "/audio/lessons/lesson-10/第10課-問題-3-Mondai-3.mp3",
+            },
+          ],
+        },
         {
           type: "exercise-fill-in-blank",
           title: "Bài tập 1: Điền あります／います, trợ từ が／に và từ chỉ vị trí",

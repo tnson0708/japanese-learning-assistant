@@ -6,6 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { JapaneseText } from "@/components/theory/japanese-text";
+import { ExerciseAudioPlayer } from "@/components/theory/exercise-blocks";
 import type { TranslationSentenceItem, TranslationDialogueLine } from "@/lib/theory";
 
 export function TranslationBlock({
@@ -15,6 +16,7 @@ export function TranslationBlock({
   examples,
   dialogueTitle,
   dialogueLines,
+  dialogueAudioUrl,
 }: {
   title: string;
   instruction?: string;
@@ -22,6 +24,7 @@ export function TranslationBlock({
   examples?: TranslationSentenceItem[];
   dialogueTitle?: string;
   dialogueLines?: TranslationDialogueLine[];
+  dialogueAudioUrl?: string;
 }) {
   const [revealedItems, setRevealedItems] = useState<Record<string, boolean>>({});
   const [showAll, setShowAll] = useState(false);
@@ -224,6 +227,8 @@ export function TranslationBlock({
                 </h3>
               </div>
             </div>
+
+            <ExerciseAudioPlayer audioUrl={dialogueAudioUrl} />
 
             <div className="flex flex-col gap-2.5 rounded-xl border bg-card p-4 shadow-2xs">
               {dialogueLines.map((line, idx) => {

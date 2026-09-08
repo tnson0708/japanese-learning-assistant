@@ -199,6 +199,7 @@ export const lesson2: Lesson = {
             },
           ],
           dialogueTitle: "Từ nay rất mong được sự giúp đỡ của anh (これから お世話に なります)",
+          dialogueAudioUrl: "/audio/lessons/lesson-2/第2課-Conversation.mp3",
           dialogueLines: [
             {
               speakerVi: "Yamada Ichiro",
@@ -487,8 +488,16 @@ export const lesson2: Lesson = {
           instruction: "Nghe và làm các bài tập nghe hiểu (問題) tương ứng trong sách.",
           items: [
             {
+              label: "問題 1 (Mondai 1)",
+              url: "/audio/lessons/lesson-2/第2課-問題-1-Mondai-1.mp3",
+            },
+            {
+              label: "問題 2 (Mondai 2)",
+              url: "/audio/lessons/lesson-2/第2課-問題-2-Mondai-2.mp3",
+            },
+            {
               label: "問題 3 (Mondai 3)",
-              url: "/audio/lessons/lesson-2/第2課 問題 3 Mondai 3.mp3",
+              url: "/audio/lessons/lesson-2/第2課-問題-3-Mondai-3.mp3",
             },
           ],
         },

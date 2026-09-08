@@ -213,6 +213,7 @@ export const lesson5: Lesson = {
             },
           ],
           dialogueTitle: "Tàu này có đi Koshien không? (この 電車は 甲子園へ 行きますか)",
+          dialogueAudioUrl: "/audio/lessons/lesson-5/第5課-Conversation.mp3",
           dialogueLines: [
             {
               speakerVi: "Santos",
@@ -471,15 +472,15 @@ export const lesson5: Lesson = {
           items: [
             {
               label: "問題 1 (Mondai 1)",
-              url: "/audio/lessons/lesson-5/第5課 問題 1 Mondai 1.mp3",
+              url: "/audio/lessons/lesson-5/第5課-問題-1-Mondai-1.mp3",
             },
             {
               label: "問題 2 (Mondai 2)",
-              url: "/audio/lessons/lesson-5/第5課 問題 2 Mondai 2.mp3",
+              url: "/audio/lessons/lesson-5/第5課-問題-2-Mondai-2.mp3",
             },
             {
               label: "問題 3 (Mondai 3)",
-              url: "/audio/lessons/lesson-5/第5課 問題 3 Mondai 3.mp3",
+              url: "/audio/lessons/lesson-5/第5課-問題-3-Mondai-3.mp3",
             },
           ],
         },

@@ -237,6 +237,7 @@ export const lesson1: Lesson = {
             },
           ],
           dialogueTitle: "Rất vui được làm quen với chị (初めまして)",
+          dialogueAudioUrl: "/audio/lessons/lesson-1/第1課-Conversation.mp3",
           dialogueLines: [
             {
               speakerVi: "Sato",
@@ -490,6 +491,25 @@ export const lesson1: Lesson = {
       id: "exercises",
       title: "V. Bài tập & Luyện tập",
       blocks: [
+        {
+          type: "listening-audio-list",
+          title: "Bài nghe trong sách giáo trình (Bài 1)",
+          instruction: "Nghe và làm các bài tập nghe hiểu (問題) tương ứng trong sách.",
+          items: [
+            {
+              label: "問題 1 (Mondai 1)",
+              url: "/audio/lessons/lesson-1/第1課-問題-1-Mondai-１.mp3",
+            },
+            {
+              label: "問題 2 (Mondai 2)",
+              url: "/audio/lessons/lesson-1/第1課-問題-2-Mondai-2.mp3",
+            },
+            {
+              label: "問題 3 (Mondai 3)",
+              url: "/audio/lessons/lesson-1/第1課-問題-3-Mondai-3.mp3",
+            },
+          ],
+        },
         {
           type: "exercise-fill-in-blank",
           title: "Bài tập 1: Điền trợ từ thích hợp (は, も, の, か, から)",

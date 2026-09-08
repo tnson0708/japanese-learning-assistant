@@ -196,6 +196,7 @@ export const lesson3: Lesson = {
             },
           ],
           dialogueTitle: "Chị cho tôi chai này (これを ください)",
+          dialogueAudioUrl: "/audio/lessons/lesson-3/第3課-Conversation.mp3",
           dialogueLines: [
             {
               speakerVi: "Nhân viên bán hàng A",
@@ -505,11 +506,11 @@ export const lesson3: Lesson = {
           items: [
             {
               label: "問題 1 (Mondai 1)",
-              url: "/audio/lessons/lesson-3/第3課 問題 1 Mondai1.mp3",
+              url: "/audio/lessons/lesson-3/第3課-問題-1-Mondai-1.mp3",
             },
             {
               label: "問題 2 (Mondai 2)",
-              url: "/audio/lessons/lesson-3/第3課 問題 2 Mondai 2.mp3",
+              url: "/audio/lessons/lesson-3/第3課-問題-2-Mondai-2.mp3",
             },
           ],
         },
