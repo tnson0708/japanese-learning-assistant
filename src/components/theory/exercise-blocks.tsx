@@ -14,9 +14,10 @@ import type {
   DrillCardPerson,
   PictureDrillGroup,
   ListeningTrackItem,
+  SelfIntroLine,
 } from "@/lib/theory";
 
-function printSingleExercise(blockId: string) {
+export function printSingleExercise(blockId: string) {
   const targetElem = document.getElementById(blockId);
   if (targetElem) {
     targetElem.classList.add("print-target-active");
@@ -1001,6 +1002,109 @@ export function PictureCardsExerciseBlock({
             </div>
           </div>
         ))}
+      </CardContent>
+    </Card>
+  );
+}
+
+/**
+ * 6. Self-Introduction Free-Write Drill: fills a fixed greeting template
+ * ("初めまして。わたしは ___です。 ___から 来ました。どうぞ よろしく。") with the
+ * learner's own info. There's no single "correct" answer, so it's a free
+ * text practice with an optional sample answer to reveal for reference.
+ */
+export function SelfIntroExerciseBlock({
+  title,
+  instruction,
+  introText,
+  lines,
+  closingText,
+  sampleAnswerJp,
+  sampleAnswerVi,
+}: {
+  title: string;
+  instruction?: string;
+  introText?: string;
+  lines: SelfIntroLine[];
+  closingText?: string;
+  sampleAnswerJp?: string;
+  sampleAnswerVi?: string;
+}) {
+  const [drafts, setDrafts] = useState<Record<number, string>>({});
+  const [revealed, setRevealed] = useState(false);
+
+  const blockId = `exercise-self-intro-${title.replace(/\s+/g, "-")}`;
+
+  return (
+    <Card id={blockId} className="border-primary/20 shadow-xs exercise-card-block print:border-gray-400 print:shadow-none print:break-inside-avoid print:bg-white">
+      <CardHeader className="pb-3 print:pb-1">
+        <div className="flex items-center gap-2">
+          <Users className="size-4 text-primary print:hidden" />
+          <CardTitle className="text-base font-semibold text-foreground print:text-black print:font-bold">
+            {title}
+          </CardTitle>
+          <button
+            type="button"
+            onClick={() => printSingleExercise(blockId)}
+            className="rounded-full p-1 text-muted-foreground/70 transition-colors hover:bg-accent hover:text-primary cursor-pointer print:hidden"
+            title="In riêng bài tập này (Print only this exercise)"
+          >
+            <Printer className="size-3.5" />
+          </button>
+        </div>
+        {instruction && (
+          <p className="text-xs text-muted-foreground print:text-gray-700">{instruction}</p>
+        )}
+      </CardHeader>
+
+      <CardContent className="flex flex-col gap-3">
+        <div className="flex flex-col gap-2 rounded-xl border bg-muted/20 p-3.5 text-sm leading-loose print:border-gray-300 print:bg-white">
+          {introText && <JapaneseText text={introText} className="font-medium text-foreground" />}
+          {lines.map((line, i) => (
+            <div key={i} className="flex flex-wrap items-baseline gap-1">
+              {line.before && <JapaneseText text={line.before} className="font-medium text-foreground" />}
+              <input
+                type="text"
+                value={drafts[i] || ""}
+                onChange={(e) => setDrafts((prev) => ({ ...prev, [i]: e.target.value }))}
+                placeholder={line.placeholder}
+                className="min-w-32 flex-1 border-b border-dashed border-muted-foreground/40 bg-transparent px-1 py-0.5 text-sm text-foreground outline-hidden focus:border-primary print:hidden"
+              />
+              <span className="hidden print:inline font-mono text-xs">________________</span>
+              {line.after && <span className="text-foreground">{line.after}</span>}
+            </div>
+          ))}
+          {closingText && <JapaneseText text={closingText} className="font-medium text-foreground" />}
+        </div>
+
+        {sampleAnswerJp && (
+          <div className="flex items-center justify-end print:hidden">
+            <Button
+              type="button"
+              variant={revealed ? "secondary" : "outline"}
+              size="sm"
+              onClick={() => setRevealed((r) => !r)}
+              className="h-7 gap-1.5 px-2 text-xs"
+            >
+              {revealed ? (
+                <>
+                  <EyeOff className="size-3.5" /> Ẩn câu mẫu
+                </>
+              ) : (
+                <>
+                  <Eye className="size-3.5" /> Xem câu mẫu
+                </>
+              )}
+            </Button>
+          </div>
+        )}
+
+        {revealed && sampleAnswerJp && (
+          <div className="rounded-lg bg-background p-2.5 print:hidden">
+            <JapaneseText text={sampleAnswerJp} className="text-sm font-semibold text-primary" />
+            {sampleAnswerVi && <p className="mt-1 text-xs text-muted-foreground">{sampleAnswerVi}</p>}
+          </div>
+        )}
       </CardContent>
     </Card>
   );

@@ -102,6 +102,63 @@ export interface ReorderQuestionItem {
   explanation?: string;
 }
 
+/** One free-write blank line inside a self-introduction template (e.g. "わたしは ___です。"). */
+export interface SelfIntroLine {
+  before: string;
+  after?: string;
+  placeholder: string;
+}
+
+/**
+ * One blank line of a "listen and write the answer following the given
+ * pattern" drill (Mondai-1-style in Minna no Nihongo). The correct
+ * transcript is only known once someone transcribes it from the textbook's
+ * answer key — left undefined until then, so the item still renders as a
+ * self-check practice line with no wrong "correct answer" guessed at.
+ */
+export interface ListeningDictationItem {
+  id: string;
+  num: number;
+  answerJp?: string;
+  answerVi?: string;
+}
+
+/** Which simple built-in icon to draw for a listening-picture-choice option, standing in for the textbook's actual illustration. */
+export type ListeningPictureIcon =
+  | "greeting-night"
+  | "greeting-dawn"
+  | "greeting-day"
+  | "greet-crowd"
+  | "greet-handshake"
+  | "greet-distant"
+  | "name-badge";
+
+export interface ListeningPictureOption {
+  id: string;
+  label: string;
+  icon: ListeningPictureIcon;
+  badgeName?: string;
+  badgeNumber?: string;
+}
+
+/** One numbered set of 2-3 pictures the learner picks from after listening (Mondai-2-style). */
+export interface ListeningPictureGroup {
+  id: string;
+  num: string;
+  options: ListeningPictureOption[];
+  /** id of the correct option, once known from the answer key. */
+  correctOptionId?: string;
+}
+
+/** One ○/× (true/false) listening item (Mondai-3-style). Examples are pre-marked and shown as reference, not clickable. */
+export interface ListeningTrueFalseItem {
+  id: string;
+  num: string;
+  isExample?: boolean;
+  exampleAnswer?: boolean;
+  correctAnswer?: boolean;
+}
+
 /**
  * One "character card" used by picture-based textbook drills (e.g. 練習B),
  * where the original book shows a photo + country map. Here the photo is
@@ -202,6 +259,39 @@ export type ContentBlock =
       title: string;
       instruction?: string;
       items: ListeningTrackItem[];
+    }
+  | {
+      type: "exercise-listening-dictation";
+      title: string;
+      instruction?: string;
+      audioUrl?: string;
+      exampleJp: string;
+      exampleVi?: string;
+      items: ListeningDictationItem[];
+    }
+  | {
+      type: "exercise-listening-picture-choice";
+      title: string;
+      instruction?: string;
+      audioUrl?: string;
+      groups: ListeningPictureGroup[];
+    }
+  | {
+      type: "exercise-listening-truefalse";
+      title: string;
+      instruction?: string;
+      audioUrl?: string;
+      items: ListeningTrueFalseItem[];
+    }
+  | {
+      type: "exercise-self-intro";
+      title: string;
+      instruction?: string;
+      introText?: string;
+      lines: SelfIntroLine[];
+      closingText?: string;
+      sampleAnswerJp?: string;
+      sampleAnswerVi?: string;
     };
 
 export type SectionId =

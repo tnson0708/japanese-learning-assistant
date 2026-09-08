@@ -9,7 +9,13 @@ import {
   SentencePracticeBlock,
   PictureCardsExerciseBlock,
   ListeningAudioListBlock,
+  SelfIntroExerciseBlock,
 } from "@/components/theory/exercise-blocks";
+import {
+  ListeningDictationBlock,
+  ListeningPictureChoiceBlock,
+  ListeningTrueFalseBlock,
+} from "@/components/theory/listening-exercise-blocks";
 import { TranslationBlock } from "@/components/theory/translation-blocks";
 import type { ContentBlock, VocabItem } from "@/lib/theory";
 
@@ -264,6 +270,47 @@ export function BlockRenderer({ block }: { block: ContentBlock }) {
           title={block.title}
           instruction={block.instruction}
           items={block.items}
+        />
+      );
+    case "exercise-listening-dictation":
+      return (
+        <ListeningDictationBlock
+          title={block.title}
+          instruction={block.instruction}
+          audioUrl={block.audioUrl}
+          exampleJp={block.exampleJp}
+          exampleVi={block.exampleVi}
+          items={block.items}
+        />
+      );
+    case "exercise-listening-picture-choice":
+      return (
+        <ListeningPictureChoiceBlock
+          title={block.title}
+          instruction={block.instruction}
+          audioUrl={block.audioUrl}
+          groups={block.groups}
+        />
+      );
+    case "exercise-listening-truefalse":
+      return (
+        <ListeningTrueFalseBlock
+          title={block.title}
+          instruction={block.instruction}
+          audioUrl={block.audioUrl}
+          items={block.items}
+        />
+      );
+    case "exercise-self-intro":
+      return (
+        <SelfIntroExerciseBlock
+          title={block.title}
+          instruction={block.instruction}
+          introText={block.introText}
+          lines={block.lines}
+          closingText={block.closingText}
+          sampleAnswerJp={block.sampleAnswerJp}
+          sampleAnswerVi={block.sampleAnswerVi}
         />
       );
     default:
