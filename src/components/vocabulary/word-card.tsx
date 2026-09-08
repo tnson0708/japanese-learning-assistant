@@ -1,0 +1,68 @@
+"use client";
+
+import { Volume2 } from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { useLanguage } from "@/lib/language-context";
+import { speakJapanese } from "@/lib/speech";
+import type { VocabWord } from "@/lib/vocabulary";
+
+export function WordCard({ word }: { word: VocabWord }) {
+  const { t } = useLanguage();
+
+  return (
+    <Card className="shadow-2xs">
+      <CardContent className="flex flex-col gap-2.5">
+        <div className="flex items-start justify-between gap-2">
+          <div className="flex items-baseline gap-2">
+            <span className="text-2xl font-bold tracking-tight text-foreground">{word.word}</span>
+            {word.wordType === "kanji" && (
+              <span className="text-sm text-muted-foreground">{word.reading}</span>
+            )}
+            <Badge variant="outline" className="text-[10px]">
+              {word.jlptLevel}
+            </Badge>
+          </div>
+
+          <button
+            type="button"
+            onClick={() => speakJapanese(word.reading || word.word)}
+            className="shrink-0 rounded-full p-1.5 text-muted-foreground/70 transition-colors hover:bg-accent hover:text-primary cursor-pointer"
+            title={`Listen to ${word.word}`}
+            aria-label={`Listen to ${word.word}`}
+          >
+            <Volume2 className="size-4" />
+          </button>
+        </div>
+
+        <div className="flex flex-wrap items-center gap-1.5">
+          <p className="text-sm text-foreground">{word.meaning}</p>
+          {word.wordType === "kanji" && word.hanVietHint && (
+            <span className="rounded bg-secondary/60 px-1.5 py-0.5 text-xs font-medium text-secondary-foreground/80">
+              Hán Việt: {word.hanVietHint}
+            </span>
+          )}
+        </div>
+
+        <div className="flex flex-col gap-1 border-t pt-2">
+          <div className="flex items-start justify-between gap-2">
+            <p className="text-xs text-muted-foreground">
+              <span className="font-semibold text-foreground/70">{t("vocab_example_label")}: </span>
+              {word.exampleSentence}
+            </p>
+            <button
+              type="button"
+              onClick={() => speakJapanese(word.exampleSentence)}
+              className="shrink-0 rounded-full p-1.5 text-muted-foreground/70 transition-colors hover:bg-accent hover:text-primary"
+              title={t("vocab_listen_sentence")}
+              aria-label={t("vocab_listen_sentence")}
+            >
+              <Volume2 className="size-4" />
+            </button>
+          </div>
+          <p className="text-xs italic text-muted-foreground/80">{word.exampleSentenceMeaning}</p>
+        </div>
+      </CardContent>
+    </Card>
+  );
+}

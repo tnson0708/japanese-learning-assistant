@@ -149,12 +149,20 @@
 }
 
 /* Printable layout optimization for A4 paper */
+.only-print {
+  display: none !important;
+}
+
 @media print {
   header,
   footer,
   nav,
   .no-print {
     display: none !important;
+  }
+
+  .only-print {
+    display: flex !important;
   }
 
   body {

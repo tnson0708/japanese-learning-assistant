@@ -2,20 +2,23 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   BookOpen,
   GraduationCap,
   Home,
+  LayoutGrid,
   MessageSquare,
   PenTool,
   Presentation,
-  Table,
+  Shield,
+  Search,
 } from "lucide-react";
 import { LanguageToggle } from "@/components/language-toggle";
 import { VoiceToggle } from "@/components/voice-toggle";
 import { useLanguage } from "@/lib/language-context";
 import { cn } from "@/lib/utils";
+import { GlobalSearchModal } from "@/components/global-search-modal";
 
 export function Nav() {
   const pathname = usePathname();
@@ -23,14 +26,29 @@ export function Nav() {
   const isVi = language === "vi";
   const activeTabRef = useRef<HTMLAnchorElement | null>(null);
 
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+
+  // Global keyboard shortcut for Cmd+K / Ctrl+K
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
+        e.preventDefault();
+        setIsSearchOpen((prev) => !prev);
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, []);
+
   const links = [
     { href: "/", label: t("nav_home"), shortLabel: isVi ? "Trang chủ" : "Home", icon: Home },
     { href: "/kana", label: t("nav_learn"), shortLabel: isVi ? "Học Kana" : "Learn", icon: BookOpen },
-    { href: "/vocabulary", label: t("nav_vocabulary"), shortLabel: isVi ? "Từ vựng" : "Vocab", icon: Table },
+    { href: "/vocabulary", label: t("nav_vocabulary"), shortLabel: isVi ? "Từ vựng" : "Vocab", icon: LayoutGrid },
     { href: "/theory", label: t("nav_theory"), shortLabel: isVi ? "Lý thuyết" : "Theory", icon: GraduationCap },
     { href: "/phrases", label: t("nav_phrases"), shortLabel: isVi ? "Mẫu câu" : "Phrases", icon: MessageSquare },
     { href: "/practice", label: t("nav_practice"), shortLabel: isVi ? "Luyện tập" : "Practice", icon: PenTool },
-    { href: "/teaching", label: t("nav_teaching"), shortLabel: isVi ? "Giảng dạy" : "Teaching", icon: Presentation },
+    { href: "/slides", label: t("nav_slides"), shortLabel: isVi ? "Slide" : "Slides", icon: Presentation },
   ];
 
   // Auto-scroll active mobile bottom tab into view on route change
@@ -81,8 +99,34 @@ export function Nav() {
             })}
           </nav>
 
-          {/* Header Right Controls (Voice & Language Toggles) */}
+          {/* Header Right Controls (Search Trigger, Voice & Language Toggles & Admin Link) */}
           <div className="flex items-center gap-2 shrink-0">
+            {/* Global Spotlight Search Trigger Button */}
+            <button
+              type="button"
+              onClick={() => setIsSearchOpen(true)}
+              className="flex h-9 items-center gap-2 rounded-lg border border-input bg-background/80 px-2.5 sm:px-3 text-xs text-muted-foreground transition-all hover:bg-accent hover:text-accent-foreground cursor-pointer shadow-2xs"
+              title="Tìm kiếm toàn hệ thống (⌘K / Ctrl+K)"
+            >
+              <Search className="size-4 text-primary shrink-0" />
+              <span className="hidden sm:inline-block font-medium">{isVi ? "Tìm kiếm..." : "Search..."}</span>
+              <kbd className="hidden md:inline-flex items-center gap-0.5 rounded border bg-muted px-1.5 py-0.5 text-[10px] font-mono font-bold text-muted-foreground">
+                <span>⌘</span>K
+              </kbd>
+            </button>
+
+            <Link
+              href="/admin"
+              className={cn(
+                "flex size-9 items-center justify-center rounded-lg border transition-colors cursor-pointer",
+                pathname.startsWith("/admin")
+                  ? "bg-amber-500 text-white border-amber-500"
+                  : "border-input bg-background hover:bg-accent hover:text-accent-foreground text-muted-foreground"
+              )}
+              title="Trang quản trị (Admin Panel)"
+            >
+              <Shield className="size-4" />
+            </Link>
             <VoiceToggle />
             <LanguageToggle />
           </div>
@@ -134,6 +178,9 @@ export function Nav() {
           })}
         </div>
       </nav>
+
+      {/* Global Spotlight Search Modal */}
+      <GlobalSearchModal isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />
     </>
   );
 }

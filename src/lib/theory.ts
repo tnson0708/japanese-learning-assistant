@@ -2,6 +2,27 @@ import { lesson1 } from "@/data/theory/lesson-1";
 import { lesson2 } from "@/data/theory/lesson-2";
 import { lesson3 } from "@/data/theory/lesson-3";
 import { lesson4 } from "@/data/theory/lesson-4";
+import { lesson5 } from "@/data/theory/lesson-5";
+import { lesson6 } from "@/data/theory/lesson-6";
+import { lesson7 } from "@/data/theory/lesson-7";
+import { lesson8 } from "@/data/theory/lesson-8";
+import { lesson9 } from "@/data/theory/lesson-9";
+import { lesson10 } from "@/data/theory/lesson-10";
+import { lesson11 } from "@/data/theory/lesson-11";
+import { lesson12 } from "@/data/theory/lesson-12";
+import { lesson13 } from "@/data/theory/lesson-13";
+import { lesson14 } from "@/data/theory/lesson-14";
+import { lesson15 } from "@/data/theory/lesson-15";
+import { lesson16 } from "@/data/theory/lesson-16";
+import { lesson17 } from "@/data/theory/lesson-17";
+import { lesson18 } from "@/data/theory/lesson-18";
+import { lesson19 } from "@/data/theory/lesson-19";
+import { lesson20 } from "@/data/theory/lesson-20";
+import { lesson21 } from "@/data/theory/lesson-21";
+import { lesson22 } from "@/data/theory/lesson-22";
+import { lesson23 } from "@/data/theory/lesson-23";
+import { lesson24 } from "@/data/theory/lesson-24";
+import { lesson25 } from "@/data/theory/lesson-25";
 
 /** A single vocabulary/phrase entry: Japanese reading, optional Kanji, Vietnamese meaning, optional usage note. */
 export interface VocabItem {
@@ -65,6 +86,13 @@ export interface TranslationDialogueLine {
   jp: string;
 }
 
+/** One playable listening track from the physical textbook (e.g. a Mondai audio clip). */
+export interface ListeningTrackItem {
+  label: string;
+  /** Path under /public, e.g. "/audio/lessons/lesson-4/第4課 問題 1 Mondai 1.mp3" — encoded at render time. */
+  url: string;
+}
+
 export interface ReorderQuestionItem {
   id: string;
   words: string[];
@@ -72,6 +100,28 @@ export interface ReorderQuestionItem {
   fullSentenceJp: string;
   fullSentenceVi: string;
   explanation?: string;
+}
+
+/**
+ * One "character card" used by picture-based textbook drills (e.g. 練習B),
+ * where the original book shows a photo + country map. Here the photo is
+ * replaced by a flag emoji + structured attributes so the drill stays fully
+ * data-driven instead of embedding scanned images.
+ */
+export interface DrillCardPerson {
+  id: string;
+  name: string;
+  flag: string;
+  countryJp: string;
+  jobJp: string;
+  jobVi: string;
+  age?: number;
+}
+
+/** A sub-drill (e.g. 練習B's numbered items 1-7), grouped under one instruction. */
+export interface PictureDrillGroup {
+  heading: string;
+  items: SentencePracticeItem[];
 }
 
 /**
@@ -114,25 +164,42 @@ export type ContentBlock =
       type: "exercise-fill-in-blank";
       title: string;
       instruction?: string;
+      audioUrl?: string;
       questions: FillInBlankQuestion[];
     }
   | {
       type: "exercise-multiple-choice";
       title: string;
       instruction?: string;
+      audioUrl?: string;
       questions: MultipleChoiceQuestion[];
     }
   | {
       type: "exercise-sentence-practice";
       title: string;
       instruction?: string;
+      audioUrl?: string;
       items: SentencePracticeItem[];
     }
   | {
       type: "exercise-reorder-sentence";
       title: string;
       instruction?: string;
+      audioUrl?: string;
       questions: ReorderQuestionItem[];
+    }
+  | {
+      type: "exercise-picture-cards";
+      title: string;
+      instruction?: string;
+      people: DrillCardPerson[];
+      groups: PictureDrillGroup[];
+    }
+  | {
+      type: "listening-audio-list";
+      title: string;
+      instruction?: string;
+      items: ListeningTrackItem[];
     };
 
 export type SectionId =
@@ -155,7 +222,33 @@ export interface Lesson {
 }
 
 // Add each new lesson's file here as it's transcribed.
-export const lessonList: Lesson[] = [lesson1, lesson2, lesson3, lesson4];
+export const lessonList: Lesson[] = [
+  lesson1,
+  lesson2,
+  lesson3,
+  lesson4,
+  lesson5,
+  lesson6,
+  lesson7,
+  lesson8,
+  lesson9,
+  lesson10,
+  lesson11,
+  lesson12,
+  lesson13,
+  lesson14,
+  lesson15,
+  lesson16,
+  lesson17,
+  lesson18,
+  lesson19,
+  lesson20,
+  lesson21,
+  lesson22,
+  lesson23,
+  lesson24,
+  lesson25,
+];
 
 export function getLessonById(id: number): Lesson | undefined {
   return lessonList.find((l) => l.id === id);

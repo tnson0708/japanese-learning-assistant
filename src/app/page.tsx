@@ -78,12 +78,14 @@ export default function Home() {
       description: t("mod_practice_desc"),
     },
     {
-      href: "/teaching",
-      title: t("mod_teaching_title"),
-      kicker: "授業",
+      href: "/slides",
+      title: isVi ? "Slide bài giảng" : "Presentation Slides",
+      kicker: "スライド",
       icon: Presentation,
-      badge: t("mod_teaching_badge"),
-      description: t("mod_teaching_desc"),
+      badge: "Google Slides",
+      description: isVi
+        ? "Xem trực tiếp slide bài giảng và tài liệu học tiếng Nhật tương tác."
+        : "Browse interactive Google Slides presentations and course material.",
     },
   ];
 

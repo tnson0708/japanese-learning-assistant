@@ -1,0 +1,582 @@
+import type { Lesson } from "@/lib/theory";
+
+export const lesson25: Lesson = {
+  id: 25,
+  title: "Bài 25: 明日 雨が 降ったら、出かけません — Điều kiện V-たら, Cho dù V-ても",
+  sections: [
+    {
+      id: "vocabulary",
+      title: "I. Từ vựng",
+      blocks: [
+        {
+          type: "vocab-group",
+          heading: "Động từ (動詞)",
+          items: [
+            { jp: "かんがえますII", kanji: "考えます", meaning: "nghĩ, suy nghĩ" },
+            { jp: "つきますI［駅に～］", kanji: "着きます［駅に～］", meaning: "đến ［ga］" },
+            { jp: "とりますI［年を～］", kanji: "取ります［年を～］", meaning: "có, thêm ［tuổi］" },
+            { jp: "たりますII", kanji: "足ります", meaning: "đủ" },
+          ],
+        },
+        {
+          type: "vocab-group",
+          heading: "Danh từ & Trạng từ (名詞・副詞)",
+          items: [
+            { jp: "いなか", kanji: "田舎", meaning: "quê, nông thôn" },
+            { jp: "チャンス", meaning: "cơ hội" },
+            { jp: "おく", kanji: "億", meaning: "một trăm triệu (100.000.000)" },
+            { jp: "もし［～たら］", meaning: "nếu ［～ thì］" },
+            { jp: "いみ", kanji: "意味", meaning: "nghĩa, ý nghĩa" },
+            { jp: "こと", meaning: "việc, chuyện （～の こと: việc/chuyện về ～）" },
+            { jp: "ひま", kanji: "暇", meaning: "thời gian rảnh" },
+          ],
+        },
+        {
+          type: "vocab-group",
+          heading: "Chuyển công tác & Chia tay (転勤・別れ)",
+          items: [
+            { jp: "てんきん", kanji: "転勤", meaning: "chuyển địa điểm làm việc (～します: chuyển địa điểm làm việc)" },
+            { jp: "［いろいろ］お世話に なりました。", meaning: "Cám ơn anh/chị đã giúp đỡ tôi (nhiều)." },
+            { jp: "頑張ります", kanji: "がんばります", meaning: "cố, cố gắng" },
+            {
+              jp: "どうぞ お元気で。",
+              meaning:
+                "Chúc anh/chị mạnh khỏe. Anh/Chị hãy bảo trọng. (câu nói trước khi chia tay với ai đó mà có lẽ lâu nữa mới gặp lại)",
+            },
+          ],
+        },
+        {
+          type: "vocab-group",
+          heading: "Giao tiếp & Tên riêng (会話表現・固有名詞)",
+          items: [
+            { jp: "もしもし", meaning: "A-lô (dùng khi gọi điện thoại)" },
+            { jp: "ベトナム", meaning: "Việt Nam" },
+          ],
+        },
+      ],
+    },
+    {
+      id: "translation",
+      title: "II. Bản dịch",
+      blocks: [
+        {
+          type: "translation-section",
+          title: "II. Phần dịch",
+          instruction:
+            "Đọc câu tiếng Việt và tự suy nghĩ/dịch sang tiếng Nhật. Bấm 'Xem đáp án' để kiểm tra câu tiếng Nhật chuẩn xác và nghe phát âm.",
+          sentences: [
+            {
+              id: "l25-s1",
+              num: 1,
+              vi: "Nếu trời mưa thì tôi sẽ không ra ngoài.",
+              jp: "明日 雨が 降ったら、出かけません。",
+            },
+            {
+              id: "l25-s2",
+              num: 2,
+              vi: "Cho dù trời mưa thì tôi cũng đi ra ngoài.",
+              jp: "雨が 降っても、出かけます。",
+            },
+          ],
+          examples: [
+            {
+              id: "l25-e1",
+              num: 1,
+              vi: "Nếu có 100 triệu yên thì anh/chị sẽ làm gì?\n…Tôi muốn xây một ngôi trường.",
+              jp: "もし 1億円 あったら、何を しますか。\n……学校を 建てたいです。",
+            },
+            {
+              id: "l25-e2",
+              num: 2,
+              vi: "Nếu tàu điện và xe buýt không chạy thì anh sẽ làm thế nào?\n…Tôi sẽ đi bộ về.",
+              jp: "電車や バスが 走らなかったら、どう しますか。\n……歩いて 帰ります。",
+            },
+            {
+              id: "l25-e3",
+              num: 3,
+              vi: "Ở cửa hàng giày mới kia có nhiều giày tốt đấy.\n…Thế à. Nếu rẻ thì tôi sẽ mua.",
+              jp: "あの 新しい 靴屋に いい 靴が たくさん ありますよ。\n……そうですか。安かったら、買います。",
+            },
+            {
+              id: "l25-e4",
+              num: 4,
+              vi: "Ngày mai tôi cũng phải đến à?\n…Nếu anh không xếp được thì tuần sau hãy đến nhé.",
+              jp: "明日も 来なければ なりませんか。\n……時間が なかったら、来週 来て ください。",
+            },
+            {
+              id: "l25-e5",
+              num: 5,
+              vi: "Anh/Chị đã nghĩ tên cho con chưa?\n…Rồi ạ. Nếu là con trai thì là “Hikaru”. Nếu là con gái thì là “Aya”.",
+              jp: "子どもの 名前は もう 考えましたか。\n……ええ、考えました。男の子だったら「ひかる」です。女の子だったら「あや」です。",
+            },
+            {
+              id: "l25-e6",
+              num: 6,
+              vi: "Anh/Chị có đi làm ngay khi tốt nghiệp không?\n…Không, tôi muốn đi du lịch các nước khoảng 1 năm.",
+              jp: "卒業したら、すぐ 就職しますか。\n……いいえ、1年ぐらい いろいろな 国を 旅行したいです。",
+            },
+            {
+              id: "l25-e7",
+              num: 7,
+              vi: "Thưa thầy, em không hiểu nghĩa của từ này ạ.\n…Em tra từ điển chưa?\nRồi ạ. Em tra rồi vẫn không hiểu ạ.",
+              jp: "先生、この 言葉の 意味が 分かりません。\n……辞書を 調べましたか。\n調べましたが、分かりませんでした。",
+            },
+            {
+              id: "l25-e8",
+              num: 8,
+              vi: "Khi trời nóng anh/chị có bật điều hòa không?\n…Không, dù có nóng tôi cũng không bật. Vì (điều hòa) không tốt cho sức khỏe.",
+              jp: "暑い とき、エアコンを つけますか。\n……いいえ、暑くても つけません。体に よく ないですから。",
+            },
+          ],
+          dialogueTitle: "Các anh chị đã giúp đỡ tôi rất nhiều",
+          dialogueLines: [
+            {
+              speakerVi: "Kimura",
+              vi: "Chúc mừng anh nhân dịp chuyển địa điểm công tác.",
+              jp: "転勤、おめでとうございます。",
+            },
+            { speakerVi: "Miller", vi: "Cám ơn chị.", jp: "ありがとうございます。" },
+            {
+              speakerVi: "Kimura",
+              vi: "Anh Miller đi Tokyo chúng tôi sẽ buồn đấy.",
+              jp: "ミラーさんが 東京へ 行ったら、寂しく なりますね。",
+            },
+            { speakerVi: "Sato", vi: "Đúng thế nhỉ.", jp: "本当に そうですね。" },
+            {
+              speakerVi: "Kimura",
+              vi: "Cho dù lên Tokyo thì anh cũng đừng quên Osaka nhé.",
+              jp: "東京へ 行っても、大阪の ことを 忘れないで くださいね。",
+            },
+            {
+              speakerVi: "Miller",
+              vi: "Tất nhiên rồi. Các anh chị nếu có thời gian rồi thì nhất định lên Tokyo chơi nhé.",
+              jp: "もちろんです。皆さんも 時間が あったら、ぜひ 東京へ 遊びに 来て ください。",
+            },
+            {
+              speakerVi: "Santos",
+              vi: "Anh Miller cũng thế nhé, khi xuống Osaka thì gọi điện nhé. Chúng ta sẽ đi uống với nhau.",
+              jp: "ミラーさんも、大阪へ 来たら、電話して くださいね。一緒に 飲みに 行きましょう。",
+            },
+            { speakerVi: "Miller", vi: "Vâng, nhất định rồi.", jp: "はい、きっと。" },
+            {
+              speakerVi: "Miller",
+              vi: "Các anh chị đã giúp đỡ tôi rất nhiều.",
+              jp: "皆さん、いろいろ お世話に なりました。",
+            },
+            {
+              speakerVi: "Sato",
+              vi: "Anh cố gắng và giữ gìn sức khỏe nhé.",
+              jp: "頑張って くださいね。お元気で。",
+            },
+            {
+              speakerVi: "Miller",
+              vi: "Vâng. Các anh chị cũng nhớ giữ gìn sức khỏe.",
+              jp: "はい。皆さんも どうぞ お元気で。",
+            },
+          ],
+        },
+      ],
+    },
+    {
+      id: "reference",
+      title: "III. Từ và thông tin tham khảo",
+      blocks: [
+        {
+          type: "table",
+          title: "人の一生 (CUỘC ĐỜI MỘT CON NGƯỜI) — Các giai đoạn cuộc đời",
+          columns: ["Độ tuổi", "Giai đoạn", "Sự kiện / Mốc quan trọng"],
+          speakableColumns: [],
+          rows: [
+            ["0歳", "赤ちゃん (em bé)", "生まれます (sinh ra)"],
+            [
+              "6歳",
+              "子ども (trẻ con)",
+              "保育園 (nhà trẻ) → 幼稚園 (mẫu giáo) → 学校に 入ります (đi học)",
+            ],
+            [
+              "18歳",
+              "青年 (thanh niên)",
+              "学校を 出ます (tốt nghiệp), 就職します (đi làm), 結婚します (lập gia đình)",
+            ],
+            [
+              "30歳",
+              "(lập gia đình / con cái)",
+              "子どもが 生まれます (sinh con), 離婚します (ly hôn), 再婚します (tái hôn)",
+            ],
+            ["40歳", "中年 (trung niên)", "―"],
+            ["60歳～70歳", "老人 (người già)", "仕事を やめます (nghỉ hưu, nghỉ việc)"],
+            ["？", "―", "死にます (chết)"],
+          ],
+        },
+        {
+          type: "note",
+          text: "Các cấp học tại Nhật (学校): 小学校 tiểu học (6 năm) → 中学校 trung học cơ sở (3 năm) → 高等学校 trung học phổ thông (3 năm) → sau đó có thể học lên 大学 đại học (4 năm), 短大 cao đẳng (2 năm), 専門学校 trung học chuyên nghiệp/dạy nghề (2 năm), hoặc 大学院 trên đại học/cao học (2～6 năm).",
+        },
+        {
+          type: "note",
+          text: "平均寿命（へいきんじゅみょう）— Tuổi thọ trung bình của người Nhật (năm 2009, theo Bộ Lao động và Đời sống Nhật Bản): Nam 79.59 tuổi, Nữ 86.44 tuổi.",
+        },
+      ],
+    },
+    {
+      id: "grammar",
+      title: "IV. Giải thích ngữ pháp",
+      blocks: [
+        {
+          type: "grammar-pattern",
+          pattern: "1. Thể thông thường (chia ở) quá khứ + ら、～ (mệnh đề chính)",
+          explanation:
+            "Thêm ら vào sau thể thông thường quá khứ của động từ, tính từ, danh từ, v.v. ở mệnh đề đứng trước đó để biểu thị điều kiện giả định. Ở mệnh đề chính (đứng sau ～たら) có thể đưa vào những cách nói thể hiện ý chí, nguyện vọng, sự mời rủ, nhờ vả, v.v. của người nói.",
+          examples: [
+            { jp: "① お金が あったら、旅行します。", vi: "Nếu có tiền thì tôi sẽ đi du lịch." },
+            { jp: "② 時間が なかったら、テレビを 見ません。", vi: "Nếu không có thời gian thì tôi sẽ không xem ti-vi." },
+            { jp: "③ 安かったら、パソコンを 買いたいです。", vi: "Nếu (máy tính cá nhân) rẻ thì tôi muốn mua." },
+            { jp: "④ 暇だったら、手伝って ください。", vi: "Nếu anh/chị rảnh thì hãy giúp tôi." },
+            { jp: "⑤ いい 天気だったら、散歩しませんか。", vi: "Nếu trời đẹp thì chúng ta đi dạo nhé?" },
+          ],
+        },
+        {
+          type: "grammar-pattern",
+          pattern: "2. Động từ thể たら、～ (mệnh đề chính)",
+          explanation:
+            "Mẫu câu này dùng cấu trúc たら để biểu thị rằng một khi động tác/tình huống ở mệnh đề đứng trước たら hình thành thì động tác/tình huống ở mệnh đề chính đi sau đó chắc chắn sẽ xảy ra (nghĩa gần với 'khi/sau khi'). Khác với と (đã học ở Bài 23) chỉ dùng cho kết quả tất yếu khách quan, ở mệnh đề chính sau ～たら CÓ THỂ dùng các cách nói thể hiện ý chí, nguyện vọng, mời rủ, nhờ vả của người nói.",
+          notes: [
+            "So sánh: 時間が あったら、コンサートに 行きたいです (đúng) — ×時間が あると、コンサートに 行きたいです (sai, vì と không cho phép nguyện vọng ở mệnh đề chính).",
+          ],
+          examples: [
+            { jp: "⑥ 時間が あったら、コンサートに 行きたいです。", vi: "Nếu có thời gian thì tôi muốn đi xem hòa nhạc." },
+            { jp: "⑦ うちへ 帰ったら、すぐ シャワーを 浴びます。", vi: "(Khi) về đến nhà tôi sẽ tắm vòi sen ngay." },
+          ],
+        },
+        {
+          type: "grammar-pattern",
+          pattern:
+            "3. Động từ thể て／Động từ thể ない (くて) ／ Tính từ đuôi い（くて）／ Tính từ đuôi な［で］／ Danh từ で + も、～ (mệnh đề chính)",
+          explanation:
+            "Mẫu câu này biểu thị điều kiện nhượng bộ 'Cho dù ～'. Ở mệnh đề chính đi sau ても biểu thị một kết quả trái với kết quả mà lẽ ra phải xảy ra (theo nhận thức thông thường ứng với điều kiện giả định đó) nhưng lại không xảy ra.",
+          examples: [
+            { jp: "⑧ 雨が 降っても、わたしは 洗濯します。", vi: "Cho dù trời có mưa tôi cũng vẫn giặt quần áo." },
+            { jp: "⑨ 安くても、わたしは グループ旅行が 嫌いです。", vi: "Cho dù rẻ, tôi cũng không thích đi du lịch theo đoàn." },
+            { jp: "⑩ 便利でも、パソコンを 使いません。", vi: "Cho dù máy tính cá nhân tiện lợi nhưng tôi cũng không dùng." },
+            { jp: "⑪ 日曜日でも、働きます。", vi: "Cho dù chủ nhật tôi cũng làm việc." },
+          ],
+        },
+        {
+          type: "grammar-pattern",
+          pattern: "4. もし ［～たら］／ いくら ［～ても］",
+          explanation:
+            "もし dùng cùng với ～たら, có chức năng thông báo trước cho câu văn đó là câu điều kiện của người nói, nhấn mạnh tâm lý giả định của người nói.",
+          examples: [
+            { jp: "⑫ もし 1億円 あったら、いろいろな 国を 旅行したいです。", vi: "Nếu có 100 triệu yên thì tôi muốn đi du lịch đến nhiều nước." },
+          ],
+        },
+        {
+          type: "grammar-pattern",
+          pattern: "5. Chủ ngữ của mệnh đề phụ",
+          explanation:
+            "Như đã nêu ở mục 2, Bài 16, chúng ta dùng trợ từ が để biểu thị chủ ngữ trong các mệnh đề phụ với ～てから, ～と, ～とき, ～まえに, v.v. Cũng giống như trong các mệnh đề phụ với ～たら, ～ても, chủ ngữ của mệnh đề phụ cũng được biểu thị bởi trợ từ が, chủ ngữ này có thể khác với chủ ngữ của mệnh đề chính đi sau đó cũng được.",
+          examples: [
+            { jp: "⑬ 友達が 来る まえに、部屋を 掃除します。 (xem Bài 18)", vi: "Trước khi bạn đến chơi, tôi dọn phòng." },
+            { jp: "⑭ 妻が 病気の とき、会社を 休みます。 (xem Bài 23)", vi: "Khi vợ bị ốm thì tôi nghỉ làm." },
+            {
+              jp: "⑮ 友達が 約束の 時間に 来なかったら、どう しますか。 (xem Bài 25)",
+              vi: "Nếu (người) bạn không đến đúng giờ hẹn thì anh/chị sẽ làm gì?",
+            },
+          ],
+        },
+      ],
+    },
+    {
+      id: "exercises",
+      title: "V. Bài tập & Luyện tập",
+      blocks: [
+        {
+          type: "exercise-fill-in-blank",
+          title: "Bài tập 1: Chia thể たら／ても, もし, và chủ ngữ mệnh đề phụ với が (Bài 25)",
+          instruction: "Chọn từ/dạng thích hợp để hoàn thành câu.",
+          questions: [
+            {
+              id: "l25-q1",
+              promptPre: "お金が ",
+              promptPost: "、旅行します。",
+              options: ["あったら", "あります", "あって", "ある"],
+              correctAnswer: "あったら",
+              explanation: "たら thêm vào sau thể thông thường QUÁ KHỨ của động từ (あった) để biểu thị điều kiện giả định.",
+              fullSentenceJp: "お金が あったら、旅行します。",
+              fullSentenceVi: "Nếu có tiền thì tôi sẽ đi du lịch.",
+            },
+            {
+              id: "l25-q2",
+              promptPre: "時間が ",
+              promptPost: "、テレビを 見ません。",
+              options: ["なかったら", "ないです", "なくて", "ない"],
+              correctAnswer: "なかったら",
+              explanation: "Thể phủ định quá khứ (なかった) + ら để biểu thị điều kiện giả định phủ định.",
+              fullSentenceJp: "時間が なかったら、テレビを 見ません。",
+              fullSentenceVi: "Nếu không có thời gian thì tôi sẽ không xem ti-vi.",
+            },
+            {
+              id: "l25-q3",
+              promptPre: "安かっ",
+              promptPost: "、パソコンを 買いたいです。",
+              options: ["たら", "たです", "て", "た"],
+              correctAnswer: "たら",
+              explanation: "Tính từ đuôi い ở thể quá khứ (安かった) + ら: 安かったら.",
+              fullSentenceJp: "安かったら、パソコンを 買いたいです。",
+              fullSentenceVi: "Nếu (máy tính cá nhân) rẻ thì tôi muốn mua.",
+            },
+            {
+              id: "l25-q4",
+              promptPre: "暇",
+              promptPost: "、手伝って ください。",
+              options: ["だったら", "なら", "だ", "な"],
+              correctAnswer: "だったら",
+              explanation: "Tính từ đuôi な ở thể quá khứ (暇だった) + ら: 暇だったら.",
+              fullSentenceJp: "暇だったら、手伝って ください。",
+              fullSentenceVi: "Nếu anh/chị rảnh thì hãy giúp tôi.",
+            },
+            {
+              id: "l25-q5",
+              promptPre: "友達",
+              promptPost: " 約束の 時間に 来なかったら、どう しますか。",
+              options: ["が", "は", "を", "に"],
+              correctAnswer: "が",
+              explanation: "Chủ ngữ của mệnh đề phụ (trước ～たら) khác với chủ ngữ mệnh đề chính được đánh dấu bằng trợ từ が.",
+              fullSentenceJp: "友達が 約束の 時間に 来なかったら、どう しますか。",
+              fullSentenceVi: "Nếu (người) bạn không đến đúng giờ hẹn thì anh/chị sẽ làm gì?",
+            },
+            {
+              id: "l25-q6",
+              promptPre: "雨が 降っ",
+              promptPost: "、わたしは 洗濯します。",
+              options: ["ても", "たら", "ると", "ないと"],
+              correctAnswer: "ても",
+              explanation: "ても (động từ thể て + も) biểu thị điều kiện nhượng bộ 'Cho dù ~ thì vẫn ~'.",
+              fullSentenceJp: "雨が 降っても、わたしは 洗濯します。",
+              fullSentenceVi: "Cho dù trời có mưa tôi cũng vẫn giặt quần áo.",
+            },
+            {
+              id: "l25-q7",
+              promptPre: "安く",
+              promptPost: "、わたしは グループ旅行が 嫌いです。",
+              options: ["ても", "たら", "て", "くて"],
+              correctAnswer: "ても",
+              explanation: "Tính từ đuôi い bỏ い thêm くても: 安くても.",
+              fullSentenceJp: "安くても、わたしは グループ旅行が 嫌いです。",
+              fullSentenceVi: "Cho dù rẻ, tôi cũng không thích đi du lịch theo đoàn.",
+            },
+            {
+              id: "l25-q8",
+              promptPre: "便利",
+              promptPost: "、パソコンを 使いません。",
+              options: ["でも", "だったら", "だと", "でて"],
+              correctAnswer: "でも",
+              explanation: "Tính từ đuôi な bỏ な thêm でも: 便利でも.",
+              fullSentenceJp: "便利でも、パソコンを 使いません。",
+              fullSentenceVi: "Cho dù máy tính cá nhân tiện lợi nhưng tôi cũng không dùng.",
+            },
+            {
+              id: "l25-q9",
+              promptPre: "日曜日",
+              promptPost: "、働きます。",
+              options: ["でも", "だったら", "なら", "です"],
+              correctAnswer: "でも",
+              explanation: "Danh từ + でも biểu thị điều kiện nhượng bộ: 日曜日でも.",
+              fullSentenceJp: "日曜日でも、働きます。",
+              fullSentenceVi: "Cho dù chủ nhật tôi cũng làm việc.",
+            },
+            {
+              id: "l25-q10",
+              promptPre: "",
+              promptPost: " 1億円 あったら、何を しますか。",
+              options: ["もし", "いくら", "たぶん", "きっと"],
+              correctAnswer: "もし",
+              explanation: "もし đi cùng ～たら, dùng để báo trước và nhấn mạnh câu văn đó là câu điều kiện giả định.",
+              fullSentenceJp: "もし 1億円 あったら、何を しますか。",
+              fullSentenceVi: "Nếu có 100 triệu yên thì anh/chị sẽ làm gì?",
+            },
+          ],
+        },
+        {
+          type: "exercise-multiple-choice",
+          title: "Bài tập 2: Trắc nghiệm Từ vựng & Ngữ pháp Bài 25",
+          instruction: "Chọn phương án trả lời đúng nhất.",
+          questions: [
+            {
+              id: "l25-mc1",
+              question: "「考えます」có nghĩa là gì?",
+              options: ["nghĩ, suy nghĩ", "nói", "biết", "cảm thấy"],
+              correctAnswerIndex: 0,
+              explanation: "考えます nghĩa là nghĩ, suy nghĩ.",
+            },
+            {
+              id: "l25-mc2",
+              question: "「取ります［年を～］」có nghĩa là gì?",
+              options: ["có thêm tuổi (già đi)", "giảm tuổi", "sinh nhật", "nghỉ hưu"],
+              correctAnswerIndex: 0,
+              explanation: "年を 取ります nghĩa là có thêm tuổi, già đi.",
+            },
+            {
+              id: "l25-mc3",
+              question: "So với と (đã học ở Bài 23), cấu trúc ～たら khác biệt ở điểm nào?",
+              options: [
+                "Ở mệnh đề chính sau ～たら CÓ THỂ dùng ý chí/nguyện vọng/mời rủ/nhờ vả, còn と thì KHÔNG",
+                "たら chỉ dùng được cho quá khứ, còn と chỉ dùng cho tương lai",
+                "Hai cấu trúc hoàn toàn giống nhau về mọi mặt",
+                "と chỉ dùng cho danh từ, còn たら chỉ dùng cho động từ",
+              ],
+              correctAnswerIndex: 0,
+              explanation: "と chỉ dùng cho kết quả tất yếu khách quan; たら cho phép mệnh đề chính có ý chí, nguyện vọng, mời rủ của người nói.",
+            },
+            {
+              id: "l25-mc4",
+              question: "Câu nào đúng ngữ pháp trong hai câu sau: (1) 時間が あったら、コンサートに 行きたいです。 (2) 時間が あると、コンサートに 行きたいです。",
+              options: [
+                "Chỉ câu (1) đúng, vì と không cho phép nguyện vọng ở mệnh đề chính",
+                "Chỉ câu (2) đúng",
+                "Cả hai câu đều đúng",
+                "Cả hai câu đều sai",
+              ],
+              correctAnswerIndex: 0,
+              explanation: "と chỉ dùng cho kết quả tất yếu khách quan, không dùng được với 行きたいです (nguyện vọng); phải dùng たら.",
+            },
+            {
+              id: "l25-mc5",
+              question: "Mẫu câu ～ても (mục 3, Bài 25) diễn đạt ý nghĩa gì?",
+              options: [
+                "điều kiện nhượng bộ: 'Cho dù ~ thì vẫn ~' (kết quả trái với lẽ thường)",
+                "điều kiện tất yếu, chắc chắn xảy ra",
+                "nguyên nhân - kết quả",
+                "mục đích của hành động"
+              ],
+              correctAnswerIndex: 0,
+              explanation: "ても biểu thị điều kiện nhượng bộ, kết quả ở mệnh đề chính trái với điều lẽ ra phải xảy ra theo điều kiện đó.",
+            },
+            {
+              id: "l25-mc6",
+              question: "Từ nào thường đi kèm ～ても để nhấn mạnh nghĩa 'dù thế nào đi nữa'?",
+              options: ["いくら", "もし", "たぶん", "きっと"],
+              correctAnswerIndex: 0,
+              explanation: "いくら đi kèm ～ても để nhấn mạnh 'dù thế nào/dù bao nhiêu đi nữa', tương tự cách もし đi kèm ～たら.",
+            },
+            {
+              id: "l25-mc7",
+              question: "Trong các mệnh đề phụ (～たら, ～ても, ～とき, v.v.), khi chủ ngữ của mệnh đề phụ khác với chủ ngữ mệnh đề chính thì được đánh dấu bằng trợ từ nào?",
+              options: ["が", "は", "を", "も"],
+              correctAnswerIndex: 0,
+              explanation: "Chủ ngữ của mệnh đề phụ được đánh dấu bằng trợ từ が, ví dụ: 友達が 来なかったら.",
+            },
+            {
+              id: "l25-mc8",
+              question: "Câu nào dịch đúng nghĩa \"Cho dù chủ nhật tôi cũng làm việc\"?",
+              options: [
+                "日曜日でも、働きます。",
+                "日曜日だったら、働きます。",
+                "日曜日と、働きます。",
+                "日曜日の とき、働きません。",
+              ],
+              correctAnswerIndex: 0,
+              explanation: "Danh từ + でも biểu thị điều kiện nhượng bộ 'cho dù là chủ nhật'.",
+            },
+          ],
+        },
+        {
+          type: "exercise-sentence-practice",
+          title: "Bài tập 3: Luyện dịch câu Việt → Nhật Bài 25",
+          instruction: "Tự dịch câu tiếng Việt sang tiếng Nhật, sau đó bấm 'Xem đáp án' để kiểm tra.",
+          items: [
+            {
+              id: "l25-sp1",
+              vi: "Nếu có tiền thì tôi sẽ đi du lịch.",
+              jp: "お金が あったら、旅行します。",
+              hint: "Dùng động từ thể quá khứ (あった) + ら.",
+              breakdown: "お金が あったら (nếu có tiền thì) + 旅行します (sẽ đi du lịch).",
+            },
+            {
+              id: "l25-sp2",
+              vi: "Nếu anh/chị rảnh thì hãy giúp tôi.",
+              jp: "暇だったら、手伝って ください。",
+              hint: "Dùng tính từ đuôi な thể quá khứ (暇だった) + ら.",
+              breakdown: "暇だったら (nếu rảnh thì) + 手伝って ください (hãy giúp tôi).",
+            },
+            {
+              id: "l25-sp3",
+              vi: "Cho dù trời mưa thì tôi cũng đi ra ngoài.",
+              jp: "雨が 降っても、出かけます。",
+              hint: "Dùng động từ thể て + も (降っても).",
+              breakdown: "雨が 降っても (cho dù trời mưa) + 出かけます (tôi vẫn đi ra ngoài).",
+            },
+            {
+              id: "l25-sp4",
+              vi: "Cho dù chủ nhật tôi cũng làm việc.",
+              jp: "日曜日でも、働きます。",
+              hint: "Dùng danh từ + でも (日曜日でも).",
+              breakdown: "日曜日でも (cho dù là chủ nhật) + 働きます (tôi vẫn làm việc).",
+            },
+            {
+              id: "l25-sp5",
+              vi: "Nếu có 100 triệu yên thì tôi muốn đi du lịch đến nhiều nước.",
+              jp: "もし 1億円 あったら、いろいろな 国を 旅行したいです。",
+              hint: "Dùng もし ... たら để nhấn mạnh giả định.",
+              breakdown: "もし 1億円 あったら (nếu (giả sử) có 100 triệu yên) + いろいろな 国を 旅行したいです (muốn đi du lịch nhiều nước).",
+            },
+            {
+              id: "l25-sp6",
+              vi: "Nếu (người) bạn không đến đúng giờ hẹn thì anh/chị sẽ làm gì?",
+              jp: "友達が 約束の 時間に 来なかったら、どう しますか。",
+              hint: "Chủ ngữ của mệnh đề phụ (友達) dùng trợ từ が, khác với chủ ngữ ẩn của mệnh đề chính.",
+              breakdown: "友達が 約束の 時間に 来なかったら (nếu bạn không đến đúng giờ hẹn) + どう しますか (sẽ làm gì?).",
+            },
+          ],
+        },
+        {
+          type: "exercise-reorder-sentence",
+          title: "Bài tập 4: Sắp xếp từ thành câu hoàn chỉnh (Luyện tập cấu trúc Bài 25)",
+          instruction: "Bấm vào các từ gợi ý theo đúng thứ tự ngữ pháp để ghép thành câu tiếng Nhật hoàn chỉnh.",
+          questions: [
+            {
+              id: "l25-ro1",
+              words: ["旅行します", "お金が", "あったら"],
+              correctOrder: ["お金が", "あったら", "旅行します"],
+              fullSentenceJp: "お金が あったら、旅行します。",
+              fullSentenceVi: "Nếu có tiền thì tôi sẽ đi du lịch.",
+              explanation: "Điều kiện (お金が あったら) + Mệnh đề chính (旅行します).",
+            },
+            {
+              id: "l25-ro2",
+              words: ["ください", "暇だったら", "手伝って"],
+              correctOrder: ["暇だったら", "手伝って", "ください"],
+              fullSentenceJp: "暇だったら、手伝って ください。",
+              fullSentenceVi: "Nếu anh/chị rảnh thì hãy giúp tôi.",
+              explanation: "Điều kiện (暇だったら) + Nhờ vả (手伝って ください).",
+            },
+            {
+              id: "l25-ro3",
+              words: ["出かけます", "雨が", "降っても"],
+              correctOrder: ["雨が", "降っても", "出かけます"],
+              fullSentenceJp: "雨が 降っても、出かけます。",
+              fullSentenceVi: "Cho dù trời mưa thì tôi cũng đi ra ngoài.",
+              explanation: "Điều kiện nhượng bộ (雨が 降っても) + Mệnh đề chính (出かけます).",
+            },
+            {
+              id: "l25-ro4",
+              words: ["旅行したいです", "いろいろな 国を", "もし 1億円", "あったら"],
+              correctOrder: ["もし 1億円", "あったら", "いろいろな 国を", "旅行したいです"],
+              fullSentenceJp: "もし 1億円 あったら、いろいろな 国を 旅行したいです。",
+              fullSentenceVi: "Nếu có 100 triệu yên thì tôi muốn đi du lịch đến nhiều nước.",
+              explanation: "もし + Điều kiện (もし 1億円 あったら) + Tân ngữ (いろいろな 国を) + Nguyện vọng (旅行したいです).",
+            },
+            {
+              id: "l25-ro5",
+              words: ["どう しますか", "来なかったら", "約束の 時間に", "友達が"],
+              correctOrder: ["友達が", "約束の 時間に", "来なかったら", "どう しますか"],
+              fullSentenceJp: "友達が 約束の 時間に 来なかったら、どう しますか。",
+              fullSentenceVi: "Nếu (người) bạn không đến đúng giờ hẹn thì anh/chị sẽ làm gì?",
+              explanation: "Chủ ngữ mệnh đề phụ + が (友達が) + Thời điểm (約束の 時間に) + Điều kiện phủ định (来なかったら) + Câu hỏi (どう しますか).",
+            },
+          ],
+        },
+      ],
+    },
+  ],
+};

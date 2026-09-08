@@ -482,6 +482,17 @@ export const lesson2: Lesson = {
       title: "V. Bài tập & Luyện tập",
       blocks: [
         {
+          type: "listening-audio-list",
+          title: "Bài nghe trong sách giáo trình (Bài 2)",
+          instruction: "Nghe và làm các bài tập nghe hiểu (問題) tương ứng trong sách.",
+          items: [
+            {
+              label: "問題 3 (Mondai 3)",
+              url: "/audio/lessons/lesson-2/第2課 問題 3 Mondai 3.mp3",
+            },
+          ],
+        },
+        {
           type: "exercise-fill-in-blank",
           title: "Bài tập 1: Phân biệt chỉ từ これ, それ, あれ & この, その, あの",
           instruction: "Chọn chỉ từ phù hợp nhất dựa trên khoảng cách vị trí của đồ vật.",
