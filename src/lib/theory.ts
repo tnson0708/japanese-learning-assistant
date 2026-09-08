@@ -102,11 +102,57 @@ export interface ReorderQuestionItem {
   explanation?: string;
 }
 
+/** The worked example row of a picture-cued particle+sentence writing drill (e.g. 電車（で） 会社へ行きます。). */
+export interface PictureFillExample {
+  cue: string;
+  particle: string;
+  sentence: string;
+}
+
+/**
+ * One numbered blank row: 1-2 cue words each get a small particle blank
+ * (e.g. "友達（　）"), followed by one shared long blank line for the
+ * learner's own full sentence. There's no fixed correct sentence — only the
+ * picture (not reproducible here as an exact scan) determines it.
+ */
+export interface PictureFillItem {
+  id: string;
+  num: string;
+  cues: string[];
+}
+
+/**
+ * One numbered row of a picture-cued drill where the surrounding sentence is
+ * fixed (a common verb shared by every item, e.g. "～を　貸します。") and only
+ * the object noun in the middle is blank — the opposite shape from
+ * `PictureFillItem`, where the particle was the blank instead.
+ */
+export interface CuedWriteItem {
+  id: string;
+  num: string;
+  prefixJp: string;
+}
+
 /** One free-write blank line inside a self-introduction template (e.g. "わたしは ___です。"). */
 export interface SelfIntroLine {
   before: string;
   after?: string;
   placeholder: string;
+}
+
+/** One reply line inside a dialogue-completion item — fixed lead-in text, then a blank, then a period. */
+export interface DialogueCompletionLine {
+  prefixJp: string;
+  /** Filled in for the worked example line; left undefined for the learner's own items. */
+  answerJp?: string;
+}
+
+/** One question + reply-lines set (練習C-style もう／まだ drill). */
+export interface DialogueCompletionItem {
+  id: string;
+  num: string;
+  questionJp: string;
+  lines: DialogueCompletionLine[];
 }
 
 /**
@@ -136,7 +182,10 @@ export type ListeningPictureIcon =
 export interface ListeningPictureOption {
   id: string;
   label: string;
-  icon: ListeningPictureIcon;
+  /** Built-in placeholder icon, used when no real image is available yet. Ignored once `imageUrl` is set. */
+  icon?: ListeningPictureIcon;
+  /** Path under /public to the textbook's actual picture, once someone saves it into the repo. */
+  imageUrl?: string;
   badgeName?: string;
   badgeNumber?: string;
 }
@@ -150,13 +199,15 @@ export interface ListeningPictureGroup {
   correctOptionId?: string;
 }
 
-/** One ○/× (true/false) listening item (Mondai-3-style). Examples are pre-marked and shown as reference, not clickable. */
+/** One ○/× (true/false) item (Mondai-3-style, or a reading-comprehension statement). Examples are pre-marked and shown as reference, not clickable. */
 export interface ListeningTrueFalseItem {
   id: string;
   num: string;
   isExample?: boolean;
   exampleAnswer?: boolean;
   correctAnswer?: boolean;
+  /** The written Japanese statement to judge — used by the reading-comprehension variant, where (unlike audio) the statement is shown, not just heard. */
+  statementJp?: string;
 }
 
 /**
@@ -265,7 +316,7 @@ export type ContentBlock =
       title: string;
       instruction?: string;
       audioUrl?: string;
-      exampleJp: string;
+      exampleJp?: string;
       exampleVi?: string;
       items: ListeningDictationItem[];
     }
@@ -292,6 +343,45 @@ export type ContentBlock =
       closingText?: string;
       sampleAnswerJp?: string;
       sampleAnswerVi?: string;
+    }
+  | {
+      type: "exercise-reading-comprehension";
+      title: string;
+      instruction?: string;
+      passageTitle?: string;
+      passageJp: string;
+      passageVi?: string;
+      /** Path under /public to an illustration accompanying the passage, once someone saves it into the repo. */
+      passageImageUrl?: string;
+      items: ListeningTrueFalseItem[];
+    }
+  | {
+      type: "exercise-picture-particle-write";
+      title: string;
+      instruction?: string;
+      /** Path under /public to the textbook's picture strip, once someone saves it into the repo. */
+      imageUrl?: string;
+      imageAlt?: string;
+      example: PictureFillExample;
+      items: PictureFillItem[];
+    }
+  | {
+      type: "exercise-picture-cued-write";
+      title: string;
+      instruction?: string;
+      imageUrl?: string;
+      imageAlt?: string;
+      /** Fixed text shared by every row, shown after the blank object noun (e.g. "を 貸します"). */
+      suffixJp: string;
+      example: { prefixJp: string; answerJp: string };
+      items: CuedWriteItem[];
+    }
+  | {
+      type: "exercise-dialogue-completion";
+      title: string;
+      instruction?: string;
+      example: DialogueCompletionItem;
+      items: DialogueCompletionItem[];
     };
 
 export type SectionId =

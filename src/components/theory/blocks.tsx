@@ -10,11 +10,15 @@ import {
   PictureCardsExerciseBlock,
   ListeningAudioListBlock,
   SelfIntroExerciseBlock,
+  PictureParticleWriteBlock,
+  PictureCuedWriteBlock,
+  DialogueCompletionBlock,
 } from "@/components/theory/exercise-blocks";
 import {
   ListeningDictationBlock,
   ListeningPictureChoiceBlock,
   ListeningTrueFalseBlock,
+  ReadingComprehensionBlock,
 } from "@/components/theory/listening-exercise-blocks";
 import { TranslationBlock } from "@/components/theory/translation-blocks";
 import type { ContentBlock, VocabItem } from "@/lib/theory";
@@ -311,6 +315,50 @@ export function BlockRenderer({ block }: { block: ContentBlock }) {
           closingText={block.closingText}
           sampleAnswerJp={block.sampleAnswerJp}
           sampleAnswerVi={block.sampleAnswerVi}
+        />
+      );
+    case "exercise-reading-comprehension":
+      return (
+        <ReadingComprehensionBlock
+          title={block.title}
+          instruction={block.instruction}
+          passageTitle={block.passageTitle}
+          passageJp={block.passageJp}
+          passageVi={block.passageVi}
+          passageImageUrl={block.passageImageUrl}
+          items={block.items}
+        />
+      );
+    case "exercise-picture-particle-write":
+      return (
+        <PictureParticleWriteBlock
+          title={block.title}
+          instruction={block.instruction}
+          imageUrl={block.imageUrl}
+          imageAlt={block.imageAlt}
+          example={block.example}
+          items={block.items}
+        />
+      );
+    case "exercise-picture-cued-write":
+      return (
+        <PictureCuedWriteBlock
+          title={block.title}
+          instruction={block.instruction}
+          imageUrl={block.imageUrl}
+          imageAlt={block.imageAlt}
+          suffixJp={block.suffixJp}
+          example={block.example}
+          items={block.items}
+        />
+      );
+    case "exercise-dialogue-completion":
+      return (
+        <DialogueCompletionBlock
+          title={block.title}
+          instruction={block.instruction}
+          example={block.example}
+          items={block.items}
         />
       );
     default:

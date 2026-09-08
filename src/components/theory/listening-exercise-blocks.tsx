@@ -31,7 +31,7 @@ export function ListeningDictationBlock({
   title: string;
   instruction?: string;
   audioUrl?: string;
-  exampleJp: string;
+  exampleJp?: string;
   exampleVi?: string;
   items: ListeningDictationItem[];
 }) {
@@ -68,11 +68,13 @@ export function ListeningDictationBlock({
       <CardContent className="flex flex-col gap-4">
         <ExerciseAudioPlayer audioUrl={audioUrl} />
 
-        <div className="flex flex-col gap-1.5 rounded-lg border border-dashed border-primary/30 bg-primary/5 px-3.5 py-2.5">
-          <span className="text-[10px] font-bold uppercase tracking-wider text-primary">Ví dụ (例)</span>
-          <JapaneseText text={exampleJp} className="text-sm font-semibold text-foreground" />
-          {exampleVi && <p className="text-xs text-muted-foreground">{exampleVi}</p>}
-        </div>
+        {exampleJp && (
+          <div className="flex flex-col gap-1.5 rounded-lg border border-dashed border-primary/30 bg-primary/5 px-3.5 py-2.5">
+            <span className="text-[10px] font-bold uppercase tracking-wider text-primary">Ví dụ (例)</span>
+            <JapaneseText text={exampleJp} className="text-sm font-semibold text-foreground" />
+            {exampleVi && <p className="text-xs text-muted-foreground">{exampleVi}</p>}
+          </div>
+        )}
 
         <div className="flex flex-col gap-2.5">
           {items.map((item) => {
@@ -166,13 +168,34 @@ function ClockIcon() {
 
 function PictureIcon({
   icon,
+  imageUrl,
   badgeName,
   badgeNumber,
 }: {
-  icon: ListeningPictureIcon;
+  icon?: ListeningPictureIcon;
+  imageUrl?: string;
   badgeName?: string;
   badgeNumber?: string;
 }) {
+  if (imageUrl) {
+    return (
+      // eslint-disable-next-line @next/next/no-img-element
+      <img
+        src={encodeURI(imageUrl)}
+        alt={badgeName ? `${badgeName} ${badgeNumber ?? ""}` : "Tranh minh họa"}
+        className="aspect-square w-full rounded-md border object-cover"
+      />
+    );
+  }
+
+  if (!icon) {
+    return (
+      <div className="flex aspect-square w-full items-center justify-center rounded-md border border-dashed bg-muted/30 text-[10px] italic text-muted-foreground">
+        Chưa có tranh
+      </div>
+    );
+  }
+
   if (icon === "name-badge") {
     return (
       <svg viewBox="0 0 84 60" className="h-16 w-full rounded-md" role="img" aria-label={`Thẻ tên ${badgeName ?? ""} ${badgeNumber ?? ""}`}>
@@ -341,7 +364,7 @@ export function ListeningPictureChoiceBlock({
                           <Square className="size-3.5 text-muted-foreground/50" />
                         )}
                       </div>
-                      <PictureIcon icon={opt.icon} badgeName={opt.badgeName} badgeNumber={opt.badgeNumber} />
+                      <PictureIcon icon={opt.icon} imageUrl={opt.imageUrl} badgeName={opt.badgeName} badgeNumber={opt.badgeNumber} />
                       {opt.label && (
                         <span className="text-[10px] text-muted-foreground">{opt.label}</span>
                       )}
@@ -469,6 +492,157 @@ export function ListeningTrueFalseBlock({
             Đáp án đúng/sai sẽ được cập nhật sau khi có sách giải — trước mắt hãy tự đối chiếu khi nghe lại.
           </p>
         )}
+      </CardContent>
+    </Card>
+  );
+}
+
+/**
+ * 4. Reading Comprehension + True/False Drill: a short passage followed by
+ * ○/× statements the learner checks against it. Unlike the listening
+ * true/false drill, correctness here is derivable straight from the text,
+ * so `correctAnswer` is expected to be filled in for every item.
+ */
+export function ReadingComprehensionBlock({
+  title,
+  instruction,
+  passageTitle,
+  passageJp,
+  passageVi,
+  passageImageUrl,
+  items,
+}: {
+  title: string;
+  instruction?: string;
+  passageTitle?: string;
+  passageJp: string;
+  passageVi?: string;
+  passageImageUrl?: string;
+  items: ListeningTrueFalseItem[];
+}) {
+  const [answers, setAnswers] = useState<Record<string, boolean>>({});
+  const [showTranslation, setShowTranslation] = useState(false);
+
+  const blockId = `exercise-reading-${items[0]?.id || title.replace(/\s+/g, "-")}`;
+  const examples = items.filter((it) => it.isExample);
+  const questions = items.filter((it) => !it.isExample);
+
+  return (
+    <Card id={blockId} className="border-primary/20 shadow-xs exercise-card-block print:border-gray-400 print:shadow-none print:break-inside-avoid print:bg-white">
+      <CardHeader className="pb-3 print:pb-1">
+        <div className="flex items-center gap-2">
+          <Volume2 className="size-4 text-primary print:hidden opacity-0" />
+          <CardTitle className="text-base font-semibold text-foreground print:text-black print:font-bold">
+            {title}
+          </CardTitle>
+          <button
+            type="button"
+            onClick={() => printSingleExercise(blockId)}
+            className="rounded-full p-1 text-muted-foreground/70 transition-colors hover:bg-accent hover:text-primary cursor-pointer print:hidden"
+            title="In riêng bài tập này (Print only this exercise)"
+          >
+            <Printer className="size-3.5" />
+          </button>
+        </div>
+        {instruction && (
+          <p className="text-xs text-muted-foreground print:text-gray-700">{instruction}</p>
+        )}
+      </CardHeader>
+
+      <CardContent className="flex flex-col gap-4">
+        <div className="flex flex-col gap-2 rounded-xl border bg-muted/20 p-3.5">
+          {passageTitle && (
+            <span className="text-xs font-bold uppercase tracking-wider text-primary">{passageTitle}</span>
+          )}
+          {passageImageUrl && (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              src={encodeURI(passageImageUrl)}
+              alt={passageTitle || "Tranh minh họa"}
+              className="max-h-48 w-fit rounded-lg border object-contain"
+            />
+          )}
+          <JapaneseText text={passageJp} className="text-sm leading-loose text-foreground whitespace-pre-line" />
+          {passageVi && (
+            <>
+              <Button
+                type="button"
+                variant="ghost"
+                size="sm"
+                onClick={() => setShowTranslation((s) => !s)}
+                className="h-6 w-fit px-2 text-[11px] print:hidden"
+              >
+                {showTranslation ? "Ẩn bản dịch" : "Xem bản dịch"}
+              </Button>
+              {showTranslation && (
+                <p className="whitespace-pre-line text-xs italic text-muted-foreground">{passageVi}</p>
+              )}
+            </>
+          )}
+        </div>
+
+        {examples.length > 0 && (
+          <div className="flex flex-wrap items-center gap-4 rounded-lg border border-dashed bg-muted/30 px-3.5 py-2">
+            {examples.map((ex) => (
+              <span key={ex.id} className="flex items-center gap-1.5 text-xs font-semibold text-muted-foreground">
+                {ex.num}:
+                <span
+                  className={`flex size-6 items-center justify-center rounded-full border-2 text-sm font-bold ${
+                    ex.exampleAnswer
+                      ? "border-emerald-500 text-emerald-600"
+                      : "border-red-500 text-red-600"
+                  }`}
+                >
+                  {ex.exampleAnswer ? "○" : "×"}
+                </span>
+              </span>
+            ))}
+          </div>
+        )}
+
+        <div className="flex flex-col gap-2">
+          {questions.map((q) => {
+            const picked = answers[q.id];
+            const graded = picked !== undefined && q.correctAnswer !== undefined;
+            const isRight = graded && picked === q.correctAnswer;
+
+            return (
+              <div
+                key={q.id}
+                className="flex items-center gap-2 rounded-lg border bg-card px-3 py-2 shadow-2xs"
+              >
+                <span className="text-xs font-bold text-foreground">{q.num}</span>
+                {q.statementJp && (
+                  <JapaneseText text={q.statementJp} className="flex-1 text-sm text-foreground" />
+                )}
+                <div className="flex shrink-0 gap-1.5">
+                  {(["○", "×"] as const).map((sym) => {
+                    const val = sym === "○";
+                    const isPicked = picked === val;
+                    return (
+                      <button
+                        key={sym}
+                        type="button"
+                        onClick={() => setAnswers((prev) => ({ ...prev, [q.id]: val }))}
+                        className={`flex size-8 items-center justify-center rounded-full border-2 text-base font-bold transition-colors cursor-pointer ${
+                          isPicked
+                            ? graded
+                              ? isRight
+                                ? "border-emerald-500 bg-emerald-500/10 text-emerald-600"
+                                : "border-red-500 bg-red-500/10 text-red-600"
+                              : "border-primary bg-primary/10 text-primary"
+                            : "border-border/70 text-muted-foreground hover:border-primary/40"
+                        }`}
+                      >
+                        {sym}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            );
+          })}
+        </div>
       </CardContent>
     </Card>
   );

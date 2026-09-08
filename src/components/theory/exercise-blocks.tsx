@@ -15,6 +15,10 @@ import type {
   PictureDrillGroup,
   ListeningTrackItem,
   SelfIntroLine,
+  PictureFillExample,
+  PictureFillItem,
+  CuedWriteItem,
+  DialogueCompletionItem,
 } from "@/lib/theory";
 
 export function printSingleExercise(blockId: string) {
@@ -1105,6 +1109,344 @@ export function SelfIntroExerciseBlock({
             {sampleAnswerVi && <p className="mt-1 text-xs text-muted-foreground">{sampleAnswerVi}</p>}
           </div>
         )}
+      </CardContent>
+    </Card>
+  );
+}
+
+/**
+ * 7. Picture-Cued Particle + Sentence Writing Drill: shows the textbook's
+ * picture strip (once someone saves it as an asset — otherwise a
+ * placeholder), a worked example, then rows where the learner fills in a
+ * short particle blank per cue word plus one free sentence blank. There's
+ * no single correct sentence (it depends on the picture), so this is a
+ * write-only practice with no grading/reveal.
+ */
+export function PictureParticleWriteBlock({
+  title,
+  instruction,
+  imageUrl,
+  imageAlt,
+  example,
+  items,
+}: {
+  title: string;
+  instruction?: string;
+  imageUrl?: string;
+  imageAlt?: string;
+  example: PictureFillExample;
+  items: PictureFillItem[];
+}) {
+  const [particleDrafts, setParticleDrafts] = useState<Record<string, string>>({});
+  const [sentenceDrafts, setSentenceDrafts] = useState<Record<string, string>>({});
+
+  const blockId = `exercise-picture-write-${items[0]?.id || title.replace(/\s+/g, "-")}`;
+
+  return (
+    <Card id={blockId} className="border-primary/20 shadow-xs exercise-card-block print:border-gray-400 print:shadow-none print:break-inside-avoid print:bg-white">
+      <CardHeader className="pb-3 print:pb-1">
+        <div className="flex items-center gap-2">
+          <Sparkles className="size-4 text-primary print:hidden" />
+          <CardTitle className="text-base font-semibold text-foreground print:text-black print:font-bold">
+            {title}
+          </CardTitle>
+          <button
+            type="button"
+            onClick={() => printSingleExercise(blockId)}
+            className="rounded-full p-1 text-muted-foreground/70 transition-colors hover:bg-accent hover:text-primary cursor-pointer print:hidden"
+            title="In riêng bài tập này (Print only this exercise)"
+          >
+            <Printer className="size-3.5" />
+          </button>
+        </div>
+        {instruction && (
+          <p className="text-xs text-muted-foreground print:text-gray-700">{instruction}</p>
+        )}
+      </CardHeader>
+
+      <CardContent className="flex flex-col gap-4">
+        {imageUrl ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            src={encodeURI(imageUrl)}
+            alt={imageAlt || "Tranh minh họa bài tập"}
+            className="w-full rounded-lg border object-contain"
+          />
+        ) : (
+          <div className="flex items-center gap-1.5 rounded-lg border border-dashed bg-muted/30 px-3.5 py-2.5 text-xs italic text-muted-foreground print:hidden">
+            <HelpCircle className="size-3.5 shrink-0" />
+            Tranh minh họa của sách chưa được thêm vào — hãy tự xem tranh trong sách khi làm bài.
+          </div>
+        )}
+
+        <div className="flex flex-wrap items-baseline gap-1.5 rounded-lg border border-dashed border-primary/30 bg-primary/5 px-3.5 py-2.5 text-sm">
+          <span className="text-[10px] font-bold uppercase tracking-wider text-primary mr-1">例</span>
+          <JapaneseText text={example.cue} className="font-semibold text-foreground" />
+          <span className="font-semibold text-primary">（{example.particle}）</span>
+          <JapaneseText text={example.sentence} className="font-medium text-foreground" />
+        </div>
+
+        <div className="flex flex-col gap-2.5">
+          {items.map((item) => (
+            <div
+              key={item.id}
+              className="flex flex-wrap items-center gap-1.5 rounded-lg border bg-card p-3 shadow-2xs print:border-gray-300 print:bg-white"
+            >
+              <span className="flex size-6 shrink-0 items-center justify-center rounded-full bg-muted text-xs font-bold text-foreground">
+                {item.num}
+              </span>
+              {item.cues.map((cue, i) => (
+                <span key={i} className="flex items-center gap-1">
+                  <JapaneseText text={cue} className="font-medium text-foreground" />
+                  <span className="text-foreground">（</span>
+                  <input
+                    type="text"
+                    value={particleDrafts[`${item.id}-${i}`] || ""}
+                    onChange={(e) =>
+                      setParticleDrafts((prev) => ({ ...prev, [`${item.id}-${i}`]: e.target.value }))
+                    }
+                    className="w-10 border-b border-dashed border-muted-foreground/40 bg-transparent text-center text-sm text-foreground outline-hidden focus:border-primary print:hidden"
+                  />
+                  <span className="hidden print:inline font-mono text-xs">&nbsp;&nbsp;&nbsp;</span>
+                  <span className="text-foreground">）</span>
+                </span>
+              ))}
+              <input
+                type="text"
+                value={sentenceDrafts[item.id] || ""}
+                onChange={(e) => setSentenceDrafts((prev) => ({ ...prev, [item.id]: e.target.value }))}
+                placeholder="Viết câu hoàn chỉnh dựa theo tranh..."
+                className="min-w-40 flex-1 border-b border-dashed border-muted-foreground/40 bg-transparent px-1 py-0.5 text-sm text-foreground outline-hidden focus:border-primary print:hidden"
+              />
+              <span className="hidden print:inline font-mono text-xs">________________________</span>
+              <span className="text-foreground">。</span>
+            </div>
+          ))}
+        </div>
+      </CardContent>
+    </Card>
+  );
+}
+
+/**
+ * 8. Picture-Cued Object-Noun Writing Drill: every row shares the same
+ * fixed surrounding sentence (e.g. "～に　___を　貸します。") — only the middle
+ * object noun changes based on the picture. The mirror image of
+ * PictureParticleWriteBlock, where the particle (not the noun) was blank.
+ */
+export function PictureCuedWriteBlock({
+  title,
+  instruction,
+  imageUrl,
+  imageAlt,
+  suffixJp,
+  example,
+  items,
+}: {
+  title: string;
+  instruction?: string;
+  imageUrl?: string;
+  imageAlt?: string;
+  suffixJp: string;
+  example: { prefixJp: string; answerJp: string };
+  items: CuedWriteItem[];
+}) {
+  const [drafts, setDrafts] = useState<Record<string, string>>({});
+
+  const blockId = `exercise-picture-cued-${items[0]?.id || title.replace(/\s+/g, "-")}`;
+
+  return (
+    <Card id={blockId} className="border-primary/20 shadow-xs exercise-card-block print:border-gray-400 print:shadow-none print:break-inside-avoid print:bg-white">
+      <CardHeader className="pb-3 print:pb-1">
+        <div className="flex items-center gap-2">
+          <Sparkles className="size-4 text-primary print:hidden" />
+          <CardTitle className="text-base font-semibold text-foreground print:text-black print:font-bold">
+            {title}
+          </CardTitle>
+          <button
+            type="button"
+            onClick={() => printSingleExercise(blockId)}
+            className="rounded-full p-1 text-muted-foreground/70 transition-colors hover:bg-accent hover:text-primary cursor-pointer print:hidden"
+            title="In riêng bài tập này (Print only this exercise)"
+          >
+            <Printer className="size-3.5" />
+          </button>
+        </div>
+        {instruction && (
+          <p className="text-xs text-muted-foreground print:text-gray-700">{instruction}</p>
+        )}
+      </CardHeader>
+
+      <CardContent className="flex flex-col gap-4">
+        {imageUrl ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            src={encodeURI(imageUrl)}
+            alt={imageAlt || "Tranh minh họa bài tập"}
+            className="w-full rounded-lg border object-contain"
+          />
+        ) : (
+          <div className="flex items-center gap-1.5 rounded-lg border border-dashed bg-muted/30 px-3.5 py-2.5 text-xs italic text-muted-foreground print:hidden">
+            <HelpCircle className="size-3.5 shrink-0" />
+            Tranh minh họa của sách chưa được thêm vào — hãy tự xem tranh trong sách khi làm bài.
+          </div>
+        )}
+
+        <div className="flex flex-wrap items-baseline gap-1.5 rounded-lg border border-dashed border-primary/30 bg-primary/5 px-3.5 py-2.5 text-sm">
+          <span className="text-[10px] font-bold uppercase tracking-wider text-primary mr-1">例</span>
+          <JapaneseText text={example.prefixJp} className="font-semibold text-foreground" />
+          <JapaneseText text={example.answerJp} className="font-semibold text-primary" />
+          <JapaneseText text={suffixJp} className="font-medium text-foreground" />
+          <span className="text-foreground">。</span>
+        </div>
+
+        <div className="flex flex-col gap-2.5">
+          {items.map((item) => (
+            <div
+              key={item.id}
+              className="flex flex-wrap items-center gap-1.5 rounded-lg border bg-card p-3 shadow-2xs print:border-gray-300 print:bg-white"
+            >
+              <span className="flex size-6 shrink-0 items-center justify-center rounded-full bg-muted text-xs font-bold text-foreground">
+                {item.num}
+              </span>
+              <JapaneseText text={item.prefixJp} className="font-medium text-foreground" />
+              <input
+                type="text"
+                value={drafts[item.id] || ""}
+                onChange={(e) => setDrafts((prev) => ({ ...prev, [item.id]: e.target.value }))}
+                placeholder="..."
+                className="w-32 border-b border-dashed border-muted-foreground/40 bg-transparent px-1 py-0.5 text-sm text-foreground outline-hidden focus:border-primary print:hidden"
+              />
+              <span className="hidden print:inline font-mono text-xs">________________</span>
+              <JapaneseText text={suffixJp} className="font-medium text-foreground" />
+              <span className="text-foreground">。</span>
+            </div>
+          ))}
+        </div>
+      </CardContent>
+    </Card>
+  );
+}
+
+/**
+ * 9. Dialogue Completion Drill (練習C-style もう／まだ): a worked example
+ * shows the question plus its reply lines fully solved; each item repeats
+ * the question + reply-line shape with blanks for the learner to fill,
+ * revealing the confident grammar-derived answer per item.
+ */
+export function DialogueCompletionBlock({
+  title,
+  instruction,
+  example,
+  items,
+}: {
+  title: string;
+  instruction?: string;
+  example: DialogueCompletionItem;
+  items: DialogueCompletionItem[];
+}) {
+  const [drafts, setDrafts] = useState<Record<string, string>>({});
+  const [revealed, setRevealed] = useState<Record<string, boolean>>({});
+
+  const toggleReveal = (id: string) => setRevealed((prev) => ({ ...prev, [id]: !prev[id] }));
+
+  const blockId = `exercise-dialogue-${items[0]?.id || title.replace(/\s+/g, "-")}`;
+
+  return (
+    <Card id={blockId} className="border-primary/20 shadow-xs exercise-card-block print:border-gray-400 print:shadow-none print:break-inside-avoid print:bg-white">
+      <CardHeader className="pb-3 print:pb-1">
+        <div className="flex items-center gap-2">
+          <Sparkles className="size-4 text-primary print:hidden" />
+          <CardTitle className="text-base font-semibold text-foreground print:text-black print:font-bold">
+            {title}
+          </CardTitle>
+          <button
+            type="button"
+            onClick={() => printSingleExercise(blockId)}
+            className="rounded-full p-1 text-muted-foreground/70 transition-colors hover:bg-accent hover:text-primary cursor-pointer print:hidden"
+            title="In riêng bài tập này (Print only this exercise)"
+          >
+            <Printer className="size-3.5" />
+          </button>
+        </div>
+        {instruction && (
+          <p className="text-xs text-muted-foreground print:text-gray-700">{instruction}</p>
+        )}
+      </CardHeader>
+
+      <CardContent className="flex flex-col gap-4">
+        <div className="flex flex-col gap-1.5 rounded-lg border border-dashed border-primary/30 bg-primary/5 px-3.5 py-2.5">
+          <span className="text-[10px] font-bold uppercase tracking-wider text-primary">Ví dụ (例)</span>
+          <JapaneseText text={example.questionJp} className="text-sm font-semibold text-foreground" />
+          {example.lines.map((line, i) => (
+            <div key={i} className="flex flex-wrap items-baseline gap-1 pl-3 text-sm">
+              <JapaneseText text={line.prefixJp} className="font-medium text-foreground" />
+              <JapaneseText text={line.answerJp || ""} className="font-semibold text-primary" />
+              <span className="text-foreground">。</span>
+            </div>
+          ))}
+        </div>
+
+        <div className="flex flex-col gap-2.5">
+          {items.map((item) => {
+            const isRevealed = !!revealed[item.id];
+            return (
+              <div
+                key={item.id}
+                className="flex flex-col gap-2 rounded-lg border bg-card p-3 shadow-2xs print:border-gray-300 print:bg-white"
+              >
+                <div className="flex items-center gap-2">
+                  <span className="flex size-6 shrink-0 items-center justify-center rounded-full bg-muted text-xs font-bold text-foreground">
+                    {item.num}
+                  </span>
+                  <JapaneseText text={item.questionJp} className="text-sm font-medium text-foreground" />
+                  <Button
+                    type="button"
+                    variant={isRevealed ? "secondary" : "outline"}
+                    size="sm"
+                    onClick={() => toggleReveal(item.id)}
+                    className="h-7 shrink-0 px-2 text-[11px] font-semibold print:hidden ml-auto"
+                  >
+                    {isRevealed ? "Ẩn" : "Xem đáp án"}
+                  </Button>
+                </div>
+
+                {item.lines.map((line, i) => {
+                  const draftKey = `${item.id}-${i}`;
+                  return (
+                    <div key={i} className="flex flex-wrap items-baseline gap-1 pl-8">
+                      <JapaneseText text={line.prefixJp} className="text-sm font-medium text-foreground" />
+                      <input
+                        type="text"
+                        value={drafts[draftKey] || ""}
+                        onChange={(e) => setDrafts((prev) => ({ ...prev, [draftKey]: e.target.value }))}
+                        className="min-w-24 flex-1 border-b border-dashed border-muted-foreground/40 bg-transparent px-1 py-0.5 text-sm text-foreground outline-hidden focus:border-primary print:hidden"
+                      />
+                      <span className="hidden print:inline font-mono text-xs">________________</span>
+                      <span className="text-foreground">。</span>
+                    </div>
+                  );
+                })}
+
+                {isRevealed && (
+                  <div className="ml-8 flex flex-col gap-1 border-l-2 border-primary/50 pl-3 py-0.5 animate-in fade-in duration-150">
+                    {item.lines.map((line, i) => (
+                      <div key={i} className="flex flex-wrap items-baseline gap-1 text-sm">
+                        <JapaneseText text={line.prefixJp} className="font-medium text-muted-foreground" />
+                        {line.answerJp ? (
+                          <JapaneseText text={line.answerJp} className="font-semibold text-primary" />
+                        ) : (
+                          <span className="italic text-muted-foreground">(chưa có đáp án)</span>
+                        )}
+                        <span className="text-foreground">。</span>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
       </CardContent>
     </Card>
   );
