@@ -10,6 +10,8 @@ import { getAdjacentLessons, getLessonById } from "@/lib/theory";
 import { useLanguage } from "@/lib/language-context";
 
 import { Lesson1VocabView } from "@/components/theory/lesson1-vocab-view";
+import { Lesson2VocabView } from "@/components/theory/lesson2-vocab-view";
+import { LessonVocabView } from "@/components/theory/lesson-vocab-view";
 
 const sectionIcons: Record<string, typeof BookOpen> = {
   vocabulary: BookOpen,
@@ -114,6 +116,10 @@ export default function TheoryLessonPage() {
 
             {lessonId === 1 && section.id === "vocabulary" ? (
               <Lesson1VocabView />
+            ) : lessonId === 2 && section.id === "vocabulary" ? (
+              <Lesson2VocabView />
+            ) : section.id === "vocabulary" ? (
+              <LessonVocabView lesson={lesson} />
             ) : (
               section.blocks.map((block, i) => (
                 <BlockRenderer key={i} block={block} />
@@ -123,15 +129,18 @@ export default function TheoryLessonPage() {
         ))}
       </Tabs>
 
-      <div className="flex items-center justify-between border-t pt-4 print:hidden">
+      <div className="flex items-center justify-between gap-3 border-t border-border/60 pt-4 print:hidden">
         {prev ? (
           <Button
             render={<Link href={`/theory/${prev.id}`} />}
             nativeButton={false}
             variant="ghost"
             size="sm"
+            className="max-w-[48%] cursor-pointer gap-1.5 font-semibold text-xs sm:text-sm text-muted-foreground hover:text-foreground"
+            title={prev.title}
           >
-            <ChevronLeft className="size-4" /> {prev.title}
+            <ChevronLeft className="size-4 shrink-0" />
+            <span className="truncate">{prev.title.split("—")[0]?.trim() || `Bài ${prev.id}`}</span>
           </Button>
         ) : (
           <span />
@@ -142,8 +151,11 @@ export default function TheoryLessonPage() {
             nativeButton={false}
             variant="ghost"
             size="sm"
+            className="max-w-[48%] cursor-pointer gap-1.5 font-semibold text-xs sm:text-sm text-muted-foreground hover:text-foreground ml-auto"
+            title={next.title}
           >
-            {next.title} <ChevronRight className="size-4" />
+            <span className="truncate">{next.title.split("—")[0]?.trim() || `Bài ${next.id}`}</span>
+            <ChevronRight className="size-4 shrink-0" />
           </Button>
         ) : (
           <span />

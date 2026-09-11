@@ -6,7 +6,6 @@ import {
   Building2,
   Cake,
   Globe2,
-  Search,
   Subtitles,
   Volume2,
 } from "lucide-react";
@@ -203,8 +202,6 @@ const CONVERSATION_PHRASES = [
 ];
 
 export function Lesson1VocabView() {
-  const [searchQuery, setSearchQuery] = useState("");
-  const [activeCategory, setActiveCategory] = useState<string>("all");
   const [showFurigana, setShowFurigana] = useState(true);
 
   // Play audio for all main words sequentially or play single word
@@ -225,29 +222,9 @@ export function Lesson1VocabView() {
     playNext();
   };
 
-  // Filter words
-  const filteredWords = LESSON_1_WORDS.filter((item) => {
-    if (activeCategory !== "all") {
-      if (activeCategory === "pronoun" && item.category !== "pronoun") return false;
-      if (activeCategory === "job" && item.category !== "job" && item.category !== "location") return false;
-      if (activeCategory === "age" && item.id !== "w16") return false;
-      if (activeCategory === "chat" && item.category !== "response") return false;
-    }
-
-    if (!searchQuery.trim()) return true;
-    const q = searchQuery.toLowerCase().trim();
-    return (
-      item.jp.toLowerCase().includes(q) ||
-      (item.kanji && item.kanji.toLowerCase().includes(q)) ||
-      item.romaji.toLowerCase().includes(q) ||
-      item.meaning.toLowerCase().includes(q) ||
-      (item.note && item.note.toLowerCase().includes(q))
-    );
-  });
-
   return (
     <div className="flex flex-col gap-6 w-full">
-      {/* Top Banner Control Bar (Audio Play & Flashcards & Furigana Toggle) */}
+      {/* Top Banner Control Bar (Audio Play & Furigana Toggle) */}
       <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 bg-card p-4 rounded-xl border border-border/80 shadow-2xs">
         <div className="flex items-center gap-2 text-xs font-semibold text-foreground">
           <BookOpen className="size-4 text-red-600" />
@@ -280,62 +257,9 @@ export function Lesson1VocabView() {
         </div>
       </div>
 
-      {/* Vocabulary Search & Filter Controls */}
-      <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3 bg-card p-3 rounded-xl border border-border/80 shadow-2xs">
-        <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
-          <input
-            type="text"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Tìm theo Hiragana, Kanji hoặc nghĩa tiếng Việt..."
-            className="w-full pl-9 pr-4 py-1.5 text-xs sm:text-sm rounded-lg bg-background border border-border/60 focus:outline-none focus:ring-1 focus:ring-red-500/30 text-foreground placeholder:text-muted-foreground"
-          />
-        </div>
-
-        <div className="flex items-center gap-1.5 overflow-x-auto pb-1 md:pb-0 text-xs">
-          <button
-            type="button"
-            onClick={() => setActiveCategory("all")}
-            className={cn(
-              "px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors cursor-pointer shrink-0",
-              activeCategory === "all"
-                ? "bg-red-600 text-white"
-                : "bg-background border border-border/60 text-muted-foreground hover:bg-accent"
-            )}
-          >
-            Tất cả (35)
-          </button>
-          <button
-            type="button"
-            onClick={() => setActiveCategory("pronoun")}
-            className={cn(
-              "px-3 py-1.5 rounded-lg text-xs font-medium transition-colors cursor-pointer shrink-0",
-              activeCategory === "pronoun"
-                ? "bg-red-600 text-white font-semibold"
-                : "bg-background border border-border/60 text-muted-foreground hover:bg-accent"
-            )}
-          >
-            Đại từ &amp; Người
-          </button>
-          <button
-            type="button"
-            onClick={() => setActiveCategory("job")}
-            className={cn(
-              "px-3 py-1.5 rounded-lg text-xs font-medium transition-colors cursor-pointer shrink-0",
-              activeCategory === "job"
-                ? "bg-red-600 text-white font-semibold"
-                : "bg-background border border-border/60 text-muted-foreground hover:bg-accent"
-            )}
-          >
-            Nghề nghiệp &amp; Nơi chốn
-          </button>
-        </div>
-      </div>
-
       {/* Core Vocabulary Cards Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-        {filteredWords.map((item) => (
+        {LESSON_1_WORDS.map((item) => (
           <div
             key={item.id}
             className="flex items-start justify-between gap-3 p-4 rounded-xl border border-border/80 bg-card shadow-2xs hover:shadow-md transition-all group"
@@ -368,8 +292,8 @@ export function Lesson1VocabView() {
                       {item.jp}
                     </span>
                   )}
-                  <span className="text-xs text-muted-foreground font-mono uppercase">
-                    {item.romaji}
+                  <span className="text-[11px] text-muted-foreground/75 font-mono lowercase">
+                    {item.romaji.toLowerCase()}
                   </span>
                 </div>
 
@@ -391,10 +315,6 @@ export function Lesson1VocabView() {
                 )}
               </div>
             </div>
-
-            <span className="px-2 py-0.5 rounded text-[11px] font-medium bg-muted text-muted-foreground shrink-0">
-              {item.categoryLabel}
-            </span>
           </div>
         ))}
       </div>

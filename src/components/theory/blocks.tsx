@@ -67,6 +67,30 @@ function VocabGroup({ heading, items }: { heading?: string; items: VocabItem[] }
   );
 }
 
+import { cn } from "@/lib/utils";
+
+function CellContent({ cell, isSpeakable }: { cell: string; isSpeakable: boolean }) {
+  if (!cell) return null;
+  const lines = cell.split("\n");
+  const primary = lines[0];
+  const secondary = lines.slice(1).join(" ");
+
+  return (
+    <div className="flex flex-col gap-0.5 leading-tight">
+      {isSpeakable ? (
+        <JapaneseText text={primary} className="font-semibold text-foreground whitespace-nowrap" />
+      ) : (
+        <span className="font-semibold text-foreground whitespace-nowrap">{primary}</span>
+      )}
+      {secondary && (
+        <span className="text-xs font-normal text-muted-foreground leading-snug whitespace-nowrap">
+          {secondary}
+        </span>
+      )}
+    </div>
+  );
+}
+
 function SimpleTable({
   title,
   columns,
@@ -78,6 +102,8 @@ function SimpleTable({
   rows: string[][];
   speakableColumns?: number[];
 }) {
+  const isMultiColumn = columns.length >= 5;
+
   return (
     <div className="flex flex-col gap-3.5">
       {title && (
@@ -86,12 +112,54 @@ function SimpleTable({
           <h3 className="text-sm font-bold text-foreground">{title}</h3>
         </div>
       )}
-      <div className="overflow-x-auto rounded-xl border border-border/80 bg-card shadow-2xs">
-        <table className="w-full text-left text-sm">
+
+      {/* Responsive card layout for multi-column tables on smaller screens */}
+      {isMultiColumn && (
+        <div className="flex flex-col gap-3 md:hidden">
+          {rows.map((row, ri) => (
+            <div
+              key={ri}
+              className="flex flex-col gap-2.5 rounded-xl border border-border/80 bg-card p-3.5 shadow-2xs"
+            >
+              <div className="flex items-center gap-2 border-b border-border/60 pb-2">
+                <span className="rounded-md bg-red-50 dark:bg-red-950/60 px-2.5 py-1 text-xs font-bold text-red-600">
+                  {columns[0]}: {row[0]}
+                </span>
+              </div>
+              <div className="grid grid-cols-2 gap-2.5 pt-1 sm:grid-cols-3">
+                {row.slice(1).map((cell, ci) => {
+                  const actualCi = ci + 1;
+                  const isSpeakable = speakableColumns.includes(actualCi);
+                  return (
+                    <div
+                      key={actualCi}
+                      className="flex flex-col gap-1 rounded-lg bg-muted/30 p-2.5 border border-border/40"
+                    >
+                      <span className="text-[11px] font-bold text-muted-foreground uppercase tracking-wider">
+                        {columns[actualCi]}
+                      </span>
+                      <CellContent cell={cell} isSpeakable={isSpeakable} />
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* Standard Table View (Desktop for 5+ cols, and all screens for 2-4 cols) */}
+      <div
+        className={cn(
+          "overflow-x-auto rounded-xl border border-border/80 bg-card shadow-2xs",
+          isMultiColumn && "hidden md:block"
+        )}
+      >
+        <table className="w-full text-left text-sm border-collapse min-w-max md:min-w-full">
           <thead className="border-b border-border/60 bg-muted/40 text-xs font-bold uppercase tracking-wider text-muted-foreground">
             <tr>
               {columns.map((c, i) => (
-                <th key={i} scope="col" className="px-4 py-3 sm:px-5">
+                <th key={i} scope="col" className="px-4 py-3 sm:px-5 whitespace-nowrap">
                   {c}
                 </th>
               ))}
@@ -103,12 +171,8 @@ function SimpleTable({
                 {row.map((cell, ci) => {
                   const isSpeakable = speakableColumns.includes(ci);
                   return (
-                    <td key={ci} className="px-4 py-3 whitespace-nowrap sm:px-5">
-                      {isSpeakable ? (
-                        <JapaneseText text={cell} className="font-semibold text-foreground" />
-                      ) : (
-                        cell
-                      )}
+                    <td key={ci} className="px-4 py-3 sm:px-5 align-top whitespace-nowrap">
+                      <CellContent cell={cell} isSpeakable={isSpeakable} />
                     </td>
                   );
                 })}
