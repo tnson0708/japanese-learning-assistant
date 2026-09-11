@@ -9,6 +9,8 @@ import { BlockRenderer } from "@/components/theory/blocks";
 import { getAdjacentLessons, getLessonById } from "@/lib/theory";
 import { useLanguage } from "@/lib/language-context";
 
+import { Lesson1VocabView } from "@/components/theory/lesson1-vocab-view";
+
 const sectionIcons: Record<string, typeof BookOpen> = {
   vocabulary: BookOpen,
   translation: Languages,
@@ -110,9 +112,13 @@ export default function TheoryLessonPage() {
               </div>
             )}
 
-            {section.blocks.map((block, i) => (
-              <BlockRenderer key={i} block={block} />
-            ))}
+            {lessonId === 1 && section.id === "vocabulary" ? (
+              <Lesson1VocabView />
+            ) : (
+              section.blocks.map((block, i) => (
+                <BlockRenderer key={i} block={block} />
+              ))
+            )}
           </TabsContent>
         ))}
       </Tabs>

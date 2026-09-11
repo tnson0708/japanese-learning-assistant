@@ -7,33 +7,33 @@ export function LanguageToggle() {
   const { language, setLanguage } = useLanguage();
 
   return (
-    <div className="flex items-center rounded-full border bg-muted/80 p-1 text-xs shadow-2xs">
+    <div className="flex items-center rounded-lg border bg-background/80 p-0.5 text-xs shadow-2xs">
       <button
         type="button"
         onClick={() => setLanguage("en")}
         className={cn(
-          "inline-flex items-center gap-1.5 rounded-full px-3 py-1 font-semibold transition-all duration-150",
+          "inline-flex items-center gap-1.5 rounded-md px-2 py-1 text-[11px] font-semibold transition-all duration-150 cursor-pointer",
           language === "en"
-            ? "bg-primary text-primary-foreground shadow-xs scale-100"
-            : "text-muted-foreground hover:text-foreground font-normal opacity-70 hover:opacity-100"
+            ? "bg-muted text-foreground font-bold shadow-2xs border border-border/50"
+            : "text-muted-foreground hover:text-foreground font-normal"
         )}
         aria-label="Switch to English"
       >
-        <span>🇬🇧</span>
+        <span className="text-xs">🇺🇸</span>
         <span>EN</span>
       </button>
       <button
         type="button"
         onClick={() => setLanguage("vi")}
         className={cn(
-          "inline-flex items-center gap-1.5 rounded-full px-3 py-1 font-semibold transition-all duration-150",
+          "inline-flex items-center gap-1.5 rounded-md px-2 py-1 text-[11px] font-semibold transition-all duration-150 cursor-pointer",
           language === "vi"
-            ? "bg-primary text-primary-foreground shadow-xs scale-100"
-            : "text-muted-foreground hover:text-foreground font-normal opacity-70 hover:opacity-100"
+            ? "bg-muted text-foreground font-bold shadow-2xs border border-border/50"
+            : "text-muted-foreground hover:text-foreground font-normal"
         )}
         aria-label="Chuyển sang Tiếng Việt"
       >
-        <span>🇻🇳</span>
+        <span className="text-xs">🇻🇳</span>
         <span>VI</span>
       </button>
     </div>

@@ -2,6 +2,7 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { JapaneseText } from "@/components/theory/japanese-text";
+import { BookOpen, GraduationCap, Info } from "lucide-react";
 import {
   FillInBlankExerciseBlock,
   MultipleChoiceExerciseBlock,
@@ -30,11 +31,11 @@ function VocabRow({ item }: { item: VocabItem }) {
         <JapaneseText
           text={item.kanji ?? item.jp}
           reading={item.kanji ? item.jp : undefined}
-          className="text-lg font-medium"
+          className="text-lg font-bold text-foreground"
         />
       </div>
       <div className="flex-1 text-sm text-foreground">
-        <p>{item.meaning}</p>
+        <p className="font-medium">{item.meaning}</p>
         {item.note && (
           <p className="mt-0.5 text-xs text-muted-foreground">{item.note}</p>
         )}
@@ -45,7 +46,7 @@ function VocabRow({ item }: { item: VocabItem }) {
 
 function VocabList({ items }: { items: VocabItem[] }) {
   return (
-    <ul className="flex flex-col rounded-xl border bg-card px-4 shadow-2xs sm:px-5">
+    <ul className="flex flex-col rounded-xl border border-border/80 bg-card px-4 shadow-2xs sm:px-5">
       {items.map((item, i) => (
         <VocabRow key={i} item={item} />
       ))}
@@ -57,7 +58,7 @@ function VocabGroup({ heading, items }: { heading?: string; items: VocabItem[] }
   return (
     <div className="flex flex-col gap-2">
       {heading && (
-        <h3 className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
+        <h3 className="text-xs font-bold uppercase tracking-wider text-red-600">
           {heading}
         </h3>
       )}
@@ -78,14 +79,19 @@ function SimpleTable({
   speakableColumns?: number[];
 }) {
   return (
-    <div className="flex flex-col gap-2">
-      {title && <h3 className="text-sm font-bold text-foreground">{title}</h3>}
-      <div className="overflow-x-auto rounded-xl border bg-card shadow-2xs">
+    <div className="flex flex-col gap-3.5">
+      {title && (
+        <div className="flex items-center gap-2">
+          <BookOpen className="size-4 text-red-600" />
+          <h3 className="text-sm font-bold text-foreground">{title}</h3>
+        </div>
+      )}
+      <div className="overflow-x-auto rounded-xl border border-border/80 bg-card shadow-2xs">
         <table className="w-full text-left text-sm">
-          <thead className="border-b bg-muted/50 text-xs font-bold uppercase tracking-wider text-muted-foreground">
+          <thead className="border-b border-border/60 bg-muted/40 text-xs font-bold uppercase tracking-wider text-muted-foreground">
             <tr>
               {columns.map((c, i) => (
-                <th key={i} scope="col" className="px-4 py-2.5 sm:px-5">
+                <th key={i} scope="col" className="px-4 py-3 sm:px-5">
                   {c}
                 </th>
               ))}
@@ -94,15 +100,18 @@ function SimpleTable({
           <tbody className="divide-y divide-border/60">
             {rows.map((row, ri) => (
               <tr key={ri} className="transition-colors hover:bg-accent/40">
-                {row.map((cell, ci) => (
-                  <td key={ci} className="px-4 py-2.5 whitespace-nowrap sm:px-5">
-                    {speakableColumns.includes(ci) ? (
-                      <JapaneseText text={cell} />
-                    ) : (
-                      cell
-                    )}
-                  </td>
-                ))}
+                {row.map((cell, ci) => {
+                  const isSpeakable = speakableColumns.includes(ci);
+                  return (
+                    <td key={ci} className="px-4 py-3 whitespace-nowrap sm:px-5">
+                      {isSpeakable ? (
+                        <JapaneseText text={cell} className="font-semibold text-foreground" />
+                      ) : (
+                        cell
+                      )}
+                    </td>
+                  );
+                })}
               </tr>
             ))}
           </tbody>
@@ -114,9 +123,9 @@ function SimpleTable({
 
 function ExampleLine({ jp, vi }: { jp: string; vi: string }) {
   return (
-    <div className="flex flex-col gap-0.5 py-2 first:pt-0 last:pb-0">
-      <JapaneseText text={jp} className="text-base font-medium" />
-      <span className="text-sm text-muted-foreground">{vi}</span>
+    <div className="flex flex-col gap-0.5 py-2.5 first:pt-0 last:pb-0">
+      <JapaneseText text={jp} className="text-base font-bold text-foreground" />
+      <span className="text-xs font-medium text-muted-foreground">{vi}</span>
     </div>
   );
 }
@@ -127,52 +136,65 @@ function GrammarPatternCard({
   block: Extract<ContentBlock, { type: "grammar-pattern" }>;
 }) {
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle className="text-base font-semibold text-foreground">
-          {block.pattern}
-        </CardTitle>
+    <Card className="border-border/80 bg-card shadow-2xs rounded-xl overflow-hidden">
+      <CardHeader className="pb-3 border-b border-border/40 bg-muted/20">
+        <div className="flex items-center gap-2">
+          <div className="size-7 rounded-lg bg-red-50 dark:bg-red-950/60 text-red-600 flex items-center justify-center shrink-0">
+            <GraduationCap className="size-4" />
+          </div>
+          <CardTitle className="text-base font-bold text-foreground">
+            {block.pattern}
+          </CardTitle>
+        </div>
       </CardHeader>
-      <CardContent className="flex flex-col gap-3">
+      <CardContent className="flex flex-col gap-4 pt-4">
         {block.explanation && (
-          <p className="text-sm leading-relaxed text-foreground">
+          <p className="text-xs sm:text-sm leading-relaxed text-foreground font-medium">
             {block.explanation}
           </p>
         )}
 
         {block.subPoints && block.subPoints.length > 0 && (
-          <div className="flex flex-col gap-2.5">
+          <div className="flex flex-col gap-3">
             {block.subPoints.map((sp, i) => (
-              <div key={i} className="text-sm leading-relaxed">
+              <div key={i} className="text-xs sm:text-sm leading-relaxed bg-muted/20 p-3 rounded-lg border border-border/50">
                 {sp.label && (
-                  <span className="font-semibold text-foreground">
-                    {sp.label}:{" "}
+                  <span className="font-bold text-red-600 block mb-1">
+                    {sp.label}
                   </span>
                 )}
-                <span className="text-foreground">{sp.text}</span>
+                <span className="text-foreground font-medium">{sp.text}</span>
               </div>
             ))}
           </div>
         )}
 
         {block.examples && block.examples.length > 0 && (
-          <div className="flex flex-col divide-y divide-border/60 rounded-lg border bg-muted/30 px-3.5 py-1">
-            {block.examples.map((ex, i) => (
-              <ExampleLine key={i} jp={ex.jp} vi={ex.vi} />
-            ))}
+          <div className="flex flex-col gap-1">
+            <span className="text-xs font-bold text-muted-foreground uppercase tracking-wider mb-1">
+              Ví dụ mẫu
+            </span>
+            <div className="flex flex-col divide-y divide-border/60 rounded-xl border border-red-200/60 dark:border-red-900/30 bg-red-50/30 dark:bg-red-950/10 px-4 py-2">
+              {block.examples.map((ex, i) => (
+                <ExampleLine key={i} jp={ex.jp} vi={ex.vi} />
+              ))}
+            </div>
           </div>
         )}
 
         {block.notes && block.notes.length > 0 && (
-          <div className="flex flex-col gap-1.5">
+          <div className="flex flex-col gap-2">
             {block.notes.map((n, i) => (
-              <p
+              <div
                 key={i}
-                className="rounded-lg bg-amber-500/10 px-3 py-2 text-xs leading-relaxed text-amber-700 dark:text-amber-400"
+                className="flex items-start gap-2.5 rounded-xl border border-amber-200/80 bg-amber-50/50 dark:border-amber-900/30 dark:bg-amber-950/20 p-3 text-xs leading-relaxed text-amber-900 dark:text-amber-300"
               >
-                <span className="font-semibold">[Chú ý] </span>
-                {n}
-              </p>
+                <Info className="size-4 text-amber-600 shrink-0 mt-0.5" />
+                <div>
+                  <span className="font-bold">[Chú ý quan trọng]: </span>
+                  <span>{n}</span>
+                </div>
+              </div>
             ))}
           </div>
         )}
@@ -183,17 +205,15 @@ function GrammarPatternCard({
 
 function NoteBox({ text }: { text: string }) {
   return (
-    <p className="rounded-lg border border-dashed bg-muted/40 px-3.5 py-2.5 text-xs leading-relaxed text-muted-foreground">
-      {text}
-    </p>
+    <div className="flex items-start gap-2.5 rounded-xl border border-border/80 bg-muted/40 p-3.5 text-xs leading-relaxed text-muted-foreground">
+      <Info className="size-4 text-red-600 shrink-0 mt-0.5" />
+      <span className="font-medium text-foreground">{text}</span>
+    </div>
   );
 }
 
 /**
- * Dispatches a single content block to its renderer. This is the only place
- * that needs to change when a new block type is introduced for a future
- * lesson with a different structure — lesson data and the section layout
- * around this never need to.
+ * Dispatches a single content block to its renderer.
  */
 export function BlockRenderer({ block }: { block: ContentBlock }) {
   switch (block.type) {
@@ -208,9 +228,9 @@ export function BlockRenderer({ block }: { block: ContentBlock }) {
     case "note":
       return <NoteBox text={block.text} />;
     case "heading":
-      return <h3 className="text-lg font-semibold text-foreground">{block.text}</h3>;
+      return <h3 className="text-base font-bold text-foreground border-b pb-2">{block.text}</h3>;
     case "paragraph":
-      return <p className="text-sm text-foreground">{block.text}</p>;
+      return <p className="text-xs sm:text-sm text-foreground leading-relaxed">{block.text}</p>;
     case "translation-section":
       return (
         <TranslationBlock

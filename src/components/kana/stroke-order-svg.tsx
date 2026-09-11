@@ -8,6 +8,7 @@ interface StrokeOrderSvgProps {
   className?: string;
   autoPlay?: boolean;
   showNumbers?: boolean;
+  hideReplayButton?: boolean;
   externalPlayKey?: number;
   onReplay?: () => void;
 }
@@ -20,6 +21,7 @@ export function StrokeOrderSvg({
   className,
   autoPlay = true,
   showNumbers = true,
+  hideReplayButton = false,
   externalPlayKey = 0,
   onReplay,
 }: StrokeOrderSvgProps) {
@@ -89,22 +91,24 @@ export function StrokeOrderSvg({
         </svg>
       </div>
 
-      <button
-        type="button"
-        onClick={() => {
-          setPlayKey((k) => k + 1);
-          onReplay?.();
-        }}
-        className="mt-3 inline-flex items-center gap-1.5 rounded-full border bg-background px-3 py-1.5 text-xs font-semibold text-muted-foreground shadow-2xs transition-all duration-150 hover:border-primary/50 hover:bg-accent hover:text-foreground hover:shadow-xs active:scale-95 cursor-pointer"
-        title={t("detail_replay_strokes")}
-        aria-label={t("detail_replay_strokes")}
-      >
-        <RotateCcw className="size-3.5 text-primary" />
-        <span>{t("detail_replay_strokes")}</span>
-        <kbd className="hidden sm:inline-block rounded bg-muted border px-1.5 py-0.5 text-[10px] font-mono font-bold text-muted-foreground">
-          B
-        </kbd>
-      </button>
+      {!hideReplayButton && (
+        <button
+          type="button"
+          onClick={() => {
+            setPlayKey((k) => k + 1);
+            onReplay?.();
+          }}
+          className="mt-3 inline-flex items-center gap-1.5 rounded-full border bg-background px-3 py-1.5 text-xs font-semibold text-muted-foreground shadow-2xs transition-all duration-150 hover:border-primary/50 hover:bg-accent hover:text-foreground hover:shadow-xs active:scale-95 cursor-pointer"
+          title={t("detail_replay_strokes")}
+          aria-label={t("detail_replay_strokes")}
+        >
+          <RotateCcw className="size-3.5 text-primary" />
+          <span>{t("detail_replay_strokes")}</span>
+          <kbd className="hidden sm:inline-block rounded bg-muted border px-1.5 py-0.5 text-[10px] font-mono font-bold text-muted-foreground">
+            B
+          </kbd>
+        </button>
+      )}
     </div>
   );
 }

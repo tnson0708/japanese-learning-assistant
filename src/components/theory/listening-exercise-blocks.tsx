@@ -44,34 +44,36 @@ export function ListeningDictationBlock({
   const blockId = `exercise-listening-dictation-${items[0]?.id || title.replace(/\s+/g, "-")}`;
 
   return (
-    <Card id={blockId} className="border-primary/20 shadow-xs exercise-card-block print:border-gray-400 print:shadow-none print:break-inside-avoid print:bg-white">
-      <CardHeader className="pb-3 print:pb-1">
+    <Card id={blockId} className="border-border/80 bg-card shadow-2xs rounded-xl overflow-hidden exercise-card-block print:border-gray-400 print:shadow-none print:break-inside-avoid print:bg-white">
+      <CardHeader className="pb-3 border-b border-border/40 bg-muted/20 print:bg-white print:pb-1">
         <div className="flex items-center gap-2">
-          <Volume2 className="size-4 text-primary print:hidden" />
-          <CardTitle className="text-base font-semibold text-foreground print:text-black print:font-bold">
+          <div className="size-7 rounded-lg bg-red-50 dark:bg-red-950/60 text-red-600 flex items-center justify-center shrink-0 print:hidden">
+            <Volume2 className="size-4" />
+          </div>
+          <CardTitle className="text-base font-bold text-foreground print:text-black">
             {title}
           </CardTitle>
           <button
             type="button"
             onClick={() => printSingleExercise(blockId)}
-            className="rounded-full p-1 text-muted-foreground/70 transition-colors hover:bg-accent hover:text-primary cursor-pointer print:hidden"
+            className="rounded-full p-1 text-muted-foreground/70 transition-colors hover:bg-accent hover:text-red-600 cursor-pointer print:hidden"
             title="In riêng bài tập này (Print only this exercise)"
           >
             <Printer className="size-3.5" />
           </button>
         </div>
         {instruction && (
-          <p className="text-xs text-muted-foreground print:text-gray-700">{instruction}</p>
+          <p className="text-xs text-muted-foreground mt-0.5 print:text-gray-700">{instruction}</p>
         )}
       </CardHeader>
 
-      <CardContent className="flex flex-col gap-4">
+      <CardContent className="flex flex-col gap-4 pt-4">
         <ExerciseAudioPlayer audioUrl={audioUrl} />
 
         {exampleJp && (
-          <div className="flex flex-col gap-1.5 rounded-lg border border-dashed border-primary/30 bg-primary/5 px-3.5 py-2.5">
-            <span className="text-[10px] font-bold uppercase tracking-wider text-primary">Ví dụ (例)</span>
-            <JapaneseText text={exampleJp} className="text-sm font-semibold text-foreground" />
+          <div className="flex flex-col gap-1.5 rounded-xl border border-dashed border-red-200/80 bg-red-50/40 dark:border-red-900/30 dark:bg-red-950/20 px-3.5 py-2.5">
+            <span className="text-[10px] font-bold uppercase tracking-wider text-red-600">Ví dụ (例)</span>
+            <JapaneseText text={exampleJp} className="text-sm font-bold text-foreground" />
             {exampleVi && <p className="text-xs text-muted-foreground">{exampleVi}</p>}
           </div>
         )}

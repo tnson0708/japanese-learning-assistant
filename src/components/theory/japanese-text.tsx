@@ -23,12 +23,14 @@ export function JapaneseText({
   className,
   iconClassName,
   rate,
+  hideIcon = false,
 }: {
   text: string;
   reading?: string;
   className?: string;
   iconClassName?: string;
   rate?: number;
+  hideIcon?: boolean;
 }) {
   if (!text) return null;
 
@@ -48,21 +50,23 @@ export function JapaneseText({
       ) : (
         <span>{renderFurigana(text)}</span>
       )}
-      <button
-        type="button"
-        onClick={(e) => {
-          e.stopPropagation();
-          speakJapanese(reading || text, undefined, rate);
-        }}
-        className={cn(
-          "shrink-0 rounded-full p-0.5 text-muted-foreground/60 transition-colors hover:bg-accent hover:text-primary",
-          iconClassName
-        )}
-        aria-label={`Nghe phát âm: ${text}`}
-        title="Nghe phát âm"
-      >
-        <Volume2 className="size-3.5" />
-      </button>
+      {!hideIcon && (
+        <button
+          type="button"
+          onClick={(e) => {
+            e.stopPropagation();
+            speakJapanese(reading || text, undefined, rate);
+          }}
+          className={cn(
+            "shrink-0 rounded-full p-0.5 text-muted-foreground/60 transition-colors hover:bg-accent hover:text-red-600 cursor-pointer",
+            iconClassName
+          )}
+          aria-label={`Nghe phát âm: ${text}`}
+          title="Nghe phát âm"
+        >
+          <Volume2 className="size-3.5" />
+        </button>
+      )}
     </span>
   );
 }

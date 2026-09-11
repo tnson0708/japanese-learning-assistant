@@ -43,8 +43,8 @@ export function printSingleExercise(blockId: string) {
 export function ExerciseAudioPlayer({ audioUrl }: { audioUrl?: string }) {
   if (!audioUrl) return null;
   return (
-    <div className="mb-2 flex flex-col gap-1.5 rounded-lg border bg-muted/40 p-3 print:hidden">
-      <div className="flex items-center gap-2 text-xs font-semibold text-primary">
+    <div className="mb-2 flex flex-col gap-1.5 rounded-xl border border-red-200/80 bg-red-50/40 dark:border-red-900/40 dark:bg-red-950/20 p-3.5 shadow-2xs print:hidden">
+      <div className="flex items-center gap-2 text-xs font-bold text-red-600">
         <Volume2 className="size-4 shrink-0" />
         <span>Bài nghe (Listening Audio Track)</span>
       </div>
@@ -67,20 +67,22 @@ export function ListeningAudioListBlock({
   items: ListeningTrackItem[];
 }) {
   return (
-    <Card className="border-primary/20 shadow-xs print:hidden">
-      <CardHeader className="pb-3">
+    <Card className="border-border/80 bg-card shadow-2xs rounded-xl overflow-hidden print:hidden">
+      <CardHeader className="pb-3 border-b border-border/40 bg-muted/20">
         <div className="flex items-center gap-2">
-          <Volume2 className="size-4 text-primary" />
-          <CardTitle className="text-base font-semibold text-foreground">{title}</CardTitle>
+          <div className="size-7 rounded-lg bg-red-50 dark:bg-red-950/60 text-red-600 flex items-center justify-center shrink-0">
+            <Volume2 className="size-4" />
+          </div>
+          <CardTitle className="text-base font-bold text-foreground">{title}</CardTitle>
         </div>
         {instruction && (
-          <p className="text-xs text-muted-foreground">{instruction}</p>
+          <p className="text-xs text-muted-foreground mt-0.5">{instruction}</p>
         )}
       </CardHeader>
-      <CardContent className="flex flex-col gap-3">
+      <CardContent className="flex flex-col gap-3 pt-4">
         {items.map((item, i) => (
-          <div key={i} className="flex flex-col gap-1.5 rounded-lg border bg-muted/40 p-3">
-            <span className="text-xs font-semibold text-foreground">{item.label}</span>
+          <div key={i} className="flex flex-col gap-1.5 rounded-xl border border-border/60 bg-muted/30 p-3">
+            <span className="text-xs font-bold text-foreground">{item.label}</span>
             <audio controls src={encodeURI(item.url)} className="h-9 w-full rounded-md" />
           </div>
         ))}

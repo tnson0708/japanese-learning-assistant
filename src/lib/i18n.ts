@@ -22,25 +22,34 @@ export const translations = {
       "A focused learning suite for Hiragana, Katakana, and Japanese vocabulary — browse Gojūon grids, train handwriting with stroke recognition, run paper drills, and study categorized words.",
     hero_btn_explore: "Explore Kana Charts",
     hero_btn_paper: "Start Paper Drill",
+    hero_check_kana: "104 Characters with complete Gojūon grids",
+    hero_check_vocab: "Curated Vocab organized by 9 life domains",
+    hero_check_dual: "Dual Practice digital scoring & paper sheets",
     spotlight_title: "Spotlight Kana",
     spotlight_shuffle: "Shuffle 🎲",
     spotlight_stroke: "strokes",
     spotlight_btn_view: "View Stroke Order",
+    vowel_row_label: "VOWEL ROW [A-I-U-E-O]",
+    modules_curriculum_badge: "COMPREHENSIVE CURRICULUM",
     modules_title: "Learning Modules",
     modules_subtitle:
       "Pick a module to start learning, practicing, or teaching.",
+    modules_explore_all: "Explore All 6 Modules",
     mod_learn_title: "Learn Kana",
     mod_learn_badge: "104 Characters",
     mod_learn_desc:
       "Explore Hiragana & Katakana charts in 5-column Gojūon grids with animated stroke order and audio pronunciation.",
+    mod_tag_kana: "Gojūon, Dakuten, Yōon",
     mod_vocab_title: "Vocabulary by Domain",
     mod_vocab_badge: "9 Life Domains",
     mod_vocab_desc:
       "Browse vocabulary by life domain and focused subtopic, filter by JLPT level and word type, track progress, and drill katakana loanwords.",
+    mod_tag_vocab: "Food, Transit, Home & More",
     mod_practice_title: "Practice Writing",
     mod_practice_badge: "2 Modes",
     mod_practice_desc:
       "Score your handwriting digitally with stroke recognition, or step away from the screen for timed paper drills.",
+    mod_tag_practice: "Digital Canvas & PDF Gen",
     mod_teaching_title: "Teaching Slides",
     mod_teaching_badge: "Online Classes",
     mod_teaching_desc:
@@ -49,10 +58,14 @@ export const translations = {
     mod_phrases_badge: "40+ Daily Phrases",
     mod_phrases_desc:
       "Learn essential daily Japanese conversation sentences grouped by themes, topics, and formality levels.",
+    mod_tag_phrases: "Polite vs. Casual Speech",
     mod_theory_title: "Lesson Theory",
     mod_theory_badge: "Minna no Nihongo",
     mod_theory_desc:
       "Study vocabulary, full translation (sentence patterns, examples, dialogues), grammar explanations, and interactive exercises lesson by lesson.",
+    mod_tag_theory: "25 Core Lessons",
+    mod_tag_slides: "Ready-to-Teach Materials",
+    footer_tagline: "Crafted for focused, distraction-free language mastery.",
 
     // Phrases Page (/phrases)
     phrases_title: "Common Conversation Sentences",
@@ -268,27 +281,36 @@ export const translations = {
     hero_title: "Làm chủ Kana & Từ vựng tiếng Nhật dễ dàng",
     hero_subtitle:
       "Bộ công cụ học tập toàn diện cho Hiragana, Katakana và Từ vựng — tra cứu bảng Gojūon, luyện viết chữ nét chuẩn, viết trên giấy có bấm giờ và học từ vựng theo chủ đề.",
-    hero_btn_explore: "Xem bảng chữ Kana",
-    hero_btn_paper: "Luyện viết trên giấy",
-    spotlight_title: "Chữ Kana nổi bật",
+    hero_btn_explore: "Khám phá Bảng Kana",
+    hero_btn_paper: "Bắt đầu Luyện viết Giấy",
+    hero_check_kana: "104 Chữ cái với đầy đủ bảng Gojūon",
+    hero_check_vocab: "Từ vựng chọn lọc phân theo 9 lĩnh vực",
+    hero_check_dual: "Luyện tập kép: Chấm điểm số & Phiếu giấy",
+    spotlight_title: "Spotlight Kana",
     spotlight_shuffle: "Đổi chữ 🎲",
     spotlight_stroke: "nét",
     spotlight_btn_view: "Xem thứ tự nét viết",
+    vowel_row_label: "HÀNG NGUYÊN ÂM [A-I-U-E-O]",
+    modules_curriculum_badge: "CHƯƠNG TRÌNH TOÀN DIỆN",
     modules_title: "Các mục học tập",
     modules_subtitle:
       "Chọn một mục để bắt đầu học, luyện tập hoặc giảng dạy.",
+    modules_explore_all: "Khám phá tất cả 6 mục",
     mod_learn_title: "Học Kana",
     mod_learn_badge: "104 Chữ cái",
     mod_learn_desc:
       "Khám phá bảng Hiragana & Katakana dạng 5 cột chuẩn Gojūon với hoạt ảnh nét viết và phát âm chuẩn.",
+    mod_tag_kana: "Gojūon, Dakuten, Yōon",
     mod_vocab_title: "Từ vựng theo lĩnh vực",
     mod_vocab_badge: "9 Lĩnh vực",
     mod_vocab_desc:
       "Duyệt từ vựng theo lĩnh vực và chủ đề nhỏ, lọc theo trình độ JLPT và loại từ, theo dõi tiến độ, luyện riêng từ mượn katakana.",
+    mod_tag_vocab: "Ẩm thực, Giao thông, Gia đình...",
     mod_practice_title: "Luyện viết",
     mod_practice_badge: "2 Chế độ",
     mod_practice_desc:
       "Chấm điểm nét chữ cảm ứng trực tiếp hoặc luyện viết trên giấy thực tế có đếm giờ.",
+    mod_tag_practice: "Bảng vẽ cảm ứng & Tạo PDF",
     mod_teaching_title: "Giáo án Giảng dạy",
     mod_teaching_badge: "Dạy trực tuyến",
     mod_teaching_desc:
@@ -297,10 +319,14 @@ export const translations = {
     mod_phrases_badge: "40+ Mẫu câu",
     mod_phrases_desc:
       "Học các mẫu câu giao tiếp tiếng Nhật hàng ngày được phân loại theo chủ đề, chủ đề phụ và cấp độ lịch sự.",
+    mod_tag_phrases: "Văn phong Lịch sự & Thân mật",
     mod_theory_title: "Lý thuyết theo bài",
     mod_theory_badge: "Minna no Nihongo",
     mod_theory_desc:
       "Học từ vựng, bản dịch (mẫu câu, ví dụ, hội thoại), giải thích ngữ pháp và bài tập thực hành theo từng bài học.",
+    mod_tag_theory: "25 Bài học cốt lõi",
+    mod_tag_slides: "Tài liệu giảng dạy có sẵn",
+    footer_tagline: "Được thiết kế cho trải nghiệm học ngôn ngữ tập trung và hiệu quả.",
 
     // Phrases Page (/phrases)
     phrases_title: "Mẫu câu giao tiếp thông dụng",

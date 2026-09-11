@@ -65,18 +65,25 @@ export function Nav() {
   return (
     <>
       {/* Top Header Navbar */}
-      <header className="sticky top-0 z-40 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80">
+      <header className="sticky top-0 z-40 border-b border-border/60 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80">
         <div className="mx-auto flex h-14 max-w-6xl items-center justify-between gap-3 px-4 sm:px-6">
           {/* Brand Logo */}
           <Link
             href="/"
-            className="flex items-center gap-2 font-bold tracking-tight shrink-0 text-foreground text-base sm:text-lg"
+            className="flex items-center gap-2 tracking-tight shrink-0 text-foreground group"
           >
-            <span>仮名道場</span>
+            <div className="flex flex-col">
+              <span className="font-bold text-base sm:text-lg leading-none tracking-wide text-foreground group-hover:text-red-600 transition-colors">
+                仮名道場
+              </span>
+              <span className="text-[9px] font-extrabold uppercase tracking-widest text-red-600 leading-none mt-0.5">
+                KANA DOJO
+              </span>
+            </div>
           </Link>
 
           {/* Desktop Navigation Links (hidden on mobile, visible on md+) */}
-          <nav className="hidden md:flex items-center gap-1.5">
+          <nav className="hidden md:flex items-center gap-1 lg:gap-2">
             {links.map((link) => {
               const active =
                 link.href === "/"
@@ -87,13 +94,16 @@ export function Nav() {
                   key={link.href}
                   href={link.href}
                   className={cn(
-                    "rounded-md px-3 py-1.5 text-sm font-medium whitespace-nowrap transition-colors",
+                    "relative px-3 py-1.5 text-sm font-medium whitespace-nowrap transition-colors rounded-md",
                     active
-                      ? "bg-primary text-primary-foreground font-semibold"
-                      : "text-muted-foreground hover:bg-accent hover:text-accent-foreground"
+                      ? "text-red-600 font-semibold bg-red-50/80 dark:bg-red-950/30"
+                      : "text-muted-foreground hover:bg-accent hover:text-foreground"
                   )}
                 >
                   {link.label}
+                  {active && (
+                    <span className="absolute bottom-0 left-3 right-3 h-0.5 bg-red-600 rounded-full" />
+                  )}
                 </Link>
               );
             })}
@@ -105,11 +115,11 @@ export function Nav() {
             <button
               type="button"
               onClick={() => setIsSearchOpen(true)}
-              className="flex h-9 items-center gap-2 rounded-lg border border-input bg-background/80 px-2.5 sm:px-3 text-xs text-muted-foreground transition-all hover:bg-accent hover:text-accent-foreground cursor-pointer shadow-2xs"
-              title="Tìm kiếm toàn hệ thống (⌘K / Ctrl+K)"
+              className="flex h-9 items-center gap-2 rounded-lg border border-input bg-background px-2.5 sm:px-3 text-xs text-muted-foreground transition-all hover:bg-accent hover:text-foreground cursor-pointer shadow-2xs"
+              title="Search characters, words... (⌘K / Ctrl+K)"
             >
-              <Search className="size-4 text-primary shrink-0" />
-              <span className="hidden sm:inline-block font-medium">{isVi ? "Tìm kiếm..." : "Search..."}</span>
+              <Search className="size-3.5 text-muted-foreground shrink-0" />
+              <span className="hidden sm:inline-block font-normal text-muted-foreground">{isVi ? "Tìm ký tự, từ..." : "Search characters, words..."}</span>
               <kbd className="hidden md:inline-flex items-center gap-0.5 rounded border bg-muted px-1.5 py-0.5 text-[10px] font-mono font-bold text-muted-foreground">
                 <span>⌘</span>K
               </kbd>
