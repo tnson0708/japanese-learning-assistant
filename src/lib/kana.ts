@@ -128,6 +128,8 @@ export function getKanaSection(group: string): "main" | "dakuten" | "youon" {
   return "youon";
 }
 
+export const getGroupSection = getKanaSection;
+
 export function filterKana(
   script: Script | "both" = "both",
   section: KanaSection = "all"

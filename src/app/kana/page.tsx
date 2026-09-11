@@ -3,271 +3,40 @@
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { Suspense, useEffect, useMemo, useState } from "react";
-import { Search, Volume2, X, Printer } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { OptionGroup } from "@/components/option-group";
 import {
-  GROUP_LABELS,
-  GROUP_ORDER,
+  Search,
+  Volume2,
+  X,
+  Printer,
+  PencilLine,
+  Eye,
+  EyeOff,
+  BookOpen,
+  Sparkles,
+  Layers,
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import {
   getKanaByScript,
+  getKanaById,
   sortByGroup,
   type Kana,
   type Script,
+  type KanaSection,
 } from "@/lib/kana";
 import { speakJapanese } from "@/lib/speech";
 import { useLanguage } from "@/lib/language-context";
 import { cn } from "@/lib/utils";
 
+import { KanaTableGrid } from "@/components/kana/kana-table-grid";
+import { KanaInspectorCard } from "@/components/kana/kana-inspector-card";
 import { PronunciationGuide } from "@/components/kana/pronunciation-guide";
 import { KanjiRadicalGuide } from "@/components/kana/kanji-radical-guide";
-import { BasicKanjiGuide } from "@/components/kana/basic-kanji-guide";
-import { KANJI_RADICALS } from "@/lib/kanji-radicals";
-import { BASIC_KANJI_WORDS } from "@/lib/basic-kanji";
-import { BookOpen, Sparkles } from "lucide-react";
 
 type LearnTab = Script | "pronunciation" | "kanji";
 
 function KanjiSection() {
-  const [subTab, setSubTab] = useState<"radicals" | "basic">("radicals");
-  const { language } = useLanguage();
-  const isVi = language === "vi";
-
-  return (
-    <div className="flex flex-col gap-6">
-      <div className="flex items-center justify-between border-b pb-4 print:hidden">
-        <div className="inline-flex items-center rounded-xl border bg-muted p-1 text-xs sm:text-sm shadow-2xs">
-          <button
-            type="button"
-            onClick={() => setSubTab("radicals")}
-            className={`flex items-center gap-2 rounded-lg px-4 py-2 font-bold transition-colors cursor-pointer ${
-              subTab === "radicals"
-                ? "bg-background text-foreground shadow-2xs"
-                : "text-muted-foreground hover:text-foreground"
-            }`}
-          >
-            <BookOpen className="size-4 text-primary" />
-            <span>{isVi ? `Bộ thủ Kanji (${KANJI_RADICALS.length} bộ)` : "Kanji Radicals"}</span>
-          </button>
-
-          <button
-            type="button"
-            onClick={() => setSubTab("basic")}
-            className={`flex items-center gap-2 rounded-lg px-4 py-2 font-bold transition-colors cursor-pointer ${
-              subTab === "basic"
-                ? "bg-background text-foreground shadow-2xs"
-                : "text-muted-foreground hover:text-foreground"
-            }`}
-          >
-            <Sparkles className="size-4 text-amber-500" />
-            <span>{isVi ? `Chữ Kanji cơ bản (${BASIC_KANJI_WORDS.length} chữ)` : "Basic Kanji Words"}</span>
-          </button>
-        </div>
-
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => window.print()}
-          className="gap-2 font-semibold text-xs border-amber-500/30 text-amber-700 dark:text-amber-300 hover:bg-amber-500/10 cursor-pointer shrink-0"
-          title={isVi ? "In trang này ra giấy" : "Print Sheet"}
-        >
-          <Printer className="size-4" />
-          <span className="hidden sm:inline">
-            {isVi
-              ? subTab === "radicals"
-                ? "In bảng bộ thủ"
-                : "In 100 chữ Kanji"
-              : "Print Sheet"}
-          </span>
-          <span className="sm:hidden">{isVi ? "In" : "Print"}</span>
-        </Button>
-      </div>
-
-      {subTab === "radicals" ? <KanjiRadicalGuide /> : <BasicKanjiGuide />}
-    </div>
-  );
-}
-type SectionFilter = "all" | "main" | "dakuten" | "youon";
-
-const MAIN_GROUPS = new Set(["vowel", "k", "s", "t", "n", "h", "m", "y", "r", "w"]);
-const DAKUTEN_GROUPS = new Set([
-  "k-dakuten",
-  "s-dakuten",
-  "t-dakuten",
-  "h-dakuten",
-  "h-handakuten",
-]);
-
-function getGroupSection(group: string): "main" | "dakuten" | "youon" {
-  if (MAIN_GROUPS.has(group)) return "main";
-  if (DAKUTEN_GROUPS.has(group)) return "dakuten";
-  return "youon";
-}
-
-function KanaCard({ kana }: { kana: Kana }) {
-  const handleAudio = (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    speakJapanese(kana.char);
-  };
-
-  return (
-    <Link
-      href={`/kana/${kana.id}`}
-      className="group relative flex flex-col items-center justify-center rounded-xl border bg-card py-3.5 px-1 transition-all duration-200 hover:-translate-y-0.5 hover:border-primary/60 hover:bg-accent/50 hover:shadow-sm active:translate-y-0 print:py-2 print:border-gray-400 print:bg-white"
-    >
-      <button
-        type="button"
-        onClick={handleAudio}
-        className="absolute top-1 right-1 rounded-full p-1 text-muted-foreground/70 transition-all hover:bg-accent hover:text-primary opacity-100 lg:opacity-0 lg:group-hover:opacity-100 focus:opacity-100 print:hidden"
-        title={`Listen to ${kana.char}`}
-        aria-label={`Listen to ${kana.char}`}
-      >
-        <Volume2 className="size-3.5" />
-      </button>
-
-      <span className="text-3xl font-medium tracking-tight text-foreground transition-colors group-hover:text-primary print:text-2xl print:font-bold print:text-black">
-        {kana.char}
-      </span>
-      <span className="text-xs font-semibold uppercase text-muted-foreground transition-colors group-hover:text-foreground print:text-[11px] print:text-gray-700">
-        {kana.romaji}
-      </span>
-    </Link>
-  );
-}
-
-function KanaGroupCard({
-  groupKey,
-  kanaItems,
-}: {
-  groupKey: string;
-  kanaItems: Kana[];
-}) {
-  const is5Cols = kanaItems.length === 5;
-
-  return (
-    <div className="flex flex-col rounded-xl border bg-card/40 p-4 shadow-2xs transition-colors hover:border-border/80 print:break-inside-avoid print:border-gray-400 print:bg-white print:p-3">
-      <div className="mb-3 flex items-center justify-between print:mb-1.5">
-        <h3 className="text-xs font-bold uppercase tracking-wider text-muted-foreground print:text-black print:font-extrabold">
-          {GROUP_LABELS[groupKey] || groupKey}
-        </h3>
-        <span className="rounded-full bg-secondary/80 px-2 py-0.5 text-[10px] font-medium text-muted-foreground print:border print:border-gray-300 print:bg-gray-100 print:text-gray-800">
-          {kanaItems.length}
-        </span>
-      </div>
-
-      <div
-        className={cn(
-          "grid gap-2",
-          is5Cols ? "grid-cols-5" : "grid-cols-3"
-        )}
-      >
-        {kanaItems.map((k) => (
-          <KanaCard key={k.id} kana={k} />
-        ))}
-      </div>
-    </div>
-  );
-}
-
-function KanaGrid({ script, section, query }: { script: Script; section: SectionFilter; query: string }) {
-  const { t } = useLanguage();
-  const allKana = useMemo(() => sortByGroup(getKanaByScript(script)), [script]);
-
-  const grouped = useMemo(() => {
-    const map = new Map<string, Kana[]>();
-    for (const k of allKana) {
-      const arr = map.get(k.group) ?? [];
-      arr.push(k);
-      map.set(k.group, arr);
-    }
-    return map;
-  }, [allKana]);
-
-  const searchQuery = query.trim().toLowerCase();
-
-  // Search view
-  if (searchQuery) {
-    const searchResults = allKana.filter(
-      (k) =>
-        k.romaji.toLowerCase().includes(searchQuery) ||
-        k.char.includes(searchQuery)
-    );
-
-    if (searchResults.length === 0) {
-      return (
-        <div className="rounded-xl border border-dashed p-8 text-center text-muted-foreground">
-          {t("kana_no_results")}
-        </div>
-      );
-    }
-
-    return (
-      <div className="grid grid-cols-3 sm:grid-cols-5 md:grid-cols-6 lg:grid-cols-8 gap-2.5">
-        {searchResults.map((k) => (
-          <KanaCard key={k.id} kana={k} />
-        ))}
-      </div>
-    );
-  }
-
-  // Filtered by section
-  const availableGroups = GROUP_ORDER.filter((g) => {
-    if (!grouped.has(g)) return false;
-    if (section === "all") return true;
-    return getGroupSection(g) === section;
-  });
-
-  const sectionsToRender: { title: string; groups: string[] }[] = [];
-
-  const mainTitle = t("kana_sec_main");
-  const dakutenTitle = t("kana_sec_dakuten");
-  const youonTitle = t("kana_sec_youon");
-
-  if (section === "all") {
-    const main = availableGroups.filter((g) => getGroupSection(g) === "main");
-    const dakuten = availableGroups.filter((g) => getGroupSection(g) === "dakuten");
-    const youon = availableGroups.filter((g) => getGroupSection(g) === "youon");
-
-    if (main.length > 0) sectionsToRender.push({ title: mainTitle, groups: main });
-    if (dakuten.length > 0) sectionsToRender.push({ title: dakutenTitle, groups: dakuten });
-    if (youon.length > 0) sectionsToRender.push({ title: youonTitle, groups: youon });
-  } else {
-    sectionsToRender.push({
-      title:
-        section === "main"
-          ? mainTitle
-          : section === "dakuten"
-          ? dakutenTitle
-          : youonTitle,
-      groups: availableGroups,
-    });
-  }
-
-  return (
-    <div className="flex flex-col gap-8">
-      {sectionsToRender.map((sec) => (
-        <div key={sec.title} className="flex flex-col gap-3">
-          <div className="flex items-center gap-3">
-            <h2 className="text-sm font-bold uppercase tracking-wider text-muted-foreground/80">
-              {sec.title}
-            </h2>
-            <div className="h-px flex-1 bg-border/60" />
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 lg:gap-5">
-            {sec.groups.map((groupKey) => (
-              <KanaGroupCard
-                key={groupKey}
-                groupKey={groupKey}
-                kanaItems={grouped.get(groupKey)!}
-              />
-            ))}
-          </div>
-        </div>
-      ))}
-    </div>
-  );
+  return <KanjiRadicalGuide />;
 }
 
 function KanaPageContent() {
@@ -281,137 +50,232 @@ function KanaPageContent() {
       : "hiragana";
 
   const [activeTab, setActiveTab] = useState<LearnTab>(initialTab);
-  const [section, setSection] = useState<SectionFilter>("all");
+  const [section, setSection] = useState<KanaSection>("all");
   const [search, setSearch] = useState("");
+  const [showRomaji, setShowRomaji] = useState(true);
 
-  // Sync activeTab when tab URL search param changes (e.g., navigating back)
+  // Default selected Kana for Inspector Panel
+  const currentScriptKana = useMemo(
+    () => sortByGroup(getKanaByScript(activeTab === "katakana" ? "katakana" : "hiragana")),
+    [activeTab]
+  );
+
+  const [selectedKana, setSelectedKana] = useState<Kana>(
+    () => currentScriptKana[0] || getKanaById("hiragana-a")!
+  );
+
+  // Sync selectedKana when script tab changes
   useEffect(() => {
-    if (tabParam === "katakana" || tabParam === "hiragana" || tabParam === "pronunciation" || tabParam === "kanji") {
-      setActiveTab(tabParam);
+    if (activeTab === "hiragana" || activeTab === "katakana") {
+      const firstKana = currentScriptKana[0];
+      if (firstKana) setSelectedKana(firstKana);
     }
-  }, [tabParam]);
-
-  const sectionOptions: { value: SectionFilter; label: string }[] = [
-    { value: "all", label: t("kana_sec_all") },
-    { value: "main", label: t("kana_sec_main") },
-    { value: "dakuten", label: t("kana_sec_dakuten") },
-    { value: "youon", label: t("kana_sec_youon") },
-  ];
+  }, [activeTab, currentScriptKana]);
 
   const isKanaTab = activeTab === "hiragana" || activeTab === "katakana";
 
+  const sectionOptions: { value: KanaSection; label: string }[] = [
+    { value: "all", label: "Tất cả (All)" },
+    { value: "main", label: "Âm chính Ngũ Thập Âm (五十音 • 46)" },
+    { value: "dakuten", label: "Âm đục & Bán đục (濁音・半濁音 • 25)" },
+    { value: "youon", label: "Ảo âm / Âm ghép (拗音 • 33)" },
+  ];
+
   return (
-    <div className="mx-auto flex w-full max-w-6xl flex-1 flex-col gap-6 px-4 py-6 sm:px-6 lg:py-8 print:p-0 print:gap-4">
-      {/* Printable Header Banner (Only visible during print) */}
-      <div className="hidden print:flex flex-col gap-1 pb-3 mb-2 border-b border-gray-400">
-        <div className="flex items-center justify-between">
-          <h1 className="text-xl font-bold tracking-tight text-black">
-            {activeTab === "hiragana"
-              ? "Bảng chữ Hiragana (ひらがな) — Hiragana Alphabet Chart"
-              : activeTab === "katakana"
-              ? "Bảng chữ Katakana (カタカナ) — Katakana Alphabet Chart"
-              : activeTab === "pronunciation"
-              ? "Quy tắc phát âm tiếng Nhật — Japanese Pronunciation Guide"
-              : "Bộ thủ Kanji (漢字部首) — Essential Kanji Radicals"}
+    <div className="mx-auto flex w-full max-w-7xl flex-1 flex-col gap-6 px-4 py-6 sm:px-6 lg:py-8 print:p-0 print:gap-4">
+      {/* 1. Hero Header */}
+      <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between print:hidden">
+        <div className="flex flex-col gap-1.5 max-w-3xl">
+          <span className="text-[11px] font-extrabold uppercase tracking-wider text-red-600 dark:text-red-400">
+            TÀI LIỆU CHUẨN HÓA • Bản cập nhật MinKana Master 2025
+          </span>
+          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight text-foreground">
+            Bảng chữ cái & Tra cứu Kana
           </h1>
-          <span className="text-xs font-bold text-gray-700">仮名道場 • Kana Dojo</span>
+          <p className="text-xs font-semibold text-muted-foreground/80 tracking-wide">
+            Kana Practice & Reference
+          </p>
+          <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed pt-1">
+            Hệ thống tra cứu bảng chữ cái Hiragana & Katakana toàn diện với thứ tự nét viết động, âm thanh mẫu chuẩn Tokyo và bộ thủ Kanji tương ứng.
+          </p>
         </div>
-        <p className="text-xs text-gray-600">
-          Bảng tra cứu chữ cái tiếng Nhật (Khổ A4) • Hiragana & Katakana Reference Chart
-        </p>
+
+        {/* Action Buttons */}
+        <div className="flex items-center gap-2.5 shrink-0 pt-1">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => window.print()}
+            className="gap-2 font-bold text-xs rounded-xl border-border/80 hover:bg-accent cursor-pointer"
+          >
+            <Printer className="size-4 text-red-600" />
+            <span>In bảng A4 PDF</span>
+          </Button>
+
+          <Link
+            href="/practice"
+            className="inline-flex items-center gap-2 rounded-xl bg-red-600 hover:bg-red-700 text-white font-bold text-xs px-3.5 py-2 shadow-2xs transition-colors"
+          >
+            <PencilLine className="size-4" />
+            <span>Luyện viết giấy →</span>
+          </Link>
+        </div>
       </div>
 
-      {/* Header & Controls Bar */}
-      <div className="flex flex-col gap-4 print:hidden">
-        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-          <div>
-            <h1 className="text-2xl font-bold tracking-tight sm:text-3xl lg:text-4xl">
-              {t("kana_title")}
-            </h1>
-            <p className="text-sm text-muted-foreground">
-              {t("kana_subtitle")}
-            </p>
-          </div>
-
-          {/* Print Chart Button */}
-          {isKanaTab && (
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => window.print()}
-              className="gap-2 shrink-0 font-semibold cursor-pointer border-primary/30 hover:border-primary hover:bg-primary/10 text-foreground"
-              title="In bảng chữ ra giấy A4 (Print Chart)"
+      {/* 2. Top Navigation Tabs & Controls */}
+      <div className="flex flex-col gap-4 rounded-2xl border border-border/80 bg-card p-4 sm:p-5 shadow-2xs print:hidden">
+        <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+          {/* Main Learn Tab Selector */}
+          <div className="flex flex-wrap items-center gap-1.5 rounded-2xl bg-muted/60 p-1.5 border border-border/40 w-full lg:w-auto overflow-x-auto">
+            <button
+              type="button"
+              onClick={() => setActiveTab("hiragana")}
+              className={cn(
+                "flex items-center gap-2 rounded-xl px-3.5 py-2 text-xs font-bold transition-all cursor-pointer whitespace-nowrap select-none",
+                activeTab === "hiragana"
+                  ? "bg-red-600 text-white shadow-2xs"
+                  : "text-muted-foreground hover:bg-accent/60 hover:text-foreground"
+              )}
             >
-              <Printer className="size-4 text-primary" />
-              <span>{t("kana_print_btn")}</span>
-            </Button>
-          )}
-        </div>
-
-        {/* Filter Controls Card */}
-        <div className="flex flex-col gap-4 rounded-xl border bg-card p-4 shadow-2xs sm:p-5">
-          <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-            {/* Main Learn Tab Selector */}
-            <Tabs
-              value={activeTab}
-              onValueChange={(v) => setActiveTab(v as LearnTab)}
-              className="w-full sm:w-auto"
-            >
-              <TabsList className="grid w-full grid-cols-2 sm:grid-cols-4 sm:w-auto md:w-[680px]">
-                <TabsTrigger value="hiragana">{t("kana_tab_hiragana")}</TabsTrigger>
-                <TabsTrigger value="katakana">{t("kana_tab_katakana")}</TabsTrigger>
-                <TabsTrigger value="pronunciation">{t("kana_tab_pronunciation")}</TabsTrigger>
-                <TabsTrigger value="kanji">{t("kana_tab_kanji")}</TabsTrigger>
-              </TabsList>
-            </Tabs>
-
-            {/* Search Input (Only shown for Kana tabs) */}
-            {isKanaTab && (
-              <div className="relative w-full sm:w-64">
-                <Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
-                <input
-                  type="text"
-                  value={search}
-                  onChange={(e) => setSearch(e.target.value)}
-                  placeholder={t("kana_search_placeholder")}
-                  className="w-full rounded-lg border bg-background pl-9 pr-8 py-1.5 text-xs ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                />
-                {search && (
-                  <button
-                    type="button"
-                    onClick={() => setSearch("")}
-                    className="absolute right-2.5 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
-                  >
-                    <X className="size-3.5" />
-                  </button>
-                )}
-              </div>
-            )}
-          </div>
-
-          {/* Section Filter Pills (Only shown for Kana tabs) */}
-          {isKanaTab && (
-            <div className="flex flex-col gap-2 pt-2 border-t sm:flex-row sm:items-center sm:gap-3">
-              <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground whitespace-nowrap">
-                {t("kana_section")}:
+              <span className={cn("size-2 rounded-full shrink-0", activeTab === "hiragana" ? "bg-white" : "bg-red-600")} />
+              <span>Hiragana (ひらがな)</span>
+              <span className={cn("rounded-md px-1.5 py-0.5 text-[10px] font-extrabold", activeTab === "hiragana" ? "bg-white/20 text-white" : "bg-muted/80 text-muted-foreground")}>
+                104
               </span>
-              <div className="overflow-x-auto pb-1 scrollbar-none sm:pb-0">
-                <OptionGroup
-                  options={sectionOptions}
-                  value={section}
-                  onChange={setSection}
-                  size="sm"
-                  className="flex-nowrap"
-                />
-              </div>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setActiveTab("katakana")}
+              className={cn(
+                "flex items-center gap-2 rounded-xl px-3.5 py-2 text-xs font-bold transition-all cursor-pointer whitespace-nowrap select-none",
+                activeTab === "katakana"
+                  ? "bg-red-600 text-white shadow-2xs"
+                  : "text-muted-foreground hover:bg-accent/60 hover:text-foreground"
+              )}
+            >
+              <span>Katakana (カタカナ)</span>
+              <span className={cn("rounded-md px-1.5 py-0.5 text-[10px] font-extrabold", activeTab === "katakana" ? "bg-white/20 text-white" : "bg-muted/80 text-muted-foreground")}>
+                104
+              </span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setActiveTab("pronunciation")}
+              className={cn(
+                "flex items-center gap-2 rounded-xl px-3.5 py-2 text-xs font-bold transition-all cursor-pointer whitespace-nowrap select-none",
+                activeTab === "pronunciation"
+                  ? "bg-red-600 text-white shadow-2xs"
+                  : "text-muted-foreground hover:bg-accent/60 hover:text-foreground"
+              )}
+            >
+              <span>Phát âm & Âm điệu</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setActiveTab("kanji")}
+              className={cn(
+                "flex items-center gap-2 rounded-xl px-3.5 py-2 text-xs font-bold transition-all cursor-pointer whitespace-nowrap select-none",
+                activeTab === "kanji"
+                  ? "bg-red-600 text-white shadow-2xs"
+                  : "text-muted-foreground hover:bg-accent/60 hover:text-foreground"
+              )}
+            >
+              <span>Kanji & Bộ thủ (漢字)</span>
+            </button>
+          </div>
+
+          {/* Search Input (Shown for Kana tabs) */}
+          {isKanaTab && (
+            <div className="relative w-full lg:w-72">
+              <Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground/70" />
+              <input
+                type="text"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                placeholder="Tìm chữ (あ), Romaji (ka)..."
+                className="w-full rounded-xl border border-border/80 bg-muted/30 py-2 pl-9 pr-8 text-xs text-foreground placeholder:text-muted-foreground/70 focus:border-red-600 focus:bg-background focus:outline-hidden focus:ring-1 focus:ring-red-600 transition-all"
+              />
+              {search && (
+                <button
+                  type="button"
+                  onClick={() => setSearch("")}
+                  className="absolute right-2.5 top-1/2 -translate-y-1/2 rounded-full p-0.5 text-muted-foreground hover:bg-accent hover:text-foreground cursor-pointer"
+                >
+                  <X className="size-3.5" />
+                </button>
+              )}
             </div>
           )}
         </div>
+
+        {/* Section Filter Pills + Status Indicators */}
+        {isKanaTab && (
+          <div className="flex flex-col gap-3 pt-3 border-t border-border/50 lg:flex-row lg:items-center lg:justify-between">
+            {/* Section Filter Pills */}
+            <div className="flex flex-wrap items-center gap-1.5">
+              {sectionOptions.map((opt) => {
+                const isActive = section === opt.value;
+                return (
+                  <button
+                    key={opt.value}
+                    type="button"
+                    onClick={() => setSection(opt.value)}
+                    className={cn(
+                      "rounded-lg px-3 py-1.5 text-xs font-semibold transition-all cursor-pointer select-none",
+                      isActive
+                        ? "bg-red-600 text-white shadow-2xs"
+                        : "bg-muted/60 text-muted-foreground hover:bg-accent hover:text-foreground"
+                    )}
+                  >
+                    {opt.label}
+                  </button>
+                );
+              })}
+            </div>
+
+            {/* Helper Indicators */}
+            <div className="flex items-center gap-3 text-xs text-muted-foreground shrink-0">
+              <span className="inline-flex items-center gap-1.5 font-medium text-emerald-600 dark:text-emerald-400">
+                <span className="size-1.5 rounded-full bg-emerald-600" />
+                Audio: Chuẩn giọng nữ Tokyo (NHK Standard)
+              </span>
+
+              <button
+                type="button"
+                onClick={() => setShowRomaji(!showRomaji)}
+                className="inline-flex items-center gap-1 rounded-lg border border-border/60 bg-muted/40 px-2.5 py-1 text-xs font-bold text-foreground hover:bg-accent cursor-pointer transition-colors"
+              >
+                {showRomaji ? <Eye className="size-3.5" /> : <EyeOff className="size-3.5" />}
+                <span>{showRomaji ? "Ẩn Romaji" : "Hiện Romaji"}</span>
+              </button>
+            </div>
+          </div>
+        )}
       </div>
 
-      {/* Main Content Area */}
+      {/* 3. Main Content Layout */}
       {isKanaTab ? (
-        <KanaGrid script={activeTab} section={section} query={search} />
+        <div className="grid grid-cols-1 lg:grid-cols-[1fr_360px] gap-6 print:block">
+          {/* Left Column: Kana Table Grid */}
+          <div className="flex flex-col gap-6">
+            <KanaTableGrid
+              script={activeTab === "katakana" ? "katakana" : "hiragana"}
+              section={section}
+              searchQuery={search}
+              showRomaji={showRomaji}
+              selectedKana={selectedKana}
+              onSelectKana={setSelectedKana}
+            />
+          </div>
+
+          {/* Right Column: Sticky Inspector Panel */}
+          <div className="print:hidden">
+            <KanaInspectorCard kana={selectedKana} />
+          </div>
+        </div>
       ) : activeTab === "pronunciation" ? (
         <PronunciationGuide />
       ) : (

@@ -190,3 +190,17 @@
     display: flex !important;
   }
 }
+
+/* Authentic Japanese Mincho Calligraphy Font Stack (明朝体) for Kanji & Radicals */
+.font-kanji-mincho {
+  font-family: "Hiragino Mincho ProN", "Yu Mincho", "YuMincho", "BIZ UDPMincho", "MS PMincho", "Songti SC", "SimSun", serif;
+  font-weight: 600;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Smooth Calligraphic & Rounded Kanji Font Stack */
+.font-kanji-soft {
+  font-family: "UD Digi Kyokasho N-R", "UDDigiKyokashoN-R", "Kaiti SC", "KaiTi", "Hiragino Maru Gothic ProN", "Yu Gothic", sans-serif;
+  font-weight: 600;
+  -webkit-font-smoothing: antialiased;
+}

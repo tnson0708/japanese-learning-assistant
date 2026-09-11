@@ -98,13 +98,13 @@ export function StrokeOrderSvg({
             setPlayKey((k) => k + 1);
             onReplay?.();
           }}
-          className="mt-3 inline-flex items-center gap-1.5 rounded-full border bg-background px-3 py-1.5 text-xs font-semibold text-muted-foreground shadow-2xs transition-all duration-150 hover:border-primary/50 hover:bg-accent hover:text-foreground hover:shadow-xs active:scale-95 cursor-pointer"
+          className="mt-2 inline-flex items-center gap-1 rounded-full border border-border/70 bg-background px-2.5 py-1 text-[11px] font-semibold text-muted-foreground shadow-2xs transition-all duration-150 hover:border-red-500/50 hover:bg-accent hover:text-foreground active:scale-95 cursor-pointer whitespace-nowrap"
           title={t("detail_replay_strokes")}
           aria-label={t("detail_replay_strokes")}
         >
-          <RotateCcw className="size-3.5 text-primary" />
-          <span>{t("detail_replay_strokes")}</span>
-          <kbd className="hidden sm:inline-block rounded bg-muted border px-1.5 py-0.5 text-[10px] font-mono font-bold text-muted-foreground">
+          <RotateCcw className="size-3 text-red-600 shrink-0" />
+          <span>Phát lại nét</span>
+          <kbd className="hidden sm:inline-block rounded bg-muted/80 border px-1.5 py-0.5 text-[9px] font-mono font-bold text-muted-foreground leading-none">
             B
           </kbd>
         </button>

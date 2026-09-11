@@ -3,40 +3,33 @@
 import React, { useState } from "react";
 import {
   Volume2,
-  BookOpen,
   Sparkles,
-  Music,
+  Info,
+  Play,
   ArrowRight,
   TrendingUp,
   VolumeX,
-  Layers,
-  HelpCircle,
-  MessageSquare,
+  Music,
+  CheckCircle2,
 } from "lucide-react";
 import { speakJapanese } from "@/lib/speech";
 import { useLanguage } from "@/lib/language-context";
 import { cn } from "@/lib/utils";
 
-type PronunciationTopicId =
-  | "all"
-  | "long-vowels"
-  | "hatsuon"
-  | "sokuon"
-  | "youon"
-  | "ga-row"
-  | "devoicing"
-  | "pitch-accent"
-  | "intonation";
-
-interface AudioBadgeProps {
+// Audio Button Helper
+function AudioButton({
+  text,
+  label,
+  subLabel,
+  variant = "default",
+  className,
+}: {
   text: string;
-  romaji?: string;
-  meaning?: string;
-  accentNote?: string;
+  label?: string;
+  subLabel?: string;
+  variant?: "default" | "outline" | "red" | "accent" | "ghost";
   className?: string;
-}
-
-function AudioWordBadge({ text, romaji, meaning, accentNote, className }: AudioBadgeProps) {
+}) {
   const [playing, setPlaying] = useState(false);
 
   const handlePlay = (e: React.MouseEvent) => {
@@ -48,957 +41,799 @@ function AudioWordBadge({ text, romaji, meaning, accentNote, className }: AudioB
   };
 
   return (
-    <div
+    <button
+      type="button"
       onClick={handlePlay}
-      role="button"
-      tabIndex={0}
-      onKeyDown={(e) => e.key === "Enter" && handlePlay(e as unknown as React.MouseEvent)}
       className={cn(
-        "group relative flex flex-col items-center justify-center rounded-xl border bg-card/80 p-3 text-center transition-all duration-200 hover:-translate-y-0.5 hover:border-primary/60 hover:bg-accent/60 hover:shadow-sm cursor-pointer select-none",
-        playing && "ring-2 ring-primary/60 bg-primary/5",
+        "inline-flex items-center justify-between gap-2.5 rounded-xl border px-3.5 py-2 text-xs font-bold transition-all cursor-pointer select-none active:scale-[0.98]",
+        variant === "red"
+          ? "border-red-600 bg-red-600 text-white hover:bg-red-700 shadow-2xs"
+          : variant === "accent"
+          ? "border-red-200 bg-red-50 dark:bg-red-950/40 text-red-700 dark:text-red-300 hover:bg-red-100"
+          : variant === "outline"
+          ? "border-border/80 bg-background hover:bg-accent text-foreground"
+          : variant === "ghost"
+          ? "border-transparent bg-muted/60 hover:bg-accent text-foreground"
+          : "border-border/60 bg-card hover:border-red-500/50 hover:bg-accent/50 text-foreground",
+        playing && "ring-2 ring-red-500 animate-pulse",
         className
       )}
     >
-      <button
-        type="button"
-        className="absolute top-1.5 right-1.5 rounded-full p-1 text-muted-foreground/60 transition-colors group-hover:text-primary group-hover:bg-primary/10"
-        title={`Listen to ${text}`}
-      >
-        <Volume2 className={cn("size-3.5", playing && "animate-pulse text-primary")} />
-      </button>
-
-      <span className="text-xl font-bold tracking-wide text-foreground group-hover:text-primary transition-colors">
-        {text}
-      </span>
-
-      {romaji && (
-        <span className="mt-0.5 text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-          {romaji}
-        </span>
-      )}
-
-      {meaning && (
-        <span className="mt-1 text-[11px] font-medium text-foreground/80 leading-tight">
-          {meaning}
-        </span>
-      )}
-
-      {accentNote && (
-        <span className="mt-1 rounded-md bg-secondary/80 px-1.5 py-0.5 text-[10px] font-mono text-muted-foreground">
-          {accentNote}
-        </span>
-      )}
-    </div>
+      <div className="flex items-center gap-2">
+        <Volume2 className={cn("size-3.5 shrink-0", variant === "red" ? "text-white" : "text-red-600")} />
+        <div className="flex flex-col text-left">
+          <span>{label || text}</span>
+          {subLabel && <span className="text-[10px] opacity-80 font-normal">{subLabel}</span>}
+        </div>
+      </div>
+    </button>
   );
+}
+
+// Mouth SVG Illustrations for 5 Vowels
+function VowelMouthSvg({ type, className }: { type: "a" | "i" | "u" | "e" | "o"; className?: string }) {
+  switch (type) {
+    case "a":
+      // Wide open relaxed mouth
+      return (
+        <svg viewBox="0 0 100 50" className={cn("w-full h-10", className)}>
+          <path d="M 15 25 Q 50 10 85 25 Q 50 48 15 25 Z" fill="none" stroke="#ef4444" strokeWidth="3" strokeLinecap="round" />
+          <path d="M 25 25 Q 50 40 75 25" fill="#fca5a5" opacity="0.4" />
+          <path d="M 30 20 Q 50 15 70 20" stroke="#f87171" strokeWidth="2" fill="none" />
+        </svg>
+      );
+    case "i":
+      // Wide smile, flat lips
+      return (
+        <svg viewBox="0 0 100 50" className={cn("w-full h-10", className)}>
+          <path d="M 10 25 Q 50 18 90 25 Q 50 32 10 25 Z" fill="none" stroke="#ef4444" strokeWidth="3" strokeLinecap="round" />
+          <path d="M 15 25 Q 50 28 85 25" fill="#fca5a5" opacity="0.3" />
+          <path d="M 20 22 Q 50 18 80 22" stroke="#f87171" strokeWidth="1.5" fill="none" />
+        </svg>
+      );
+    case "u":
+      // Flat unrounded lips
+      return (
+        <svg viewBox="0 0 100 50" className={cn("w-full h-10", className)}>
+          <path d="M 25 25 Q 50 21 75 25 Q 50 29 25 25 Z" fill="none" stroke="#dc2626" strokeWidth="3.5" strokeLinecap="round" />
+          <line x1="30" y1="25" x2="70" y2="25" stroke="#ef4444" strokeWidth="2" strokeDasharray="3,3" />
+        </svg>
+      );
+    case "e":
+      // Medium open mouth
+      return (
+        <svg viewBox="0 0 100 50" className={cn("w-full h-10", className)}>
+          <path d="M 18 25 Q 50 14 82 25 Q 50 40 18 25 Z" fill="none" stroke="#ef4444" strokeWidth="3" strokeLinecap="round" />
+          <path d="M 28 25 Q 50 34 72 25" fill="#fca5a5" opacity="0.3" />
+        </svg>
+      );
+    case "o":
+      // Round vertical oval mouth
+      return (
+        <svg viewBox="0 0 100 50" className={cn("w-full h-10", className)}>
+          <ellipse cx="50" cy="25" rx="24" ry="18" fill="none" stroke="#ef4444" strokeWidth="3" />
+          <ellipse cx="50" cy="25" rx="16" ry="11" fill="#fca5a5" opacity="0.3" />
+        </svg>
+      );
+  }
 }
 
 export function PronunciationGuide() {
   const { language } = useLanguage();
   const isVi = language === "vi";
-  const [activeTopic, setActiveTopic] = useState<PronunciationTopicId>("all");
-
-  const topics = [
-    { id: "all" as const, label: isVi ? "Tất cả chủ đề" : "All Topics", icon: BookOpen },
-    { id: "long-vowels" as const, label: isVi ? "1. Nguyên âm dài (Trường âm)" : "1. Long Vowels (Chōon)", icon: Sparkles },
-    { id: "hatsuon" as const, label: isVi ? "2. Âm ん (Hatsuon)" : "2. The 'n' Sound (ん)", icon: Music },
-    { id: "sokuon" as const, label: isVi ? "3. Âm ngắt っ (Sokuon)" : "3. Small Tsu (っ)", icon: Layers },
-    { id: "youon" as const, label: isVi ? "4. Âm ghép (Yōon)" : "4. Contracted Sounds (Yōon)", icon: Layers },
-    { id: "ga-row" as const, label: isVi ? "5. Hàng が (Ga row)" : "5. The 'ga' Row", icon: Music },
-    { id: "devoicing" as const, label: isVi ? "6. Vô thanh hóa nguyên âm" : "6. Vowel Devoicing", icon: VolumeX },
-    { id: "pitch-accent" as const, label: isVi ? "7. Trọng âm (Pitch Accent)" : "7. Pitch Accent", icon: TrendingUp },
-    { id: "intonation" as const, label: isVi ? "8. Ngữ điệu câu (Intonation)" : "8. Sentence Intonation", icon: MessageSquare },
-  ];
-
-  const shouldShow = (id: PronunciationTopicId) => activeTopic === "all" || activeTopic === id;
 
   return (
-    <div className="flex flex-col gap-8">
-      {/* Sub-Topic Navigation Bar */}
-      <div className="flex flex-col gap-3 rounded-2xl border bg-card/60 p-4 shadow-2xs">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-muted-foreground">
-            <BookOpen className="size-4 text-primary" />
-            <span>{isVi ? "Danh mục bài học phát âm" : "Pronunciation Guide Index"}</span>
+    <div className="flex flex-col gap-10">
+      {/* ========================================================================= */}
+      {/* SECTION 1: BẢN ĐỒ 5 NGUYÊN ÂM CHUẨN (VOWEL MAP) */}
+      {/* ========================================================================= */}
+      <section className="flex flex-col gap-5">
+        <div className="flex flex-col gap-1 md:flex-row md:items-end md:justify-between border-b border-border/60 pb-3">
+          <div>
+            <span className="text-[10px] font-extrabold uppercase tracking-widest text-red-600">
+              KHẨU HÌNH HỌC • VOWEL MAP
+            </span>
+            <h2 className="text-xl font-extrabold tracking-tight text-foreground">
+              1. Bản đồ 5 Nguyên âm Chuẩn (A • I • U • E • O)
+            </h2>
           </div>
-          <span className="text-xs text-muted-foreground">
-            {isVi ? "8 quy tắc phát âm cốt lõi" : "8 Essential Phonetic Rules"}
+          <p className="text-xs text-muted-foreground max-w-md">
+            Khác biệt mấu chốt so với tiếng Việt. Mỗi ít xê dịch, độ mở hàm nông hơn và phát âm dứt khoát không ngân rung tùy tiện.
+          </p>
+        </div>
+
+        {/* 5 Vowel Cards Row */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+          {/* Card 1: /A/ */}
+          <div className="flex flex-col justify-between rounded-2xl border border-border/80 bg-card p-4 shadow-2xs transition-all hover:border-red-500/40">
+            <div>
+              <div className="flex items-center justify-between text-[11px] font-bold text-muted-foreground mb-1">
+                <span>01</span>
+                <span>NGUYÊN ÂM /A/</span>
+              </div>
+              <div className="text-center py-2">
+                <span className="text-4xl font-extrabold text-foreground">あ</span>
+                <div className="text-xs text-muted-foreground font-semibold mt-1">ア • [ a ]</div>
+              </div>
+              <div className="my-2 rounded-xl bg-muted/40 p-2.5 flex items-center justify-center">
+                <VowelMouthSvg type="a" />
+              </div>
+              <p className="text-xs text-muted-foreground leading-relaxed">
+                Miệng mở vừa phải, vòm họng thả lỏng. Âm ngắn gọn và thanh thoát hơn âm &quot;A&quot; trong tiếng Việt.
+              </p>
+            </div>
+            <div className="pt-3 mt-3 border-t border-border/40">
+              <AudioButton text="あ" label="Nghe âm /A/" className="w-full justify-center" />
+            </div>
+          </div>
+
+          {/* Card 2: /I/ */}
+          <div className="flex flex-col justify-between rounded-2xl border border-border/80 bg-card p-4 shadow-2xs transition-all hover:border-red-500/40">
+            <div>
+              <div className="flex items-center justify-between text-[11px] font-bold text-muted-foreground mb-1">
+                <span>02</span>
+                <span>NGUYÊN ÂM /I/</span>
+              </div>
+              <div className="text-center py-2">
+                <span className="text-4xl font-extrabold text-foreground">い</span>
+                <div className="text-xs text-muted-foreground font-semibold mt-1">イ • [ i ]</div>
+              </div>
+              <div className="my-2 rounded-xl bg-muted/40 p-2.5 flex items-center justify-center">
+                <VowelMouthSvg type="i" />
+              </div>
+              <p className="text-xs text-muted-foreground leading-relaxed">
+                Kéo nhẹ khóe miệng sang hai bên, không gồng cơ má. Lưng lưỡi dâng cao áp gần ngạc cứng.
+              </p>
+            </div>
+            <div className="pt-3 mt-3 border-t border-border/40">
+              <AudioButton text="い" label="Nghe âm /I/" className="w-full justify-center" />
+            </div>
+          </div>
+
+          {/* Card 3: /U/ (HIGHLIGHTED RED CARD) */}
+          <div className="flex flex-col justify-between rounded-2xl border-2 border-red-600/70 bg-red-50/50 dark:bg-red-950/20 p-4 shadow-xs relative overflow-hidden">
+            <div className="absolute top-0 right-0 rounded-bl-xl bg-red-600 px-2 py-0.5 text-[9px] font-black uppercase text-white tracking-wider">
+              LƯU Ý ĐẶC BIỆT
+            </div>
+            <div>
+              <div className="flex items-center justify-between text-[11px] font-bold text-red-600 mb-1">
+                <span>03</span>
+                <span>NGUYÊN ÂM /U/</span>
+              </div>
+              <div className="text-center py-2">
+                <span className="text-4xl font-extrabold text-red-600">う</span>
+                <div className="text-xs text-red-600/80 font-bold mt-1">ウ • [ ɯ ]</div>
+              </div>
+              <div className="my-2 rounded-xl bg-red-100/60 dark:bg-red-900/30 p-2.5 flex items-center justify-center border border-red-200/50">
+                <VowelMouthSvg type="u" />
+              </div>
+              <p className="text-xs text-red-950 dark:text-red-200 font-medium leading-relaxed">
+                <strong className="text-red-600 font-extrabold">Tuyệt đối không chu môi</strong> như &quot;U&quot; tiếng Việt. Môi dẹt tự nhiên, âm phát ra lai giữa &quot;U&quot; và &quot;Ư&quot;.
+              </p>
+            </div>
+            <div className="pt-3 mt-3 border-t border-red-200/60 dark:border-red-900/40">
+              <AudioButton text="う" label="Nghe âm /U/" className="w-full justify-center" />
+            </div>
+          </div>
+
+          {/* Card 4: /E/ */}
+          <div className="flex flex-col justify-between rounded-2xl border border-border/80 bg-card p-4 shadow-2xs transition-all hover:border-red-500/40">
+            <div>
+              <div className="flex items-center justify-between text-[11px] font-bold text-muted-foreground mb-1">
+                <span>04</span>
+                <span>NGUYÊN ÂM /E/</span>
+              </div>
+              <div className="text-center py-2">
+                <span className="text-4xl font-extrabold text-foreground">え</span>
+                <div className="text-xs text-muted-foreground font-semibold mt-1">エ • [ e ]</div>
+              </div>
+              <div className="my-2 rounded-xl bg-muted/40 p-2.5 flex items-center justify-center">
+                <VowelMouthSvg type="e" />
+              </div>
+              <p className="text-xs text-muted-foreground leading-relaxed">
+                Mở miệng tầm trung bình, phát âm nằm giữa âm &quot;Ê&quot; và &quot;È&quot; trong tiếng Việt. Lưỡi không gập cong.
+              </p>
+            </div>
+            <div className="pt-3 mt-3 border-t border-border/40">
+              <AudioButton text="え" label="Nghe âm /E/" className="w-full justify-center" />
+            </div>
+          </div>
+
+          {/* Card 5: /O/ */}
+          <div className="flex flex-col justify-between rounded-2xl border border-border/80 bg-card p-4 shadow-2xs transition-all hover:border-red-500/40">
+            <div>
+              <div className="flex items-center justify-between text-[11px] font-bold text-muted-foreground mb-1">
+                <span>05</span>
+                <span>NGUYÊN ÂM /O/</span>
+              </div>
+              <div className="text-center py-2">
+                <span className="text-4xl font-extrabold text-foreground">お</span>
+                <div className="text-xs text-muted-foreground font-semibold mt-1">オ • [ o ]</div>
+              </div>
+              <div className="my-2 rounded-xl bg-muted/40 p-2.5 flex items-center justify-center">
+                <VowelMouthSvg type="o" />
+              </div>
+              <p className="text-xs text-muted-foreground leading-relaxed">
+                Môi hơi tròn nhưng không nhọn ra trước. Âm thoát ra từ sâu vòm họng, lai giữa &quot;Ô&quot; và &quot;Ơ&quot;.
+              </p>
+            </div>
+            <div className="pt-3 mt-3 border-t border-border/40">
+              <AudioButton text="お" label="Nghe âm /O/" className="w-full justify-center" />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ========================================================================= */}
+      {/* SECTION 2: 4 HIỆN TƯỢNG PHÁT ÂM ĐẶC THỦ CỐT LÕI */}
+      {/* ========================================================================= */}
+      <section className="flex flex-col gap-5">
+        <div className="flex flex-col gap-1 md:flex-row md:items-end md:justify-between border-b border-border/60 pb-3">
+          <div>
+            <span className="text-[10px] font-extrabold uppercase tracking-widest text-red-600">
+              QUY LUẬT ÂM VỊ HỌC • MORA & PHONETICS
+            </span>
+            <h2 className="text-xl font-extrabold tracking-tight text-foreground">
+              2. 4 Hiện tượng Phát âm Đặc thủ Cốt lõi
+            </h2>
+          </div>
+          <p className="text-xs text-muted-foreground max-w-md">
+            Làm chủ 4 quy tắc này sẽ giúp bạn xóa bỏ hoàn toàn ngọng điệu gượng gạo khi chuyển từ phát âm tiếng Việt sang tiếng Nhật.
+          </p>
+        </div>
+
+        {/* 2x2 Grid for 4 Core Phonetic Rules */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {/* Rule 1: Âm ngắt Sokuon (促音) */}
+          <div className="flex flex-col justify-between rounded-2xl border border-border/80 bg-card p-5 shadow-2xs space-y-4">
+            <div className="space-y-3">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <span className="flex size-7 items-center justify-center rounded-xl bg-red-600 text-white font-bold text-xs">
+                    1
+                  </span>
+                  <h3 className="font-extrabold text-base text-foreground">
+                    1. Âm ngắt Sokuon (促音)
+                  </h3>
+                </div>
+                <span className="rounded-full bg-muted px-2.5 py-1 text-[11px] font-bold text-muted-foreground">
+                  1 Phách (1 Mora)
+                </span>
+              </div>
+
+              <div className="inline-flex items-center gap-1.5 rounded-lg bg-red-50 dark:bg-red-950/40 px-2.5 py-1 text-xs font-semibold text-red-600">
+                <Info className="size-3.5" />
+                <span>Ký hiệu bằng chữ &quot;tsu&quot; nhỏ (っ / ッ)</span>
+              </div>
+
+              <p className="text-xs text-muted-foreground leading-relaxed">
+                <strong>Quy tắc:</strong> Khi gặp <strong>っ</strong> đứng trước các phụ âm tắc <strong>k, s, t, p</strong>, ta giữ khẩu hình âm tiếp theo và nén hơi dừng lại đúng <strong>1 phách (Mora)</strong> rồi mới bật ra.
+              </p>
+
+              {/* Timing Diagram Box */}
+              <div className="rounded-xl border border-border/60 bg-muted/30 p-3 space-y-2">
+                <div className="text-[11px] font-bold text-foreground">
+                  Biểu đồ nhịp phách (Mora timing):
+                </div>
+                <div className="grid grid-cols-3 gap-2 text-center text-xs">
+                  <div className="rounded-lg bg-background p-2 border border-border/50">
+                    <div className="font-extrabold text-foreground">き (ki)</div>
+                    <div className="text-[10px] text-muted-foreground">Phách 1 • Bật âm</div>
+                  </div>
+                  <div className="rounded-lg bg-background p-2 border border-red-500/60 font-bold">
+                    <div className="font-extrabold text-red-600">っ (pause)</div>
+                    <div className="text-[10px] text-red-600/80 font-medium">Phách 2 • Nén hơi</div>
+                  </div>
+                  <div className="rounded-lg bg-background p-2 border border-border/50">
+                    <div className="font-extrabold text-foreground">て (te)</div>
+                    <div className="text-[10px] text-muted-foreground">Phách 3 • Bật mạnh</div>
+                  </div>
+                </div>
+                <div className="text-right text-[10px] font-bold text-red-600">
+                  3 Phách = 3 Nhịp gõ
+                </div>
+              </div>
+
+              {/* Audio examples */}
+              <div className="space-y-2 pt-1">
+                <div className="flex items-center justify-between rounded-xl bg-accent/40 p-2.5">
+                  <AudioButton text="きって" label="きって [kitte] • Con tem" />
+                  <span className="text-[11px] text-muted-foreground font-semibold">KHÁC: きて (kite) • HÃY ĐẾN</span>
+                </div>
+                <div className="flex items-center justify-between rounded-xl bg-accent/40 p-2.5">
+                  <AudioButton text="がっこう" label="がっこう [gakkou] • Trường học" />
+                  <span className="text-[10px] text-muted-foreground font-mono">4 Phách: ga - k - ko - u</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Rule 2: Trường âm Chōon (長音) */}
+          <div className="flex flex-col justify-between rounded-2xl border border-border/80 bg-card p-5 shadow-2xs space-y-4">
+            <div className="space-y-3">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <span className="flex size-7 items-center justify-center rounded-xl bg-red-600 text-white font-bold text-xs">
+                    2
+                  </span>
+                  <h3 className="font-extrabold text-base text-foreground">
+                    2. Trường âm Chōon (長音)
+                  </h3>
+                </div>
+                <span className="rounded-full bg-muted px-2.5 py-1 text-[11px] font-bold text-muted-foreground">
+                  2 Phách (2 Mora)
+                </span>
+              </div>
+
+              <p className="text-xs text-muted-foreground leading-relaxed">
+                <strong>Quy tắc:</strong> Độ dài quyết định ý nghĩa của từ. Trong Hiragana thêm nguyên âm cùng hàng (aa, ii, uu, ee/ei, oo/ou). Trong Katakana dùng dấu gạch ngang kéo dài <strong>ー</strong>.
+              </p>
+
+              {/* Pair Contrast Box */}
+              <div className="rounded-xl border border-border/60 bg-muted/30 p-3 space-y-2">
+                <div className="text-[11px] font-bold text-foreground">Cặp từ đối kháng tương phản:</div>
+                <div className="space-y-2 text-xs">
+                  <div className="flex items-center justify-between bg-background rounded-lg p-2 border border-border/40">
+                    <div>
+                      <span className="font-bold text-foreground">おばさん</span>
+                      <span className="text-muted-foreground text-[10px] ml-1">(Obasan - Cô/Bác)</span>
+                    </div>
+                    <span className="rounded bg-muted px-1.5 py-0.5 text-[10px] font-mono">2 phách</span>
+                    <ArrowRight className="size-3.5 text-muted-foreground" />
+                    <div>
+                      <span className="font-bold text-red-600">おばあさん</span>
+                      <span className="text-muted-foreground text-[10px] ml-1">(Obaasan - Bà)</span>
+                    </div>
+                    <span className="rounded bg-red-100 dark:bg-red-950 text-red-600 px-1.5 py-0.5 text-[10px] font-mono font-bold">3 phách (1+2)</span>
+                  </div>
+
+                  <div className="flex items-center justify-between bg-background rounded-lg p-2 border border-border/40">
+                    <div>
+                      <span className="font-bold text-foreground">ビル</span>
+                      <span className="text-muted-foreground text-[10px] ml-1">(Biru - Tòa nhà)</span>
+                    </div>
+                    <span className="rounded bg-muted px-1.5 py-0.5 text-[10px] font-mono">2 phách</span>
+                    <ArrowRight className="size-3.5 text-muted-foreground" />
+                    <div>
+                      <span className="font-bold text-red-600">ビール</span>
+                      <span className="text-muted-foreground text-[10px] ml-1">(Bīru - Bia)</span>
+                    </div>
+                    <span className="rounded bg-red-100 dark:bg-red-950 text-red-600 px-1.5 py-0.5 text-[10px] font-mono font-bold">3 phách (1+2)</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Audio Listen Buttons */}
+              <div className="flex flex-col gap-2 pt-1">
+                <span className="text-[11px] font-bold text-muted-foreground">📌 Nghe thử phân biệt âm ngắn / trường âm:</span>
+                <div className="grid grid-cols-2 gap-2">
+                  <AudioButton text="ビル" label="1. Biru (2B)" variant="outline" className="justify-center" />
+                  <AudioButton text="ビール" label="2. Bīru (3B)" variant="outline" className="justify-center" />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Rule 3: Âm mũi Hatsuon (撥音) */}
+          <div className="flex flex-col justify-between rounded-2xl border border-border/80 bg-card p-5 shadow-2xs space-y-4">
+            <div className="space-y-3">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <span className="flex size-7 items-center justify-center rounded-xl bg-red-600 text-white font-bold text-xs">
+                    3
+                  </span>
+                  <h3 className="font-extrabold text-base text-foreground">
+                    3. Âm mũi Hatsuon (撥音)
+                  </h3>
+                </div>
+                <span className="rounded-full bg-muted px-2.5 py-1 text-[11px] font-bold text-muted-foreground">
+                  3 Dạng /m/ /n/ /ng/
+                </span>
+              </div>
+
+              <p className="text-xs text-muted-foreground leading-relaxed">
+                Chữ <strong>&quot;ん&quot;</strong> duy nhất (ん / ン) không đứng độc lập mà thay đổi điểm tiếp xúc của vòm họng theo âm tiết đi ngay sau nó để tối ưu luồng hơi.
+              </p>
+
+              {/* 3 Form Rows */}
+              <div className="space-y-2 text-xs">
+                {/* Form /m/ */}
+                <div className="flex items-center justify-between rounded-xl bg-accent/40 p-2.5 border border-border/40">
+                  <div className="flex items-center gap-2">
+                    <span className="rounded-md bg-red-600 px-2 py-0.5 text-[11px] font-bold text-white">/m/</span>
+                    <div>
+                      <div className="font-bold text-foreground">Đọc thành [ m ] khi trước m, b, p</div>
+                      <div className="text-[10px] text-muted-foreground">Hai môi khép chặt để đón âm tiếp theo</div>
+                    </div>
+                  </div>
+                  <AudioButton text="さんぽ" label="さんぽ" subLabel="[sampo] • Đi dạo" variant="accent" />
+                </div>
+
+                {/* Form /n/ */}
+                <div className="flex items-center justify-between rounded-xl bg-accent/40 p-2.5 border border-border/40">
+                  <div className="flex items-center gap-2">
+                    <span className="rounded-md bg-blue-600 px-2 py-0.5 text-[11px] font-bold text-white">/n/</span>
+                    <div>
+                      <div className="font-bold text-foreground">Đọc thành [ n ] khi trước n, t, d</div>
+                      <div className="text-[10px] text-muted-foreground">Đầu lưỡi chạm ngạc cứng chặn hơi</div>
+                    </div>
+                  </div>
+                  <AudioButton text="あんない" label="あんない" subLabel="[annai] • Hướng dẫn" variant="accent" />
+                </div>
+
+                {/* Form /ng/ */}
+                <div className="flex items-center justify-between rounded-xl bg-accent/40 p-2.5 border border-border/40">
+                  <div className="flex items-center gap-2">
+                    <span className="rounded-md bg-emerald-600 px-2 py-0.5 text-[11px] font-bold text-white">/ng/</span>
+                    <div>
+                      <div className="font-bold text-foreground">Đọc thành [ ng ] khi trước k, g hoặc cuối từ</div>
+                      <div className="text-[10px] text-muted-foreground">Cuống lưỡi nâng cao chạm ngạc mềm</div>
+                    </div>
+                  </div>
+                  <AudioButton text="まんが" label="まんが" subLabel="[manga] • Truyện tranh" variant="accent" />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Rule 4: Nuốt nguyên âm (無声化) */}
+          <div className="flex flex-col justify-between rounded-2xl border border-border/80 bg-card p-5 shadow-2xs space-y-4">
+            <div className="space-y-3">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <span className="flex size-7 items-center justify-center rounded-xl bg-red-600 text-white font-bold text-xs">
+                    4
+                  </span>
+                  <h3 className="font-extrabold text-base text-foreground">
+                    4. Nuốt nguyên âm (無声化)
+                  </h3>
+                </div>
+                <span className="rounded-full bg-red-100 dark:bg-red-950 text-red-600 px-2.5 py-1 text-[11px] font-bold">
+                  Âm Vô Thanh
+                </span>
+              </div>
+
+              <p className="text-xs text-muted-foreground leading-relaxed">
+                <strong>Quy tắc:</strong> Khi nguyên âm hẹp <strong>/i/</strong> hoặc <strong>/u/</strong> kẹp giữa các phụ âm vô thanh (<strong>k, s, t, h, p</strong>) hoặc đứng cuối câu, dây thanh không rung, tạo thành âm gió thì thầm.
+              </p>
+
+              {/* Practical Examples */}
+              <div className="rounded-xl border border-border/60 bg-muted/30 p-3 space-y-2.5">
+                <div className="text-[11px] font-bold text-foreground">Ví dụ thực tế trong giao tiếp hàng ngày:</div>
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between bg-background rounded-lg p-2.5 border border-border/40">
+                    <div>
+                      <div className="font-bold text-foreground">です <span className="text-muted-foreground text-xs font-normal">thay vì đọc &quot;đề-sự&quot;</span></div>
+                      <div className="text-[10px] text-muted-foreground">Âm /u/ tiêu biến → Phát âm chuẩn: <span className="font-bold text-red-600">[ des ]</span> (âm gió kết thúc)</div>
+                    </div>
+                    <AudioButton text="です" label="Listen" />
+                  </div>
+
+                  <div className="flex items-center justify-between bg-background rounded-lg p-2.5 border border-border/40">
+                    <div>
+                      <div className="font-bold text-foreground">すき (suki) • <span className="text-muted-foreground font-normal">Thích</span></div>
+                      <div className="text-[10px] text-muted-foreground">/u/ nằm giữa &quot;s&quot; và &quot;k&quot; → Phát âm chuẩn: <span className="font-bold text-red-600">[ s_ki ]</span></div>
+                    </div>
+                    <AudioButton text="すき" label="Listen" />
+                  </div>
+
+                  <div className="flex items-center justify-between bg-background rounded-lg p-2.5 border border-border/40">
+                    <div>
+                      <div className="font-bold text-foreground">ひと (hito) • <span className="text-muted-foreground font-normal">Con người</span></div>
+                      <div className="text-[10px] text-muted-foreground">/i/ nằm giữa &quot;h&quot; và &quot;t&quot; → Phát âm chuẩn: <span className="font-bold text-red-600">[ h_to ]</span></div>
+                    </div>
+                    <AudioButton text="ひと" label="Listen" />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ========================================================================= */}
+      {/* SECTION 3: SƠ NHẬP CAO ĐỘ ÂM ĐIỆU (TOKYO PITCH ACCENT) */}
+      {/* ========================================================================= */}
+      <section className="flex flex-col gap-5">
+        <div className="flex flex-col gap-1 md:flex-row md:items-end md:justify-between border-b border-border/60 pb-3">
+          <div>
+            <span className="text-[10px] font-extrabold uppercase tracking-widest text-red-600">
+              NGỮ ĐIỆU CAO ĐỘ • TOKYO DIALECT
+            </span>
+            <h2 className="text-xl font-extrabold tracking-tight text-foreground">
+              3. Sơ nhập Cao độ Âm điệu (Tokyo Pitch Accent 高低アクセント)
+            </h2>
+          </div>
+          <p className="text-xs text-muted-foreground max-w-md">
+            Tiếng Nhật không có dấu sắc/huyền/hỏi/ngã như tiếng Việt, nhưng có quy tắc Cao (High) và Thấp (Low) định hình bản sắc giọng nói Tokyo.
+          </p>
+        </div>
+
+        {/* 4 Pitch Pattern Columns */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          {/* Pattern 1: Heiban */}
+          <div className="flex flex-col justify-between rounded-2xl border border-border/80 bg-card p-4 shadow-2xs">
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <span className="rounded-md bg-muted px-2 py-0.5 text-[10px] font-bold text-muted-foreground">Mẫu 0 (Type 0)</span>
+                <span className="font-extrabold text-xs text-foreground">平板</span>
+              </div>
+              <h4 className="font-extrabold text-base text-foreground">Heiban (Bằng phẳng)</h4>
+              <p className="text-xs text-muted-foreground leading-relaxed">
+                Âm đầu Thấp, các âm sau Cao và giữ nguyên khi kèm trợ từ (が/を).
+              </p>
+
+              {/* Pitch Line Diagram SVG */}
+              <div className="my-3 rounded-xl bg-muted/40 p-3 flex items-center justify-center border border-border/40">
+                <svg viewBox="0 0 160 50" className="w-full h-12">
+                  <line x1="20" y1="35" x2="60" y2="15" stroke="#22c55e" strokeWidth="2.5" />
+                  <line x1="60" y1="15" x2="140" y2="15" stroke="#22c55e" strokeWidth="2.5" />
+                  <circle cx="20" cy="35" r="5" fill="#22c55e" />
+                  <circle cx="60" cy="15" r="5" fill="#22c55e" />
+                  <circle cx="100" cy="15" r="5" fill="#22c55e" />
+                  <circle cx="140" cy="15" r="5" fill="#22c55e" />
+                </svg>
+              </div>
+              <div className="text-[11px] font-bold text-center text-foreground">
+                ví dụ: <span className="text-red-600 font-extrabold">さくら [sa-KU-RA]</span>
+                <div className="text-[10px] text-muted-foreground font-normal">Hoa anh đào</div>
+              </div>
+            </div>
+            <div className="pt-3 mt-3 border-t border-border/40">
+              <AudioButton text="さくら" label="Nghe: さくら" className="w-full justify-center" />
+            </div>
+          </div>
+
+          {/* Pattern 2: Atamadaka */}
+          <div className="flex flex-col justify-between rounded-2xl border border-border/80 bg-card p-4 shadow-2xs">
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <span className="rounded-md bg-red-100 dark:bg-red-950 text-red-600 px-2 py-0.5 text-[10px] font-bold">Mẫu 1 (Type 1)</span>
+                <span className="font-extrabold text-xs text-red-600">頭高</span>
+              </div>
+              <h4 className="font-extrabold text-base text-foreground">Atamadaka (Cao đầu)</h4>
+              <p className="text-xs text-muted-foreground leading-relaxed">
+                Âm đầu tiên Cao, ngay lập tức rơi xuống Thấp ở tất cả các âm còn lại.
+              </p>
+
+              {/* Pitch Line Diagram SVG */}
+              <div className="my-3 rounded-xl bg-muted/40 p-3 flex items-center justify-center border border-border/40">
+                <svg viewBox="0 0 160 50" className="w-full h-12">
+                  <line x1="20" y1="15" x2="60" y2="35" stroke="#ef4444" strokeWidth="2.5" />
+                  <line x1="60" y1="35" x2="140" y2="35" stroke="#ef4444" strokeWidth="2.5" />
+                  <circle cx="20" cy="15" r="5" fill="#ef4444" />
+                  <circle cx="60" cy="35" r="5" fill="#ef4444" />
+                  <circle cx="100" cy="35" r="5" fill="#ef4444" />
+                  <circle cx="140" cy="35" r="5" fill="#ef4444" />
+                </svg>
+              </div>
+              <div className="text-[11px] font-bold text-center text-foreground">
+                ví dụ: <span className="text-red-600 font-extrabold">いのち [I-no-chi]</span>
+                <div className="text-[10px] text-muted-foreground font-normal">Sinh mệnh, mạng sống</div>
+              </div>
+            </div>
+            <div className="pt-3 mt-3 border-t border-border/40">
+              <AudioButton text="いのち" label="Nghe: いのち" className="w-full justify-center" />
+            </div>
+          </div>
+
+          {/* Pattern 3: Nakadaka */}
+          <div className="flex flex-col justify-between rounded-2xl border border-border/80 bg-card p-4 shadow-2xs">
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <span className="rounded-md bg-amber-100 dark:bg-amber-950 text-amber-600 px-2 py-0.5 text-[10px] font-bold">Mẫu 2/3 (Type 2/3)</span>
+                <span className="font-extrabold text-xs text-amber-600">中高</span>
+              </div>
+              <h4 className="font-extrabold text-base text-foreground">Nakadaka (Cao giữa)</h4>
+              <p className="text-xs text-muted-foreground leading-relaxed">
+                Âm đầu Thấp, cao ở giữa từ rồi lại rơi xuống Thấp ở cuối.
+              </p>
+
+              {/* Pitch Line Diagram SVG */}
+              <div className="my-3 rounded-xl bg-muted/40 p-3 flex items-center justify-center border border-border/40">
+                <svg viewBox="0 0 160 50" className="w-full h-12">
+                  <line x1="20" y1="35" x2="80" y2="15" stroke="#f59e0b" strokeWidth="2.5" />
+                  <line x1="80" y1="15" x2="140" y2="35" stroke="#f59e0b" strokeWidth="2.5" />
+                  <circle cx="20" cy="35" r="5" fill="#f59e0b" />
+                  <circle cx="80" cy="15" r="5" fill="#f59e0b" />
+                  <circle cx="140" cy="35" r="5" fill="#f59e0b" />
+                </svg>
+              </div>
+              <div className="text-[11px] font-bold text-center text-foreground">
+                ví dụ: <span className="text-red-600 font-extrabold">たまご [ta-MA-go]</span>
+                <div className="text-[10px] text-muted-foreground font-normal">Quả trứng</div>
+              </div>
+            </div>
+            <div className="pt-3 mt-3 border-t border-border/40">
+              <AudioButton text="たまご" label="Nghe: たまご" className="w-full justify-center" />
+            </div>
+          </div>
+
+          {/* Pattern 4: Odaka */}
+          <div className="flex flex-col justify-between rounded-2xl border border-border/80 bg-card p-4 shadow-2xs">
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <span className="rounded-md bg-purple-100 dark:bg-purple-950 text-purple-600 px-2 py-0.5 text-[10px] font-bold">Mẫu Aot (Type 尾)</span>
+                <span className="font-extrabold text-xs text-purple-600">尾高</span>
+              </div>
+              <h4 className="font-extrabold text-base text-foreground">Odaka (Cao ở đuôi)</h4>
+              <p className="text-xs text-muted-foreground leading-relaxed">
+                Âm đầu Thấp, lên Cao dần đến âm cuối, nhưng sẽ <strong>tự xuống</strong> khi ghép trợ từ.
+              </p>
+
+              {/* Pitch Line Diagram SVG */}
+              <div className="my-3 rounded-xl bg-muted/40 p-3 flex items-center justify-center border border-border/40">
+                <svg viewBox="0 0 160 50" className="w-full h-12">
+                  <line x1="20" y1="35" x2="60" y2="15" stroke="#a855f7" strokeWidth="2.5" />
+                  <line x1="60" y1="15" x2="100" y2="15" stroke="#a855f7" strokeWidth="2.5" />
+                  <line x1="100" y1="15" x2="140" y2="35" stroke="#a855f7" strokeWidth="2.5" strokeDasharray="3,3" />
+                  <circle cx="20" cy="35" r="5" fill="#a855f7" />
+                  <circle cx="60" cy="15" r="5" fill="#a855f7" />
+                  <circle cx="100" cy="15" r="5" fill="#a855f7" />
+                  <circle cx="140" cy="35" r="4" fill="none" stroke="#a855f7" strokeWidth="2" />
+                </svg>
+              </div>
+              <div className="text-[11px] font-bold text-center text-foreground">
+                ví dụ: <span className="text-red-600 font-extrabold">おとこが [o-to-KO--ga↓]</span>
+                <div className="text-[10px] text-muted-foreground font-normal">Người đàn ông (với ở &quot;ga&quot;)</div>
+              </div>
+            </div>
+            <div className="pt-3 mt-3 border-t border-border/40">
+              <AudioButton text="おとこが" label="Nghe: おとこが" className="w-full justify-center" />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ========================================================================= */}
+      {/* SECTION 4: PHÒNG THÍ NGHIỆM THÍNH GIÁC (PITCH ACCENT AUDIO LAB) */}
+      {/* ========================================================================= */}
+      <section className="flex flex-col gap-5 rounded-2xl border-2 border-red-600/30 bg-card p-6 shadow-xs relative overflow-hidden">
+        <div className="flex flex-col gap-1 md:flex-row md:items-center md:justify-between border-b border-border/60 pb-4">
+          <div className="space-y-1">
+            <div className="flex items-center gap-2">
+              <Sparkles className="size-4 text-red-600 animate-pulse" />
+              <h3 className="font-extrabold text-lg text-foreground">
+                Phòng thí nghiệm thính giác: Phân biệt Từ đồng âm dị nghĩa
+              </h3>
+            </div>
+            <p className="text-xs text-muted-foreground">
+              Bấm nghe và quan sát sự biến thiên cao độ làm đảo lộn hoàn toàn nghĩa của cùng một chữ Kana.
+            </p>
+          </div>
+          <span className="rounded-full bg-red-600 px-3 py-1 text-xs font-bold text-white shrink-0 self-start md:self-auto">
+            2 Cặp Đối So Sánh
           </span>
         </div>
 
-        <div className="flex flex-wrap gap-1.5">
-          {topics.map((t) => {
-            const Icon = t.icon;
-            const active = activeTopic === t.id;
-            return (
-              <button
-                key={t.id}
-                type="button"
-                onClick={() => setActiveTopic(t.id)}
-                className={cn(
-                  "flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-medium transition-all",
-                  active
-                    ? "bg-primary text-primary-foreground font-semibold shadow-xs"
-                    : "bg-secondary/50 text-muted-foreground hover:bg-accent hover:text-foreground"
-                )}
-              >
-                <Icon className="size-3.5" />
-                <span>{t.label}</span>
-              </button>
-            );
-          })}
-        </div>
-      </div>
-
-      {/* 1. LONG VOWELS (TRƯỜNG ÂM / 長音) */}
-      {shouldShow("long-vowels") && (
-        <section className="flex flex-col gap-4 rounded-2xl border bg-card p-5 sm:p-6 shadow-2xs">
-          <div className="flex items-center gap-3 border-b pb-3">
-            <div className="flex size-9 items-center justify-center rounded-xl bg-primary/10 text-primary font-bold">
-              1
+        {/* TEST BLOCK 1: はし (HASHI) */}
+        <div className="rounded-2xl border border-border/80 bg-muted/20 p-5 space-y-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <span className="text-2xl font-black text-foreground tracking-tight">はし (Hashi)</span>
+              <span className="text-xs text-muted-foreground font-medium">3 cao độ cho 3 ý nghĩa hoàn toàn khác nhau</span>
             </div>
-            <div>
-              <h2 className="text-lg font-bold tracking-tight text-foreground">
-                {isVi ? "Nguyên âm dài (Trường âm / 長音)" : "Long Vowels (Chōon / 長音)"}
-              </h2>
-              <p className="text-xs text-muted-foreground">
-                {isVi
-                  ? "Kéo dài thời lượng phát âm bằng 2 đơn vị âm (mora). Làm thay đổi nghĩa của từ."
-                  : "Extending vowel duration to 2 beats (morae). Changes the word's meaning."}
-              </p>
-            </div>
+            <span className="text-[10px] font-mono uppercase tracking-wider text-muted-foreground bg-muted px-2 py-0.5 rounded">
+              TOKYO PITCH TEST #1
+            </span>
           </div>
-
-          <div className="text-sm text-foreground/90 leading-relaxed">
-            {isVi ? (
-              <p>
-                Nguyên âm ngắn trong tiếng Nhật gồm 5 âm <strong>あ, い, う, え, お</strong> (chỉ có 1 đơn vị âm - mora). Khi phát âm kéo dài gấp đôi thì gọi là <strong>nguyên âm dài (trường âm)</strong>. Việc phát âm ngắn hay dài rất quan trọng vì nó sẽ làm thay đổi hoàn toàn nghĩa của từ.
-              </p>
-            ) : (
-              <p>
-                Japanese has 5 short vowels: <strong>あ, い, う, え, お</strong> (each counts as 1 mora). When held for twice the duration, it becomes a <strong>long vowel (chōon)</strong>. Distinguishing short and long vowels is crucial as it alters word meaning entirely.
-              </p>
-            )}
-          </div>
-
-          {/* Comparison Cards: Short vs Long Vowels */}
-          <div className="flex flex-col gap-3">
-            <h3 className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
-              {isVi ? "Ví dụ so sánh từ âm ngắn và từ có trường âm:" : "Short vs. Long Vowel Pair Examples:"}
-            </h3>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-              {/* Pair 1 */}
-              <div className="flex items-center gap-2 rounded-xl border bg-background/50 p-2.5">
-                <AudioWordBadge
-                  text="おばさん"
-                  romaji="obasan"
-                  meaning={isVi ? "cô, bác gái" : "aunt"}
-                  className="flex-1"
-                />
-                <ArrowRight className="size-4 text-muted-foreground shrink-0" />
-                <AudioWordBadge
-                  text="おばあさん"
-                  romaji="obaasan"
-                  meaning={isVi ? "bà" : "grandmother"}
-                  className="flex-1 border-primary/40 bg-primary/5"
-                />
-              </div>
-
-              {/* Pair 2 */}
-              <div className="flex items-center gap-2 rounded-xl border bg-background/50 p-2.5">
-                <AudioWordBadge
-                  text="おじさん"
-                  romaji="ojisan"
-                  meaning={isVi ? "chú, bác trai" : "uncle"}
-                  className="flex-1"
-                />
-                <ArrowRight className="size-4 text-muted-foreground shrink-0" />
-                <AudioWordBadge
-                  text="おじいさん"
-                  romaji="ojiisan"
-                  meaning={isVi ? "ông" : "grandfather"}
-                  className="flex-1 border-primary/40 bg-primary/5"
-                />
-              </div>
-
-              {/* Pair 3 */}
-              <div className="flex items-center gap-2 rounded-xl border bg-background/50 p-2.5">
-                <AudioWordBadge
-                  text="ゆき"
-                  romaji="yuki"
-                  meaning={isVi ? "tuyết" : "snow"}
-                  className="flex-1"
-                />
-                <ArrowRight className="size-4 text-muted-foreground shrink-0" />
-                <AudioWordBadge
-                  text="ゆうき"
-                  romaji="yuuki"
-                  meaning={isVi ? "dũng cảm" : "courage"}
-                  className="flex-1 border-primary/40 bg-primary/5"
-                />
-              </div>
-
-              {/* Pair 4 */}
-              <div className="flex items-center gap-2 rounded-xl border bg-background/50 p-2.5">
-                <AudioWordBadge
-                  text="え"
-                  romaji="e"
-                  meaning={isVi ? "bức tranh" : "picture"}
-                  className="flex-1"
-                />
-                <ArrowRight className="size-4 text-muted-foreground shrink-0" />
-                <AudioWordBadge
-                  text="ええ"
-                  romaji="ee"
-                  meaning={isVi ? "vâng" : "yes"}
-                  className="flex-1 border-primary/40 bg-primary/5"
-                />
-              </div>
-
-              {/* Pair 5 */}
-              <div className="flex items-center gap-2 rounded-xl border bg-background/50 p-2.5">
-                <AudioWordBadge
-                  text="とる"
-                  romaji="toru"
-                  meaning={isVi ? "lấy" : "to take"}
-                  className="flex-1"
-                />
-                <ArrowRight className="size-4 text-muted-foreground shrink-0" />
-                <AudioWordBadge
-                  text="とおる"
-                  romaji="tooru"
-                  meaning={isVi ? "đi qua" : "pass through"}
-                  className="flex-1 border-primary/40 bg-primary/5"
-                />
-              </div>
-
-              {/* Pair 6 */}
-              <div className="flex items-center gap-2 rounded-xl border bg-background/50 p-2.5">
-                <AudioWordBadge
-                  text="ここ"
-                  romaji="koko"
-                  meaning={isVi ? "đây" : "here"}
-                  className="flex-1"
-                />
-                <ArrowRight className="size-4 text-muted-foreground shrink-0" />
-                <AudioWordBadge
-                  text="こうこう"
-                  romaji="koukou"
-                  meaning={isVi ? "trường THPT" : "high school"}
-                  className="flex-1 border-primary/40 bg-primary/5"
-                />
-              </div>
-
-              {/* Pair 7 */}
-              <div className="flex items-center gap-2 rounded-xl border bg-background/50 p-2.5">
-                <AudioWordBadge
-                  text="へや"
-                  romaji="heya"
-                  meaning={isVi ? "căn phòng" : "room"}
-                  className="flex-1"
-                />
-                <ArrowRight className="size-4 text-muted-foreground shrink-0" />
-                <AudioWordBadge
-                  text="へいや"
-                  romaji="heiya"
-                  meaning={isVi ? "đồng bằng" : "plain"}
-                  className="flex-1 border-primary/40 bg-primary/5"
-                />
-              </div>
-            </div>
-          </div>
-
-          {/* Rules Section: Writing Long Vowels */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
-            {/* Hiragana Rule Box */}
-            <div className="rounded-xl border bg-accent/30 p-4">
-              <h4 className="font-bold text-sm text-foreground flex items-center gap-2 mb-2">
-                <span className="rounded-md bg-primary px-2 py-0.5 text-xs text-primary-foreground">
-                  Hiragana
-                </span>
-                {isVi ? "Quy tắc ghi trường âm bằng Hiragana" : "Long Vowel Writing Rules in Hiragana"}
-              </h4>
-              <ul className="text-xs text-muted-foreground space-y-1.5 list-disc list-inside">
-                <li>
-                  <strong>{isVi ? "Cột あ, い, う" : "あ, い, う columns"}</strong>: {isVi ? "Thêm あ, い, う tương ứng." : "Add あ, い, う respectively."}
-                </li>
-                <li>
-                  <strong>{isVi ? "Cột え" : "え column"}</strong>: {isVi ? "Thêm い vào sau (vd: とけい → tokei)." : "Add い (e.g. とけい → tokei)."}
-                  <br />
-                  <span className="text-[11px] text-amber-600 dark:text-amber-400 font-medium">
-                    {isVi ? "Ngoại lệ: ええ (vâng), ねえ (này), おねえさん (chị gái)" : "Exceptions: ええ (yes), ねえ (hey), おねえさん (older sister)"}
-                  </span>
-                </li>
-                <li>
-                  <strong>{isVi ? "Cột お" : "お column"}</strong>: {isVi ? "Thêm う vào sau (vd: こうこう → koukou)." : "Add う (e.g. こうこう → koukou)."}
-                  <br />
-                  <span className="text-[11px] text-amber-600 dark:text-amber-400 font-medium">
-                    {isVi ? "Ngoại lệ: おおきい (to), おおい (nhiều), とおい (xa)" : "Exceptions: おおきい (big), おおい (many), とおい (far)"}
-                  </span>
-                </li>
-              </ul>
-            </div>
-
-            {/* Katakana Rule Box */}
-            <div className="rounded-xl border bg-accent/30 p-4">
-              <h4 className="font-bold text-sm text-foreground flex items-center gap-2 mb-2">
-                <span className="rounded-md bg-primary px-2 py-0.5 text-xs text-primary-foreground">
-                  Katakana
-                </span>
-                {isVi ? "Quy tắc ghi trường âm bằng Katakana" : "Long Vowel Writing Rules in Katakana"}
-              </h4>
-              <p className="text-xs text-muted-foreground mb-3">
-                {isVi
-                  ? "Trong Katakana, tất cả các trường âm đều dùng dấu gạch ngang dài ー (Chōonpu)."
-                  : "In Katakana, all long vowels are written using the horizontal bar ー (Chōonpu)."}
-              </p>
-              <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
-                <AudioWordBadge text="カード" romaji="kādo" meaning={isVi ? "thẻ, card" : "card"} />
-                <AudioWordBadge text="タクシー" romaji="takushī" meaning={isVi ? "tắc-xi" : "taxi"} />
-                <AudioWordBadge text="スーパー" romaji="sūpā" meaning={isVi ? "siêu thị" : "supermarket"} />
-                <AudioWordBadge text="エスカレーター" romaji="esukarētā" meaning={isVi ? "thang cuốn" : "escalator"} />
-                <AudioWordBadge text="ノート" romaji="nōto" meaning={isVi ? "quyển vở" : "notebook"} />
-              </div>
-            </div>
-          </div>
-        </section>
-      )}
-
-      {/* 2. THE 'N' SOUND (CÁCH PHÁT ÂM CỦA ん / 撥音) */}
-      {shouldShow("hatsuon") && (
-        <section className="flex flex-col gap-4 rounded-2xl border bg-card p-5 sm:p-6 shadow-2xs">
-          <div className="flex items-center gap-3 border-b pb-3">
-            <div className="flex size-9 items-center justify-center rounded-xl bg-primary/10 text-primary font-bold">
-              2
-            </div>
-            <div>
-              <h2 className="text-lg font-bold tracking-tight text-foreground">
-                {isVi ? "Cách phát âm của chữ ん (Hatsuon / 撥音)" : "Pronunciation of the 'n' Sound (ん / Hatsuon)"}
-              </h2>
-              <p className="text-xs text-muted-foreground">
-                {isVi
-                  ? "Âm ん kéo dài 1 mora và biến đổi thành /n/, /m/, /ŋ/ tùy theo âm đứng ngay sau nó."
-                  : "The sound ん lasts 1 mora and changes to /n/, /m/, or /ŋ/ based on the following sound."}
-              </p>
-            </div>
-          </div>
-
-          <p className="text-sm text-foreground/90 leading-relaxed">
-            {isVi
-              ? "Âm ん có độ dài bằng 1 đơn vị âm (mora) và KHÔNG BAO GIỜ đứng ở đầu một từ. Âm ん sẽ tự động biến đổi cách phát âm thành /n/, /m/, hoặc /ŋ/ do ảnh hưởng của các chữ đứng sau nó:"
-              : "The sound ん is 1 mora long and NEVER appears at the beginning of a word. Its pronunciation automatically adapts to /n/, /m/, or /ŋ/ depending on the following syllable:"}
-          </p>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {/* Rule 1: /n/ */}
-            <div className="flex flex-col gap-3 rounded-xl border bg-background/50 p-4">
-              <div className="flex items-center gap-2">
-                <span className="rounded-full bg-primary/20 px-2 py-0.5 text-xs font-bold text-primary">
-                  ① /n/
-                </span>
-                <span className="text-xs font-semibold text-foreground">
-                  {isVi ? "Trước hàng た, だ, ら, な" : "Before た, だ, ら, な rows"}
-                </span>
-              </div>
-              <p className="text-xs text-muted-foreground">
-                {isVi
-                  ? "Khi chữ tiếp theo thuộc hàng た, だ, ら, な thì ん được phát âm là /n/."
-                  : "Pronounced /n/ when followed by t, d, r, n sounds."}
-              </p>
-              <div className="grid grid-cols-2 gap-2 mt-auto">
-                <AudioWordBadge text="はんたい" romaji="hantai" meaning={isVi ? "phản đối" : "opposite"} />
-                <AudioWordBadge text="うんどう" romaji="undou" meaning={isVi ? "vận động" : "exercise"} />
-                <AudioWordBadge text="せんろ" romaji="senro" meaning={isVi ? "đường ray" : "railway"} />
-                <AudioWordBadge text="みんな" romaji="minna" meaning={isVi ? "mọi người" : "everyone"} />
-              </div>
-            </div>
-
-            {/* Rule 2: /m/ */}
-            <div className="flex flex-col gap-3 rounded-xl border bg-background/50 p-4">
-              <div className="flex items-center gap-2">
-                <span className="rounded-full bg-primary/20 px-2 py-0.5 text-xs font-bold text-primary">
-                  ② /m/
-                </span>
-                <span className="text-xs font-semibold text-foreground">
-                  {isVi ? "Trước hàng ば, ぱ, ま" : "Before ば, ぱ, ま rows"}
-                </span>
-              </div>
-              <p className="text-xs text-muted-foreground">
-                {isVi
-                  ? "Khi chữ tiếp theo thuộc hàng ば, ぱ, ま thì ん được phát âm là /m/."
-                  : "Pronounced /m/ when followed by b, p, m sounds."}
-              </p>
-              <div className="grid grid-cols-2 gap-2 mt-auto">
-                <AudioWordBadge text="しんぶん" romaji="shinbun" meaning={isVi ? "báo chí" : "newspaper"} />
-                <AudioWordBadge text="えんぴつ" romaji="enpitsu" meaning={isVi ? "bút chì" : "pencil"} />
-                <AudioWordBadge text="うんめい" romaji="unmei" meaning={isVi ? "vận mệnh" : "destiny"} />
-              </div>
-            </div>
-
-            {/* Rule 3: /ŋ/ */}
-            <div className="flex flex-col gap-3 rounded-xl border bg-background/50 p-4">
-              <div className="flex items-center gap-2">
-                <span className="rounded-full bg-primary/20 px-2 py-0.5 text-xs font-bold text-primary">
-                  ③ /ŋ/ (ng)
-                </span>
-                <span className="text-xs font-semibold text-foreground">
-                  {isVi ? "Trước hàng か, が" : "Before か, が rows"}
-                </span>
-              </div>
-              <p className="text-xs text-muted-foreground">
-                {isVi
-                  ? "Khi chữ tiếp theo thuộc hàng か hoặc が thì ん được phát âm là /ŋ/ (âm ngất mũi)."
-                  : "Pronounced /ŋ/ (nasal ng) when followed by k or g sounds."}
-              </p>
-              <div className="grid grid-cols-2 gap-2 mt-auto">
-                <AudioWordBadge text="てんき" romaji="tenki" meaning={isVi ? "thời tiết" : "weather"} />
-                <AudioWordBadge text="けんがく" romaji="kengaku" meaning={isVi ? "tham quan" : "study tour"} />
-              </div>
-            </div>
-          </div>
-        </section>
-      )}
-
-      {/* 3. SMALL TSU / SOKUON (CÁCH PHÁT ÂM CỦA っ / 促音) */}
-      {shouldShow("sokuon") && (
-        <section className="flex flex-col gap-4 rounded-2xl border bg-card p-5 sm:p-6 shadow-2xs">
-          <div className="flex items-center gap-3 border-b pb-3">
-            <div className="flex size-9 items-center justify-center rounded-xl bg-primary/10 text-primary font-bold">
-              3
-            </div>
-            <div>
-              <h2 className="text-lg font-bold tracking-tight text-foreground">
-                {isVi ? "Âm ngắt っ (Sokuon / 促音)" : "Small Tsu / Geminate Consonant (っ / Sokuon)"}
-              </h2>
-              <p className="text-xs text-muted-foreground">
-                {isVi
-                  ? "Âm っ nhỏ tạo khoảng khựng ngắn (1 mora) và gấp đôi phụ âm đứng ngay sau nó."
-                  : "Small っ creates a brief pause (1 mora) and doubles the following consonant."}
-              </p>
-            </div>
-          </div>
-
-          <p className="text-sm text-foreground/90 leading-relaxed">
-            {isVi ? (
-              <>
-                Âm <strong>っ (tsu nhỏ)</strong> có độ dài bằng 1 đơn vị âm (mora). Nó đứng trước các âm thuộc hàng <strong>か, さ, た, ぱ</strong> (và các hàng ザ, ダ trong từ ngoại lai Katakana). Khi đọc, cần ngắt nhịp nhẹ như giữ hơi rồi bật âm kế tiếp.
-              </>
-            ) : (
-              <>
-                Small <strong>っ (sokuon)</strong> lasts 1 mora. It appears before <strong>か, さ, た, ぱ</strong> rows (and ザ, ダ in Katakana loanwords), creating a double consonant pause before releasing the next sound.
-              </>
-            )}
-          </p>
-
-          <div className="flex flex-col gap-3">
-            <h3 className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
-              {isVi ? "So sánh từ thường và từ có âm ngắt っ:" : "Normal vs. Geminated Pair Examples:"}
-            </h3>
-
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-              <div className="flex items-center gap-2 rounded-xl border bg-background/50 p-2.5">
-                <AudioWordBadge text="ぶか" romaji="buka" meaning={isVi ? "cấp dưới" : "subordinate"} className="flex-1" />
-                <ArrowRight className="size-4 text-muted-foreground shrink-0" />
-                <AudioWordBadge text="ぶっか" romaji="bukka" meaning={isVi ? "mức giá" : "prices"} className="flex-1 border-primary/40 bg-primary/5" />
-              </div>
-
-              <div className="flex items-center gap-2 rounded-xl border bg-background/50 p-2.5">
-                <AudioWordBadge text="かさい" romaji="kasai" meaning={isVi ? "hỏa hoạn" : "fire"} className="flex-1" />
-                <ArrowRight className="size-4 text-muted-foreground shrink-0" />
-                <AudioWordBadge text="かっさい" romaji="kassai" meaning={isVi ? "vỗ tay tán thưởng" : "applause"} className="flex-1 border-primary/40 bg-primary/5" />
-              </div>
-
-              <div className="flex items-center gap-2 rounded-xl border bg-background/50 p-2.5">
-                <AudioWordBadge text="おと" romaji="oto" meaning={isVi ? "âm thanh" : "sound"} className="flex-1" />
-                <ArrowRight className="size-4 text-muted-foreground shrink-0" />
-                <AudioWordBadge text="おっと" romaji="otto" meaning={isVi ? "chồng" : "husband"} className="flex-1 border-primary/40 bg-primary/5" />
-              </div>
-            </div>
-          </div>
-
-          <div className="flex flex-col gap-2 mt-2">
-            <h4 className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
-              {isVi ? "Các từ có âm ngắt thông dụng khác:" : "Other Common Small Tsu Words:"}
-            </h4>
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2">
-              <AudioWordBadge text="にっき" romaji="nikki" meaning={isVi ? "nhật ký" : "diary"} />
-              <AudioWordBadge text="ざっし" romaji="zasshi" meaning={isVi ? "tạp chí" : "magazine"} />
-              <AudioWordBadge text="きって" romaji="kitte" meaning={isVi ? "con tem" : "stamp"} />
-              <AudioWordBadge text="いっぱい" romaji="ippai" meaning={isVi ? "đầy" : "full"} />
-              <AudioWordBadge text="コップ" romaji="koppu" meaning={isVi ? "cái cốc" : "cup"} />
-              <AudioWordBadge text="ベッド" romaji="beddo" meaning={isVi ? "cái giường" : "bed"} />
-            </div>
-          </div>
-        </section>
-      )}
-
-      {/* 4. CONTRACTED SOUNDS (ÂM GHÉP / 拗音 - YŌON) */}
-      {shouldShow("youon") && (
-        <section className="flex flex-col gap-4 rounded-2xl border bg-card p-5 sm:p-6 shadow-2xs">
-          <div className="flex items-center gap-3 border-b pb-3">
-            <div className="flex size-9 items-center justify-center rounded-xl bg-primary/10 text-primary font-bold">
-              4
-            </div>
-            <div>
-              <h2 className="text-lg font-bold tracking-tight text-foreground">
-                {isVi ? "Âm ghép (Yōon / 拗音)" : "Contracted Sounds (Yōon / 拗音)"}
-              </h2>
-              <p className="text-xs text-muted-foreground">
-                {isVi
-                  ? "Kết hợp chữ cột い với ゃ, ゅ, ょ nhỏ. Dù gồm 2 ký tự nhưng chỉ tính là 1 mora."
-                  : "Combining an い-column character with small ゃ, ゅ, ょ. Pronounced as 1 mora."}
-              </p>
-            </div>
-          </div>
-
-          <p className="text-sm text-foreground/90 leading-relaxed">
-            {isVi ? (
-              <>
-                Những âm ghép cùng với các chữ <strong>ゃ, ゅ, ょ nhỏ</strong> gọi là <strong>âm ghép (Yōon)</strong>. Dù được viết bằng hai ký tự nhưng phát âm chỉ liền trong 1 đơn vị âm (mora).
-              </>
-            ) : (
-              <>
-                Kana from the い-column paired with small <strong>ゃ, ゅ, ょ</strong> are called <strong>Yōon (contracted sounds)</strong>. Although written with two symbols, they are spoken as a single beat.
-              </>
-            )}
-          </p>
-
-          <div className="flex flex-col gap-3">
-            <h3 className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
-              {isVi ? "So sánh âm đơn và âm ghép:" : "Single vs. Contracted Sound Examples:"}
-            </h3>
-
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-              <div className="flex items-center gap-2 rounded-xl border bg-background/50 p-2.5">
-                <AudioWordBadge text="ひやく" romaji="hiyaku" meaning={isVi ? "nhảy vọt" : "leap"} className="flex-1" />
-                <ArrowRight className="size-4 text-muted-foreground shrink-0" />
-                <AudioWordBadge text="ひゃく" romaji="hyaku" meaning={isVi ? "một trăm" : "100"} className="flex-1 border-primary/40 bg-primary/5" />
-              </div>
-
-              <div className="flex items-center gap-2 rounded-xl border bg-background/50 p-2.5">
-                <AudioWordBadge text="じゆう" romaji="jiyuu" meaning={isVi ? "tự do" : "freedom"} className="flex-1" />
-                <ArrowRight className="size-4 text-muted-foreground shrink-0" />
-                <AudioWordBadge text="じゅう" romaji="juu" meaning={isVi ? "mười (10)" : "ten (10)"} className="flex-1 border-primary/40 bg-primary/5" />
-              </div>
-
-              <div className="flex items-center gap-2 rounded-xl border bg-background/50 p-2.5">
-                <AudioWordBadge text="びよういん" romaji="biyouin" meaning={isVi ? "thẩm mỹ viện" : "beauty salon"} className="flex-1" />
-                <ArrowRight className="size-4 text-muted-foreground shrink-0" />
-                <AudioWordBadge text="びょういん" romaji="byouin" meaning={isVi ? "bệnh viện" : "hospital"} className="flex-1 border-primary/40 bg-primary/5" />
-              </div>
-            </div>
-          </div>
-
-          <div className="flex flex-col gap-2 mt-2">
-            <h4 className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
-              {isVi ? "Các ví dụ từ âm ghép khác:" : "More Yōon Word Examples:"}
-            </h4>
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2">
-              <AudioWordBadge text="シャツ" romaji="shatsu" meaning={isVi ? "áo sơ-mi" : "shirt"} />
-              <AudioWordBadge text="おちゃ" romaji="ocha" meaning={isVi ? "trà" : "tea"} />
-              <AudioWordBadge text="ぎゅうにゅう" romaji="gyuunyuu" meaning={isVi ? "sữa bò" : "milk"} />
-              <AudioWordBadge text="きょう" romaji="kyou" meaning={isVi ? "hôm nay" : "today"} />
-              <AudioWordBadge text="ぶちょう" romaji="buchou" meaning={isVi ? "trưởng phòng" : "manager"} />
-              <AudioWordBadge text="りょこう" romaji="ryokou" meaning={isVi ? "du lịch" : "travel"} />
-            </div>
-          </div>
-        </section>
-      )}
-
-      {/* 5. THE 'GA' ROW PRONUNCIATION (HÀNG が) */}
-      {shouldShow("ga-row") && (
-        <section className="flex flex-col gap-4 rounded-2xl border bg-card p-5 sm:p-6 shadow-2xs">
-          <div className="flex items-center gap-3 border-b pb-3">
-            <div className="flex size-9 items-center justify-center rounded-xl bg-primary/10 text-primary font-bold">
-              5
-            </div>
-            <div>
-              <h2 className="text-lg font-bold tracking-tight text-foreground">
-                {isVi ? "Phát âm các chữ thuộc hàng が (が・ぎ・ぐ・げ・ご)" : "Pronunciation of the 'ga' Row (が行音)"}
-              </h2>
-              <p className="text-xs text-muted-foreground">
-                {isVi
-                  ? "Phát âm /g/ ở đầu từ và /ŋ/ (âm mũi) khi ở giữa từ trong giọng chuẩn."
-                  : "/g/ sound at the start of a word, nasal /ŋ/ sound inside a word."}
-              </p>
-            </div>
-          </div>
-
-          <div className="text-sm text-foreground/90 leading-relaxed space-y-2">
-            <p>
-              {isVi ? (
-                <>
-                  Phụ âm thuộc hàng <strong>が</strong> (が, ぎ, ぐ, げ, ご) khi <strong>đứng đầu một từ</strong> thì được đọc là <strong>/g/</strong>.
-                  Khi đứng ở giữa hoặc cuối từ, trong phát âm tiếng Nhật chuẩn truyền thống (Tokyo) sẽ được đọc là âm mũi <strong>/ŋ/</strong> (tương tự âm 'ng' trong tiếng Việt).
-                </>
-              ) : (
-                <>
-                  Consonants of the <strong>が row</strong> (が, ぎ, ぐ, げ, ご) are pronounced as <strong>/g/</strong> when at the <strong>beginning of a word</strong>. Inside or at the end of a word, standard Japanese traditionally nasalizes it as <strong>/ŋ/</strong> (like 'ng' in 'sing').
-                </>
-              )}
-            </p>
-            <p className="text-xs text-amber-600 dark:text-amber-400 font-medium">
-              {isVi
-                ? "💡 Ghi chú: Gần đây trong giao tiếp hiện đại, nhiều người Nhật trẻ không phân biệt /g/ và /ŋ/ mà đều đọc là /g/ ở mọi vị trí."
-                : "💡 Note: In modern casual Japanese, many native speakers simplify both positions to standard /g/."}
-            </p>
-          </div>
-
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-1">
-            <AudioWordBadge text="がくせい" romaji="gakusei (/g/)" meaning={isVi ? "học sinh (đầu từ)" : "student (initial /g/)"} />
-            <AudioWordBadge text="かがく" romaji="kagaku (/ŋ/)" meaning={isVi ? "khoa học (giữa từ)" : "science (medial /ŋ/)"} />
-            <AudioWordBadge text="かぎ" romaji="kagi (/ŋ/)" meaning={isVi ? "chìa khóa" : "key"} />
-            <AudioWordBadge text="にほんご" romaji="nihongo (/ŋ/)" meaning={isVi ? "tiếng Nhật" : "Japanese"} />
-          </div>
-        </section>
-      )}
-
-      {/* 6. VOWEL DEVOICING (VÔ THANH HÓA NGUYÊN ÂM / 無声化) */}
-      {shouldShow("devoicing") && (
-        <section className="flex flex-col gap-4 rounded-2xl border bg-card p-5 sm:p-6 shadow-2xs">
-          <div className="flex items-center gap-3 border-b pb-3">
-            <div className="flex size-9 items-center justify-center rounded-xl bg-primary/10 text-primary font-bold">
-              6
-            </div>
-            <div>
-              <h2 className="text-lg font-bold tracking-tight text-foreground">
-                {isVi ? "Sự vô thanh hóa của nguyên âm (Vowel Devoicing / 無声化)" : "Vowel Devoicing (無声化)"}
-              </h2>
-              <p className="text-xs text-muted-foreground">
-                {isVi
-                  ? "Nguyên âm [i] và [u] khi ở giữa các phụ âm vô thanh hoặc ở đuôi ~です, ~ます sẽ bị phát âm lướt nhẹ/thì thầm."
-                  : "Vowels [i] and [u] soften into whispered sounds between voiceless consonants or at ~desu/~masu endings."}
-              </p>
-            </div>
-          </div>
-
-          <div className="text-sm text-foreground/90 leading-relaxed space-y-2">
-            <p>
-              {isVi ? (
-                <>
-                  Các nguyên âm như <strong>[i]</strong> và <strong>[u]</strong> khi nằm giữa các phụ âm vô thanh (k, s, t, h, p) có xu hướng bị <strong>vô thanh hóa</strong> (không rung dây thanh quản, giống phát âm thì thầm lướt qua).
-                </>
-              ) : (
-                <>
-                  The vowels <strong>[i]</strong> and <strong>[u]</strong> tend to become <strong>devoiced</strong> (whispered without vocal cord vibration) when surrounded by voiceless consonants (k, s, t, h, p).
-                </>
-              )}
-            </p>
-            <p>
-              {isVi ? (
-                <>
-                  Đặc biệt, đối với các câu kết thúc bằng đuôi <strong>～です</strong> và <strong>～ます</strong>, nguyên âm <strong>[u]</strong> ở cuối từ cũng có xu hướng bị vô thanh hóa (đọc thành <em>des(u)</em> và <em>mas(u)</em>).
-                </>
-              ) : (
-                <>
-                  Additionally, at sentence endings ending with <strong>～です (desu)</strong> and <strong>～ます (masu)</strong>, the trailing <strong>[u]</strong> vowel drops, sounding like <em>des(u)</em> and <em>mas(u)</em>.
-                </>
-              )}
-            </p>
-          </div>
-
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-1">
-            <AudioWordBadge text="すき" romaji="s(u)ki" meaning={isVi ? "thích" : "like"} accentNote="s[u]ki" />
-            <AudioWordBadge text="です" romaji="des(u)" meaning={isVi ? "là (thì, là)" : "is/am/are"} accentNote="des[u]" />
-            <AudioWordBadge text="したいです" romaji="shitaides(u)" meaning={isVi ? "muốn làm" : "want to do"} accentNote="shitaides[u]" />
-            <AudioWordBadge text="ききます" romaji="kikimas(u)" meaning={isVi ? "nghe" : "listen"} accentNote="kikimas[u]" />
-          </div>
-        </section>
-      )}
-
-      {/* 7. PITCH ACCENT (TRỌNG ÂM CAO THẤP / アクセント) */}
-      {shouldShow("pitch-accent") && (
-        <section className="flex flex-col gap-4 rounded-2xl border bg-card p-5 sm:p-6 shadow-2xs">
-          <div className="flex items-center gap-3 border-b pb-3">
-            <div className="flex size-9 items-center justify-center rounded-xl bg-primary/10 text-primary font-bold">
-              7
-            </div>
-            <div>
-              <h2 className="text-lg font-bold tracking-tight text-foreground">
-                {isVi ? "Trọng âm cao thấp (Pitch Accent / アクセント)" : "Pitch Accent (Pitch Accent / アクセント)"}
-              </h2>
-              <p className="text-xs text-muted-foreground">
-                {isVi
-                  ? "Tiếng Nhật phân biệt từ bằng độ cao thấp của âm giọng. Tiếng Nhật chuẩn có 4 kiểu trọng âm."
-                  : "Japanese distinguishes word meanings through high/low pitch patterns. Standard Japanese has 4 main patterns."}
-              </p>
-            </div>
-          </div>
-
-          <div className="text-sm text-foreground/90 leading-relaxed space-y-2">
-            <p>
-              {isVi ? (
-                <>
-                  Tiếng Nhật là ngôn ngữ có <strong>trọng âm cao thấp (Pitch Accent)</strong>. Độ cao của từng đơn vị âm (mora) quyết định nghĩa của từ.
-                  Đặc trưng của tiếng Nhật tiêu chuẩn (Tokyo): <strong>Độ cao âm của mora thứ nhất và mora thứ hai KHÁC NHAU</strong>, và <strong>một khi giọng đã hạ xuống thì không lên lại trong từ đó</strong>.
-                </>
-              ) : (
-                <>
-                  Japanese uses a pitch-accent system (high vs. low tone). Two cardinal rules of standard Tokyo accent: <strong>The pitch of mora 1 and mora 2 are always different</strong>, and <strong>once the pitch drops within a word, it never rises again</strong>.
-                </>
-              )}
-            </p>
-          </div>
-
-          {/* 4 Pitch Accent Patterns */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-1">
-            {/* 1. Heiban */}
-            <div className="rounded-xl border bg-background/50 p-4">
-              <div className="flex items-center justify-between mb-2">
-                <span className="font-bold text-sm text-foreground">
-                  ① {isVi ? "Kiểu bằng (Heiban - 平板)" : "Flat pattern (Heiban - 平板)"}
-                </span>
-                <span className="rounded-full bg-blue-500/10 px-2 py-0.5 text-[10px] font-bold text-blue-600 dark:text-blue-400">
-                  Low → High → High (Particle stays HIGH)
-                </span>
-              </div>
-              <p className="text-xs text-muted-foreground mb-3">
-                {isVi
-                  ? "Âm đầu thấp, âm thứ 2 cao lên và giữ cao liên tục sang cả trợ từ đứng sau."
-                  : "Starts low on 1st mora, rises high on 2nd mora, stays high onto following particles."}
-              </p>
-              <div className="grid grid-cols-2 gap-2">
-                <AudioWordBadge text="にわ" romaji="niwa" meaning={isVi ? "vườn [thấp-cao]" : "garden [L-H]"} />
-                <AudioWordBadge text="はな" romaji="hana (mũi)" meaning={isVi ? "mũi (はなが - cao)" : "nose (hana ga - H)"} />
-                <AudioWordBadge text="なまえ" romaji="namae" meaning={isVi ? "tên" : "name"} />
-                <AudioWordBadge text="にほんご" romaji="nihongo" meaning={isVi ? "tiếng Nhật" : "Japanese"} />
-              </div>
-            </div>
-
-            {/* 2. Atamadaka */}
-            <div className="rounded-xl border bg-background/50 p-4">
-              <div className="flex items-center justify-between mb-2">
-                <span className="font-bold text-sm text-foreground">
-                  ② {isVi ? "Kiểu hạ ở đầu từ (Atamadaka - 頭高)" : "Head-high pattern (Atamadaka - 頭高)"}
-                </span>
-                <span className="rounded-full bg-red-500/10 px-2 py-0.5 text-[10px] font-bold text-red-600 dark:text-red-400">
-                  HIGH ↓ Low → Low
-                </span>
-              </div>
-              <p className="text-xs text-muted-foreground mb-3">
-                {isVi
-                  ? "Âm thứ nhất cao, ngay sau đó hạ thấp đột ngột xuống các âm còn lại."
-                  : "Starts HIGH on 1st mora, drops immediately to low pitch for remaining morae."}
-              </p>
-              <div className="grid grid-cols-3 gap-2">
-                <AudioWordBadge text="ほん" romaji="hon" meaning={isVi ? "quyển sách" : "book"} />
-                <AudioWordBadge text="てんき" romaji="tenki" meaning={isVi ? "thời tiết" : "weather"} />
-                <AudioWordBadge text="らいげつ" romaji="raigetsu" meaning={isVi ? "tháng sau" : "next month"} />
-              </div>
-            </div>
-
-            {/* 3. Nakadaka */}
-            <div className="rounded-xl border bg-background/50 p-4">
-              <div className="flex items-center justify-between mb-2">
-                <span className="font-bold text-sm text-foreground">
-                  ③ {isVi ? "Kiểu hạ ở giữa từ (Nakadaka - 中高)" : "Middle-high pattern (Nakadaka - 中高)"}
-                </span>
-                <span className="rounded-full bg-emerald-500/10 px-2 py-0.5 text-[10px] font-bold text-emerald-600 dark:text-emerald-400">
-                  Low → HIGH ↓ Low
-                </span>
-              </div>
-              <p className="text-xs text-muted-foreground mb-3">
-                {isVi
-                  ? "Âm đầu thấp, nhô cao ở giữa từ rồi hạ thấp xuống trước đuôi từ."
-                  : "Starts low, rises high in the middle, then drops low before the end."}
-              </p>
-              <div className="grid grid-cols-3 gap-2">
-                <AudioWordBadge text="たまご" romaji="tamago" meaning={isVi ? "trứng" : "egg"} />
-                <AudioWordBadge text="ひこうき" romaji="hikouki" meaning={isVi ? "máy bay" : "airplane"} />
-                <AudioWordBadge text="せんせい" romaji="sensei" meaning={isVi ? "giáo viên" : "teacher"} />
-              </div>
-            </div>
-
-            {/* 4. Odaka */}
-            <div className="rounded-xl border bg-background/50 p-4">
-              <div className="flex items-center justify-between mb-2">
-                <span className="font-bold text-sm text-foreground">
-                  ④ {isVi ? "Kiểu hạ ở cuối từ (Odaka - 尾高)" : "Tail-high pattern (Odaka - 尾高)"}
-                </span>
-                <span className="rounded-full bg-purple-500/10 px-2 py-0.5 text-[10px] font-bold text-purple-600 dark:text-purple-400">
-                  Low → HIGH (Particle DROPS ↓)
-                </span>
-              </div>
-              <p className="text-xs text-muted-foreground mb-3">
-                {isVi
-                  ? "Âm đầu thấp, các âm sau giữ cao đến hết từ. Nhưng khi thêm trợ từ thì trợ từ bị HẠ THẤP."
-                  : "Starts low, rises high until end of word, but pitch DROPS on following particle."}
-              </p>
-              <div className="grid grid-cols-2 gap-2">
-                <AudioWordBadge text="くつ" romaji="kutsu" meaning={isVi ? "giày" : "shoes"} />
-                <AudioWordBadge text="はな" romaji="hana (hoa)" meaning={isVi ? "hoa (はなが↓)" : "flower (hana ga↓)"} />
-                <AudioWordBadge text="やすみ" romaji="yasumi" meaning={isVi ? "ngày nghỉ" : "rest/holiday"} />
-                <AudioWordBadge text="おとうと" romaji="otouto" meaning={isVi ? "em trai" : "younger brother"} />
-              </div>
-            </div>
-          </div>
-
-          {/* Minimal distinction example */}
-          <div className="rounded-xl border bg-accent/40 p-4 mt-2">
-            <h4 className="font-bold text-xs uppercase tracking-wider text-muted-foreground mb-2">
-              {isVi ? "Phân biệt từ đồng âm nhờ Trọng âm (Pitch Accent Distinction):" : "Homophone Meaning Differences via Pitch Accent:"}
-            </h4>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              <div className="flex items-center gap-2">
-                <AudioWordBadge text="はし" romaji="hashi [L-H]" meaning={isVi ? "cây cầu (Heiban)" : "bridge (Heiban)"} className="flex-1" />
-                <span className="text-xs font-bold text-muted-foreground">vs</span>
-                <AudioWordBadge text="はし" romaji="hashi [H-L]" meaning={isVi ? "đôi đũa (Atamadaka)" : "chopsticks (Atamadaka)"} className="flex-1" />
-              </div>
-              <div className="flex items-center gap-2">
-                <AudioWordBadge text="いち" romaji="ichi [L-H]" meaning={isVi ? "vị trí" : "position"} className="flex-1" />
-                <span className="text-xs font-bold text-muted-foreground">vs</span>
-                <AudioWordBadge text="いち" romaji="ichi [H-L]" meaning={isVi ? "số một (1)" : "number one (1)"} className="flex-1" />
-              </div>
-            </div>
-          </div>
-        </section>
-      )}
-
-      {/* 8. SENTENCE INTONATION (NGỮ ĐIỆU CÂU / イントネーション) */}
-      {shouldShow("intonation") && (
-        <section className="flex flex-col gap-4 rounded-2xl border bg-card p-5 sm:p-6 shadow-2xs">
-          <div className="flex items-center gap-3 border-b pb-3">
-            <div className="flex size-9 items-center justify-center rounded-xl bg-primary/10 text-primary font-bold">
-              8
-            </div>
-            <div>
-              <h2 className="text-lg font-bold tracking-tight text-foreground">
-                {isVi ? "Ngữ điệu câu (Sentence Intonation / イントネーション)" : "Sentence Intonation (イントネーション)"}
-              </h2>
-              <p className="text-xs text-muted-foreground">
-                {isVi
-                  ? "3 kiểu ngữ điệu chính: Đều giọng (→), Cao giọng ở cuối (↗), và Thấp giọng ở cuối (↘)."
-                  : "3 core intonation types: Flat tone (→), Rising end (↗), and Falling end (↘)."}
-              </p>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-            <div className="rounded-xl border bg-background/50 p-3.5">
-              <div className="flex items-center gap-2 font-bold text-xs text-foreground mb-1">
-                <span className="text-primary text-base">→</span>
-                <span>① {isVi ? "Đều giọng" : "Flat Intonation"}</span>
-              </div>
-              <p className="text-xs text-muted-foreground">
-                {isVi
-                  ? "Phát âm đều giọng từ đầu đến cuối câu (dùng cho câu trần thuật thông thường)."
-                  : "Steady, level pitch throughout the sentence (used for standard declarative statements)."}
-              </p>
-            </div>
-
-            <div className="rounded-xl border bg-background/50 p-3.5">
-              <div className="flex items-center gap-2 font-bold text-xs text-foreground mb-1">
-                <span className="text-emerald-500 text-base">↗</span>
-                <span>② {isVi ? "Cao giọng ở cuối câu" : "Rising Intonation"}</span>
-              </div>
-              <p className="text-xs text-muted-foreground">
-                {isVi
-                  ? "Lên giọng ở cuối câu (dùng cho câu hỏi, nghi vấn, hoặc thể hiện ngạc nhiên)."
-                  : "Pitch rises at the end of the sentence (used for questions, confirmation, surprise)."}
-              </p>
-            </div>
-
-            <div className="rounded-xl border bg-background/50 p-3.5">
-              <div className="flex items-center gap-2 font-bold text-xs text-foreground mb-1">
-                <span className="text-amber-500 text-base">↘</span>
-                <span>③ {isVi ? "Thấp giọng ở cuối câu" : "Falling Intonation"}</span>
-              </div>
-              <p className="text-xs text-muted-foreground">
-                {isVi
-                  ? "Hạ giọng ở cuối câu (bày tỏ sự đồng ý, cảm thán, hoặc thất vọng)."
-                  : "Pitch drops at the end (expresses agreement, realization, or disappointment)."}
-              </p>
-            </div>
-          </div>
-
-          {/* Dialogue Example Card */}
-          <div className="rounded-xl border bg-accent/30 p-4 flex flex-col gap-3">
-            <h4 className="font-bold text-xs uppercase tracking-wider text-muted-foreground">
-              {isVi ? "Đoạn hội thoại mẫu thực tế:" : "Practical Example Conversation:"}
-            </h4>
-
-            <div className="flex flex-col gap-3.5">
-              {/* Line 1 */}
-              <div className="flex items-start gap-3 rounded-lg bg-card p-3 border">
-                <span className="font-bold text-xs text-primary shrink-0 mt-0.5">Sato:</span>
-                <div className="flex flex-col flex-1 gap-1">
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm font-semibold text-foreground">
-                      あした 友達と お花見を します。
-                    </span>
-                    <span className="rounded-full bg-primary/10 px-2 py-0.5 text-[10px] font-bold text-primary">
-                      【→ {isVi ? "đều giọng" : "flat"}】
-                    </span>
-                  </div>
-                  <span className="text-xs text-muted-foreground">
-                    {isVi ? "Ngày mai tôi sẽ đi ngắm hoa với bạn." : "Tomorrow I am going cherry-blossom viewing with a friend."}
-                  </span>
+            {/* Hashi 1: Đũa */}
+            <div className="flex flex-col justify-between rounded-xl border border-border/80 bg-card p-4 space-y-3">
+              <div className="space-y-1">
+                <div className="flex items-center justify-between text-[10px] font-bold">
+                  <span className="rounded bg-red-100 dark:bg-red-950 text-red-600 px-1.5 py-0.5">Type 1 頭高</span>
+                  <span className="text-muted-foreground">[ HA - shi ]</span>
                 </div>
-                <button
-                  type="button"
-                  onClick={() => speakJapanese("あした友達とお花見をします")}
-                  className="rounded-full p-1.5 text-muted-foreground hover:bg-accent hover:text-primary shrink-0"
-                  title="Listen"
-                >
-                  <Volume2 className="size-4" />
-                </button>
-              </div>
-
-              {/* Line 2 */}
-              <div className="flex items-start gap-3 rounded-lg bg-card p-3 border border-emerald-500/30">
-                <span className="font-bold text-xs text-emerald-600 dark:text-emerald-400 shrink-0 mt-0.5">Sato:</span>
-                <div className="flex flex-col flex-1 gap-1">
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm font-semibold text-foreground">
-                      ミラーさんも いっしょに 行きませんか。
-                    </span>
-                    <span className="rounded-full bg-emerald-500/10 px-2 py-0.5 text-[10px] font-bold text-emerald-600 dark:text-emerald-400">
-                      【↗ {isVi ? "cao giọng ở cuối" : "rising end"}】
-                    </span>
-                  </div>
-                  <span className="text-xs text-muted-foreground">
-                    {isVi ? "Anh Miller có đi cùng với tôi không?" : "Won't you come along with us, Mr. Miller?"}
-                  </span>
+                <div className="text-base font-extrabold text-foreground pt-1">
+                  箸 <span className="text-xs font-bold text-red-600">(Đũa ăn)</span>
                 </div>
-                <button
-                  type="button"
-                  onClick={() => speakJapanese("ミラーさんもいっしょに行きませんか")}
-                  className="rounded-full p-1.5 text-muted-foreground hover:bg-accent hover:text-emerald-500 shrink-0"
-                  title="Listen"
-                >
-                  <Volume2 className="size-4" />
-                </button>
-              </div>
-
-              {/* Line 3 */}
-              <div className="flex items-start gap-3 rounded-lg bg-card p-3 border border-amber-500/30">
-                <span className="font-bold text-xs text-amber-600 dark:text-amber-400 shrink-0 mt-0.5">Miller:</span>
-                <div className="flex flex-col flex-1 gap-1">
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm font-semibold text-foreground">
-                      いいですね。
-                    </span>
-                    <span className="rounded-full bg-amber-500/10 px-2 py-0.5 text-[10px] font-bold text-amber-600 dark:text-amber-400">
-                      【↘ {isVi ? "thấp giọng ở cuối" : "falling end"}】
-                    </span>
-                  </div>
-                  <span className="text-xs text-muted-foreground">
-                    {isVi ? "Nghe hay đấy nhỉ." : "That sounds wonderful!"}
-                  </span>
+                <p className="text-[11px] text-muted-foreground leading-relaxed">
+                  Cao ở âm [ha], hạ thấp đột ngột ở âm [shi].
+                </p>
+                <div className="flex items-center gap-2 text-[10px] font-mono text-muted-foreground pt-1">
+                  <span className="text-red-600 font-bold">• Cao</span>
+                  <span>→</span>
+                  <span>• Thấp</span>
                 </div>
-                <button
-                  type="button"
-                  onClick={() => speakJapanese("いいですね")}
-                  className="rounded-full p-1.5 text-muted-foreground hover:bg-accent hover:text-amber-500 shrink-0"
-                  title="Listen"
-                >
-                  <Volume2 className="size-4" />
-                </button>
               </div>
+              <AudioButton text="箸" label="Nghe: Đũa (箸)" variant="outline" className="w-full justify-center mt-2" />
+            </div>
+
+            {/* Hashi 2: Cây cầu */}
+            <div className="flex flex-col justify-between rounded-xl border border-border/80 bg-card p-4 space-y-3">
+              <div className="space-y-1">
+                <div className="flex items-center justify-between text-[10px] font-bold">
+                  <span className="rounded bg-amber-100 dark:bg-amber-950 text-amber-600 px-1.5 py-0.5">Type 2 中高</span>
+                  <span className="text-muted-foreground">[ ha - SHI (ga↓) ]</span>
+                </div>
+                <div className="text-base font-extrabold text-foreground pt-1">
+                  橋 <span className="text-xs font-bold text-amber-600">(Cây cầu)</span>
+                </div>
+                <p className="text-[11px] text-muted-foreground leading-relaxed">
+                  Thấp ở âm [ha], cao ở âm [shi], rơi khi thêm trợ từ.
+                </p>
+                <div className="flex items-center gap-2 text-[10px] font-mono text-muted-foreground pt-1">
+                  <span>• Thấp</span>
+                  <span>→</span>
+                  <span className="text-amber-600 font-bold">• Cao (rơi)</span>
+                </div>
+              </div>
+              <AudioButton text="橋" label="Nghe: Cây cầu (橋)" variant="outline" className="w-full justify-center mt-2" />
+            </div>
+
+            {/* Hashi 3: Mép/Rìa */}
+            <div className="flex flex-col justify-between rounded-xl border border-border/80 bg-card p-4 space-y-3">
+              <div className="space-y-1">
+                <div className="flex items-center justify-between text-[10px] font-bold">
+                  <span className="rounded bg-blue-100 dark:bg-blue-950 text-blue-600 px-1.5 py-0.5">Type 0 平板</span>
+                  <span className="text-muted-foreground">[ ha - SHI (ga) ]</span>
+                </div>
+                <div className="text-base font-extrabold text-foreground pt-1">
+                  端 <span className="text-xs font-bold text-blue-600">(Mép/Rìa đường)</span>
+                </div>
+                <p className="text-[11px] text-muted-foreground leading-relaxed">
+                  Thấp ở âm [ha], lên cao ở [shi] và giữ nguyên khi kèm trợ từ.
+                </p>
+                <div className="flex items-center gap-2 text-[10px] font-mono text-muted-foreground pt-1">
+                  <span>• Thấp</span>
+                  <span>→</span>
+                  <span className="text-blue-600 font-bold">• Cao (bằng)</span>
+                </div>
+              </div>
+              <AudioButton text="端" label="Nghe: Mép/Rìa (端)" variant="outline" className="w-full justify-center mt-2" />
             </div>
           </div>
-        </section>
-      )}
+        </div>
+
+        {/* TEST BLOCK 2: あめ (AME) */}
+        <div className="rounded-2xl border border-border/80 bg-muted/20 p-5 space-y-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <span className="text-2xl font-black text-foreground tracking-tight">あめ (Ame)</span>
+              <span className="text-xs text-muted-foreground font-medium">Cặp từ dễ gây nhầm lẫn kinh điển nhất cho người mới bắt đầu</span>
+            </div>
+            <span className="text-[10px] font-mono uppercase tracking-wider text-muted-foreground bg-muted px-2 py-0.5 rounded">
+              TOKYO PITCH TEST #2
+            </span>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {/* Ame 1: Mưa */}
+            <div className="flex items-center justify-between rounded-xl border border-border/80 bg-card p-4">
+              <div className="space-y-1">
+                <div className="inline-flex items-center gap-1.5 rounded bg-red-100 dark:bg-red-950 text-red-600 px-2 py-0.5 text-[10px] font-bold">
+                  Type 1 [ A-me ]
+                </div>
+                <div className="text-base font-extrabold text-foreground">
+                  雨 <span className="text-xs font-bold text-red-600">(Mưa)</span>
+                </div>
+                <p className="text-[11px] text-muted-foreground leading-relaxed max-w-xs">
+                  Âm [A] nhấn cao, âm [me] rơi nhẹ. Thường gặp trong: &quot;Trời đang mưa&quot;.
+                </p>
+              </div>
+              <AudioButton text="雨" label="Nghe (雨)" variant="outline" className="shrink-0" />
+            </div>
+
+            {/* Ame 2: Kẹo */}
+            <div className="flex items-center justify-between rounded-xl border border-border/80 bg-card p-4">
+              <div className="space-y-1">
+                <div className="inline-flex items-center gap-1.5 rounded bg-blue-100 dark:bg-blue-950 text-blue-600 px-2 py-0.5 text-[10px] font-bold">
+                  Type 0 [ a-ME ]
+                </div>
+                <div className="text-base font-extrabold text-foreground">
+                  飴 <span className="text-xs font-bold text-blue-600">(Kẹo ngọt)</span>
+                </div>
+                <p className="text-[11px] text-muted-foreground leading-relaxed max-w-xs">
+                  Âm [a] trầm thấp, âm [me] thanh thoát dâng cao. Thường gặp: &quot;Ăn kẹo&quot;.
+                </p>
+              </div>
+              <AudioButton text="飴" label="Nghe (飴)" variant="outline" className="shrink-0" />
+            </div>
+          </div>
+        </div>
+      </section>
     </div>
   );
 }

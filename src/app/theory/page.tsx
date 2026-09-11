@@ -632,30 +632,6 @@ export default function TheoryListPage() {
           })}
         </div>
       )}
-
-      {/* Bottom Reference Footer Attribution */}
-      <div className="mt-4 border-t border-border/40 pt-5 pb-8 text-center text-xs text-muted-foreground">
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-3">
-          <div className="flex items-center gap-2">
-            <span className="font-bold text-foreground">仮名道場 Kana Dojo</span>
-            <span>
-              • {isVi ? "Nền tảng học tiếng Nhật tinh gọn chuẩn giáo trình sơ cấp" : "Focused Japanese learning suite for N5"}
-            </span>
-          </div>
-          <p className="text-[11px]">
-            Stroke order data from{" "}
-            <a
-              className="underline hover:text-red-600"
-              href="https://kanjivg.tagaini.net/"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              KanjiVG
-            </a>
-            , licensed under CC BY-SA 3.0.
-          </p>
-        </div>
-      </div>
     </div>
   );
 }
