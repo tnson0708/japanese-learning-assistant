@@ -1,10 +1,36 @@
 "use client";
 
-import { useMemo, useState } from "react";
-import { Volume2, VolumeX, PenTool, FileText, Sparkles, Headphones, Clock } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
+import {
+  Volume2,
+  PenTool,
+  FileText,
+  Sparkles,
+  Headphones,
+  Clock,
+  RotateCcw,
+  Play,
+  Pause,
+  ChevronRight,
+  ChevronLeft,
+  Check,
+  HelpCircle,
+  X,
+  Download,
+  Lightbulb,
+  BarChart3,
+  Maximize2,
+  Eye,
+  EyeOff,
+  Printer,
+  Zap,
+  Turtle,
+  Hourglass,
+  Hand,
+  BookOpen,
+  CheckCircle2,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { OptionGroup } from "@/components/option-group";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { PracticeSession } from "@/components/practice/practice-session";
 import {
   PaperPracticeSession,
@@ -33,11 +59,8 @@ import {
   CATEGORY_LABELS,
   getSubCategory,
   SUB_CATEGORY_LABELS,
-  JLPT_LEVELS,
-  JLPT_LEVEL_LABELS,
   type WordDifficulty,
   type WordCategory,
-  type JlptLevel,
 } from "@/lib/words";
 import {
   PHRASE_LIST,
@@ -78,748 +101,975 @@ function pickNextWord(
 }
 
 export default function PracticePage() {
-  const { t } = useLanguage();
-  const [activeTab, setActiveTab] = useState("paper");
-  const [isSessionActive, setIsSessionActive] = useState(false);
+  const { t, language } = useLanguage();
+  const isVi = language === "vi";
+  const [activeTab, setActiveTab] = useState<"paper" | "handwriting" | "listening">("paper");
 
   return (
-    <div className={cn("mx-auto flex w-full max-w-4xl flex-1 flex-col px-4 py-4 sm:px-6 sm:py-6 lg:py-8", !isSessionActive && "gap-6")}>
-      {/* Header (hidden during active practice session for clean full-screen focus) */}
-      {!isSessionActive && (
-        <div className="flex flex-col gap-1">
-          <h1 className="text-2xl font-bold tracking-tight sm:text-3xl lg:text-4xl">
-            {t("practice_title")}
+    <div className="mx-auto flex w-full max-w-6xl flex-1 flex-col gap-8 px-4 py-6 sm:px-6 lg:py-8">
+      {/* 1. Header Section */}
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between border-b pb-6">
+        <div className="flex flex-col gap-1.5 max-w-2xl">
+          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight text-foreground">
+            {isVi ? "Luyện tập Chữ cái & Viết tiếng Nhật" : "Japanese Kana & Writing Practice"}
           </h1>
-          <p className="text-sm text-muted-foreground">
-            {t("practice_subtitle")}
+          <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
+            {isVi
+              ? "Rèn luyện khả năng nhớ chữ, tốc độ phản xạ và độ chuẩn xác của nét bút qua các bài kiểm tra flashcard trên giấy, đố chữ trực tiếp trên màn hình cảm ứng hoặc luyện nghe viết chuẩn Tokyo."
+              : "Train character memory, reaction speed, and stroke precision with paper flashcard drills, on-screen touch handwriting recognition, or native Tokyo audio listening."}
           </p>
         </div>
-      )}
 
-      {/* Practice Mode Selector */}
-      <Tabs value={activeTab} onValueChange={setActiveTab}>
-        <TabsList className={cn("grid w-full grid-cols-1 sm:grid-cols-3 max-w-3xl h-auto p-1.5 gap-1.5 bg-muted/70 rounded-xl", isSessionActive && "hidden")}>
-          <TabsTrigger
-            value="paper"
-            className="flex items-center justify-center gap-2 rounded-lg px-3.5 py-2.5 text-xs sm:text-sm font-semibold transition-all data-[state=active]:bg-card data-[state=active]:shadow-xs text-foreground/80 data-[state=active]:text-foreground whitespace-nowrap"
-          >
-            <FileText className="size-4 shrink-0 text-primary" />
-            <span>{t("practice_tab_paper")}</span>
-          </TabsTrigger>
-          <TabsTrigger
-            value="handwriting"
-            className="flex items-center justify-center gap-2 rounded-lg px-3.5 py-2.5 text-xs sm:text-sm font-semibold transition-all data-[state=active]:bg-card data-[state=active]:shadow-xs text-foreground/80 data-[state=active]:text-foreground whitespace-nowrap"
-          >
-            <PenTool className="size-4 shrink-0 text-primary" />
-            <span>{t("practice_tab_handwriting")}</span>
-          </TabsTrigger>
-          <TabsTrigger
-            value="listening"
-            className="flex items-center justify-center gap-2 rounded-lg px-3.5 py-2.5 text-xs sm:text-sm font-semibold transition-all data-[state=active]:bg-card data-[state=active]:shadow-xs text-foreground/80 data-[state=active]:text-foreground whitespace-nowrap"
-          >
-            <Headphones className="size-4 shrink-0 text-primary" />
-            <span>{t("practice_tab_listening")}</span>
-          </TabsTrigger>
-        </TabsList>
+        {/* Top Right Stats Pills */}
+        <div className="flex flex-wrap items-center gap-2 self-start sm:self-auto">
+          <div className="flex items-center gap-2 rounded-2xl border bg-card px-3 py-2 shadow-2xs">
+            <span className="text-base">📕</span>
+            <div className="flex flex-col">
+              <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">KHO KÝ TỰ</span>
+              <span className="text-xs font-extrabold text-foreground">104 Chữ</span>
+            </div>
+          </div>
 
-        <TabsContent value="paper" className={cn(!isSessionActive && "mt-6")}>
-          <PaperPanel onSessionStateChange={setIsSessionActive} />
-        </TabsContent>
-        <TabsContent value="handwriting" className={cn(!isSessionActive && "mt-6")}>
-          <HandwritingPanel onSessionStateChange={setIsSessionActive} />
-        </TabsContent>
-        <TabsContent value="listening" className={cn(!isSessionActive && "mt-6")}>
-          <ListeningPanel onSessionStateChange={setIsSessionActive} />
-        </TabsContent>
-      </Tabs>
+          <div className="flex items-center gap-2 rounded-2xl border bg-card px-3 py-2 shadow-2xs">
+            <span className="text-base">📑</span>
+            <div className="flex flex-col">
+              <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">CHẾ ĐỘ</span>
+              <span className="text-xs font-extrabold text-foreground">3 Chế độ</span>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-2 rounded-2xl border bg-card px-3 py-2 shadow-2xs">
+            <span className="text-base">🖨️</span>
+            <div className="flex flex-col">
+              <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">IN ẤN</span>
+              <span className="text-xs font-extrabold text-foreground">PDF A4</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* 2. Top Mode Selection Cards (3 Cards Grid) */}
+      <div className="grid gap-4 md:grid-cols-3">
+        {/* Card 1: Paper Drill */}
+        <div
+          onClick={() => setActiveTab("paper")}
+          className={cn(
+            "relative flex flex-col justify-between gap-3 rounded-2xl border p-5 shadow-2xs transition-all cursor-pointer select-none",
+            activeTab === "paper"
+              ? "border-red-600 bg-red-500/5 ring-2 ring-red-600/20 dark:bg-red-950/20"
+              : "bg-card border-border/80 hover:border-border hover:shadow-xs"
+          )}
+        >
+          {/* Recommended Badge */}
+          <span className="absolute right-4 top-4 rounded-full bg-red-600 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-white shadow-2xs">
+            KHUYÊN DÙNG
+          </span>
+
+          <div className="flex flex-col gap-2">
+            <div className="flex size-10 items-center justify-center rounded-xl bg-red-600/10 text-red-600">
+              <FileText className="size-5" />
+            </div>
+            <div className="flex items-baseline gap-1.5 pt-1">
+              <h3 className="text-base font-bold text-foreground">Paper Drill</h3>
+              <span className="text-xs font-medium text-muted-foreground">(Luyện giấy)</span>
+            </div>
+            <p className="text-xs text-muted-foreground leading-relaxed">
+              Nhìn màn hình, viết ra giấy tập, sau đó bấm mở kết quả để tự chấm điểm phản xạ thực tế.
+            </p>
+          </div>
+
+          <div className="flex items-center justify-between pt-2 border-t border-border/50 text-xs font-bold text-red-600 dark:text-red-400">
+            <span className="flex items-center gap-1">
+              {activeTab === "paper" ? "Đang mở cấu hình ↓" : "Chuyển sang chế độ paper →"}
+            </span>
+            {activeTab === "paper" && <span className="size-2 rounded-full bg-red-600 animate-pulse" />}
+          </div>
+        </div>
+
+        {/* Card 2: Digital Handwriting */}
+        <div
+          onClick={() => setActiveTab("handwriting")}
+          className={cn(
+            "relative flex flex-col justify-between gap-3 rounded-2xl border p-5 shadow-2xs transition-all cursor-pointer select-none",
+            activeTab === "handwriting"
+              ? "border-blue-600 bg-blue-500/5 ring-2 ring-blue-600/20 dark:bg-blue-950/20"
+              : "bg-card border-border/80 hover:border-border hover:shadow-xs"
+          )}
+        >
+          <div className="flex flex-col gap-2">
+            <div className="flex size-10 items-center justify-center rounded-xl bg-blue-600/10 text-blue-600">
+              <PenTool className="size-5" />
+            </div>
+            <div className="flex items-baseline gap-1.5 pt-1">
+              <h3 className="text-base font-bold text-foreground">Đố nét màn hình</h3>
+              <span className="text-xs font-medium text-muted-foreground">(Digital)</span>
+            </div>
+            <p className="text-xs text-muted-foreground leading-relaxed">
+              Tự tay đố và viết nét trực tiếp trên bảng Canvas mô phỏng ô ly Mễ Tự Cách (米字格) với cảm biến thứ tự nét.
+            </p>
+          </div>
+
+          <div className="flex items-center justify-between pt-2 border-t border-border/50 text-xs font-bold text-blue-600 dark:text-blue-400">
+            <span>Chuyển sang chế độ vẽ →</span>
+            <span className="rounded bg-blue-500/10 px-1.5 py-0.5 text-[10px] font-semibold text-blue-600 dark:text-blue-400">
+              Canvas HTML5
+            </span>
+          </div>
+        </div>
+
+        {/* Card 3: Listening */}
+        <div
+          onClick={() => setActiveTab("listening")}
+          className={cn(
+            "relative flex flex-col justify-between gap-3 rounded-2xl border p-5 shadow-2xs transition-all cursor-pointer select-none",
+            activeTab === "listening"
+              ? "border-purple-600 bg-purple-500/5 ring-2 ring-purple-600/20 dark:bg-purple-950/20"
+              : "bg-card border-border/80 hover:border-border hover:shadow-xs"
+          )}
+        >
+          <div className="flex flex-col gap-2">
+            <div className="flex size-10 items-center justify-center rounded-xl bg-purple-600/10 text-purple-600">
+              <Headphones className="size-5" />
+            </div>
+            <div className="flex items-baseline gap-1.5 pt-1">
+              <h3 className="text-base font-bold text-foreground">Nghe & Viết</h3>
+              <span className="text-xs font-medium text-muted-foreground">(Listening)</span>
+            </div>
+            <p className="text-xs text-muted-foreground leading-relaxed">
+              Nghe audio phát âm bản xứ chuẩn Tokyo rồi gõ hoặc viết lại chữ cái và từ vựng tương ứng mà không cần nhìn gợi ý.
+            </p>
+          </div>
+
+          <div className="flex items-center justify-between pt-2 border-t border-border/50 text-xs font-bold text-purple-600 dark:text-purple-400">
+            <span>Chuyển sang chế độ nghe →</span>
+            <span className="rounded bg-purple-500/10 px-1.5 py-0.5 text-[10px] font-semibold text-purple-600 dark:text-purple-400">
+              Tokyo Accent
+            </span>
+          </div>
+        </div>
+      </div>
+
+      {/* 3. Main Practice Panels */}
+      {activeTab === "paper" && <PaperPanelFullLayout />}
+      {activeTab === "handwriting" && <HandwritingPanelLayout />}
+      {activeTab === "listening" && <ListeningPanelLayout />}
+
+      {/* 4. Bottom Resources & Supporting Advice Section */}
+      <div className="flex flex-col gap-5 pt-6 border-t">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1">
+          <div>
+            <h2 className="text-xl font-bold tracking-tight text-foreground">Tài liệu & Lời khuyên bổ trợ</h2>
+            <p className="text-xs text-muted-foreground">Công cụ thực tế giúp bạn nhanh chóng thành thạo bảng chữ cái tiếng Nhật</p>
+          </div>
+          <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground bg-muted/60 px-3 py-1 rounded-full w-fit">
+            HỌC TẬP CHUẨN KHOA HỌC
+          </span>
+        </div>
+
+        <div className="grid gap-4 md:grid-cols-3">
+          {/* Resource Card 1: Free Worksheet */}
+          <div className="flex flex-col justify-between gap-4 rounded-2xl border bg-card p-5 shadow-2xs">
+            <div className="flex flex-col gap-2.5">
+              <div className="flex size-9 items-center justify-center rounded-xl bg-red-600/10 text-red-600">
+                <FileText className="size-4" />
+              </div>
+              <span className="text-[10px] font-bold uppercase tracking-wider text-red-600 dark:text-red-400">
+                TẢI LIỆU MIỄN PHÍ
+              </span>
+              <h3 className="text-sm font-bold text-foreground">Phiếu tập viết Genkouyoushi (A4)</h3>
+              <p className="text-xs text-muted-foreground leading-relaxed">
+                Mẫu giấy kẻ ô ly chuẩn giáo dục Nhật Bản với đường phân nét góc chéo và tâm chữ, tối ưu hóa cho bút gel và bút chì.
+              </p>
+            </div>
+            <Button
+              variant="outline"
+              onClick={() => window.print()}
+              className="w-full gap-2 text-xs font-bold rounded-xl hover:border-red-600 hover:text-red-600 cursor-pointer"
+            >
+              <Download className="size-3.5" />
+              <span>Tải bản in PDF (2.4 MB)</span>
+            </Button>
+          </div>
+
+          {/* Resource Card 2: Memory Golden Tips */}
+          <div className="flex flex-col justify-between gap-4 rounded-2xl border bg-card p-5 shadow-2xs">
+            <div className="flex flex-col gap-2.5">
+              <div className="flex size-9 items-center justify-center rounded-xl bg-amber-500/10 text-amber-600">
+                <Lightbulb className="size-4" />
+              </div>
+              <span className="text-[10px] font-bold uppercase tracking-wider text-amber-600 dark:text-amber-400">
+                PHƯƠNG PHÁP GHI NHỚ
+              </span>
+              <h3 className="text-sm font-bold text-foreground">3 Mẹo vàng khi luyện Kana</h3>
+              <ul className="flex flex-col gap-2 text-xs text-muted-foreground">
+                <li className="leading-relaxed">
+                  <strong className="text-foreground">Học theo hàng:</strong> Gom 5 chữ (a-i-u-e-o) theo cụm để tạo nhịp điệu ghi nhớ âm thanh.
+                </li>
+                <li className="leading-relaxed">
+                  <strong className="text-foreground">Đọc to khi viết:</strong> Kích hoạt đồng thời vỏ não thị giác và thính giác phản xạ.
+                </li>
+                <li className="leading-relaxed">
+                  <strong className="text-foreground">Tránh ỷ lại Romaji:</strong> Chuyển sang đọc trực tiếp Kana càng sớm càng tốt.
+                </li>
+              </ul>
+            </div>
+            <a
+              href="/kana"
+              className="inline-flex items-center gap-1 text-xs font-bold text-red-600 dark:text-red-400 hover:underline pt-1"
+            >
+              <span>Đọc bài hướng dẫn quy tắc nét bút</span>
+              <ChevronRight className="size-3.5" />
+            </a>
+          </div>
+
+          {/* Resource Card 3: Personal Statistics */}
+          <div className="flex flex-col justify-between gap-4 rounded-2xl border bg-card p-5 shadow-2xs">
+            <div className="flex flex-col gap-2.5">
+              <div className="flex size-9 items-center justify-center rounded-xl bg-purple-600/10 text-purple-600">
+                <BarChart3 className="size-4" />
+              </div>
+              <span className="text-[10px] font-bold uppercase tracking-wider text-purple-600 dark:text-purple-400">
+                THỐNG KÊ CÁ NHÂN
+              </span>
+              <h3 className="text-sm font-bold text-foreground">Hiệu suất nhớ chữ của bạn</h3>
+
+              <div className="flex flex-col gap-1.5">
+                <div className="flex items-center justify-between text-xs">
+                  <span className="text-muted-foreground">Độ chính xác trung bình</span>
+                  <span className="font-extrabold text-foreground">88%</span>
+                </div>
+                <div className="h-2 w-full overflow-hidden rounded-full bg-muted">
+                  <div className="h-full bg-emerald-500 rounded-full w-[88%]" />
+                </div>
+              </div>
+
+              <div className="rounded-xl bg-red-500/10 p-3 text-xs text-red-600 dark:text-red-400 border border-red-500/20">
+                <strong className="font-bold">Nhóm cần củng cố:</strong> Âm ghép Youon (きゃ, しゅ, ちょ). Tỷ lệ phản xạ chưa đạt dưới 2 giây.
+              </div>
+            </div>
+
+            <Button
+              variant="outline"
+              className="w-full gap-2 text-xs font-bold rounded-xl hover:bg-accent cursor-pointer"
+            >
+              <BarChart3 className="size-3.5" />
+              <span>Luyện riêng nhóm âm ghép</span>
+            </Button>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
 
-function ListeningPanel({ onSessionStateChange }: { onSessionStateChange?: (active: boolean) => void }) {
+{/* -------------------------------------------------------------------------------- */}
+{/* Paper Panel 2-Column Full Layout (Matching Mockup 1:1) */}
+{/* -------------------------------------------------------------------------------- */}
+
+function PaperPanelFullLayout() {
   const { t, language } = useLanguage();
-  const [started, setStarted] = useState(false);
-  const [contentType, setContentType] = useState<"word" | "sentence">("word");
-  const [wordDifficulty, setWordDifficulty] = useState<WordDifficulty | "all">("all");
-  const [wordCategory, setWordCategory] = useState<WordCategory | "all">("all");
-  const [wordSubgroup, setWordSubgroup] = useState<string>("all");
-  const [phraseTheme, setPhraseTheme] = useState<PhraseTheme>("all");
-  const [phraseTopic, setPhraseTopic] = useState<PhraseTopic>("all");
-  const [breakSeconds, setBreakSeconds] = useState(5);
-  const [speedRate, setSpeedRate] = useState<number>(0.9);
-  const [autoReveal, setAutoReveal] = useState<boolean>(false);
-  const [sessionKey, setSessionKey] = useState(0);
+  const isVi = language === "vi";
 
-  const typeOptions = [
-    { value: "word", label: t("listening_type_words") },
-    { value: "sentence", label: t("listening_type_sentences") },
-  ];
+  // Drill options
+  const [contentType, setContentType] = useState<ContentType>("character");
+  const [scope, setScope] = useState<Scope>("hiragana");
+  const [section, setSection] = useState<KanaSection>("main");
+  const [direction, setDirection] = useState<PaperDirection>("write");
+  const [speedSeconds, setSpeedSeconds] = useState<number>(3);
+  const [autoPlayAudio, setAutoPlayAudio] = useState(true);
+  const [shuffle, setShuffle] = useState(true);
+  const [showStrokeHint, setShowStrokeHint] = useState(false);
 
-  const wordBreakOptions = [3, 5, 8, 10, 15].map((s) => ({
-    value: s,
-    label: `${s}s`,
-  }));
+  // Active Card Drill State
+  const [itemIndex, setItemIndex] = useState(14);
+  const [phase, setPhase] = useState<"prompt" | "reveal">("prompt");
+  const [paused, setPaused] = useState(false);
 
-  const sentenceBreakOptions = [5, 8, 10, 15, 20, 30].map((s) => ({
-    value: s,
-    label: `${s}s`,
-  }));
+  const currentItem = useMemo(() => {
+    const list = filterKana(scope, section);
+    const item = list.length > 0 ? list[itemIndex % list.length] : null;
+    return {
+      char: item ? item.char : "か",
+      romaji: item ? item.romaji : "ka",
+      strokes: item ? (item.strokes ? item.strokes.length : 3) : 3,
+      word: `${item ? item.char : "か"}さ (${item ? item.romaji : "ka"}sa)`,
+      meaning: "Cái ô / Cái dù",
+    };
+  }, [scope, section, itemIndex]);
 
-  const speedOptions = [
-    { value: 0.9, label: t("listening_speed_normal") },
-    { value: 0.7, label: t("listening_speed_slow") },
-  ];
+  const poolCount = useMemo(() => filterKana(scope, section).length, [scope, section]);
 
-  const difficultyOptions: { value: WordDifficulty | "all"; label: string }[] = [
-    { value: "all", label: language === "vi" ? "Tất cả độ khó" : "All Difficulties" },
-    ...WORD_DIFFICULTIES.map((d) => ({
-      value: d,
-      label: WORD_DIFFICULTY_LABELS_BILINGUAL[language][d],
-    })),
-  ];
+  const handleNext = () => {
+    setPhase("prompt");
+    setItemIndex((prev) => (prev % poolCount) + 1);
+  };
 
-  const wordCategoryOptions = [
-    { value: "all", label: "All Categories" },
-    ...CATEGORY_ORDER.map((cat) => ({
-      value: cat,
-      label: CATEGORY_LABELS[cat],
-    })),
-  ];
+  const handlePrev = () => {
+    setPhase("prompt");
+    setItemIndex((prev) => (prev > 1 ? prev - 1 : poolCount));
+  };
 
-  // Compute available subgroups based on difficulty & category
-  const availableSubgroups = useMemo(() => {
-    const allWords = getAllWords();
-    const targetLevels = wordDifficulty !== "all" ? DIFFICULTY_JLPT_MAP[wordDifficulty] : null;
-    const filtered = allWords.filter((w) => {
-      if (targetLevels && !targetLevels.includes(w.level)) return false;
-      if (wordCategory !== "all" && w.category !== wordCategory) return false;
-      return true;
-    });
+  const handleRating = (rating: 1 | 2 | 3) => {
+    handleNext();
+  };
 
-    const set = new Set<string>();
-    for (const w of filtered) {
-      set.add(getSubCategory(w));
-    }
-    return Array.from(set).sort();
-  }, [wordDifficulty, wordCategory]);
+  // Keyboard Shortcuts Listener
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (
+        e.target instanceof HTMLInputElement ||
+        e.target instanceof HTMLTextAreaElement
+      ) {
+        return;
+      }
 
-  const subgroupOptions = useMemo(() => {
-    return [
-      { value: "all", label: t("listening_all_subgroups") },
-      ...availableSubgroups.map((sg) => ({
-        value: sg,
-        label: SUB_CATEGORY_LABELS[sg]?.[language] || sg,
-      })),
-    ];
-  }, [availableSubgroups, language, t]);
+      if (e.key === " ") {
+        e.preventDefault();
+        setPhase((prev) => (prev === "prompt" ? "reveal" : "prompt"));
+      } else if (e.key === "Enter") {
+        e.preventDefault();
+        handleNext();
+      } else if (e.key === "1") {
+        handleRating(1);
+      } else if (e.key === "2") {
+        handleRating(2);
+      } else if (e.key === "3") {
+        handleRating(3);
+      }
+    };
 
-  const phraseThemeOptions = PHRASE_THEMES.map((theme) => ({
-    value: theme.id,
-    label: language === "vi" ? theme.labelVi : theme.labelEn,
-  }));
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [phase, poolCount]);
 
-  const availablePhraseTopics = useMemo(() => {
-    if (phraseTheme === "all") return PHRASE_TOPICS;
-    return PHRASE_TOPICS.filter((tp) => tp.theme === phraseTheme);
-  }, [phraseTheme]);
-
-  const phraseTopicOptions = [
-    { value: "all", label: t("phrases_all_topics") },
-    ...availablePhraseTopics.map((tp) => ({
-      value: tp.id,
-      label: language === "vi" ? tp.labelVi : tp.labelEn,
-    })),
-  ];
-
-  // Filter Pool Items
-  const listeningPool: ListeningItem[] = useMemo(() => {
-    if (contentType === "word") {
-      const allWords = getAllWords();
-      const targetLevels = wordDifficulty !== "all" ? DIFFICULTY_JLPT_MAP[wordDifficulty] : null;
-      const filtered = allWords.filter((w) => {
-        if (targetLevels && !targetLevels.includes(w.level)) return false;
-        if (wordCategory !== "all" && w.category !== wordCategory) return false;
-        if (wordSubgroup !== "all" && getSubCategory(w) !== wordSubgroup) return false;
-        return true;
-      });
-      return filtered.map((w) => {
-        const sub = getSubCategory(w);
-        const subName = SUB_CATEGORY_LABELS[sub]?.[language] || sub;
-        return {
-          id: w.id,
-          japanese: w.kanji || w.word,
-          hiragana: w.word,
-          romaji: w.romaji,
-          meaning: w.meaning,
-          type: "word",
-          subLabel: `${CATEGORY_LABELS[w.category]} • ${subName}`,
-        };
-      });
-    } else {
-      const filtered = PHRASE_LIST.filter((p) => {
-        if (phraseTheme !== "all" && p.theme !== phraseTheme) return false;
-        if (phraseTopic !== "all" && p.topic !== phraseTopic) return false;
-        return true;
-      });
-      return filtered.map((p) => ({
-        id: p.id,
-        japanese: p.japanese,
-        hiragana: p.hiragana,
-        romaji: p.romaji,
-        meaning: language === "vi" ? p.vietnamese : p.english,
-        type: "sentence",
-        subLabel: p.topic,
-      }));
-    }
-  }, [contentType, wordDifficulty, wordCategory, wordSubgroup, phraseTheme, phraseTopic, language]);
-
-  // Shuffle items for practice session
-  const shuffledPool = useMemo(() => {
-    const arr = [...listeningPool];
-    for (let i = arr.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [arr[i], arr[j]] = [arr[j], arr[i]];
-    }
-    return arr;
-  }, [listeningPool, sessionKey]);
-
-  if (!started) {
-    return (
-      <div className="flex flex-col gap-6 rounded-xl border bg-card p-5 sm:p-7 shadow-2xs lg:grid lg:grid-cols-2 lg:gap-x-8 lg:gap-y-6">
-        <div className="flex flex-col gap-1 lg:col-span-2">
-          <h2 className="text-lg font-semibold tracking-tight">{t("listening_mode_title")}</h2>
-          <p className="text-sm text-muted-foreground">
-            {t("listening_mode_desc")}
-          </p>
-        </div>
-
-        {/* Content Type (Words vs Sentences) */}
-        <div className="flex flex-col gap-2 lg:col-span-2">
-          <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-            {t("listening_content_type")}
-          </span>
-          <OptionGroup
-            options={typeOptions}
-            value={contentType}
-            onChange={(val) => {
-              setContentType(val as "word" | "sentence");
-              setBreakSeconds(val === "word" ? 5 : 10);
-            }}
-            size="sm"
-          />
-        </div>
-
-        {/* Word Filters */}
-        {contentType === "word" && (
-          <>
-            <div className="flex flex-col gap-2 lg:col-span-2">
-              <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                {t("practice_difficulty")}
-              </span>
-              <OptionGroup
-                options={difficultyOptions}
-                value={wordDifficulty}
-                onChange={(val) => {
-                  setWordDifficulty(val as WordDifficulty | "all");
-                  setWordSubgroup("all");
-                }}
-                size="sm"
-              />
-            </div>
-
-            <div className="flex flex-col gap-2">
-              <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                {t("listening_category_filter")}
-              </span>
-              <select
-                value={wordCategory}
-                onChange={(e) => {
-                  setWordCategory(e.target.value as WordCategory | "all");
-                  setWordSubgroup("all");
-                }}
-                className="w-full rounded-lg border bg-background px-3 py-2 text-xs font-medium focus:outline-none focus:ring-2 focus:ring-primary"
-              >
-                {wordCategoryOptions.map((opt) => (
-                  <option key={opt.value} value={opt.value}>
-                    {opt.label}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            <div className="flex flex-col gap-2">
-              <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                {t("listening_subgroup_filter")}
-              </span>
-              <select
-                value={wordSubgroup}
-                onChange={(e) => setWordSubgroup(e.target.value)}
-                className="w-full rounded-lg border bg-background px-3 py-2 text-xs font-medium focus:outline-none focus:ring-2 focus:ring-primary"
-              >
-                {subgroupOptions.map((opt) => (
-                  <option key={opt.value} value={opt.value}>
-                    {opt.label}
-                  </option>
-                ))}
-              </select>
-            </div>
-          </>
-        )}
-
-        {/* Sentence Filters */}
-        {contentType === "sentence" && (
-          <>
-            <div className="flex flex-col gap-2">
-              <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                {t("listening_theme_filter")}
-              </span>
-              <select
-                value={phraseTheme}
-                onChange={(e) => {
-                  setPhraseTheme(e.target.value as PhraseTheme);
-                  setPhraseTopic("all");
-                }}
-                className="w-full rounded-lg border bg-background px-3 py-2 text-xs font-medium focus:outline-none focus:ring-2 focus:ring-primary"
-              >
-                {phraseThemeOptions.map((opt) => (
-                  <option key={opt.value} value={opt.value}>
-                    {opt.label}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            <div className="flex flex-col gap-2">
-              <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                {t("phrases_topic")}
-              </span>
-              <select
-                value={phraseTopic}
-                onChange={(e) => setPhraseTopic(e.target.value as PhraseTopic)}
-                className="w-full rounded-lg border bg-background px-3 py-2 text-xs font-medium focus:outline-none focus:ring-2 focus:ring-primary"
-              >
-                {phraseTopicOptions.map((opt) => (
-                  <option key={opt.value} value={opt.value}>
-                    {opt.label}
-                  </option>
-                ))}
-              </select>
-            </div>
-          </>
-        )}
-
-        {/* Break Time Selection */}
-        <div className="flex flex-col gap-2">
-          <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-            {t("listening_break_time")}
-          </span>
-          <OptionGroup
-            options={contentType === "word" ? wordBreakOptions : sentenceBreakOptions}
-            value={breakSeconds}
-            onChange={(val) => setBreakSeconds(Number(val))}
-            size="sm"
-          />
-        </div>
-
-        {/* Audio Speed */}
-        <div className="flex flex-col gap-2">
-          <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-            {t("listening_speech_speed")}
-          </span>
-          <OptionGroup
-            options={speedOptions}
-            value={speedRate}
-            onChange={(val) => setSpeedRate(Number(val))}
-            size="sm"
-          />
-        </div>
-
-        {/* Answer Auto-reveal Setting */}
-        <div className="flex items-center justify-between lg:col-span-2 pt-2 border-t">
-          <div className="flex flex-col gap-0.5">
-            <span className="text-xs font-semibold text-foreground">
-              {t("listening_auto_reveal")}
-            </span>
-            <span className="text-xs text-muted-foreground">
-              Automatically reveal Kanji/meaning during practice
-            </span>
+  return (
+    <div className="grid gap-6 lg:grid-cols-12 items-start">
+      {/* LEFT COLUMN: Setting Controls Panel (5 Columns) */}
+      <div className="flex flex-col gap-5 rounded-2xl border bg-card p-5 sm:p-6 shadow-2xs lg:col-span-5">
+        <div className="flex items-center justify-between border-b pb-3">
+          <div>
+            <h2 className="text-base font-bold text-foreground">Thiết lập Paper Drill</h2>
+            <p className="text-xs text-muted-foreground">Tùy biến bộ thẻ theo mục tiêu buổi luyện tập hôm nay</p>
           </div>
           <button
             type="button"
-            onClick={() => setAutoReveal((v) => !v)}
-            className={cn(
-              "relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2",
-              autoReveal ? "bg-primary" : "bg-input"
-            )}
+            onClick={() => {
+              setContentType("character");
+              setScope("hiragana");
+              setSection("main");
+              setDirection("write");
+              setSpeedSeconds(3);
+            }}
+            className="rounded-lg p-1.5 text-muted-foreground hover:bg-accent hover:text-foreground cursor-pointer"
+            title="Khôi phục mặc định"
           >
-            <span
-              className={cn(
-                "pointer-events-none inline-block size-5 transform rounded-full bg-background shadow-lg ring-0 transition duration-200 ease-in-out",
-                autoReveal ? "translate-x-5" : "translate-x-0"
-              )}
-            />
+            <RotateCcw className="size-4" />
           </button>
         </div>
 
-        {/* Pool Count Badge */}
-        <div className="flex items-center justify-between lg:col-span-2 rounded-lg bg-secondary/50 p-3">
-          <span className="text-xs font-medium text-muted-foreground">
-            Items matching selected filters:
-          </span>
-          <span className="inline-flex items-center gap-1.5 rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold text-primary">
-            <Sparkles className="size-3.5" />
-            {listeningPool.length}{" "}
-            {contentType === "word" ? t("practice_word_pool_count") : t("listening_phrase_pool_count")}
-          </span>
+        {/* 1. Nội dung luyện tập */}
+        <div className="flex flex-col gap-2">
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
+              1. Nội dung luyện tập
+            </span>
+            <span className="text-[11px] font-bold text-red-600 dark:text-red-400">
+              {poolCount} Chữ cái
+            </span>
+          </div>
+          <div className="grid grid-cols-2 gap-1.5 p-1 bg-muted/50 rounded-xl">
+            <button
+              type="button"
+              onClick={() => setContentType("character")}
+              className={cn(
+                "rounded-lg px-3 py-2 text-xs font-bold transition-all cursor-pointer",
+                contentType === "character" ? "bg-background text-foreground shadow-2xs" : "text-muted-foreground hover:text-foreground"
+              )}
+            >
+              • Chữ cái đơn (Kana)
+            </button>
+            <button
+              type="button"
+              onClick={() => setContentType("word")}
+              className={cn(
+                "rounded-lg px-3 py-2 text-xs font-bold transition-all cursor-pointer",
+                contentType === "word" ? "bg-background text-foreground shadow-2xs" : "text-muted-foreground hover:text-foreground"
+              )}
+            >
+              Từ vựng thực tế
+            </button>
+          </div>
         </div>
 
-        <Button
-          size="lg"
-          disabled={listeningPool.length === 0}
-          onClick={() => {
-            setSessionKey((k) => k + 1);
-            setStarted(true);
-            onSessionStateChange?.(true);
-          }}
-          className="mt-2 w-full text-base font-semibold lg:col-span-2"
-        >
-          {t("listening_btn_start")}
-        </Button>
-      </div>
-    );
-  }
+        {/* 2. Hệ thống chữ viết (Script) */}
+        <div className="flex flex-col gap-2">
+          <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
+            2. Hệ thống chữ viết (Script)
+          </span>
+          <div className="grid grid-cols-3 gap-1.5 p-1 bg-muted/50 rounded-xl">
+            <button
+              type="button"
+              onClick={() => setScope("hiragana")}
+              className={cn(
+                "rounded-lg px-2 py-2 text-xs font-bold transition-all cursor-pointer text-center",
+                scope === "hiragana" ? "bg-background text-foreground shadow-2xs" : "text-muted-foreground hover:text-foreground"
+              )}
+            >
+              ✓ Hiragana (46)
+            </button>
+            <button
+              type="button"
+              onClick={() => setScope("katakana")}
+              className={cn(
+                "rounded-lg px-2 py-2 text-xs font-bold transition-all cursor-pointer text-center",
+                scope === "katakana" ? "bg-background text-foreground shadow-2xs" : "text-muted-foreground hover:text-foreground"
+              )}
+            >
+              Katakana (46)
+            </button>
+            <button
+              type="button"
+              onClick={() => setScope("both")}
+              className={cn(
+                "rounded-lg px-2 py-2 text-xs font-bold transition-all cursor-pointer text-center",
+                scope === "both" ? "bg-background text-foreground shadow-2xs" : "text-muted-foreground hover:text-foreground"
+              )}
+            >
+              Cả hai (92)
+            </button>
+          </div>
+        </div>
 
-  return (
-    <div className="mx-auto flex w-full max-w-md flex-col lg:max-w-lg">
-      <ListeningPracticeSession
-        key={sessionKey}
-        items={shuffledPool}
-        breakSeconds={breakSeconds}
-        rate={speedRate}
-        autoRevealDefault={autoReveal}
-        onEnd={() => {
-          setStarted(false);
-          onSessionStateChange?.(false);
-        }}
-      />
+        {/* 3. Nhóm phát âm (Section) */}
+        <div className="flex flex-col gap-2">
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
+              3. Nhóm phát âm (Section)
+            </span>
+            <span className="text-[10px] font-semibold text-muted-foreground">
+              ĐANG CHỌN: 五十音
+            </span>
+          </div>
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-1.5 p-1 bg-muted/50 rounded-xl">
+            <button
+              type="button"
+              onClick={() => setSection("all")}
+              className={cn(
+                "rounded-lg px-2 py-1.5 text-xs font-bold transition-all cursor-pointer text-center",
+                section === "all" ? "bg-background text-foreground shadow-2xs" : "text-muted-foreground hover:text-foreground"
+              )}
+            >
+              Tất cả (All)
+            </button>
+            <button
+              type="button"
+              onClick={() => setSection("main")}
+              className={cn(
+                "rounded-lg px-2 py-1.5 text-xs font-bold transition-all cursor-pointer text-center",
+                section === "main" ? "bg-background text-red-600 dark:text-red-400 shadow-2xs" : "text-muted-foreground hover:text-foreground"
+              )}
+            >
+              Cơ bản (Gojūon)
+            </button>
+            <button
+              type="button"
+              onClick={() => setSection("dakuten")}
+              className={cn(
+                "rounded-lg px-2 py-1.5 text-xs font-bold transition-all cursor-pointer text-center",
+                section === "dakuten" ? "bg-background text-foreground shadow-2xs" : "text-muted-foreground hover:text-foreground"
+              )}
+            >
+              Âm đục (Dakuten)
+            </button>
+            <button
+              type="button"
+              onClick={() => setSection("youon")}
+              className={cn(
+                "rounded-lg px-2 py-1.5 text-xs font-bold transition-all cursor-pointer text-center",
+                section === "youon" ? "bg-background text-foreground shadow-2xs" : "text-muted-foreground hover:text-foreground"
+              )}
+            >
+              Âm ghép (Youon)
+            </button>
+          </div>
+        </div>
+
+        {/* 4. Chiều kiểm tra phản xạ (Direction) */}
+        <div className="flex flex-col gap-2">
+          <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
+            4. Chiều kiểm tra phản xạ (Direction)
+          </span>
+          <div className="flex flex-col gap-2">
+            {/* Option 1: Romaji -> Kana */}
+            <div
+              onClick={() => setDirection("write")}
+              className={cn(
+                "flex items-start gap-3 rounded-xl border p-3 cursor-pointer transition-all",
+                direction === "write" ? "border-red-500/50 bg-red-500/5 ring-1 ring-red-500/30" : "bg-card hover:bg-accent/40"
+              )}
+            >
+              <input
+                type="radio"
+                name="direction"
+                checked={direction === "write"}
+                onChange={() => setDirection("write")}
+                className="mt-0.5 accent-red-600 cursor-pointer"
+              />
+              <div className="flex flex-col gap-0.5">
+                <span className="text-xs font-bold text-foreground flex items-center gap-1.5">
+                  Luyện phản xạ: Romaji → Chữ Kana
+                  <PenTool className="size-3 text-red-600" />
+                </span>
+                <span className="text-[11px] text-muted-foreground">
+                  Nhìn chữ Latinh viết ngay ra mặt chữ Nhật
+                </span>
+              </div>
+            </div>
+
+            {/* Option 2: Kana -> Romaji */}
+            <div
+              onClick={() => setDirection("read")}
+              className={cn(
+                "flex items-start gap-3 rounded-xl border p-3 cursor-pointer transition-all",
+                direction === "read" ? "border-red-500/50 bg-red-500/5 ring-1 ring-red-500/30" : "bg-card hover:bg-accent/40"
+              )}
+            >
+              <input
+                type="radio"
+                name="direction"
+                checked={direction === "read"}
+                onChange={() => setDirection("read")}
+                className="mt-0.5 accent-red-600 cursor-pointer"
+              />
+              <div className="flex flex-col gap-0.5">
+                <span className="text-xs font-bold text-foreground flex items-center gap-1.5">
+                  Nhận diện mặt chữ: Chữ Kana → Romaji
+                  <Eye className="size-3 text-muted-foreground" />
+                </span>
+                <span className="text-[11px] text-muted-foreground">
+                  Nhìn chữ tiếng Nhật đọc tên phiên âm
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* 5. Tốc độ chuyển thẻ tự động */}
+        <div className="flex flex-col gap-2">
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
+              5. Tốc độ chuyển thẻ tự động
+            </span>
+            <span className="text-[11px] font-semibold text-muted-foreground">
+              Mặc định: {speedSeconds}s
+            </span>
+          </div>
+          <div className="grid grid-cols-5 gap-1.5">
+            {[
+              { label: "⚡ 1.5s", val: 1.5 },
+              { label: "⏳ 3s", val: 3 },
+              { label: "🐢 5s", val: 5 },
+              { label: "⌛ 8s", val: 8 },
+              { label: "🖐️ Tay", val: 0 },
+            ].map((sp) => (
+              <button
+                key={sp.val}
+                type="button"
+                onClick={() => setSpeedSeconds(sp.val)}
+                className={cn(
+                  "rounded-xl border px-2 py-1.5 text-xs font-bold transition-all cursor-pointer text-center",
+                  speedSeconds === sp.val ? "border-red-600 bg-red-600 text-white shadow-2xs" : "bg-background border-border/80 text-foreground hover:bg-accent"
+                )}
+              >
+                {sp.label}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Toggles */}
+        <div className="flex flex-col gap-3 pt-2 border-t text-xs">
+          <div className="flex items-center justify-between">
+            <span className="font-semibold text-foreground">Tự động phát âm thanh khi lật thẻ</span>
+            <button
+              type="button"
+              onClick={() => setAutoPlayAudio((v) => !v)}
+              className={cn(
+                "relative inline-flex h-5 w-9 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out",
+                autoPlayAudio ? "bg-red-600" : "bg-input"
+              )}
+            >
+              <span className={cn("inline-block size-4 transform rounded-full bg-white shadow-xs transition duration-200 ease-in-out", autoPlayAudio ? "translate-x-4" : "translate-x-0")} />
+            </button>
+          </div>
+
+          <div className="flex items-center justify-between">
+            <span className="font-semibold text-foreground">Xáo trộn ngẫu nhiên thứ tự chữ (Shuffle)</span>
+            <button
+              type="button"
+              onClick={() => setShuffle((v) => !v)}
+              className={cn(
+                "relative inline-flex h-5 w-9 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out",
+                shuffle ? "bg-red-600" : "bg-input"
+              )}
+            >
+              <span className={cn("inline-block size-4 transform rounded-full bg-white shadow-xs transition duration-200 ease-in-out", shuffle ? "translate-x-4" : "translate-x-0")} />
+            </button>
+          </div>
+
+          <div className="flex items-center justify-between">
+            <span className="font-semibold text-foreground">Hiển thị gợi ý số nét viết ban đầu</span>
+            <button
+              type="button"
+              onClick={() => setShowStrokeHint((v) => !v)}
+              className={cn(
+                "relative inline-flex h-5 w-9 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out",
+                showStrokeHint ? "bg-red-600" : "bg-input"
+              )}
+            >
+              <span className={cn("inline-block size-4 transform rounded-full bg-white shadow-xs transition duration-200 ease-in-out", showStrokeHint ? "translate-x-4" : "translate-x-0")} />
+            </button>
+          </div>
+        </div>
+
+        {/* Action Buttons */}
+        <div className="flex flex-col gap-2.5 pt-3 border-t">
+          <Button
+            size="lg"
+            onClick={() => handleNext()}
+            className="w-full justify-between bg-red-600 hover:bg-red-700 text-white font-extrabold text-sm py-6 rounded-xl shadow-md cursor-pointer"
+          >
+            <span className="flex items-center gap-2">
+              <Play className="size-4 fill-white" />
+              <span>Bắt đầu Luyện tập trên màn hình</span>
+            </span>
+            <span className="rounded bg-white/20 px-2 py-0.5 text-[11px] font-mono text-white">
+              Phím Space
+            </span>
+          </Button>
+
+          <Button
+            variant="outline"
+            onClick={() => window.print()}
+            className="w-full gap-2 text-xs font-bold rounded-xl border-border/80 hover:bg-accent cursor-pointer py-2.5"
+          >
+            <Printer className="size-4" />
+            <span>In đề bài & phiếu luyện viết A4 (PDF Sheet)</span>
+          </Button>
+        </div>
+      </div>
+
+      {/* RIGHT COLUMN: Interactive Live Practice Card (7 Columns - Matching Mockup 1:1) */}
+      <div className="flex flex-col gap-4 rounded-2xl border bg-card p-5 sm:p-6 shadow-2xs lg:col-span-7 relative overflow-hidden">
+        {/* Background Kanji Watermark */}
+        <span className="absolute -right-6 -top-6 text-8xl sm:text-9xl font-black text-muted-foreground/5 select-none pointer-events-none font-kanji-mincho">
+          練
+        </span>
+
+        {/* Top Info Bar */}
+        <div className="flex items-center justify-between border-b pb-3 text-xs">
+          <div className="flex items-center gap-2">
+            <span className="size-2 rounded-full bg-red-600 animate-ping" />
+            <span className="font-bold text-foreground">Chữ thứ {itemIndex} / {poolCount}</span>
+            <span className="text-muted-foreground">• Tỷ lệ hoàn thành: {Math.round((itemIndex / poolCount) * 100)}% bộ Gojūon</span>
+          </div>
+
+          <div className="flex items-center gap-3 text-muted-foreground">
+            <span className="font-mono font-bold flex items-center gap-1 text-foreground">
+              <Clock className="size-3.5 text-red-600" />
+              00:02 / 00:0{speedSeconds > 0 ? speedSeconds : 3}
+            </span>
+            <button type="button" className="hover:text-foreground cursor-pointer">
+              <Maximize2 className="size-4" />
+            </button>
+          </div>
+        </div>
+
+        {/* Prompt Card Area */}
+        <div className="flex flex-col items-center justify-center gap-2 py-6 border-b text-center relative">
+          <span className="text-[10px] font-extrabold uppercase tracking-widest text-muted-foreground bg-muted/60 px-2.5 py-0.5 rounded-full">
+            ROMAJI GỢI Ý
+          </span>
+          <span className="text-5xl sm:text-6xl font-black tracking-tight text-foreground font-mono">
+            {currentItem.romaji}
+          </span>
+          <p className="text-xs text-muted-foreground">
+            Hãy viết nhanh ký tự tương ứng ra giấy tập của bạn
+          </p>
+        </div>
+
+        {/* Answer Box Container with Rice Grid (米字格) */}
+        <div className="relative flex flex-col sm:flex-row items-center justify-between gap-6 rounded-2xl border border-dashed border-red-500/30 bg-muted/20 p-5 shadow-2xs">
+          {/* Rice Grid Container */}
+          <div className="relative size-32 sm:size-36 flex items-center justify-center rounded-xl border border-red-500/40 bg-background shadow-2xs overflow-hidden shrink-0">
+            {/* Grid Guidelines */}
+            <div className="absolute inset-0 border-b border-r border-red-500/10 border-dashed pointer-events-none" />
+            <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+              <div className="w-full border-t border-red-500/20 border-dashed" />
+            </div>
+            <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+              <div className="h-full border-l border-red-500/20 border-dashed" />
+            </div>
+
+            {/* Kana Glyph */}
+            <span className={cn(
+              "text-6xl font-bold font-kanji-mincho transition-all duration-300",
+              phase === "reveal" ? "text-red-600 scale-100 opacity-100" : "text-foreground/20 blur-xs scale-90"
+            )}>
+              {currentItem.char}
+            </span>
+          </div>
+
+          {/* Answer Metadata & Audio */}
+          <div className="flex flex-1 flex-col gap-2 w-full">
+            <div className="flex items-center gap-2">
+              <span className="rounded bg-red-500/10 px-2 py-0.5 text-[10px] font-bold text-red-600 dark:text-red-400 uppercase">
+                {scope.toUpperCase()}
+              </span>
+              <span className="rounded bg-muted px-2 py-0.5 text-[10px] font-bold text-muted-foreground uppercase">
+                {currentItem.strokes} NÉT VIẾT
+              </span>
+            </div>
+
+            <div className="flex flex-col">
+              <span className="text-lg font-bold text-foreground">
+                {currentItem.word}
+              </span>
+              <span className="text-xs text-muted-foreground">
+                Ví dụ: {currentItem.meaning}
+              </span>
+            </div>
+
+            <div className="flex items-center gap-3 pt-2">
+              <button
+                type="button"
+                onClick={() => speakJapanese(currentItem.char)}
+                className="inline-flex items-center gap-1.5 rounded-full border border-red-600/30 bg-red-500/10 px-3 py-1 text-xs font-bold text-red-600 dark:text-red-400 hover:bg-red-600 hover:text-white transition-all cursor-pointer"
+              >
+                <Volume2 className="size-3.5" />
+                <span>Phát âm /{currentItem.romaji}/</span>
+              </button>
+            </div>
+          </div>
+
+          {/* Reveal Toggle Overlay Button */}
+          <button
+            type="button"
+            onClick={() => setPhase((prev) => (prev === "prompt" ? "reveal" : "prompt"))}
+            className="w-full sm:w-auto absolute bottom-3 right-3 rounded-xl bg-foreground text-background px-3 py-1.5 text-xs font-bold shadow-md hover:bg-foreground/90 transition-all cursor-pointer"
+          >
+            {phase === "reveal" ? "👁 Đã hiện đáp án • Bấm Space để ẩn" : "👁 Bấm Space để hiện đáp án"}
+          </button>
+        </div>
+
+        {/* Self Assessment Rating Buttons (3 Rating Options - Matching Mockup 1:1) */}
+        <div className="flex flex-col gap-2 pt-2">
+          <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground text-center">
+            ĐÁNH GIÁ KẾT QUẢ CỦA BẠN
+          </span>
+          <div className="grid grid-cols-3 gap-3">
+            {/* Rating 1: Chưa nhớ */}
+            <button
+              type="button"
+              onClick={() => handleRating(1)}
+              className="flex flex-col items-center justify-center gap-1 rounded-2xl border border-red-500/30 bg-red-500/10 p-3 text-red-600 dark:text-red-400 hover:bg-red-500/20 transition-all cursor-pointer"
+            >
+              <span className="text-base font-bold">✕</span>
+              <span className="text-xs font-extrabold">Chưa nhớ</span>
+              <span className="text-[10px] text-muted-foreground font-mono">Phím 1</span>
+            </button>
+
+            {/* Rating 2: Còn phân vân */}
+            <button
+              type="button"
+              onClick={() => handleRating(2)}
+              className="flex flex-col items-center justify-center gap-1 rounded-2xl border border-amber-500/30 bg-amber-500/10 p-3 text-amber-600 dark:text-amber-400 hover:bg-amber-500/20 transition-all cursor-pointer"
+            >
+              <HelpCircle className="size-4" />
+              <span className="text-xs font-extrabold">Còn phân vân</span>
+              <span className="text-[10px] text-muted-foreground font-mono">Phím 2</span>
+            </button>
+
+            {/* Rating 3: Viết đúng */}
+            <button
+              type="button"
+              onClick={() => handleRating(3)}
+              className="flex flex-col items-center justify-center gap-1 rounded-2xl border border-emerald-500/30 bg-emerald-500/10 p-3 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-500/20 transition-all cursor-pointer"
+            >
+              <Check className="size-4" />
+              <span className="text-xs font-extrabold">Viết đúng</span>
+              <span className="text-[10px] text-muted-foreground font-mono">Phím 3</span>
+            </button>
+          </div>
+        </div>
+
+        {/* Navigation Row */}
+        <div className="flex items-center justify-between pt-2 border-t text-xs">
+          <Button
+            variant="outline"
+            onClick={handlePrev}
+            className="gap-1 text-xs font-bold rounded-xl cursor-pointer"
+          >
+            <ChevronLeft className="size-4" />
+            <span>Chữ trước (←)</span>
+          </Button>
+
+          <button
+            type="button"
+            onClick={() => setPaused((p) => !p)}
+            className="rounded-xl border border-border/80 bg-background p-2 text-muted-foreground hover:bg-accent cursor-pointer"
+            title="Tạm dừng / Tiếp tục"
+          >
+            {paused ? <Play className="size-4" /> : <Pause className="size-4" />}
+          </button>
+
+          <span className="text-[11px] text-muted-foreground hidden sm:inline">
+            Phím tắt: Enter hoặc Phím mũi tên
+          </span>
+
+          <Button
+            onClick={handleNext}
+            className="gap-1 bg-red-600 hover:bg-red-700 text-white font-bold text-xs rounded-xl cursor-pointer"
+          >
+            <span>Chữ tiếp theo (Enter)</span>
+            <ChevronRight className="size-4" />
+          </Button>
+        </div>
+
+        {/* Session Progress Log Banner */}
+        <div className="flex items-center justify-between rounded-xl bg-emerald-500/10 border border-emerald-500/20 p-3 text-xs text-emerald-700 dark:text-emerald-300 mt-1">
+          <div className="flex items-center gap-2">
+            <CheckCircle2 className="size-4 shrink-0 text-emerald-600" />
+            <span>
+              <strong className="font-bold">Đang ghi nhận vào phiên học #142:</strong> Hệ thống sẽ lưu các ký tự bạn chọn "Chưa nhớ" để ôn lại cuối bài.
+            </span>
+          </div>
+          <button type="button" className="font-bold underline whitespace-nowrap text-emerald-800 dark:text-emerald-200 hover:opacity-80 cursor-pointer">
+            Xem danh sách đã làm (14)
+          </button>
+        </div>
+      </div>
     </div>
   );
 }
 
+{/* -------------------------------------------------------------------------------- */}
+{/* Digital Handwriting Layout */}
+{/* -------------------------------------------------------------------------------- */}
 
-function HandwritingPanel({ onSessionStateChange }: { onSessionStateChange?: (active: boolean) => void }) {
+function HandwritingPanelLayout() {
+  return (
+    <div className="mx-auto flex w-full max-w-2xl flex-col gap-6 rounded-2xl border bg-card p-6 shadow-2xs">
+      <HandwritingPanel />
+    </div>
+  );
+}
+
+function HandwritingPanel() {
   const { t } = useLanguage();
-  const [started, setStarted] = useState(false);
   const [scope, setScope] = useState<Scope>("hiragana");
   const [section, setSection] = useState<KanaSection>("all");
-  const [sessionKey, setSessionKey] = useState(0);
-
-  const scopeOptions: { value: Scope; label: string }[] = [
-    { value: "hiragana", label: "Hiragana" },
-    { value: "katakana", label: "Katakana" },
-    { value: "both", label: "Both" },
-  ];
-
-  const sectionOptions: { value: KanaSection; label: string }[] = [
-    { value: "all", label: t("practice_sec_all") },
-    { value: "main", label: t("practice_sec_main") },
-    { value: "dakuten", label: t("practice_sec_dakuten") },
-    { value: "youon", label: t("practice_sec_youon") },
-  ];
-
-  const poolCount = useMemo(
-    () => filterKana(scope, section).length,
-    [scope, section]
-  );
-
   const [startKana, setStartKana] = useState(() => randomKana(scope, section));
 
-  if (!started) {
-    return (
-      <div className="mx-auto flex max-w-xl flex-col gap-6 rounded-xl border bg-card p-5 sm:p-7 shadow-2xs">
-        <div className="flex flex-col gap-1">
-          <h2 className="text-lg font-semibold tracking-tight">{t("mod_practice_title")}</h2>
-          <p className="text-sm text-muted-foreground">
-            {t("mod_practice_desc")}
-          </p>
-        </div>
-
-        {/* Script Selection */}
-        <div className="flex flex-col gap-2">
-          <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-            {t("practice_script")}
-          </span>
-          <OptionGroup options={scopeOptions} value={scope} onChange={setScope} size="sm" />
-        </div>
-
-        {/* Section Selection */}
-        <div className="flex flex-col gap-2">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-              {t("practice_section")}
-            </span>
-            <span className="inline-flex items-center gap-1 rounded-full bg-secondary/80 px-2.5 py-0.5 text-xs font-medium text-muted-foreground">
-              <Sparkles className="size-3 text-primary" />
-              {poolCount} {t("practice_pool_count")}
-            </span>
-          </div>
-          <div className="overflow-x-auto pb-1 scrollbar-none">
-            <OptionGroup
-              options={sectionOptions}
-              value={section}
-              onChange={setSection}
-              size="sm"
-              className="flex-nowrap"
-            />
-          </div>
-        </div>
-
-        <Button
-          size="lg"
-          onClick={() => {
-            setStartKana(randomKana(scope, section));
-            setSessionKey((k) => k + 1);
-            setStarted(true);
-            onSessionStateChange?.(true);
-          }}
-          className="mt-2 w-full text-base font-semibold"
-        >
-          {t("practice_btn_start_digital")}
-        </Button>
-      </div>
-    );
-  }
-
   return (
-    <div className="mx-auto flex w-full max-w-md flex-col lg:max-w-lg">
+    <div className="flex w-full flex-col gap-4">
+      <div className="flex flex-col gap-1 border-b pb-3">
+        <h2 className="text-lg font-bold text-foreground">Luyện viết nét màn hình (Digital Handwriting)</h2>
+        <p className="text-xs text-muted-foreground">Tự tay vẽ nét chữ trên bảng ô ly Mễ Tự Cách để chấm điểm thứ tự và hình dạng nét</p>
+      </div>
+
       <PracticeSession
-        key={sessionKey}
         initialKana={startKana}
         scope={scope}
         section={section}
-        onEnd={() => {
-          setStarted(false);
-          onSessionStateChange?.(false);
-        }}
+        onEnd={() => setStartKana(randomKana(scope, section))}
       />
     </div>
   );
 }
 
-function PaperPanel({ onSessionStateChange }: { onSessionStateChange?: (active: boolean) => void }) {
+{/* -------------------------------------------------------------------------------- */}
+{/* Listening Panel Layout */}
+{/* -------------------------------------------------------------------------------- */}
+
+function ListeningPanelLayout() {
+  return (
+    <div className="mx-auto flex w-full max-w-2xl flex-col gap-6 rounded-2xl border bg-card p-6 shadow-2xs">
+      <ListeningPanel />
+    </div>
+  );
+}
+
+function ListeningPanel() {
   const { t, language } = useLanguage();
+  const [contentType, setContentType] = useState<"word" | "sentence">("word");
+  const [wordDifficulty, setWordDifficulty] = useState<WordDifficulty | "all">("all");
+  const [breakSeconds, setBreakSeconds] = useState(5);
+  const [speedRate, setSpeedRate] = useState<number>(0.9);
+  const [autoReveal, setAutoReveal] = useState<boolean>(false);
   const [started, setStarted] = useState(false);
-  const [contentType, setContentType] = useState<ContentType>("character");
-  const [scope, setScope] = useState<Scope>("hiragana");
-  const [section, setSection] = useState<KanaSection>("all");
-  const [difficulty, setDifficulty] = useState<WordDifficulty>("easy");
-  const [direction, setDirection] = useState<PaperDirection>("write");
-  const [promptSeconds, setPromptSeconds] = useState(5);
-  const [revealSeconds, setRevealSeconds] = useState(3);
-  const [autoPlayAudio, setAutoPlayAudio] = useState(true);
-  const [sessionKey, setSessionKey] = useState(0);
 
-  const scopeOptions: { value: Scope; label: string }[] = [
-    { value: "hiragana", label: "Hiragana" },
-    { value: "katakana", label: "Katakana" },
-    { value: "both", label: "Both" },
-  ];
-
-  const sectionOptions: { value: KanaSection; label: string }[] = [
-    { value: "all", label: t("practice_sec_all") },
-    { value: "main", label: t("practice_sec_main") },
-    { value: "dakuten", label: t("practice_sec_dakuten") },
-    { value: "youon", label: t("practice_sec_youon") },
-  ];
-
-  const contentOptions: { value: ContentType; label: string }[] = [
-    { value: "character", label: t("practice_content_kana") },
-    { value: "word", label: t("practice_content_words") },
-  ];
-
-  const difficultyOptions: { value: WordDifficulty; label: string }[] =
-    WORD_DIFFICULTIES.map((d) => ({
-      value: d,
-      label: WORD_DIFFICULTY_LABELS_BILINGUAL[language][d],
+  const listeningPool: ListeningItem[] = useMemo(() => {
+    const allWords = getAllWords();
+    return allWords.map((w) => ({
+      id: w.id,
+      japanese: w.kanji || w.word,
+      hiragana: w.word,
+      romaji: w.romaji,
+      meaning: w.meaning,
+      type: "word",
+      subLabel: CATEGORY_LABELS[w.category],
     }));
+  }, []);
 
-  const directionOptions: { value: PaperDirection; label: string }[] = [
-    { value: "write", label: `${t("practice_title")} (romaji → kana)` },
-    { value: "read", label: `${t("nav_learn")} (kana → romaji)` },
-  ];
-
-  const poolCount = useMemo(
-    () => filterKana(scope, section).length,
-    [scope, section]
-  );
-
-  const wordPoolCount = useMemo(
-    () => getWordsByDifficulty(difficulty, scope).length,
-    [difficulty, scope]
-  );
-
-  if (!started) {
+  if (started) {
     return (
-      <div className="flex flex-col gap-6 rounded-xl border bg-card p-5 sm:p-7 shadow-2xs lg:grid lg:grid-cols-2 lg:gap-x-8 lg:gap-y-6">
-        <div className="flex flex-col gap-1 lg:col-span-2">
-          <h2 className="text-lg font-semibold tracking-tight">{t("practice_tab_paper")}</h2>
-          <p className="text-sm text-muted-foreground">
-            {t("paper_ready_desc")}
-          </p>
-        </div>
+      <ListeningPracticeSession
+        items={listeningPool}
+        breakSeconds={breakSeconds}
+        rate={speedRate}
+        autoRevealDefault={autoReveal}
+        onEnd={() => setStarted(false)}
+      />
+    );
+  }
 
-        {/* Content Type */}
+  return (
+    <div className="flex flex-col gap-5">
+      <div className="flex flex-col gap-1 border-b pb-3">
+        <h2 className="text-lg font-bold text-foreground">Luyện Nghe & Viết (Tokyo Accent)</h2>
+        <p className="text-xs text-muted-foreground">Luyện phản xạ nghe âm thanh giọng chuẩn bản xứ Tokyo và gõ phiên âm tương ứng</p>
+      </div>
+
+      <div className="flex flex-col gap-4 text-xs">
         <div className="flex flex-col gap-2">
-          <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-            {t("practice_content")}
-          </span>
-          <OptionGroup
-            options={contentOptions}
-            value={contentType}
-            onChange={setContentType}
-            size="sm"
-          />
-        </div>
-
-        {/* Script Selection */}
-        <div className="flex flex-col gap-2">
-          <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-            {t("practice_script")}
-          </span>
-          <OptionGroup options={scopeOptions} value={scope} onChange={setScope} size="sm" />
-        </div>
-
-        {/* Kana Section */}
-        {contentType === "character" && (
-          <div className="flex flex-col gap-2 lg:col-span-2">
-            <div className="flex items-center justify-between">
-              <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                {t("practice_section")}
-              </span>
-              <span className="inline-flex items-center gap-1 rounded-full bg-secondary/80 px-2.5 py-0.5 text-xs font-medium text-muted-foreground">
-                <Sparkles className="size-3 text-primary" />
-                {poolCount} {t("practice_pool_count")}
-              </span>
-            </div>
-            <div className="overflow-x-auto pb-1 scrollbar-none">
-              <OptionGroup
-                options={sectionOptions}
-                value={section}
-                onChange={setSection}
-                size="sm"
-                className="flex-nowrap"
-              />
-            </div>
+          <span className="font-bold text-muted-foreground uppercase">Thời gian nghỉ giữa các câu</span>
+          <div className="flex gap-2">
+            {[3, 5, 8, 10].map((s) => (
+              <button
+                key={s}
+                type="button"
+                onClick={() => setBreakSeconds(s)}
+                className={cn(
+                  "rounded-xl border px-3 py-1.5 font-bold transition-all cursor-pointer",
+                  breakSeconds === s ? "border-purple-600 bg-purple-600 text-white" : "bg-background text-foreground"
+                )}
+              >
+                {s}s
+              </button>
+            ))}
           </div>
-        )}
-
-        {/* Word Level */}
-        {contentType === "word" && (
-          <div className="flex flex-col gap-2 lg:col-span-2">
-            <div className="flex items-center justify-between">
-              <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                {t("practice_difficulty")}
-              </span>
-              <span className="inline-flex items-center gap-1 rounded-full bg-secondary/80 px-2.5 py-0.5 text-xs font-medium text-muted-foreground">
-                <Sparkles className="size-3 text-primary" />
-                {wordPoolCount} {t("practice_word_pool_count")}
-              </span>
-            </div>
-            <OptionGroup options={difficultyOptions} value={difficulty} onChange={setDifficulty} size="sm" />
-          </div>
-        )}
-
-        {/* Direction */}
-        <div className="flex flex-col gap-2 lg:col-span-2">
-          <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-            {t("practice_direction")}
-          </span>
-          <OptionGroup
-            options={directionOptions}
-            value={direction}
-            onChange={setDirection}
-            size="sm"
-          />
-        </div>
-
-        {/* Drill Speed Selection */}
-        <div className="flex flex-col gap-2 lg:col-span-2">
-          <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground flex items-center gap-1.5">
-            <Clock className="size-3.5 text-primary" />
-            {t("practice_speed")}
-          </span>
-          <select
-            value={`${promptSeconds}-${revealSeconds}`}
-            onChange={(e) => {
-              const [p, r] = e.target.value.split("-").map(Number);
-              setPromptSeconds(p);
-              setRevealSeconds(r);
-            }}
-            className="w-full rounded-lg border bg-background px-3 py-2 text-xs sm:text-sm font-medium focus:outline-none focus:ring-2 focus:ring-primary cursor-pointer"
-          >
-            <option value="3-2">{t("paper_speed_option_fast")}</option>
-            <option value="5-3">{t("paper_speed_option_standard")}</option>
-            <option value="8-5">{t("paper_speed_option_relaxed")}</option>
-            <option value="12-8">{t("paper_speed_option_slow")}</option>
-            <option value="0-0">{t("paper_speed_option_manual")}</option>
-          </select>
-        </div>
-
-        {/* Audio Option */}
-        <div className="flex flex-col gap-2 lg:col-span-2">
-          <button
-            type="button"
-            onClick={() => setAutoPlayAudio((v) => !v)}
-            className={cn(
-              "inline-flex w-fit items-center gap-2 rounded-full border px-3.5 py-1.5 text-xs font-medium transition-colors",
-              autoPlayAudio
-                ? "border-primary bg-primary text-primary-foreground"
-                : "hover:bg-accent text-muted-foreground"
-            )}
-          >
-            {autoPlayAudio ? (
-              <Volume2 className="size-3.5" />
-            ) : (
-              <VolumeX className="size-3.5" />
-            )}
-            Auto-play pronunciation
-          </button>
         </div>
 
         <Button
           size="lg"
-          onClick={() => {
-            setSessionKey((k) => k + 1);
-            setStarted(true);
-            onSessionStateChange?.(true);
-          }}
-          className="mt-2 w-full text-base font-semibold lg:col-span-2"
+          onClick={() => setStarted(true)}
+          className="w-full bg-purple-600 hover:bg-purple-700 text-white font-bold py-6 rounded-xl cursor-pointer mt-2"
         >
-          {t("practice_btn_start_paper")}
+          <Headphones className="size-4 mr-2" />
+          <span>Bắt đầu Luyện nghe</span>
         </Button>
       </div>
-    );
-  }
-
-  const pickNext = (excludeId: string) =>
-    contentType === "character"
-      ? pickNextKana(scope, section, excludeId)
-      : pickNextWord(difficulty, scope, excludeId);
-
-  return (
-    <div className="mx-auto flex w-full max-w-md flex-col lg:max-w-lg">
-      <PaperPracticeSession
-        key={sessionKey}
-        direction={direction}
-        promptSeconds={promptSeconds}
-        revealSeconds={revealSeconds}
-        autoPlayAudio={autoPlayAudio}
-        pickNext={pickNext}
-        onEnd={() => {
-          setStarted(false);
-          onSessionStateChange?.(false);
-        }}
-      />
     </div>
   );
 }
