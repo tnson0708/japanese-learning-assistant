@@ -351,7 +351,7 @@ function KanaCardItem({
       {/* Main Kana Character */}
       <span
         className={cn(
-          "text-2xl font-extrabold tracking-tight transition-colors mt-1",
+          "text-2xl font-extrabold tracking-tight transition-colors mt-1 font-kanji-mincho",
           confusing ? confusing.textClass : "",
           isSelected
             ? "text-red-600 dark:text-red-400"

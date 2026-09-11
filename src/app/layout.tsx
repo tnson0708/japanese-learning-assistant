@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Plus_Jakarta_Sans, Geist_Mono } from "next/font/google";
+import { Plus_Jakarta_Sans, Geist_Mono, Yuji_Boku } from "next/font/google";
 import { Nav } from "@/components/nav";
 import { Footer } from "@/components/footer";
 import { Providers } from "@/app/providers";
@@ -15,6 +15,15 @@ const sansFont = Plus_Jakarta_Sans({
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
+});
+
+// Bold ink-brush display face for kanji/kana glyphs (see .font-kanji-mincho in globals.css) —
+// system Mincho fonts render too thin/delicate to match the intended brush-calligraphy look.
+const kanjiFont = Yuji_Boku({
+  weight: "400",
+  variable: "--font-kanji",
+  subsets: ["latin"],
+  display: "swap",
 });
 
 
@@ -54,7 +63,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${sansFont.variable} ${geistMono.variable} h-full antialiased font-sans`}
+      className={`${sansFont.variable} ${geistMono.variable} ${kanjiFont.variable} h-full antialiased font-sans`}
     >
 
       <body className="min-h-full flex flex-col bg-background text-foreground">

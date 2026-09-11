@@ -152,7 +152,7 @@ export function PronunciationGuide() {
                 <span>NGUYÊN ÂM /A/</span>
               </div>
               <div className="text-center py-2">
-                <span className="text-4xl font-extrabold text-foreground">あ</span>
+                <span className="text-4xl font-extrabold text-foreground font-kanji-mincho">あ</span>
                 <div className="text-xs text-muted-foreground font-semibold mt-1">ア • [ a ]</div>
               </div>
               <div className="my-2 rounded-xl bg-muted/40 p-2.5 flex items-center justify-center">
@@ -175,7 +175,7 @@ export function PronunciationGuide() {
                 <span>NGUYÊN ÂM /I/</span>
               </div>
               <div className="text-center py-2">
-                <span className="text-4xl font-extrabold text-foreground">い</span>
+                <span className="text-4xl font-extrabold text-foreground font-kanji-mincho">い</span>
                 <div className="text-xs text-muted-foreground font-semibold mt-1">イ • [ i ]</div>
               </div>
               <div className="my-2 rounded-xl bg-muted/40 p-2.5 flex items-center justify-center">
@@ -201,7 +201,7 @@ export function PronunciationGuide() {
                 <span>NGUYÊN ÂM /U/</span>
               </div>
               <div className="text-center py-2">
-                <span className="text-4xl font-extrabold text-red-600">う</span>
+                <span className="text-4xl font-extrabold text-red-600 font-kanji-mincho">う</span>
                 <div className="text-xs text-red-600/80 font-bold mt-1">ウ • [ ɯ ]</div>
               </div>
               <div className="my-2 rounded-xl bg-red-100/60 dark:bg-red-900/30 p-2.5 flex items-center justify-center border border-red-200/50">
@@ -224,7 +224,7 @@ export function PronunciationGuide() {
                 <span>NGUYÊN ÂM /E/</span>
               </div>
               <div className="text-center py-2">
-                <span className="text-4xl font-extrabold text-foreground">え</span>
+                <span className="text-4xl font-extrabold text-foreground font-kanji-mincho">え</span>
                 <div className="text-xs text-muted-foreground font-semibold mt-1">エ • [ e ]</div>
               </div>
               <div className="my-2 rounded-xl bg-muted/40 p-2.5 flex items-center justify-center">
@@ -247,7 +247,7 @@ export function PronunciationGuide() {
                 <span>NGUYÊN ÂM /O/</span>
               </div>
               <div className="text-center py-2">
-                <span className="text-4xl font-extrabold text-foreground">お</span>
+                <span className="text-4xl font-extrabold text-foreground font-kanji-mincho">お</span>
                 <div className="text-xs text-muted-foreground font-semibold mt-1">オ • [ o ]</div>
               </div>
               <div className="my-2 rounded-xl bg-muted/40 p-2.5 flex items-center justify-center">
@@ -710,7 +710,7 @@ export function PronunciationGuide() {
         <div className="rounded-2xl border border-border/80 bg-muted/20 p-5 space-y-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <span className="text-2xl font-black text-foreground tracking-tight">はし (Hashi)</span>
+              <span className="text-2xl font-black text-foreground tracking-tight"><span className="font-kanji-mincho">はし</span> (Hashi)</span>
               <span className="text-xs text-muted-foreground font-medium">3 cao độ cho 3 ý nghĩa hoàn toàn khác nhau</span>
             </div>
             <span className="text-[10px] font-mono uppercase tracking-wider text-muted-foreground bg-muted px-2 py-0.5 rounded">
@@ -727,7 +727,7 @@ export function PronunciationGuide() {
                   <span className="text-muted-foreground">[ HA - shi ]</span>
                 </div>
                 <div className="text-base font-extrabold text-foreground pt-1">
-                  箸 <span className="text-xs font-bold text-red-600">(Đũa ăn)</span>
+                  <span className="font-kanji-mincho">箸</span> <span className="text-xs font-bold text-red-600">(Đũa ăn)</span>
                 </div>
                 <p className="text-[11px] text-muted-foreground leading-relaxed">
                   Cao ở âm [ha], hạ thấp đột ngột ở âm [shi].
@@ -749,7 +749,7 @@ export function PronunciationGuide() {
                   <span className="text-muted-foreground">[ ha - SHI (ga↓) ]</span>
                 </div>
                 <div className="text-base font-extrabold text-foreground pt-1">
-                  橋 <span className="text-xs font-bold text-amber-600">(Cây cầu)</span>
+                  <span className="font-kanji-mincho">橋</span> <span className="text-xs font-bold text-amber-600">(Cây cầu)</span>
                 </div>
                 <p className="text-[11px] text-muted-foreground leading-relaxed">
                   Thấp ở âm [ha], cao ở âm [shi], rơi khi thêm trợ từ.
@@ -771,7 +771,7 @@ export function PronunciationGuide() {
                   <span className="text-muted-foreground">[ ha - SHI (ga) ]</span>
                 </div>
                 <div className="text-base font-extrabold text-foreground pt-1">
-                  端 <span className="text-xs font-bold text-blue-600">(Mép/Rìa đường)</span>
+                  <span className="font-kanji-mincho">端</span> <span className="text-xs font-bold text-blue-600">(Mép/Rìa đường)</span>
                 </div>
                 <p className="text-[11px] text-muted-foreground leading-relaxed">
                   Thấp ở âm [ha], lên cao ở [shi] và giữ nguyên khi kèm trợ từ.
@@ -791,7 +791,7 @@ export function PronunciationGuide() {
         <div className="rounded-2xl border border-border/80 bg-muted/20 p-5 space-y-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <span className="text-2xl font-black text-foreground tracking-tight">あめ (Ame)</span>
+              <span className="text-2xl font-black text-foreground tracking-tight"><span className="font-kanji-mincho">あめ</span> (Ame)</span>
               <span className="text-xs text-muted-foreground font-medium">Cặp từ dễ gây nhầm lẫn kinh điển nhất cho người mới bắt đầu</span>
             </div>
             <span className="text-[10px] font-mono uppercase tracking-wider text-muted-foreground bg-muted px-2 py-0.5 rounded">
@@ -807,7 +807,7 @@ export function PronunciationGuide() {
                   Type 1 [ A-me ]
                 </div>
                 <div className="text-base font-extrabold text-foreground">
-                  雨 <span className="text-xs font-bold text-red-600">(Mưa)</span>
+                  <span className="font-kanji-mincho">雨</span> <span className="text-xs font-bold text-red-600">(Mưa)</span>
                 </div>
                 <p className="text-[11px] text-muted-foreground leading-relaxed max-w-xs">
                   Âm [A] nhấn cao, âm [me] rơi nhẹ. Thường gặp trong: &quot;Trời đang mưa&quot;.
@@ -823,7 +823,7 @@ export function PronunciationGuide() {
                   Type 0 [ a-ME ]
                 </div>
                 <div className="text-base font-extrabold text-foreground">
-                  飴 <span className="text-xs font-bold text-blue-600">(Kẹo ngọt)</span>
+                  <span className="font-kanji-mincho">飴</span> <span className="text-xs font-bold text-blue-600">(Kẹo ngọt)</span>
                 </div>
                 <p className="text-[11px] text-muted-foreground leading-relaxed max-w-xs">
                   Âm [a] trầm thấp, âm [me] thanh thoát dâng cao. Thường gặp: &quot;Ăn kẹo&quot;.

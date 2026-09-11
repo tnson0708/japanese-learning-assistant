@@ -29,13 +29,13 @@ export function KanaInspectorCard({ kana }: { kana: Kana }) {
         <div className="relative flex flex-col items-center justify-center rounded-xl bg-muted/20 py-6 border border-border/40 overflow-hidden">
           {/* Background Ghost Origin Kanji */}
           {meta.originKanji && (
-            <span className="absolute right-4 top-1/2 -translate-y-1/2 text-7xl font-black text-muted-foreground/10 select-none pointer-events-none">
+            <span className="absolute right-4 top-1/2 -translate-y-1/2 text-7xl font-black text-muted-foreground/10 select-none pointer-events-none font-kanji-mincho">
               {meta.originKanji}
             </span>
           )}
 
           {/* Large Kana Character */}
-          <span className="text-6xl font-extrabold text-foreground tracking-tight select-none">
+          <span className="text-6xl font-extrabold text-foreground tracking-tight select-none font-kanji-mincho">
             {kana.char}
           </span>
 

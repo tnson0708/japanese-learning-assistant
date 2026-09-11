@@ -50,7 +50,7 @@ export function KatakanaConfusingPairs() {
                   <path d="M 30 75 Q 40 45 75 25" fill="none" stroke="currentColor" strokeWidth="4" strokeDasharray="3 3" />
                   <polygon points="75,25 65,30 70,38" fill="currentColor" />
                 </svg>
-                <span className="text-4xl font-extrabold text-red-600 dark:text-red-400 select-none z-10">
+                <span className="text-4xl font-extrabold text-red-600 dark:text-red-400 select-none z-10 font-kanji-mincho">
                   シ
                 </span>
                 <button
@@ -83,7 +83,7 @@ export function KatakanaConfusingPairs() {
                   <path d="M 75 25 Q 60 55 35 75" fill="none" stroke="currentColor" strokeWidth="4" strokeDasharray="3 3" />
                   <polygon points="35,75 42,66 48,72" fill="currentColor" />
                 </svg>
-                <span className="text-4xl font-extrabold text-emerald-600 dark:text-emerald-400 select-none z-10">
+                <span className="text-4xl font-extrabold text-emerald-600 dark:text-emerald-400 select-none z-10 font-kanji-mincho">
                   ツ
                 </span>
                 <button
@@ -131,7 +131,7 @@ export function KatakanaConfusingPairs() {
                   <path d="M 65 25 Q 50 55 35 75" fill="none" stroke="currentColor" strokeWidth="4" strokeDasharray="3 3" />
                   <polygon points="35,75 42,66 48,72" fill="currentColor" />
                 </svg>
-                <span className="text-4xl font-extrabold text-red-600 dark:text-red-400 select-none z-10">
+                <span className="text-4xl font-extrabold text-red-600 dark:text-red-400 select-none z-10 font-kanji-mincho">
                   ソ
                 </span>
                 <button
@@ -164,7 +164,7 @@ export function KatakanaConfusingPairs() {
                   <path d="M 30 75 Q 40 45 75 25" fill="none" stroke="currentColor" strokeWidth="4" strokeDasharray="3 3" />
                   <polygon points="75,25 65,30 70,38" fill="currentColor" />
                 </svg>
-                <span className="text-4xl font-extrabold text-amber-600 dark:text-amber-400 select-none z-10">
+                <span className="text-4xl font-extrabold text-amber-600 dark:text-amber-400 select-none z-10 font-kanji-mincho">
                   ン
                 </span>
                 <button

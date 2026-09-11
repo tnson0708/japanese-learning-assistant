@@ -8,7 +8,7 @@ export const translations = {
     nav_vocabulary: "Vocabulary",
     nav_theory: "Theory",
     nav_history: "History",
-    nav_phrases: "Common Sentences",
+    nav_phrases: "Phrases",
     nav_practice: "Practice",
     nav_teaching: "Teaching",
     nav_slides: "Slides",

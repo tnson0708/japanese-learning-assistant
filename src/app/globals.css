@@ -191,10 +191,12 @@
   }
 }
 
-/* Authentic Japanese Mincho Calligraphy Font Stack (明朝体) for Kanji & Radicals */
+/* Bold ink-brush display font for Kanji & Radicals glyphs (falls back to OS Mincho for any
+   glyph the display font doesn't cover, then generic serif). !important so it always wins
+   over the Vietnamese-locale `span` font-family override below. */
 .font-kanji-mincho {
-  font-family: "Hiragino Mincho ProN", "Yu Mincho", "YuMincho", "BIZ UDPMincho", "MS PMincho", "Songti SC", "SimSun", serif;
-  font-weight: 600;
+  font-family: var(--font-kanji), "Hiragino Mincho ProN", "Yu Mincho", "YuMincho", "BIZ UDPMincho", "MS PMincho", "Songti SC", "SimSun", serif !important;
+  font-weight: 400;
   -webkit-font-smoothing: antialiased;
 }
 
