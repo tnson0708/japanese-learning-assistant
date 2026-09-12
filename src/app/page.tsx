@@ -397,19 +397,6 @@ export default function Home() {
           和
         </div>
       </div>
-
-      {/* Website Status & Visit Counter */}
-      <VisitCounter variant="card" />
-
-      {/* Sub-footer Line */}
-      <div className="flex flex-col sm:flex-row items-center justify-between gap-2 border-t border-border/40 pt-6 text-xs text-muted-foreground">
-        <div className="font-semibold text-foreground">
-          仮名道場 <span className="font-normal text-muted-foreground">— Master Japanese Kana &amp; Vocabulary</span>
-        </div>
-        <div>
-          © 2025 Kana Dojo. {t("footer_tagline")}
-        </div>
-      </div>
     </div>
   );
 }

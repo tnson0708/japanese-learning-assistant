@@ -254,110 +254,6 @@ export default function PracticePage() {
       {activeTab === "handwriting" && <HandwritingPanelLayout />}
       {activeTab === "listening" && <ListeningPanelLayout />}
 
-      {/* 4. Bottom Resources & Supporting Advice Section */}
-      <div className="flex flex-col gap-5 pt-6 border-t">
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1">
-          <div>
-            <h2 className="text-xl font-bold tracking-tight text-foreground">Tài liệu & Lời khuyên bổ trợ</h2>
-            <p className="text-xs text-muted-foreground">Công cụ thực tế giúp bạn nhanh chóng thành thạo bảng chữ cái tiếng Nhật</p>
-          </div>
-          <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground bg-muted/60 px-3 py-1 rounded-full w-fit">
-            HỌC TẬP CHUẨN KHOA HỌC
-          </span>
-        </div>
-
-        <div className="grid gap-4 md:grid-cols-3">
-          {/* Resource Card 1: Free Worksheet */}
-          <div className="flex flex-col justify-between gap-4 rounded-2xl border bg-card p-5 shadow-2xs">
-            <div className="flex flex-col gap-2.5">
-              <div className="flex size-9 items-center justify-center rounded-xl bg-red-600/10 text-red-600">
-                <FileText className="size-4" />
-              </div>
-              <span className="text-[10px] font-bold uppercase tracking-wider text-red-600 dark:text-red-400">
-                TẢI LIỆU MIỄN PHÍ
-              </span>
-              <h3 className="text-sm font-bold text-foreground">Phiếu tập viết Genkouyoushi (A4)</h3>
-              <p className="text-xs text-muted-foreground leading-relaxed">
-                Mẫu giấy kẻ ô ly chuẩn giáo dục Nhật Bản với đường phân nét góc chéo và tâm chữ, tối ưu hóa cho bút gel và bút chì.
-              </p>
-            </div>
-            <Button
-              variant="outline"
-              onClick={() => window.print()}
-              className="w-full gap-2 text-xs font-bold rounded-xl hover:border-red-600 hover:text-red-600 cursor-pointer"
-            >
-              <Download className="size-3.5" />
-              <span>Tải bản in PDF (2.4 MB)</span>
-            </Button>
-          </div>
-
-          {/* Resource Card 2: Memory Golden Tips */}
-          <div className="flex flex-col justify-between gap-4 rounded-2xl border bg-card p-5 shadow-2xs">
-            <div className="flex flex-col gap-2.5">
-              <div className="flex size-9 items-center justify-center rounded-xl bg-amber-500/10 text-amber-600">
-                <Lightbulb className="size-4" />
-              </div>
-              <span className="text-[10px] font-bold uppercase tracking-wider text-amber-600 dark:text-amber-400">
-                PHƯƠNG PHÁP GHI NHỚ
-              </span>
-              <h3 className="text-sm font-bold text-foreground">3 Mẹo vàng khi luyện Kana</h3>
-              <ul className="flex flex-col gap-2 text-xs text-muted-foreground">
-                <li className="leading-relaxed">
-                  <strong className="text-foreground">Học theo hàng:</strong> Gom 5 chữ (a-i-u-e-o) theo cụm để tạo nhịp điệu ghi nhớ âm thanh.
-                </li>
-                <li className="leading-relaxed">
-                  <strong className="text-foreground">Đọc to khi viết:</strong> Kích hoạt đồng thời vỏ não thị giác và thính giác phản xạ.
-                </li>
-                <li className="leading-relaxed">
-                  <strong className="text-foreground">Tránh ỷ lại Romaji:</strong> Chuyển sang đọc trực tiếp Kana càng sớm càng tốt.
-                </li>
-              </ul>
-            </div>
-            <a
-              href="/kana"
-              className="inline-flex items-center gap-1 text-xs font-bold text-red-600 dark:text-red-400 hover:underline pt-1"
-            >
-              <span>Đọc bài hướng dẫn quy tắc nét bút</span>
-              <ChevronRight className="size-3.5" />
-            </a>
-          </div>
-
-          {/* Resource Card 3: Personal Statistics */}
-          <div className="flex flex-col justify-between gap-4 rounded-2xl border bg-card p-5 shadow-2xs">
-            <div className="flex flex-col gap-2.5">
-              <div className="flex size-9 items-center justify-center rounded-xl bg-purple-600/10 text-purple-600">
-                <BarChart3 className="size-4" />
-              </div>
-              <span className="text-[10px] font-bold uppercase tracking-wider text-purple-600 dark:text-purple-400">
-                THỐNG KÊ CÁ NHÂN
-              </span>
-              <h3 className="text-sm font-bold text-foreground">Hiệu suất nhớ chữ của bạn</h3>
-
-              <div className="flex flex-col gap-1.5">
-                <div className="flex items-center justify-between text-xs">
-                  <span className="text-muted-foreground">Độ chính xác trung bình</span>
-                  <span className="font-extrabold text-foreground">88%</span>
-                </div>
-                <div className="h-2 w-full overflow-hidden rounded-full bg-muted">
-                  <div className="h-full bg-emerald-500 rounded-full w-[88%]" />
-                </div>
-              </div>
-
-              <div className="rounded-xl bg-red-500/10 p-3 text-xs text-red-600 dark:text-red-400 border border-red-500/20">
-                <strong className="font-bold">Nhóm cần củng cố:</strong> Âm ghép Youon (きゃ, しゅ, ちょ). Tỷ lệ phản xạ chưa đạt dưới 2 giây.
-              </div>
-            </div>
-
-            <Button
-              variant="outline"
-              className="w-full gap-2 text-xs font-bold rounded-xl hover:bg-accent cursor-pointer"
-            >
-              <BarChart3 className="size-3.5" />
-              <span>Luyện riêng nhóm âm ghép</span>
-            </Button>
-          </div>
-        </div>
-      </div>
     </div>
   );
 }
@@ -380,67 +276,153 @@ function PaperPanelFullLayout() {
   const [shuffle, setShuffle] = useState(true);
   const [showStrokeHint, setShowStrokeHint] = useState(false);
 
-  // Active Card Drill State
-  const [itemIndex, setItemIndex] = useState(14);
-  const [phase, setPhase] = useState<"prompt" | "reveal">("prompt");
+  // Active Card Drill Engine State
+  const [started, setStarted] = useState(false);
   const [paused, setPaused] = useState(false);
+  const [itemIndex, setItemIndex] = useState(0);
+  const [phase, setPhase] = useState<"prompt" | "reveal">("prompt");
+  const [remainingMs, setRemainingMs] = useState(3000);
+  const [completedCount, setCompletedCount] = useState(0);
 
-  const currentItem = useMemo(() => {
-    const list = filterKana(scope, section);
-    const item = list.length > 0 ? list[itemIndex % list.length] : null;
-    return {
-      char: item ? item.char : "か",
-      romaji: item ? item.romaji : "ka",
-      strokes: item ? (item.strokes ? item.strokes.length : 3) : 3,
-      word: `${item ? item.char : "か"}さ (${item ? item.romaji : "ka"}sa)`,
-      meaning: "Cái ô / Cái dù",
-    };
-  }, [scope, section, itemIndex]);
+  // Construct Pool & Current Item
+  const itemPool = useMemo(() => {
+    if (contentType === "character") {
+      const kanas = filterKana(scope, section);
+      return kanas.map((k) => ({
+        id: k.id,
+        char: k.char,
+        romaji: k.romaji,
+        strokes: k.strokes ? k.strokes.length : 3,
+        word: `${k.char} (${k.romaji})`,
+        meaning: `Ký tự ${k.script === "hiragana" ? "Hiragana" : "Katakana"} - âm /${k.romaji}/`,
+      }));
+    } else {
+      const words = getAllWords();
+      return words.map((w) => ({
+        id: w.id,
+        char: w.kanji || w.word,
+        romaji: w.romaji,
+        strokes: w.kanji ? `${w.kanji.length} Kanji` : "Kana",
+        word: w.kanji ? `${w.kanji} (${w.word})` : w.word,
+        meaning: w.meaning,
+      }));
+    }
+  }, [contentType, scope, section]);
 
-  const poolCount = useMemo(() => filterKana(scope, section).length, [scope, section]);
+  const poolCount = itemPool.length;
+  const safeIndex = poolCount > 0 ? ((itemIndex % poolCount) + poolCount) % poolCount : 0;
+  const currentItem = itemPool[safeIndex] || {
+    id: "ka",
+    char: "か",
+    romaji: "ka",
+    strokes: 3,
+    word: "かさ (kasa)",
+    meaning: "Cái ô / Cái dù",
+  };
+
+  const handleStart = () => {
+    setStarted(true);
+    setPaused(false);
+    setPhase("prompt");
+    setItemIndex(0);
+    setCompletedCount(0);
+    setRemainingMs(speedSeconds > 0 ? speedSeconds * 1000 : 0);
+  };
 
   const handleNext = () => {
     setPhase("prompt");
-    setItemIndex((prev) => (prev % poolCount) + 1);
+    setItemIndex((prev) => (prev + 1) % (poolCount || 1));
+    setCompletedCount((c) => c + 1);
+    setRemainingMs(speedSeconds > 0 ? speedSeconds * 1000 : 0);
   };
 
   const handlePrev = () => {
     setPhase("prompt");
-    setItemIndex((prev) => (prev > 1 ? prev - 1 : poolCount));
+    setItemIndex((prev) => (prev > 0 ? prev - 1 : (poolCount || 1) - 1));
+    setRemainingMs(speedSeconds > 0 ? speedSeconds * 1000 : 0);
   };
 
-  const handleRating = (rating: 1 | 2 | 3) => {
-    handleNext();
+  const toggleReveal = () => {
+    setPhase((prev) => {
+      const nextPhase = prev === "prompt" ? "reveal" : "prompt";
+      if (nextPhase === "reveal" && autoPlayAudio && currentItem) {
+        speakJapanese(currentItem.char);
+      }
+      return nextPhase;
+    });
+    if (speedSeconds > 0) {
+      setRemainingMs(Math.max(1500, speedSeconds * 1000));
+    }
   };
+
+  // Timer Interval Effect (100ms ticks)
+  useEffect(() => {
+    if (!started || paused || speedSeconds <= 0) return;
+
+    const stepMs = 100;
+    const timer = setInterval(() => {
+      setRemainingMs((prev) => {
+        if (prev <= stepMs) {
+          if (phase === "prompt") {
+            setPhase("reveal");
+            return Math.max(1500, speedSeconds * 1000);
+          } else {
+            setItemIndex((idx) => (idx + 1) % (poolCount || 1));
+            setCompletedCount((c) => c + 1);
+            setPhase("prompt");
+            return speedSeconds * 1000;
+          }
+        }
+        return prev - stepMs;
+      });
+    }, stepMs);
+
+    return () => clearInterval(timer);
+  }, [started, paused, speedSeconds, phase, poolCount]);
+
+  // Auto-play audio on reveal phase transition
+  useEffect(() => {
+    if (started && phase === "reveal" && autoPlayAudio && currentItem) {
+      speakJapanese(currentItem.char);
+    }
+  }, [started, phase, currentItem?.id, autoPlayAudio]);
 
   // Keyboard Shortcuts Listener
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (
         e.target instanceof HTMLInputElement ||
-        e.target instanceof HTMLTextAreaElement
+        e.target instanceof HTMLTextAreaElement ||
+        e.target instanceof HTMLSelectElement
       ) {
         return;
       }
 
       if (e.key === " ") {
         e.preventDefault();
-        setPhase((prev) => (prev === "prompt" ? "reveal" : "prompt"));
+        toggleReveal();
       } else if (e.key === "Enter") {
         e.preventDefault();
+        if (!started) {
+          handleStart();
+        } else {
+          handleNext();
+        }
+      } else if (e.key === "ArrowRight") {
+        e.preventDefault();
         handleNext();
-      } else if (e.key === "1") {
-        handleRating(1);
-      } else if (e.key === "2") {
-        handleRating(2);
-      } else if (e.key === "3") {
-        handleRating(3);
+      } else if (e.key === "ArrowLeft") {
+        e.preventDefault();
+        handlePrev();
+      } else if (e.key === "p" || e.key === "P") {
+        e.preventDefault();
+        setPaused((prev) => !prev);
       }
     };
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [phase, poolCount]);
+  }, [started, speedSeconds, poolCount, autoPlayAudio, currentItem]);
 
   return (
     <div className="grid gap-6 lg:grid-cols-12 items-start">
@@ -459,6 +441,7 @@ function PaperPanelFullLayout() {
               setSection("main");
               setDirection("write");
               setSpeedSeconds(3);
+              setStarted(false);
             }}
             className="rounded-lg p-1.5 text-muted-foreground hover:bg-accent hover:text-foreground cursor-pointer"
             title="Khôi phục mặc định"
@@ -474,13 +457,13 @@ function PaperPanelFullLayout() {
               1. Nội dung luyện tập
             </span>
             <span className="text-[11px] font-bold text-red-600 dark:text-red-400">
-              {poolCount} Chữ cái
+              {poolCount} {contentType === "character" ? "Chữ cái" : "Từ vựng"}
             </span>
           </div>
           <div className="grid grid-cols-2 gap-1.5 p-1 bg-muted/50 rounded-xl">
             <button
               type="button"
-              onClick={() => setContentType("character")}
+              onClick={() => { setContentType("character"); setStarted(false); }}
               className={cn(
                 "rounded-lg px-3 py-2 text-xs font-bold transition-all cursor-pointer",
                 contentType === "character" ? "bg-background text-foreground shadow-2xs" : "text-muted-foreground hover:text-foreground"
@@ -490,7 +473,7 @@ function PaperPanelFullLayout() {
             </button>
             <button
               type="button"
-              onClick={() => setContentType("word")}
+              onClick={() => { setContentType("word"); setStarted(false); }}
               className={cn(
                 "rounded-lg px-3 py-2 text-xs font-bold transition-all cursor-pointer",
                 contentType === "word" ? "bg-background text-foreground shadow-2xs" : "text-muted-foreground hover:text-foreground"
@@ -509,33 +492,33 @@ function PaperPanelFullLayout() {
           <div className="grid grid-cols-3 gap-1.5 p-1 bg-muted/50 rounded-xl">
             <button
               type="button"
-              onClick={() => setScope("hiragana")}
+              onClick={() => { setScope("hiragana"); setStarted(false); }}
               className={cn(
                 "rounded-lg px-2 py-2 text-xs font-bold transition-all cursor-pointer text-center",
                 scope === "hiragana" ? "bg-background text-foreground shadow-2xs" : "text-muted-foreground hover:text-foreground"
               )}
             >
-              ✓ Hiragana (46)
+              Hiragana
             </button>
             <button
               type="button"
-              onClick={() => setScope("katakana")}
+              onClick={() => { setScope("katakana"); setStarted(false); }}
               className={cn(
                 "rounded-lg px-2 py-2 text-xs font-bold transition-all cursor-pointer text-center",
                 scope === "katakana" ? "bg-background text-foreground shadow-2xs" : "text-muted-foreground hover:text-foreground"
               )}
             >
-              Katakana (46)
+              Katakana
             </button>
             <button
               type="button"
-              onClick={() => setScope("both")}
+              onClick={() => { setScope("both"); setStarted(false); }}
               className={cn(
                 "rounded-lg px-2 py-2 text-xs font-bold transition-all cursor-pointer text-center",
                 scope === "both" ? "bg-background text-foreground shadow-2xs" : "text-muted-foreground hover:text-foreground"
               )}
             >
-              Cả hai (92)
+              Cả hai
             </button>
           </div>
         </div>
@@ -546,14 +529,11 @@ function PaperPanelFullLayout() {
             <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
               3. Nhóm phát âm (Section)
             </span>
-            <span className="text-[10px] font-semibold text-muted-foreground">
-              ĐANG CHỌN: 五十音
-            </span>
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-1.5 p-1 bg-muted/50 rounded-xl">
             <button
               type="button"
-              onClick={() => setSection("all")}
+              onClick={() => { setSection("all"); setStarted(false); }}
               className={cn(
                 "rounded-lg px-2 py-1.5 text-xs font-bold transition-all cursor-pointer text-center",
                 section === "all" ? "bg-background text-foreground shadow-2xs" : "text-muted-foreground hover:text-foreground"
@@ -563,33 +543,33 @@ function PaperPanelFullLayout() {
             </button>
             <button
               type="button"
-              onClick={() => setSection("main")}
+              onClick={() => { setSection("main"); setStarted(false); }}
               className={cn(
                 "rounded-lg px-2 py-1.5 text-xs font-bold transition-all cursor-pointer text-center",
                 section === "main" ? "bg-background text-red-600 dark:text-red-400 shadow-2xs" : "text-muted-foreground hover:text-foreground"
               )}
             >
-              Cơ bản (Gojūon)
+              Cơ bản
             </button>
             <button
               type="button"
-              onClick={() => setSection("dakuten")}
+              onClick={() => { setSection("dakuten"); setStarted(false); }}
               className={cn(
                 "rounded-lg px-2 py-1.5 text-xs font-bold transition-all cursor-pointer text-center",
                 section === "dakuten" ? "bg-background text-foreground shadow-2xs" : "text-muted-foreground hover:text-foreground"
               )}
             >
-              Âm đục (Dakuten)
+              Âm đục
             </button>
             <button
               type="button"
-              onClick={() => setSection("youon")}
+              onClick={() => { setSection("youon"); setStarted(false); }}
               className={cn(
                 "rounded-lg px-2 py-1.5 text-xs font-bold transition-all cursor-pointer text-center",
                 section === "youon" ? "bg-background text-foreground shadow-2xs" : "text-muted-foreground hover:text-foreground"
               )}
             >
-              Âm ghép (Youon)
+              Âm ghép
             </button>
           </div>
         </div>
@@ -600,7 +580,6 @@ function PaperPanelFullLayout() {
             4. Chiều kiểm tra phản xạ (Direction)
           </span>
           <div className="flex flex-col gap-2">
-            {/* Option 1: Romaji -> Kana */}
             <div
               onClick={() => setDirection("write")}
               className={cn(
@@ -626,7 +605,6 @@ function PaperPanelFullLayout() {
               </div>
             </div>
 
-            {/* Option 2: Kana -> Romaji */}
             <div
               onClick={() => setDirection("read")}
               className={cn(
@@ -661,7 +639,7 @@ function PaperPanelFullLayout() {
               5. Tốc độ chuyển thẻ tự động
             </span>
             <span className="text-[11px] font-semibold text-muted-foreground">
-              Mặc định: {speedSeconds}s
+              Mặc định: {speedSeconds > 0 ? `${speedSeconds}s` : "Thủ công"}
             </span>
           </div>
           <div className="grid grid-cols-5 gap-1.5">
@@ -675,7 +653,10 @@ function PaperPanelFullLayout() {
               <button
                 key={sp.val}
                 type="button"
-                onClick={() => setSpeedSeconds(sp.val)}
+                onClick={() => {
+                  setSpeedSeconds(sp.val);
+                  setRemainingMs(sp.val * 1000);
+                }}
                 className={cn(
                   "rounded-xl border px-2 py-1.5 text-xs font-bold transition-all cursor-pointer text-center",
                   speedSeconds === sp.val ? "border-red-600 bg-red-600 text-white shadow-2xs" : "bg-background border-border/80 text-foreground hover:bg-accent"
@@ -734,32 +715,23 @@ function PaperPanelFullLayout() {
 
         {/* Action Buttons */}
         <div className="flex flex-col gap-2.5 pt-3 border-t">
-          <Button
-            size="lg"
-            onClick={() => handleNext()}
-            className="w-full justify-between bg-red-600 hover:bg-red-700 text-white font-extrabold text-sm py-6 rounded-xl shadow-md cursor-pointer"
+          <button
+            type="button"
+            onClick={started ? handleNext : handleStart}
+            className="w-full inline-flex items-center justify-between bg-red-600 hover:bg-red-700 active:bg-red-800 text-white font-extrabold text-sm py-3.5 px-4 rounded-xl shadow-md cursor-pointer transition-all"
           >
             <span className="flex items-center gap-2">
               <Play className="size-4 fill-white" />
-              <span>Bắt đầu Luyện tập trên màn hình</span>
+              <span>{started ? "Chữ tiếp theo (Hoặc Tái khởi động)" : "Bắt đầu Luyện tập trên màn hình"}</span>
             </span>
             <span className="rounded bg-white/20 px-2 py-0.5 text-[11px] font-mono text-white">
-              Phím Space
+              Phím Enter
             </span>
-          </Button>
-
-          <Button
-            variant="outline"
-            onClick={() => window.print()}
-            className="w-full gap-2 text-xs font-bold rounded-xl border-border/80 hover:bg-accent cursor-pointer py-2.5"
-          >
-            <Printer className="size-4" />
-            <span>In đề bài & phiếu luyện viết A4 (PDF Sheet)</span>
-          </Button>
+          </button>
         </div>
       </div>
 
-      {/* RIGHT COLUMN: Interactive Live Practice Card (7 Columns - Matching Mockup 1:1) */}
+      {/* RIGHT COLUMN: Interactive Live Practice Card (7 Columns) */}
       <div className="flex flex-col gap-4 rounded-2xl border bg-card p-5 sm:p-6 shadow-2xs lg:col-span-7 relative overflow-hidden">
         {/* Background Kanji Watermark */}
         <span className="absolute -right-6 -top-6 text-8xl sm:text-9xl font-black text-muted-foreground/5 select-none pointer-events-none font-kanji-mincho">
@@ -769,18 +741,34 @@ function PaperPanelFullLayout() {
         {/* Top Info Bar */}
         <div className="flex items-center justify-between border-b pb-3 text-xs">
           <div className="flex items-center gap-2">
-            <span className="size-2 rounded-full bg-red-600 animate-ping" />
-            <span className="font-bold text-foreground">Chữ thứ {itemIndex} / {poolCount}</span>
-            <span className="text-muted-foreground">• Tỷ lệ hoàn thành: {Math.round((itemIndex / poolCount) * 100)}% bộ Gojūon</span>
+            <span className={cn(
+              "size-2 rounded-full",
+              started ? (paused ? "bg-amber-500" : "bg-red-600 animate-ping") : "bg-muted-foreground"
+            )} />
+            <span className="font-bold text-foreground">
+              Chữ thứ {poolCount > 0 ? safeIndex + 1 : 0} / {poolCount}
+            </span>
+            <span className="text-muted-foreground">
+              • Đã làm: {completedCount} chữ ({poolCount > 0 ? Math.round(((safeIndex + 1) / poolCount) * 100) : 0}%)
+            </span>
           </div>
 
           <div className="flex items-center gap-3 text-muted-foreground">
-            <span className="font-mono font-bold flex items-center gap-1 text-foreground">
-              <Clock className="size-3.5 text-red-600" />
-              00:02 / 00:0{speedSeconds > 0 ? speedSeconds : 3}
+            <span className="font-mono font-bold flex items-center gap-1.5 text-foreground bg-muted/60 px-2.5 py-1 rounded-lg">
+              <Clock className={cn("size-3.5", started && !paused ? "text-red-600 animate-spin" : "text-muted-foreground")} />
+              <span>
+                {speedSeconds === 0
+                  ? "Thủ công"
+                  : `${(remainingMs / 1000).toFixed(1)}s / ${speedSeconds}s`}
+              </span>
             </span>
-            <button type="button" className="hover:text-foreground cursor-pointer">
-              <Maximize2 className="size-4" />
+            <button
+              type="button"
+              onClick={() => setPaused((p) => !p)}
+              className="hover:text-foreground cursor-pointer p-1 rounded hover:bg-accent"
+              title={paused ? "Tiếp tục" : "Tạm dừng"}
+            >
+              {paused ? <Play className="size-4 text-amber-500 fill-amber-500" /> : <Pause className="size-4" />}
             </button>
           </div>
         </div>
@@ -788,13 +776,15 @@ function PaperPanelFullLayout() {
         {/* Prompt Card Area */}
         <div className="flex flex-col items-center justify-center gap-2 py-6 border-b text-center relative">
           <span className="text-[10px] font-extrabold uppercase tracking-widest text-muted-foreground bg-muted/60 px-2.5 py-0.5 rounded-full">
-            ROMAJI GỢI Ý
+            {direction === "write" ? "ROMAJI GỢI Ý (ĐỌC & VIẾT KANA)" : "KÝ TỰ TIẾNG NHẬT (KANA)"}
           </span>
           <span className="text-5xl sm:text-6xl font-black tracking-tight text-foreground font-mono">
-            {currentItem.romaji}
+            {direction === "write" ? currentItem.romaji : currentItem.char}
           </span>
           <p className="text-xs text-muted-foreground">
-            Hãy viết nhanh ký tự tương ứng ra giấy tập của bạn
+            {direction === "write"
+              ? "Hãy đọc Romaji và nhanh chóng viết ký tự Kana tương ứng ra giấy tập"
+              : "Hãy nhìn mặt chữ Kana và đọc nhẩm tên phiên âm Romaji tương ứng"}
           </p>
         </div>
 
@@ -811,12 +801,12 @@ function PaperPanelFullLayout() {
               <div className="h-full border-l border-red-500/20 border-dashed" />
             </div>
 
-            {/* Kana Glyph */}
+            {/* Kana / Romaji Glyph */}
             <span className={cn(
               "text-6xl font-bold font-kanji-mincho transition-all duration-300",
-              phase === "reveal" ? "text-red-600 scale-100 opacity-100" : "text-foreground/20 blur-xs scale-90"
+              phase === "reveal" ? "text-red-600" : "text-muted-foreground/30"
             )}>
-              {currentItem.char}
+              {phase === "reveal" ? (direction === "write" ? currentItem.char : currentItem.romaji) : "?"}
             </span>
           </div>
 
@@ -827,16 +817,23 @@ function PaperPanelFullLayout() {
                 {scope.toUpperCase()}
               </span>
               <span className="rounded bg-muted px-2 py-0.5 text-[10px] font-bold text-muted-foreground uppercase">
-                {currentItem.strokes} NÉT VIẾT
+                {currentItem.strokes}
               </span>
+              {phase === "reveal" && (
+                <span className="rounded bg-emerald-500/10 px-2 py-0.5 text-[10px] font-bold text-emerald-600 dark:text-emerald-400 uppercase">
+                  ĐÁP ÁN
+                </span>
+              )}
             </div>
 
             <div className="flex flex-col">
               <span className="text-lg font-bold text-foreground">
-                {currentItem.word}
+                {phase === "reveal" ? currentItem.word : "••• (???)"}
               </span>
               <span className="text-xs text-muted-foreground">
-                Ví dụ: {currentItem.meaning}
+                {phase === "reveal"
+                  ? `Giải thích: ${currentItem.meaning}`
+                  : "Giải thích: Bấm Space để hiện đáp án"}
               </span>
             </div>
 
@@ -844,10 +841,11 @@ function PaperPanelFullLayout() {
               <button
                 type="button"
                 onClick={() => speakJapanese(currentItem.char)}
-                className="inline-flex items-center gap-1.5 rounded-full border border-red-600/30 bg-red-500/10 px-3 py-1 text-xs font-bold text-red-600 dark:text-red-400 hover:bg-red-600 hover:text-white transition-all cursor-pointer"
+                disabled={phase !== "reveal"}
+                className="inline-flex items-center gap-1.5 rounded-full border border-red-600/30 bg-red-500/10 px-3 py-1 text-xs font-bold text-red-600 dark:text-red-400 hover:bg-red-600 hover:text-white transition-all cursor-pointer disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:bg-red-500/10 disabled:hover:text-red-600"
               >
                 <Volume2 className="size-3.5" />
-                <span>Phát âm /{currentItem.romaji}/</span>
+                <span>{phase === "reveal" ? `Phát âm /${currentItem.romaji}/` : "Phát âm (ẩn)"}</span>
               </button>
             </div>
           </div>
@@ -855,85 +853,46 @@ function PaperPanelFullLayout() {
           {/* Reveal Toggle Overlay Button */}
           <button
             type="button"
-            onClick={() => setPhase((prev) => (prev === "prompt" ? "reveal" : "prompt"))}
+            onClick={toggleReveal}
             className="w-full sm:w-auto absolute bottom-3 right-3 rounded-xl bg-foreground text-background px-3 py-1.5 text-xs font-bold shadow-md hover:bg-foreground/90 transition-all cursor-pointer"
           >
             {phase === "reveal" ? "👁 Đã hiện đáp án • Bấm Space để ẩn" : "👁 Bấm Space để hiện đáp án"}
           </button>
         </div>
 
-        {/* Self Assessment Rating Buttons (3 Rating Options - Matching Mockup 1:1) */}
-        <div className="flex flex-col gap-2 pt-2">
-          <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground text-center">
-            ĐÁNH GIÁ KẾT QUẢ CỦA BẠN
-          </span>
-          <div className="grid grid-cols-3 gap-3">
-            {/* Rating 1: Chưa nhớ */}
-            <button
-              type="button"
-              onClick={() => handleRating(1)}
-              className="flex flex-col items-center justify-center gap-1 rounded-2xl border border-red-500/30 bg-red-500/10 p-3 text-red-600 dark:text-red-400 hover:bg-red-500/20 transition-all cursor-pointer"
-            >
-              <span className="text-base font-bold">✕</span>
-              <span className="text-xs font-extrabold">Chưa nhớ</span>
-              <span className="text-[10px] text-muted-foreground font-mono">Phím 1</span>
-            </button>
-
-            {/* Rating 2: Còn phân vân */}
-            <button
-              type="button"
-              onClick={() => handleRating(2)}
-              className="flex flex-col items-center justify-center gap-1 rounded-2xl border border-amber-500/30 bg-amber-500/10 p-3 text-amber-600 dark:text-amber-400 hover:bg-amber-500/20 transition-all cursor-pointer"
-            >
-              <HelpCircle className="size-4" />
-              <span className="text-xs font-extrabold">Còn phân vân</span>
-              <span className="text-[10px] text-muted-foreground font-mono">Phím 2</span>
-            </button>
-
-            {/* Rating 3: Viết đúng */}
-            <button
-              type="button"
-              onClick={() => handleRating(3)}
-              className="flex flex-col items-center justify-center gap-1 rounded-2xl border border-emerald-500/30 bg-emerald-500/10 p-3 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-500/20 transition-all cursor-pointer"
-            >
-              <Check className="size-4" />
-              <span className="text-xs font-extrabold">Viết đúng</span>
-              <span className="text-[10px] text-muted-foreground font-mono">Phím 3</span>
-            </button>
-          </div>
-        </div>
-
         {/* Navigation Row */}
         <div className="flex items-center justify-between pt-2 border-t text-xs">
-          <Button
-            variant="outline"
+          <button
+            type="button"
             onClick={handlePrev}
-            className="gap-1 text-xs font-bold rounded-xl cursor-pointer"
+            className="inline-flex items-center gap-1 font-bold text-xs py-2 px-3.5 rounded-xl border border-border/80 bg-background hover:bg-accent text-foreground cursor-pointer transition-all"
           >
             <ChevronLeft className="size-4" />
             <span>Chữ trước (←)</span>
-          </Button>
+          </button>
 
           <button
             type="button"
             onClick={() => setPaused((p) => !p)}
-            className="rounded-xl border border-border/80 bg-background p-2 text-muted-foreground hover:bg-accent cursor-pointer"
+            className="rounded-xl border border-border/80 bg-background px-3 py-2 text-xs font-semibold text-muted-foreground hover:bg-accent cursor-pointer flex items-center gap-1.5"
             title="Tạm dừng / Tiếp tục"
           >
-            {paused ? <Play className="size-4" /> : <Pause className="size-4" />}
+            {paused ? <Play className="size-4 text-amber-500" /> : <Pause className="size-4" />}
+            <span>{paused ? "Tiếp tục đếm" : "Tạm dừng"}</span>
           </button>
 
-          <span className="text-[11px] text-muted-foreground hidden sm:inline">
-            Phím tắt: Enter hoặc Phím mũi tên
+          <span className="text-[11px] text-muted-foreground hidden sm:inline font-mono">
+            Enter: Qua chữ • Space: Hiện đáp án
           </span>
 
-          <Button
+          <button
+            type="button"
             onClick={handleNext}
-            className="gap-1 bg-red-600 hover:bg-red-700 text-white font-bold text-xs rounded-xl cursor-pointer"
+            className="inline-flex items-center gap-1 bg-red-600 hover:bg-red-700 active:bg-red-800 text-white font-extrabold text-xs py-2 px-3.5 rounded-xl shadow-xs cursor-pointer transition-all"
           >
             <span>Chữ tiếp theo (Enter)</span>
             <ChevronRight className="size-4" />
-          </Button>
+          </button>
         </div>
 
         {/* Session Progress Log Banner */}
@@ -941,11 +900,11 @@ function PaperPanelFullLayout() {
           <div className="flex items-center gap-2">
             <CheckCircle2 className="size-4 shrink-0 text-emerald-600" />
             <span>
-              <strong className="font-bold">Đang ghi nhận vào phiên học #142:</strong> Hệ thống sẽ lưu các ký tự bạn chọn "Chưa nhớ" để ôn lại cuối bài.
+              <strong className="font-bold">Phiên học đang diễn ra:</strong> Đã hoàn thành {completedCount} lượt luyện tập phản xạ.
             </span>
           </div>
-          <button type="button" className="font-bold underline whitespace-nowrap text-emerald-800 dark:text-emerald-200 hover:opacity-80 cursor-pointer">
-            Xem danh sách đã làm (14)
+          <button type="button" onClick={handleStart} className="font-bold underline whitespace-nowrap text-emerald-800 dark:text-emerald-200 hover:opacity-80 cursor-pointer">
+            Làm lại từ đầu
           </button>
         </div>
       </div>
