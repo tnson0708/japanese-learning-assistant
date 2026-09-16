@@ -522,10 +522,10 @@ export default function PracticePage() {
                     setPromptRemainingMs(sp.val * 1000);
                   }}
                   className={cn(
-                    "rounded-xl border px-2 py-2 text-xs font-bold transition-all cursor-pointer text-center",
+                    "rounded-xl border px-2 py-2 text-xs font-bold transition-all cursor-pointer text-center select-none",
                     promptSeconds === sp.val
-                      ? "border-red-600 bg-red-600 text-white shadow-2xs"
-                      : "bg-background border-border/80 text-foreground hover:bg-accent"
+                      ? "border-red-600/60 bg-red-500/10 text-red-600 dark:text-red-400 font-black ring-1 ring-red-500/20 shadow-2xs"
+                      : "bg-background border-border/70 text-muted-foreground hover:bg-accent/60 hover:text-foreground"
                   )}
                 >
                   {sp.label}
@@ -541,7 +541,7 @@ export default function PracticePage() {
                 <Eye className="size-3.5" />
                 3. Thời gian xem kết quả
               </span>
-              <span className="text-[11px] font-extrabold text-red-600">
+              <span className="text-[11px] font-extrabold text-red-600 dark:text-red-400">
                 {revealSeconds > 0 ? `${revealSeconds}s (Mặc định 2s)` : "Dừng mở"}
               </span>
             </div>
@@ -561,10 +561,10 @@ export default function PracticePage() {
                     setRevealRemainingMs(rv.val * 1000);
                   }}
                   className={cn(
-                    "rounded-xl border px-2 py-2 text-xs font-bold transition-all cursor-pointer text-center",
+                    "rounded-xl border px-2 py-2 text-xs font-bold transition-all cursor-pointer text-center select-none",
                     revealSeconds === rv.val
-                      ? "border-red-600 bg-red-600 text-white shadow-2xs"
-                      : "bg-background border-border/80 text-foreground hover:bg-accent"
+                      ? "border-red-600/60 bg-red-500/10 text-red-600 dark:text-red-400 font-black ring-1 ring-red-500/20 shadow-2xs"
+                      : "bg-background border-border/70 text-muted-foreground hover:bg-accent/60 hover:text-foreground"
                   )}
                 >
                   {rv.label}
@@ -582,7 +582,7 @@ export default function PracticePage() {
                 onClick={() => setAutoPlayAudio((v) => !v)}
                 className={cn(
                   "relative inline-flex h-5 w-9 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out",
-                  autoPlayAudio ? "bg-red-600" : "bg-input"
+                  autoPlayAudio ? "bg-red-600/80" : "bg-input"
                 )}
               >
                 <span className={cn("inline-block size-4 transform rounded-full bg-white shadow-xs transition duration-200 ease-in-out", autoPlayAudio ? "translate-x-4" : "translate-x-0")} />
@@ -596,7 +596,7 @@ export default function PracticePage() {
                 onClick={() => setShuffleMode((v) => !v)}
                 className={cn(
                   "relative inline-flex h-5 w-9 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out",
-                  shuffleMode ? "bg-red-600" : "bg-input"
+                  shuffleMode ? "bg-red-600/80" : "bg-input"
                 )}
               >
                 <span className={cn("inline-block size-4 transform rounded-full bg-white shadow-xs transition duration-200 ease-in-out", shuffleMode ? "translate-x-4" : "translate-x-0")} />
@@ -609,13 +609,13 @@ export default function PracticePage() {
             <button
               type="button"
               onClick={started ? handleNext : handleStart}
-              className="w-full inline-flex items-center justify-between bg-red-600 hover:bg-red-700 active:bg-red-800 text-white font-black text-sm py-4 px-5 rounded-xl shadow-md cursor-pointer transition-all"
+              className="w-full inline-flex items-center justify-between bg-foreground text-background hover:bg-foreground/90 font-black text-sm py-4 px-5 rounded-xl shadow-sm cursor-pointer transition-all"
             >
               <span className="flex items-center gap-2.5">
-                <Play className="size-5 fill-white" />
+                <Play className="size-5 fill-current" />
                 <span>{started ? "Thẻ tiếp theo" : "Bắt đầu Luyện Phản Xạ 5s"}</span>
               </span>
-              <span className="rounded bg-white/20 px-2.5 py-1 text-[11px] font-mono text-white">
+              <span className="rounded bg-background/20 text-background px-2.5 py-1 text-[11px] font-mono">
                 Mũi tên →
               </span>
             </button>
@@ -803,31 +803,31 @@ export default function PracticePage() {
                   className="inline-flex items-center gap-1.5 rounded-full border border-red-600/30 bg-red-500/10 px-3.5 py-1.5 text-xs font-bold text-red-600 dark:text-red-400 hover:bg-red-600 hover:text-white transition-all cursor-pointer"
                 >
                   <Volume2 className="size-4" />
-                  <span>Nghe phát âm /{currentItem.mainReading}/</span>
+                  <span>Nghe phát âm</span>
                 </button>
               </div>
             </div>
           </div>
 
           {/* Navigation Controls Bar */}
-          <div className="flex items-center justify-between pt-2 border-t text-xs">
+          <div className="flex items-center justify-between pt-3 border-t text-xs gap-3">
             <button
               type="button"
               onClick={handlePrev}
-              className="inline-flex items-center gap-1.5 font-bold text-xs py-2.5 px-4 rounded-xl border border-border/80 bg-background hover:bg-accent text-foreground cursor-pointer transition-all"
+              className="inline-flex items-center gap-1.5 font-bold text-xs py-2.5 px-4 rounded-xl border border-border/80 bg-background hover:bg-accent text-foreground cursor-pointer transition-all shrink-0"
             >
               <ChevronLeft className="size-4" />
               <span>Chữ trước (←)</span>
             </button>
 
-            <span className="text-[11px] text-muted-foreground hidden sm:inline font-mono">
+            <span className="text-[11px] text-muted-foreground hidden sm:inline font-mono text-center">
               Phím tắt: Mũi tên phải → (Thẻ tiếp theo) • Space (Lật đáp án)
             </span>
 
             <button
               type="button"
               onClick={handleNext}
-              className="inline-flex items-center gap-1.5 bg-red-600 hover:bg-red-700 active:bg-red-800 text-white font-extrabold text-xs py-2.5 px-4 rounded-xl shadow-xs cursor-pointer transition-all"
+              className="inline-flex items-center gap-1.5 font-bold text-xs py-2.5 px-4 rounded-xl border border-border/80 bg-background hover:bg-accent text-foreground cursor-pointer transition-all shrink-0"
             >
               <span>Thẻ tiếp theo (→)</span>
               <ChevronRight className="size-4" />
