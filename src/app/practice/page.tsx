@@ -52,7 +52,7 @@ export default function PracticePage() {
   // Timing Settings
   const [promptSeconds, setPromptSeconds] = useState<number>(5);
   const [revealSeconds, setRevealSeconds] = useState<number>(2);
-  const [autoPlayAudio, setAutoPlayAudio] = useState(true);
+  const [autoPlayAudio, setAutoPlayAudio] = useState(false);
   const [shuffleMode, setShuffleMode] = useState(true);
 
   // Active Flashcard Drill Engine State
@@ -362,6 +362,7 @@ export default function PracticePage() {
                 setIncludeKanji(true);
                 setPromptSeconds(5);
                 setRevealSeconds(2);
+                setAutoPlayAudio(false);
                 setStarted(false);
               }}
               className="rounded-lg p-1.5 text-muted-foreground hover:bg-accent hover:text-foreground cursor-pointer transition-colors"
