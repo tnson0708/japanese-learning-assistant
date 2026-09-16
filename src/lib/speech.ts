@@ -217,7 +217,7 @@ export function speakJapanese(text: string, overrideGender?: VoiceGender, rate =
           // Ignore normal 'canceled' and 'interrupted' events during fast item switching
           if (e.error === "canceled" || e.error === "interrupted") return;
 
-          console.error("TTS utterance error event:", e.error);
+          console.warn("TTS utterance notice:", e.error);
 
           // Fallback: If synthesis failed with explicit voice, retry using system default ja-JP
           if ((e.error === "synthesis-failed" || e.error === "voice-unavailable") && utter.voice) {
@@ -235,12 +235,11 @@ export function speakJapanese(text: string, overrideGender?: VoiceGender, rate =
 
         // Some browsers (older WebKit, some Android WebViews) neither fire an
         // error event nor start speaking when synthesis is silently refused —
-        // this is the "no error, no sound" failure mode. Surface it explicitly
-        // instead of leaving it a silent mystery.
+        // this is the "no error, no sound" failure mode. Log as notice instead of error.
         window.setTimeout(() => {
           if (!started && !synth.speaking && !synth.pending) {
-            console.error(
-              "TTS: speechSynthesis.speak() produced no 'start' event and the engine is idle — this browser silently refused to speak, with no error event fired. Check that the tab/system isn't muted, and that a Japanese voice is installed."
+            console.warn(
+              "TTS Notice: speechSynthesis.speak() produced no 'start' event — browser autoplay policy may require user interaction first, or voice engine is initializing."
             );
           }
         }, 800);
