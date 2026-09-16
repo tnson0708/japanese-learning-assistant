@@ -15,6 +15,7 @@ import {
   Search,
 } from "lucide-react";
 import { LanguageToggle } from "@/components/language-toggle";
+import { ThemeToggle } from "@/components/theme-toggle";
 import { VoiceToggle } from "@/components/voice-toggle";
 import { useLanguage } from "@/lib/language-context";
 import { cn } from "@/lib/utils";
@@ -137,6 +138,7 @@ export function Nav() {
             >
               <Shield className="size-4" />
             </Link>
+            <ThemeToggle />
             <VoiceToggle />
             <LanguageToggle />
           </div>

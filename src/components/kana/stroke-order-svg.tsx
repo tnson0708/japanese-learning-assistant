@@ -74,7 +74,7 @@ export function StrokeOrderSvg({
             ))}
           </g>
           {showNumbers && (
-            <g fill="#94a3b8" fontSize={8}>
+            <g className="fill-muted-foreground" fontSize={8}>
               {strokes.map((s, i) => {
                 const start = s.d.match(/M\s*(-?[\d.]+)[, ]\s*(-?[\d.]+)/);
                 if (!start) return null;

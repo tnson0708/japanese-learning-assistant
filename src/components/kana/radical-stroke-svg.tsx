@@ -43,7 +43,7 @@ export function RadicalStrokeSvg({
         aria-label={`Stroke order for ${radical.char}`}
       >
         {/* Background grid lines for Kanji practice square (田字格) */}
-        <g stroke="#cbd5e1" strokeWidth={0.8} strokeDasharray="3 3">
+        <g className="stroke-muted-foreground/40" strokeWidth={0.8} strokeDasharray="3 3">
           <line x1={50} y1={0} x2={50} y2={100} />
           <line x1={0} y1={50} x2={100} y2={50} />
           <line x1={0} y1={0} x2={100} y2={100} opacity={0.4} />
@@ -71,7 +71,7 @@ export function RadicalStrokeSvg({
         </g>
 
         {/* Stroke Order Numbers */}
-        <g fill="#64748b" fontSize={7} fontWeight="bold">
+        <g className="fill-muted-foreground" fontSize={7} fontWeight="bold">
           {radical.strokePaths.map((d, i) => {
             const start = d.match(/M\s*(-?[\d.]+)[, ]\s*(-?[\d.]+)/);
             if (!start) return null;

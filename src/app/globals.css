@@ -46,9 +46,25 @@
   --radius-2xl: calc(var(--radius) * 1.8);
   --radius-3xl: calc(var(--radius) * 2.2);
   --radius-4xl: calc(var(--radius) * 2.6);
+
+  /* Brand red: remap Tailwind's red-* scale onto a calmer, lower-chroma crimson
+     so every bg-red-600 / text-red-400 / border-red-200 in the app softens at once,
+     with a dimmer variant in dark mode (see :root / .dark below). */
+  --color-red-50: var(--brand-red-50);
+  --color-red-100: var(--brand-red-100);
+  --color-red-200: var(--brand-red-200);
+  --color-red-300: var(--brand-red-300);
+  --color-red-400: var(--brand-red-400);
+  --color-red-500: var(--brand-red-500);
+  --color-red-600: var(--brand-red-600);
+  --color-red-700: var(--brand-red-700);
+  --color-red-800: var(--brand-red-800);
+  --color-red-900: var(--brand-red-900);
+  --color-red-950: var(--brand-red-950);
 }
 
 :root {
+  color-scheme: light;
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
   --card: oklch(1 0 0);
@@ -63,10 +79,21 @@
   --muted-foreground: oklch(0.556 0 0);
   --accent: oklch(0.97 0 0);
   --accent-foreground: oklch(0.205 0 0);
-  --destructive: oklch(0.577 0.245 27.325);
+  --destructive: oklch(0.56 0.17 26);
   --border: oklch(0.922 0 0);
   --input: oklch(0.922 0 0);
   --ring: oklch(0.708 0 0);
+  --brand-red-50: oklch(97.3% 0.010 20);
+  --brand-red-100: oklch(94.2% 0.024 20);
+  --brand-red-200: oklch(89% 0.048 20);
+  --brand-red-300: oklch(81.5% 0.085 21);
+  --brand-red-400: oklch(71.5% 0.135 23);
+  --brand-red-500: oklch(63.5% 0.165 25);
+  --brand-red-600: oklch(56% 0.17 26);
+  --brand-red-700: oklch(49.5% 0.15 26);
+  --brand-red-800: oklch(43.5% 0.125 26);
+  --brand-red-900: oklch(38.5% 0.1 25);
+  --brand-red-950: oklch(25.5% 0.065 25);
   --chart-1: oklch(0.87 0 0);
   --chart-2: oklch(0.556 0 0);
   --chart-3: oklch(0.439 0 0);
@@ -84,6 +111,7 @@
 }
 
 .dark {
+  color-scheme: dark;
   --background: oklch(0.145 0 0);
   --foreground: oklch(0.985 0 0);
   --card: oklch(0.205 0 0);
@@ -98,10 +126,21 @@
   --muted-foreground: oklch(0.708 0 0);
   --accent: oklch(0.269 0 0);
   --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
+  --destructive: oklch(0.72 0.13 22);
   --border: oklch(1 0 0 / 10%);
   --input: oklch(1 0 0 / 15%);
   --ring: oklch(0.556 0 0);
+  --brand-red-50: oklch(96% 0.012 19);
+  --brand-red-100: oklch(92% 0.03 19);
+  --brand-red-200: oklch(87% 0.05 19);
+  --brand-red-300: oklch(81% 0.08 20);
+  --brand-red-400: oklch(74% 0.11 22);
+  --brand-red-500: oklch(65% 0.15 25);
+  --brand-red-600: oklch(59% 0.15 25);
+  --brand-red-700: oklch(51% 0.135 25);
+  --brand-red-800: oklch(40% 0.11 25);
+  --brand-red-900: oklch(34% 0.09 25);
+  --brand-red-950: oklch(24% 0.055 25);
   --chart-1: oklch(0.87 0 0);
   --chart-2: oklch(0.556 0 0);
   --chart-3: oklch(0.439 0 0);

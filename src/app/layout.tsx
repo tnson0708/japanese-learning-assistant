@@ -53,7 +53,15 @@ export const viewport: Viewport = {
   initialScale: 1,
   maximumScale: 1,
   userScalable: false,
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
+    { media: "(prefers-color-scheme: dark)", color: "#0a0a0a" },
+  ],
 };
+
+// Applies the saved/OS theme before first paint so there is no light→dark flash.
+// Must stay in sync with readInitialTheme() in lib/theme-context.tsx.
+const themeInitScript = `(function(){try{var s=localStorage.getItem("kana_dojo_theme");var d=s?s==="dark":matchMedia("(prefers-color-scheme: dark)").matches;document.documentElement.classList.toggle("dark",d)}catch(e){}})()`;
 
 export default function RootLayout({
   children,
@@ -64,8 +72,11 @@ export default function RootLayout({
     <html
       lang="en"
       className={`${sansFont.variable} ${geistMono.variable} ${kanjiFont.variable} h-full antialiased font-sans`}
+      suppressHydrationWarning
     >
-
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
+      </head>
       <body className="min-h-full flex flex-col bg-background text-foreground">
         <Providers>
           <MaintenanceGuard>
