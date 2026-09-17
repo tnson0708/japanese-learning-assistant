@@ -19,7 +19,7 @@ function readInitialTheme(): Theme {
   try {
     const saved = localStorage.getItem(THEME_STORAGE_KEY);
     if (saved === "light" || saved === "dark") return saved;
-    return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+    return "light";
   } catch {
     return "light";
   }
@@ -30,21 +30,13 @@ function applyTheme(theme: Theme) {
 }
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
-  // Lazy initializer reads the same source as the inline script in layout.tsx,
-  // so React state matches the class that was already applied before first paint.
   const [theme, setThemeState] = useState<Theme>(readInitialTheme);
 
-  // Follow OS changes only while the user hasn't picked a theme explicitly.
   useEffect(() => {
-    const mq = window.matchMedia("(prefers-color-scheme: dark)");
-    const onChange = (e: MediaQueryListEvent) => {
-      if (localStorage.getItem(THEME_STORAGE_KEY)) return;
-      const next: Theme = e.matches ? "dark" : "light";
-      applyTheme(next);
-      setThemeState(next);
-    };
-    mq.addEventListener("change", onChange);
-    return () => mq.removeEventListener("change", onChange);
+    const saved = localStorage.getItem(THEME_STORAGE_KEY);
+    const initial: Theme = saved === "dark" ? "dark" : "light";
+    applyTheme(initial);
+    setThemeState(initial);
   }, []);
 
   const setTheme = (next: Theme) => {

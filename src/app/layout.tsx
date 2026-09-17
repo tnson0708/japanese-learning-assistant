@@ -59,9 +59,9 @@ export const viewport: Viewport = {
   ],
 };
 
-// Applies the saved/OS theme before first paint so there is no light→dark flash.
+// Applies the saved theme before first paint (defaults to light mode).
 // Must stay in sync with readInitialTheme() in lib/theme-context.tsx.
-const themeInitScript = `(function(){try{var s=localStorage.getItem("kana_dojo_theme");var d=s?s==="dark":matchMedia("(prefers-color-scheme: dark)").matches;document.documentElement.classList.toggle("dark",d)}catch(e){}})()`;
+const themeInitScript = `(function(){try{var s=localStorage.getItem("kana_dojo_theme");var d=s==="dark";document.documentElement.classList.toggle("dark",d)}catch(e){}})()`;
 
 export default function RootLayout({
   children,

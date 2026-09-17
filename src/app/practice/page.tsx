@@ -274,7 +274,7 @@ export default function PracticePage() {
 
       if (e.key === " ") {
         e.preventDefault();
-        toggleReveal();
+        setPaused((prev) => !prev);
       } else if (e.key === "Enter") {
         e.preventDefault();
         if (!started) {
@@ -653,7 +653,7 @@ export default function PracticePage() {
                   className="inline-flex items-center gap-1.5 rounded-lg border bg-background px-3 py-1 text-xs font-bold text-foreground hover:bg-accent cursor-pointer transition-all"
                 >
                   {paused ? <Play className="size-3.5 text-amber-500 fill-amber-500" /> : <Pause className="size-3.5 text-muted-foreground" />}
-                  <span>{paused ? "Tiếp tục" : "Tạm dừng"}</span>
+                  <span>{paused ? "Tiếp tục (Space)" : "Tạm dừng (Space)"}</span>
                 </button>
               </div>
             </div>
@@ -725,12 +725,11 @@ export default function PracticePage() {
 
           {/* RESULT BOX AREA: Automatic 2s Result Verification */}
           <div
-            onClick={toggleReveal}
             className={cn(
-              "relative flex flex-col gap-3 rounded-2xl border p-5 transition-all cursor-pointer select-none",
+              "relative flex flex-col gap-3 rounded-2xl border p-5 transition-all select-none",
               phase === "reveal"
                 ? "border-emerald-500/50 bg-emerald-500/5 ring-2 ring-emerald-500/20 dark:bg-emerald-950/20"
-                : "border-border bg-card hover:border-border/80"
+                : "border-border bg-card"
             )}
           >
             <div className="flex items-center justify-between border-b pb-2.5">
@@ -740,12 +739,12 @@ export default function PracticePage() {
                   phase === "reveal" ? "bg-emerald-500 animate-pulse" : "bg-muted-foreground"
                 )} />
                 <span className="text-xs font-extrabold uppercase tracking-wider text-foreground">
-                  {phase === "reveal" ? "KẾT QUẢ PHIÊN ÂM & TÊN GỌI" : "KẾT QUẢ ĐANG ẨN (LẬT TRONG 5S)"}
+                  {phase === "reveal" ? "KẾT QUẢ PHIÊN ÂM & TÊN GỌI" : "KẾT QUẢ ĐANG ẨN (TỰ ĐỘNG LẬT SAU 5S)"}
                 </span>
               </div>
 
               <span className="text-[11px] font-bold text-muted-foreground">
-                {phase === "reveal" ? "Bấm Space để ẩn" : "Bấm Space để mở ngay"}
+                {phase === "reveal" ? "Đã lật kết quả" : "Tự động lật sau 5s"}
               </span>
             </div>
 
@@ -822,7 +821,7 @@ export default function PracticePage() {
             </button>
 
             <span className="text-[11px] text-muted-foreground hidden sm:inline font-mono text-center">
-              Phím tắt: Mũi tên phải → (Thẻ tiếp theo) • Space (Lật đáp án)
+              Phím tắt: Space (Tạm dừng / Tiếp tục) • Mũi tên (← / → Chuyển thẻ)
             </span>
 
             <button
