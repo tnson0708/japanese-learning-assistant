@@ -22,9 +22,13 @@ export const BASIC_KANJI_WORDS: BasicKanjiWord[] = [
     strokes: 1,
     strokePaths: ["M 15 50 L 85 50"],
     exampleWords: [
-      { word: "一つ", reading: "ひとつ", meaning: "1 cái (đếm đồ vật)" },
-      { word: "一人", reading: "ひとり", meaning: "1 người" },
-      { word: "一日", reading: "ついたち", meaning: "Ngày mùng 1" },
+      { word: "一", reading: "いち", meaning: "Một" },
+      { word: "一日", reading: "いちにち", meaning: "Một ngày" },
+      { word: "一日", reading: "ついたち", meaning: "Ngày mùng một" },
+      { word: "一つ", reading: "ひとつ", meaning: "Một cái" },
+      { word: "一人", reading: "ひとり", meaning: "Một người" },
+      { word: "一度", reading: "いちど", meaning: "Một lần" },
+      { word: "一度も", reading: "いちども", meaning: "Chưa một lần, chưa bao giờ" },
     ],
   },
   // --- 2. 二 ---
@@ -38,9 +42,11 @@ export const BASIC_KANJI_WORDS: BasicKanjiWord[] = [
     strokes: 2,
     strokePaths: ["M 25 35 L 75 35", "M 15 70 L 85 70"],
     exampleWords: [
-      { word: "二つ", reading: "ふたつ", meaning: "2 cái" },
-      { word: "二人", reading: "ふたり", meaning: "2 người" },
-      { word: "二月", reading: "にがつ", meaning: "Tháng 2" },
+      { word: "二", reading: "に", meaning: "Hai" },
+      { word: "二日", reading: "ふつか", meaning: "Ngày mùng hai, hai ngày" },
+      { word: "二十日", reading: "はつか", meaning: "Ngày 20, 20 ngày" },
+      { word: "二つ", reading: "ふたつ", meaning: "Hai cái" },
+      { word: "二人", reading: "ふたり", meaning: "Hai người" },
     ],
   },
   // --- 3. 三 ---
@@ -54,9 +60,9 @@ export const BASIC_KANJI_WORDS: BasicKanjiWord[] = [
     strokes: 3,
     strokePaths: ["M 25 28 L 75 28", "M 32 50 L 68 50", "M 15 75 L 85 75"],
     exampleWords: [
-      { word: "三つ", reading: "みっつ", meaning: "3 cái" },
-      { word: "三人", reading: "さんにん", meaning: "3 người" },
-      { word: "三月", reading: "さんがつ", meaning: "Tháng 3" },
+      { word: "三", reading: "さん", meaning: "Ba" },
+      { word: "三日", reading: "みっか", meaning: "Ngày mùng ba, ba ngày" },
+      { word: "三つ", reading: "みっつ", meaning: "Ba cái" },
     ],
   },
   // --- 4. 四 ---
@@ -68,11 +74,17 @@ export const BASIC_KANJI_WORDS: BasicKanjiWord[] = [
     meaningVi: "Số 4, bốn",
     meaningEn: "Four",
     strokes: 5,
-    strokePaths: ["M 22 20 L 22 80", "M 22 20 L 78 20 L 78 80", "M 35 32 L 35 60 L 48 60", "M 65 32 C 62 48, 55 58, 48 65", "M 22 80 L 78 80"],
+    strokePaths: [
+      "M 13.3 28.9 C 14.7 30.3, 15.4 31.9, 15.6 33.7 C 16.7 40.9, 18 56.8, 19.7 71.1 C 19.9 73.4, 20 74.6, 20.2 76.8",
+      "M 16.4 31.2 C 36.2 29.5, 63.6 27.6, 78.6 27.3 C 83 27.2, 84.4 29.7, 84.1 32.2 C 83.3 40.5, 80.3 58.2, 78.3 68.6 C 77.8 70.9, 77.4 72.8, 77.1 74.2",
+      "M 37.2 33 C 37.2 33.6, 37.3 34.5, 37 35.4 C 35 42.1, 32.3 48.7, 24.8 56.2",
+      "M 54.8 31.4 C 55.6 32.4, 56.1 33.5, 56.2 35 C 56.3 38.3, 56.2 41.5, 56.2 44.1 C 56.2 50.5, 56.9 51, 64.9 51 C 69.5 51, 73 50.3, 74.3 49.4",
+      "M 20.9 72.8 C 33.5 72.2, 60.9 71.1, 77 70.9",
+    ],
     exampleWords: [
-      { word: "四つ", reading: "よっつ", meaning: "4 cái" },
-      { word: "四月", reading: "しがつ", meaning: "Tháng 4" },
-      { word: "四季", reading: "しき", meaning: "Bốn mùa" },
+      { word: "四", reading: "し・よん", meaning: "Bốn" },
+      { word: "四日", reading: "よっか", meaning: "Ngày mùng bốn, bốn ngày" },
+      { word: "四つ", reading: "よっつ", meaning: "Bốn cái" },
     ],
   },
   // --- 5. 五 ---
@@ -84,10 +96,16 @@ export const BASIC_KANJI_WORDS: BasicKanjiWord[] = [
     meaningVi: "Số 5, năm",
     meaningEn: "Five",
     strokes: 4,
-    strokePaths: ["M 25 25 L 75 25", "M 52 25 L 35 55", "M 35 55 L 75 55 L 75 82", "M 15 82 L 85 82"],
+    strokePaths: [
+      "M 26.7 19.4 C 29.1 20.1, 31.4 19.8, 33.8 19.5 C 41.6 18.7, 52.4 17.5, 62.5 16.9 C 64.6 16.7, 66.8 16.6, 68.8 17.1",
+      "M 46.9 21.3 C 47.5 22.3, 47.8 23.8, 47.4 25.5 C 44.7 35.5, 35.6 62.6, 30.7 75.1",
+      "M 21.5 46.5 C 23.2 47.5, 25.4 47.3, 27.3 47.1 C 40.4 45.9, 52.5 44.6, 63 43.8 C 65.5 43.6, 66.6 45.3, 65.9 47, 64 61.9, 60.9 64.4, 59.4 73.4",
+      "M 9.5 76.1 C 12 76.9, 15 76.7, 17.6 76.5, 30.9 75.5, 54.5 74, 74.6 73.2, 77.5 73.1, 80.4 72.9, 83.2 73.6",
+    ],
     exampleWords: [
-      { word: "五つ", reading: "いつつ", meaning: "5 cái" },
-      { word: "五月", reading: "ごがつ", meaning: "Tháng 5" },
+      { word: "五", reading: "ご", meaning: "Năm" },
+      { word: "五日", reading: "いつか", meaning: "Ngày mùng năm, năm ngày" },
+      { word: "五つ", reading: "いつつ", meaning: "Năm cái" },
     ],
   },
   // --- 6. 六 ---
@@ -101,8 +119,9 @@ export const BASIC_KANJI_WORDS: BasicKanjiWord[] = [
     strokes: 4,
     strokePaths: ["M 50 15 L 50 28", "M 18 35 L 82 35", "M 38 45 C 30 60, 22 75, 12 85", "M 62 45 C 70 60, 78 75, 88 85"],
     exampleWords: [
-      { word: "六つ", reading: "むっつ", meaning: "6 cái" },
-      { word: "六月", reading: "ろくがつ", meaning: "Tháng 6" },
+      { word: "六", reading: "ろく", meaning: "Sáu" },
+      { word: "六日", reading: "むいか", meaning: "Ngày mùng sáu, sáu ngày" },
+      { word: "六つ", reading: "むっつ", meaning: "Sáu cái" },
     ],
   },
   // --- 7. 七 ---
@@ -116,8 +135,9 @@ export const BASIC_KANJI_WORDS: BasicKanjiWord[] = [
     strokes: 2,
     strokePaths: ["M 20 42 L 80 42", "M 48 18 L 48 68 C 48 85, 78 85, 82 78"],
     exampleWords: [
-      { word: "七つ", reading: "ななつ", meaning: "7 cái" },
-      { word: "七月", reading: "しちがつ", meaning: "Tháng 7" },
+      { word: "七", reading: "しち・なな", meaning: "Bảy" },
+      { word: "七日", reading: "なのか", meaning: "Ngày mùng bảy, bảy ngày" },
+      { word: "七つ", reading: "ななつ", meaning: "Bảy cái" },
     ],
   },
   // --- 8. 八 ---
@@ -131,9 +151,9 @@ export const BASIC_KANJI_WORDS: BasicKanjiWord[] = [
     strokes: 2,
     strokePaths: ["M 40 22 C 32 42, 25 62, 15 82", "M 60 22 C 68 42, 75 62, 85 82"],
     exampleWords: [
-      { word: "八つ", reading: "やっつ", meaning: "8 cái" },
-      { word: "八月", reading: "はちがつ", meaning: "Tháng 8" },
-      { word: "八百", reading: "やお", meaning: "800 (từ cổ)" },
+      { word: "八", reading: "はち", meaning: "Tám" },
+      { word: "八日", reading: "ようか", meaning: "Ngày mùng tám, tám ngày" },
+      { word: "八つ", reading: "やっつ", meaning: "Tám cái" },
     ],
   },
   // --- 9. 九 ---
@@ -145,10 +165,14 @@ export const BASIC_KANJI_WORDS: BasicKanjiWord[] = [
     meaningVi: "Số 9, chín",
     meaningEn: "Nine",
     strokes: 2,
-    strokePaths: ["M 48 18 C 38 38, 28 62, 15 82", "M 25 32 L 70 32 L 45 55 C 45 75, 78 78, 80 88"],
+    strokePaths: [
+      "M 38.4 13.2 C 39.3 14.5, 39.8 16.2, 39.8 17.9 C 39.8 54.7, 31.4 70.6, 13.7 81",
+      "M 12.4 42 C 15 42.8, 17.7 42, 20.3 41.4 C 28 39.4, 56.8 32.4, 57.8 32.3 C 60.1 32.2, 62.2 32.8, 61.7 36.7 C 61.2 40.6, 56.7 55.7, 55.3 66.5 C 53.2 82.5, 57.1 84.3, 72 84.3 C 84.6 84.3, 89.4 83.3, 89.7 75",
+    ],
     exampleWords: [
-      { word: "九つ", reading: "ここのつ", meaning: "9 cái" },
-      { word: "九月", reading: "くがつ", meaning: "Tháng 9" },
+      { word: "九", reading: "きゅう・く", meaning: "Chín" },
+      { word: "九日", reading: "ここのか", meaning: "Ngày mùng chín, chín ngày" },
+      { word: "九つ", reading: "ここのつ", meaning: "Chín cái" },
     ],
   },
   // --- 10. 十 ---
@@ -162,9 +186,10 @@ export const BASIC_KANJI_WORDS: BasicKanjiWord[] = [
     strokes: 2,
     strokePaths: ["M 18 50 L 82 50", "M 50 15 L 50 85"],
     exampleWords: [
-      { word: "十", reading: "とお", meaning: "10 cái" },
-      { word: "十月", reading: "じゅうがつ", meaning: "Tháng 10" },
-      { word: "十分", reading: "じゅうぶん", meaning: "Đầy đủ, thấu đáo" },
+      { word: "十", reading: "じゅう・とお", meaning: "Mười" },
+      { word: "十日", reading: "とおか", meaning: "Ngày mùng mười, mười ngày" },
+      { word: "二十日", reading: "はつか", meaning: "Ngày hai mươi, hai mươi ngày" },
+      { word: "十", reading: "とお", meaning: "Mười cái" },
     ],
   },
   // --- 11. 千 ---
@@ -178,8 +203,15 @@ export const BASIC_KANJI_WORDS: BasicKanjiWord[] = [
     strokes: 3,
     strokePaths: ["M 65 18 C 50 25, 38 32, 28 38", "M 20 48 L 80 48", "M 50 18 L 50 88"],
     exampleWords: [
-      { word: "千円", reading: "せんえん", meaning: "1,000 Yên" },
-      { word: "三千", reading: "さんぜん", meaning: "3,000" },
+      { word: "千", reading: "せん", meaning: "Một nghìn" },
+      { word: "二千", reading: "にせん", meaning: "Hai nghìn" },
+      { word: "三千", reading: "さんぜん", meaning: "Ba nghìn" },
+      { word: "四千", reading: "よんせん", meaning: "Bốn nghìn" },
+      { word: "五千", reading: "ごせん", meaning: "Năm nghìn" },
+      { word: "六千", reading: "ろくせん", meaning: "Sáu nghìn" },
+      { word: "七千", reading: "ななせん", meaning: "Bảy nghìn" },
+      { word: "八千", reading: "はっせん", meaning: "Tám nghìn" },
+      { word: "九千", reading: "きゅうせん", meaning: "Chín nghìn" },
     ],
   },
   // --- 12. 干 ---
@@ -223,8 +255,8 @@ export const BASIC_KANJI_WORDS: BasicKanjiWord[] = [
     strokes: 4,
     strokePaths: ["M 55 15 C 42 22, 32 26, 25 28", "M 20 38 L 80 38", "M 12 60 L 88 60", "M 50 38 L 50 88"],
     exampleWords: [
-      { word: "午前", reading: "ごぜん", meaning: "Buổi sáng (AM)" },
-      { word: "午後", reading: "ごご", meaning: "Buổi chiều (PM)" },
+      { word: "午前", reading: "ごぜん", meaning: "Buổi sáng" },
+      { word: "午後", reading: "ごご", meaning: "Buổi chiều" },
     ],
   },
   // --- 15. 牛 ---
@@ -254,9 +286,15 @@ export const BASIC_KANJI_WORDS: BasicKanjiWord[] = [
     strokes: 5,
     strokePaths: ["M 38 18 L 28 35", "M 20 35 L 80 35", "M 50 18 L 50 82", "M 25 58 L 75 58", "M 12 82 L 88 82"],
     exampleWords: [
-      { word: "学生", reading: "がくせい", meaning: "Học sinh, sinh viên" },
-      { word: "先生", reading: "せんせい", meaning: "Thầy cô giáo" },
-      { word: "生まれます", reading: "うまれます", meaning: "Sinh ra" },
+      { word: "学生", reading: "がくせい", meaning: "Sinh viên" },
+      { word: "小学生", reading: "しょうがくせい", meaning: "Học sinh tiểu học" },
+      { word: "中学生", reading: "ちゅうがくせい", meaning: "Học sinh THCS" },
+      { word: "高校生", reading: "こうこうせい", meaning: "Học sinh THPT" },
+      { word: "大学生", reading: "だいがくせい", meaning: "Sinh viên đại học" },
+      { word: "先生", reading: "せんせい", meaning: "Thầy giáo, cô giáo" },
+      { word: "生まれます", reading: "うまれます", meaning: "Được sinh ra" },
+      { word: "生ビール", reading: "なまビール", meaning: "Bia tươi" },
+      { word: "生ジュース", reading: "なまジュース", meaning: "Nước hoa quả tươi" },
     ],
   },
   // --- 17. 年 ---
@@ -270,9 +308,12 @@ export const BASIC_KANJI_WORDS: BasicKanjiWord[] = [
     strokes: 6,
     strokePaths: ["M 45 15 C 38 22, 30 28, 22 32", "M 28 35 L 72 35", "M 18 52 L 82 52", "M 28 68 L 72 68", "M 50 25 L 50 88"],
     exampleWords: [
+      { word: "去年", reading: "きょねん", meaning: "Năm ngoái" },
       { word: "今年", reading: "ことし", meaning: "Năm nay" },
-      { word: "来年", reading: "らいねん", meaning: "Năm sau" },
-      { word: "三年", reading: "さんねん", meaning: "3 năm" },
+      { word: "来年", reading: "らいねん", meaning: "Năm tới" },
+      { word: "毎年", reading: "まいとし・まいねん", meaning: "Hàng năm" },
+      { word: "～年", reading: "ねん", meaning: "~ năm" },
+      { word: "～年前", reading: "ねんまえ", meaning: "~ năm về trước" },
     ],
   },
   // --- 18. 半 ---
@@ -286,9 +327,9 @@ export const BASIC_KANJI_WORDS: BasicKanjiWord[] = [
     strokes: 5,
     strokePaths: ["M 35 18 C 38 22, 40 26, 42 30", "M 65 18 C 62 22, 60 26, 58 30", "M 20 38 L 80 38", "M 15 58 L 85 58", "M 50 12 L 50 88"],
     exampleWords: [
-      { word: "半", reading: "はん", meaning: "Rưỡi (5時半: 5 giờ rưỡi)" },
+      { word: "～時半", reading: "じはん", meaning: "~ giờ rưỡi" },
+      { word: "～時間半", reading: "じかんはん", meaning: "~ tiếng rưỡi" },
       { word: "半分", reading: "はんぶん", meaning: "Một nửa" },
-      { word: "半年", reading: "はんとし", meaning: "Nửa năm" },
     ],
   },
   // --- 19. 工 ---
@@ -320,6 +361,7 @@ export const BASIC_KANJI_WORDS: BasicKanjiWord[] = [
     exampleWords: [
       { word: "左", reading: "ひだり", meaning: "Phía bên trái" },
       { word: "左手", reading: "ひだりて", meaning: "Tay trái" },
+      { word: "左足", reading: "ひだりあし", meaning: "Chân trái" },
     ],
   },
   // --- 21. 土 ---
@@ -334,7 +376,8 @@ export const BASIC_KANJI_WORDS: BasicKanjiWord[] = [
     strokePaths: ["M 25 38 L 75 38", "M 50 15 L 50 82", "M 15 82 L 85 82"],
     exampleWords: [
       { word: "土曜日", reading: "どようび", meaning: "Thứ bảy" },
-      { word: "土産", reading: "みやげ", meaning: "Quà lưu niệm" },
+      { word: "土", reading: "つち", meaning: "Đất" },
+      { word: "土地", reading: "とち", meaning: "Đất, mặt đất" },
     ],
   },
   // --- 22. 士 ---
@@ -363,8 +406,8 @@ export const BASIC_KANJI_WORDS: BasicKanjiWord[] = [
     strokes: 4,
     strokePaths: ["M 18 40 L 82 40", "M 50 15 L 50 88", "M 50 40 C 40 58, 28 74, 15 85", "M 50 40 C 60 58, 72 74, 85 85"],
     exampleWords: [
-      { word: "木", reading: "き", meaning: "Cây gỗ" },
       { word: "木曜日", reading: "もくようび", meaning: "Thứ năm" },
+      { word: "木", reading: "き", meaning: "Cây, gỗ" },
     ],
   },
   // --- 24. 林 ---
@@ -446,8 +489,10 @@ export const BASIC_KANJI_WORDS: BasicKanjiWord[] = [
     strokePaths: ["M 20 25 L 80 25", "M 32 35 C 38 38, 40 42, 42 45", "M 68 35 C 62 38, 60 42, 58 45", "M 15 52 L 85 52", "M 50 12 L 50 88", "M 50 52 C 38 68, 25 80, 12 86", "M 50 52 C 62 68, 75 80, 88 86"],
     exampleWords: [
       { word: "来ます", reading: "きます", meaning: "Đến" },
-      { word: "来週", reading: "らいしゅう", meaning: "Tuần sau" },
-      { word: "未来", reading: "みらい", meaning: "Tương lai" },
+      { word: "来週", reading: "らいしゅう", meaning: "Tuần tới" },
+      { word: "来月", reading: "らいげつ", meaning: "Tháng tới" },
+      { word: "来年", reading: "らいねん", meaning: "Năm tới" },
+      { word: "外来語", reading: "がいらいご", meaning: "Từ ngoại lai" },
     ],
   },
   // --- 28. 未 ---
@@ -484,11 +529,7 @@ export const BASIC_KANJI_WORDS: BasicKanjiWord[] = [
       "M 68 42 C 58 60, 50 74, 42 85",
       "M 68 42 C 76 60, 84 74, 92 85",
     ],
-    exampleWords: [
-      { word: "味", reading: "あじ", meaning: "Hương vị" },
-      { word: "意味", reading: "いみ", meaning: "Ý nghĩa" },
-      { word: "趣味", reading: "しゅみ", meaning: "Sở thích" },
-    ],
+    exampleWords: [{ word: "意味", reading: "いみ", meaning: "Ý nghĩa" }],
   },
   // --- 30. 末 ---
   {
@@ -518,8 +559,13 @@ export const BASIC_KANJI_WORDS: BasicKanjiWord[] = [
     strokePaths: ["M 18 38 L 82 38", "M 50 15 C 38 42, 28 65, 12 85", "M 50 38 C 60 52, 72 68, 88 85"],
     exampleWords: [
       { word: "大きい", reading: "おおきい", meaning: "To, lớn" },
-      { word: "大学", reading: "だいがく", meaning: "Trường đại học" },
-      { word: "大変", reading: "たいへん", meaning: "Vất vả, vất vả quá" },
+      { word: "大学", reading: "だいがく", meaning: "Đại học" },
+      { word: "大学生", reading: "だいがくせい", meaning: "Sinh viên đại học" },
+      { word: "大使館", reading: "たいしかん", meaning: "Đại sứ quán" },
+      { word: "大人", reading: "おとな", meaning: "Người lớn" },
+      { word: "大好きな", reading: "だいすきな", meaning: "Rất thích" },
+      { word: "大切な", reading: "たいせつな", meaning: "Quan trọng" },
+      { word: "大雨", reading: "おおあめ", meaning: "Mưa to" },
     ],
   },
   // --- 32. 夫 ---
@@ -577,10 +623,7 @@ export const BASIC_KANJI_WORDS: BasicKanjiWord[] = [
     meaningEn: "Dog",
     strokes: 4,
     strokePaths: ["M 18 38 L 82 38", "M 50 15 C 38 42, 28 65, 12 85", "M 50 38 C 60 52, 72 68, 88 85", "M 65 18 C 70 22, 74 26, 78 30"],
-    exampleWords: [
-      { word: "犬", reading: "いぬ", meaning: "Con chó" },
-      { word: "子犬", reading: "こいぬ", meaning: "Chó con" },
-    ],
+    exampleWords: [{ word: "犬", reading: "いぬ", meaning: "Con chó" }],
   },
   // --- 36. 丈 ---
   {
@@ -612,10 +655,7 @@ export const BASIC_KANJI_WORDS: BasicKanjiWord[] = [
     meaningEn: "Sky / Heaven",
     strokes: 4,
     strokePaths: ["M 25 28 L 75 28", "M 15 50 L 85 50", "M 50 15 C 38 42, 28 65, 12 85", "M 50 50 C 60 62, 72 75, 88 85"],
-    exampleWords: [
-      { word: "天気", reading: "てんき", meaning: "Thời tiết" },
-      { word: "天才", reading: "てんさい", meaning: "Thiên tài" },
-    ],
+    exampleWords: [{ word: "天気", reading: "てんき", meaning: "Thời tiết" }],
   },
   // --- 38. 王 ---
   {
@@ -643,8 +683,8 @@ export const BASIC_KANJI_WORDS: BasicKanjiWord[] = [
     strokes: 5,
     strokePaths: ["M 50 15 C 52 20, 54 25, 55 28", "M 25 35 L 75 35", "M 32 55 L 68 55", "M 50 35 L 50 82", "M 15 82 L 85 82"],
     exampleWords: [
-      { word: "主人", reading: "しゅじん", meaning: "Chồng (chủ nhà)" },
-      { word: "主要", reading: "しゅよう", meaning: "Chủ yếu, chính" },
+      { word: "主人", reading: "しゅじん", meaning: "Chồng (tôi)" },
+      { word: "ご主人", reading: "ごしゅじん", meaning: "Chồng (người khác)" },
     ],
   },
   // --- 40. 住 ---
@@ -665,10 +705,7 @@ export const BASIC_KANJI_WORDS: BasicKanjiWord[] = [
       "M 65 35 L 65 82",
       "M 38 82 L 92 82",
     ],
-    exampleWords: [
-      { word: "住みます", reading: "すみます", meaning: "Sinh sống, ở" },
-      { word: "住所", reading: "じゅうしょ", meaning: "Địa chỉ nhà" },
-    ],
+    exampleWords: [{ word: "住んでいます", reading: "すんでいます", meaning: "Ở" }],
   },
   // --- 41. 水 ---
   {
@@ -681,9 +718,9 @@ export const BASIC_KANJI_WORDS: BasicKanjiWord[] = [
     strokes: 4,
     strokePaths: ["M 50 15 L 50 78 C 45 85, 38 85, 30 80", "M 42 35 C 32 45, 22 55, 12 62", "M 22 75 C 32 68, 42 62, 50 55", "M 50 38 C 62 52, 75 68, 88 82"],
     exampleWords: [
-      { word: "水", reading: "みず", meaning: "Nước uống" },
       { word: "水曜日", reading: "すいようび", meaning: "Thứ tư" },
-      { word: "水泳", reading: "すいえい", meaning: "Bơi lội" },
+      { word: "水", reading: "みず", meaning: "Nước" },
+      { word: "水道", reading: "すいどう", meaning: "Nước máy" },
     ],
   },
   // --- 42. 火 ---
@@ -697,9 +734,9 @@ export const BASIC_KANJI_WORDS: BasicKanjiWord[] = [
     strokes: 4,
     strokePaths: ["M 30 38 C 25 45, 20 52, 15 58", "M 70 38 C 75 45, 80 52, 85 58", "M 50 18 C 42 42, 28 68, 12 88", "M 50 40 C 60 55, 72 72, 88 88"],
     exampleWords: [
-      { word: "火", reading: "ひ", meaning: "Ngọn lửa" },
       { word: "火曜日", reading: "かようび", meaning: "Thứ ba" },
-      { word: "花火", reading: "はなび", meaning: "Pháo hoa" },
+      { word: "火", reading: "ひ", meaning: "Lửa" },
+      { word: "火事", reading: "かじ", meaning: "Cháy, hỏa hoạn" },
     ],
   },
   // --- 43. 人 ---
@@ -713,9 +750,20 @@ export const BASIC_KANJI_WORDS: BasicKanjiWord[] = [
     strokes: 2,
     strokePaths: ["M 50 15 C 38 38, 28 65, 12 88", "M 45 35 C 55 52, 70 70, 88 88"],
     exampleWords: [
-      { word: "人", reading: "ひと", meaning: "Con người" },
       { word: "日本人", reading: "にほんじん", meaning: "Người Nhật" },
-      { word: "三人", reading: "さんにん", meaning: "3 người" },
+      { word: "中国人", reading: "ちゅうごくじん", meaning: "Người Trung Quốc" },
+      { word: "外国人", reading: "がいこくじん", meaning: "Người nước ngoài" },
+      { word: "～人", reading: "じん", meaning: "Người ~" },
+      { word: "人", reading: "ひと", meaning: "Người, con người" },
+      { word: "男の人", reading: "おとこのひと", meaning: "Người đàn ông" },
+      { word: "女の人", reading: "おんなのひと", meaning: "Người đàn bà" },
+      { word: "あの人", reading: "あのひと", meaning: "Người kia" },
+      { word: "主人", reading: "しゅじん", meaning: "Chồng (tôi)" },
+      { word: "ご主人", reading: "ごしゅじん", meaning: "Chồng (người khác)" },
+      { word: "一人", reading: "ひとり", meaning: "Một người" },
+      { word: "二人", reading: "ふたり", meaning: "Hai người" },
+      { word: "～人", reading: "にん", meaning: "~ người" },
+      { word: "大人", reading: "おとな", meaning: "Người lớn" },
     ],
   },
   // --- 44. 入 ---
@@ -729,9 +777,9 @@ export const BASIC_KANJI_WORDS: BasicKanjiWord[] = [
     strokes: 2,
     strokePaths: ["M 45 18 C 38 35, 30 55, 18 82", "M 32 32 C 48 48, 65 68, 85 85"],
     exampleWords: [
-      { word: "入ります", reading: "はいります", meaning: "Đi vào" },
+      { word: "入ります", reading: "はいります", meaning: "Vào" },
+      { word: "入れます", reading: "いれます", meaning: "Đưa vào" },
       { word: "入り口", reading: "いりぐち", meaning: "Lối vào" },
-      { word: "輸入", reading: "ゆにゅう", meaning: "Nhập khẩu" },
     ],
   },
   // --- 45. 山 ---
@@ -745,9 +793,9 @@ export const BASIC_KANJI_WORDS: BasicKanjiWord[] = [
     strokes: 3,
     strokePaths: ["M 50 15 L 50 82", "M 20 38 L 20 82 L 80 82", "M 80 38 L 80 82"],
     exampleWords: [
-      { word: "山", reading: "やま", meaning: "Ngọn núi" },
-      { word: "富士山", reading: "ふじさん", meaning: "Núi Phú Sĩ" },
-      { word: "山登り", reading: "やまのぼり", meaning: "Leo núi" },
+      { word: "山", reading: "やま", meaning: "Núi" },
+      { word: "山田", reading: "やまだ", meaning: "Tên họ người Nhật" },
+      { word: "山川", reading: "やまかわ", meaning: "Tên họ người Nhật" },
     ],
   },
   // --- 46. 出 ---
@@ -761,9 +809,10 @@ export const BASIC_KANJI_WORDS: BasicKanjiWord[] = [
     strokes: 5,
     strokePaths: ["M 50 12 L 50 88", "M 25 25 L 25 45 L 75 45 L 75 25", "M 20 62 L 20 82 L 80 82 L 80 62"],
     exampleWords: [
-      { word: "出ます", reading: "でます", meaning: "Đi ra ngoài" },
+      { word: "出ます", reading: "でます", meaning: "Ra, đi ra" },
+      { word: "出します", reading: "だします", meaning: "Đưa ra" },
+      { word: "出かけます", reading: "でかけます", meaning: "Đi ra ngoài" },
       { word: "出口", reading: "でぐち", meaning: "Lối ra" },
-      { word: "出発", reading: "しゅっぱつ", meaning: "Xuất phát" },
     ],
   },
   // --- 47. 月 ---
@@ -777,9 +826,14 @@ export const BASIC_KANJI_WORDS: BasicKanjiWord[] = [
     strokes: 4,
     strokePaths: ["M 30 18 L 30 85 C 28 92, 22 92, 15 88", "M 30 18 L 75 18 L 75 85 C 72 90, 68 90, 62 85", "M 30 40 L 75 40", "M 30 62 L 75 62"],
     exampleWords: [
-      { word: "月", reading: "つき", meaning: "Mặt trăng" },
       { word: "月曜日", reading: "げつようび", meaning: "Thứ hai" },
-      { word: "一月", reading: "いちがつ", meaning: "Tháng 1" },
+      { word: "～月", reading: "がつ", meaning: "Tháng ~" },
+      { word: "～か月", reading: "かげつ", meaning: "~ tháng" },
+      { word: "先月", reading: "せんげつ", meaning: "Tháng trước" },
+      { word: "今月", reading: "こんげつ", meaning: "Tháng này" },
+      { word: "来月", reading: "らいげつ", meaning: "Tháng sau" },
+      { word: "毎月", reading: "まいつき", meaning: "Hàng tháng" },
+      { word: "月", reading: "つき", meaning: "Mặt trăng" },
     ],
   },
   // --- 48. 用 ---
@@ -808,9 +862,8 @@ export const BASIC_KANJI_WORDS: BasicKanjiWord[] = [
     strokes: 4,
     strokePaths: ["M 22 20 L 22 88", "M 22 20 L 78 20 L 78 88 C 75 92, 70 92, 65 85", "M 48 28 L 32 52", "M 42 45 C 55 58, 65 72, 72 82"],
     exampleWords: [
-      { word: "内", reading: "うち", meaning: "Bên trong, trong nhà" },
-      { word: "案内", reading: "あんない", meaning: "Hướng dẫn, dẫn đường" },
-      { word: "国内", reading: "こくない", meaning: "Trong nước" },
+      { word: "家内", reading: "かない", meaning: "Vợ (tôi)" },
+      { word: "国内の", reading: "こくないの", meaning: "Trong nước, nội địa" },
     ],
   },
   // --- 50. 肉 ---
@@ -830,12 +883,7 @@ export const BASIC_KANJI_WORDS: BasicKanjiWord[] = [
       "M 50 58 C 42 70, 35 78, 30 85",
       "M 45 70 L 62 82",
     ],
-    exampleWords: [
-      { word: "肉", reading: "にく", meaning: "Thịt" },
-      { word: "牛肉", reading: "ぎゅうにく", meaning: "Thịt bò" },
-      { word: "豚肉", reading: "ぶたにく", meaning: "Thịt lợn" },
-      { word: "鳥肉", reading: "とりにく", meaning: "Thịt gà" },
-    ],
+    exampleWords: [{ word: "肉", reading: "にく", meaning: "Thịt" }],
   },
   // --- 51. 不 ---
   {
@@ -863,9 +911,13 @@ export const BASIC_KANJI_WORDS: BasicKanjiWord[] = [
     strokes: 3,
     strokePaths: ["M 15 28 L 85 28", "M 50 28 L 50 85", "M 50 50 C 62 58, 72 65, 78 72"],
     exampleWords: [
-      { word: "下", reading: "した", meaning: "Phía dưới" },
+      { word: "下", reading: "した", meaning: "Dưới, bên dưới" },
+      { word: "下手な", reading: "へたな", meaning: "Kém" },
       { word: "地下鉄", reading: "ちかてつ", meaning: "Tàu điện ngầm" },
-      { word: "下さい", reading: "ください", meaning: "Xin hãy..." },
+      { word: "下ろします", reading: "おろします", meaning: "Hạ xuống, dỡ xuống" },
+      { word: "下着", reading: "したぎ", meaning: "Đồ lót" },
+      { word: "地下", reading: "ちか", meaning: "Ngầm, hầm" },
+      { word: "地下室", reading: "ちかしつ", meaning: "Phòng hầm" },
     ],
   },
   // --- 53. 上 ---
@@ -879,9 +931,9 @@ export const BASIC_KANJI_WORDS: BasicKanjiWord[] = [
     strokes: 3,
     strokePaths: ["M 50 18 L 50 82", "M 50 48 L 78 48", "M 18 82 L 82 82"],
     exampleWords: [
-      { word: "上", reading: "うえ", meaning: "Phía trên" },
-      { word: "上手", reading: "じょうず", meaning: "Giỏi, thành thạo" },
-      { word: "上がります", reading: "あがります", meaning: "Đi lên, vào nhà" },
+      { word: "上", reading: "うえ", meaning: "Trên, bên trên" },
+      { word: "上手な", reading: "じょうずな", meaning: "Giỏi" },
+      { word: "上着", reading: "うわぎ", meaning: "Áo khoác" },
     ],
   },
   // --- 54. 止 ---
@@ -895,8 +947,8 @@ export const BASIC_KANJI_WORDS: BasicKanjiWord[] = [
     strokes: 4,
     strokePaths: ["M 50 15 L 50 78", "M 50 48 L 78 48", "M 28 42 L 28 78", "M 15 78 L 85 78"],
     exampleWords: [
-      { word: "止まります", reading: "とまります", meaning: "Dừng lại" },
-      { word: "中止", reading: "ちゅうし", meaning: "Tạm dừng, hủy bỏ" },
+      { word: "止めます", reading: "とめます", meaning: "Ngăn, chặn, dừng" },
+      { word: "止まります", reading: "とまります", meaning: "Dừng, đỗ" },
     ],
   },
   // --- 55. 正 ---
@@ -956,8 +1008,11 @@ export const BASIC_KANJI_WORDS: BasicKanjiWord[] = [
     strokes: 3,
     strokePaths: ["M 20 28 L 80 28", "M 50 28 L 32 88", "M 32 50 C 58 50, 78 55, 75 82 C 72 90, 62 90, 55 85"],
     exampleWords: [
-      { word: "一万", reading: "いちまん", meaning: "10,000 (1 vạn Yên)" },
-      { word: "万一", reading: "まんいち", meaning: "Vạn nhất, lỡ như" },
+      { word: "万", reading: "まん", meaning: "10 nghìn" },
+      { word: "一万", reading: "いちまん", meaning: "10 nghìn" },
+      { word: "一万円", reading: "いちまんえん", meaning: "10 nghìn yên" },
+      { word: "十万円", reading: "じゅうまんえん", meaning: "100 nghìn yên" },
+      { word: "百万円", reading: "ひゃくまんえん", meaning: "1 triệu yên" },
     ],
   },
   // --- 59. 方 ---
@@ -971,9 +1026,20 @@ export const BASIC_KANJI_WORDS: BasicKanjiWord[] = [
     strokes: 4,
     strokePaths: ["M 50 15 L 50 28", "M 18 28 L 82 28", "M 48 28 L 48 60 C 48 78, 75 80, 72 88", "M 48 45 C 38 60, 25 74, 12 85"],
     exampleWords: [
-      { word: "方", reading: "かた", meaning: "Vị (người lịch sự: この方)" },
-      { word: "夕方", reading: "ゆうがた", meaning: "Chiều tối" },
+      { word: "あの方", reading: "あのかた", meaning: "Người ấy (cách nói lịch sự)" },
+      { word: "使い方", reading: "つかいかた", meaning: "Cách dùng" },
+      { word: "読み方", reading: "よみかた", meaning: "Cách đọc" },
       { word: "書き方", reading: "かきかた", meaning: "Cách viết" },
+      { word: "～方", reading: "かた", meaning: "Cách ~" },
+      { word: "～の方", reading: "ほう", meaning: "Về hướng ~" },
+      { word: "夕方", reading: "ゆうがた", meaning: "Chiều muộn" },
+      { word: "～の読み方", reading: "よみかた", meaning: "Cách đọc ~" },
+      { word: "～の書き方", reading: "かきかた", meaning: "Cách viết ~" },
+      { word: "～の使い方", reading: "つかいかた", meaning: "Cách dùng ~" },
+      { word: "～の作り方", reading: "つくりかた", meaning: "Cách làm ~" },
+      { word: "教え方", reading: "おしえかた", meaning: "Cách dạy" },
+      { word: "考え方", reading: "かんがえかた", meaning: "Cách nghĩ" },
+      { word: "見方", reading: "みかた", meaning: "Cách nhìn, góc nhìn" },
     ],
   },
   // --- 60. 分 ---
@@ -987,9 +1053,9 @@ export const BASIC_KANJI_WORDS: BasicKanjiWord[] = [
     strokes: 4,
     strokePaths: ["M 45 15 C 32 32, 22 48, 12 60", "M 52 18 C 65 32, 78 48, 88 60", "M 32 45 L 70 45 L 35 88", "M 42 55 C 50 68, 62 78, 78 85"],
     exampleWords: [
-      { word: "5分", reading: "ごふん", meaning: "5 phút" },
-      { word: "分かります", reading: "わかります", meaning: "Hiểu, biết" },
-      { word: "自分", reading: "じぶん", meaning: "Bản thân" },
+      { word: "～分", reading: "ふん・ぶん", meaning: "~ phút" },
+      { word: "自分で", reading: "じぶんで", meaning: "Tự mình" },
+      { word: "半分", reading: "はんぶん", meaning: "Một nửa" },
     ],
   },
   // --- 61. 口 ---
@@ -1003,7 +1069,7 @@ export const BASIC_KANJI_WORDS: BasicKanjiWord[] = [
     strokes: 3,
     strokePaths: ["M 25 25 L 25 78", "M 25 25 L 75 25 L 75 78", "M 25 78 L 75 78"],
     exampleWords: [
-      { word: "口", reading: "くち", meaning: "Cái miệng" },
+      { word: "口", reading: "くち", meaning: "Mồm" },
       { word: "入り口", reading: "いりぐち", meaning: "Lối vào" },
       { word: "出口", reading: "でぐち", meaning: "Lối ra" },
     ],
@@ -1019,8 +1085,8 @@ export const BASIC_KANJI_WORDS: BasicKanjiWord[] = [
     strokes: 5,
     strokePaths: ["M 20 32 L 80 32", "M 50 15 L 50 50", "M 32 50 L 32 85", "M 32 50 L 68 50 L 68 85", "M 32 85 L 68 85"],
     exampleWords: [
-      { word: "古い", reading: "ふるい", meaning: "Cũ (không dùng cho người)" },
-      { word: "中古", reading: "ちゅうこ", meaning: "Đồ cũ, đồ dùng lại" },
+      { word: "古い", reading: "ふるい", meaning: "Cũ" },
+      { word: "古本", reading: "ふるほん", meaning: "Sách cũ" },
     ],
   },
   // --- 63. 品 ---
@@ -1076,6 +1142,7 @@ export const BASIC_KANJI_WORDS: BasicKanjiWord[] = [
     exampleWords: [
       { word: "右", reading: "みぎ", meaning: "Phía bên phải" },
       { word: "右手", reading: "みぎて", meaning: "Tay phải" },
+      { word: "右足", reading: "みぎあし", meaning: "Chân phải" },
     ],
   },
   // --- 66. 合 ---
@@ -1105,8 +1172,7 @@ export const BASIC_KANJI_WORDS: BasicKanjiWord[] = [
     strokePaths: ["M 50 15 C 40 28, 30 40, 20 48", "M 28 32 L 75 32 L 35 82", "M 38 48 L 38 78", "M 38 48 L 72 48 L 72 78", "M 38 78 L 72 78"],
     exampleWords: [
       { word: "名前", reading: "なまえ", meaning: "Tên" },
-      { word: "有名", reading: "ゆうめい", meaning: "Nổi tiếng" },
-      { word: "名刺", reading: "めいし", meaning: "Danh thiếp" },
+      { word: "有名な", reading: "ゆうめいな", meaning: "Nổi tiếng" },
     ],
   },
   // --- 68. 回 ---
@@ -1220,9 +1286,14 @@ export const BASIC_KANJI_WORDS: BasicKanjiWord[] = [
       "M 20 85 L 80 85",
     ],
     exampleWords: [
-      { word: "国", reading: "くに", meaning: "Đất nước" },
+      { word: "国", reading: "くに", meaning: "Đất nước, Nhà nước" },
+      { word: "中国", reading: "ちゅうごく", meaning: "Trung Quốc" },
+      { word: "中国人", reading: "ちゅうごくじん", meaning: "Người Trung Quốc" },
+      { word: "中国語", reading: "ちゅうごくご", meaning: "Tiếng Trung" },
       { word: "外国", reading: "がいこく", meaning: "Nước ngoài" },
-      { word: "韓国", reading: "かんこく", meaning: "Hàn Quốc" },
+      { word: "外国人", reading: "がいこくじん", meaning: "Người nước ngoài" },
+      { word: "外国語", reading: "がいこくご", meaning: "Ngoại ngữ" },
+      { word: "国内の", reading: "こくないの", meaning: "Trong nước, nội địa" },
     ],
   },
   // --- 73. 中 ---
@@ -1236,9 +1307,17 @@ export const BASIC_KANJI_WORDS: BasicKanjiWord[] = [
     strokes: 4,
     strokePaths: ["M 25 30 L 25 65", "M 25 30 L 75 30 L 75 65", "M 25 65 L 75 65", "M 50 12 L 50 88"],
     exampleWords: [
-      { word: "中", reading: "なか", meaning: "Bên trong" },
+      { word: "中", reading: "なか", meaning: "Trong, bên trong" },
+      { word: "田中", reading: "たなか", meaning: "Tên họ người Nhật" },
+      { word: "中川", reading: "なかがわ", meaning: "Tên họ người Nhật" },
       { word: "中国", reading: "ちゅうごく", meaning: "Trung Quốc" },
-      { word: "一日中", reading: "いちにちじゅう", meaning: "Suốt cả ngày" },
+      { word: "中国人", reading: "ちゅうごくじん", meaning: "Người Trung Quốc" },
+      { word: "中国語", reading: "ちゅうごくご", meaning: "Tiếng Trung" },
+      { word: "中学校", reading: "ちゅうがっこう", meaning: "Trường THCS" },
+      { word: "中学生", reading: "ちゅうがくせい", meaning: "Học sinh THCS" },
+      { word: "中東", reading: "ちゅうとう", meaning: "Trung Đông" },
+      { word: "一日中", reading: "いちにちじゅう", meaning: "Cả ngày" },
+      { word: "話し中", reading: "はなしちゅう", meaning: "Đang nói chuyện" },
     ],
   },
   // --- 74. 仲 ---
@@ -1268,15 +1347,21 @@ export const BASIC_KANJI_WORDS: BasicKanjiWord[] = [
     id: "kanji-nhat-ngay",
     char: "日",
     hanViet: "Nhật",
-    hiragana: "ひ / にち・じつ",
-    meaningVi: "Mặt trời, ngày, Nhật Bản",
+    hiragana: "ひ・か / にち・じつ",
+    meaningVi: "Mặt trời (nghĩa gốc), ngày, Nhật Bản",
     meaningEn: "Sun / Day / Japan",
     strokes: 4,
     strokePaths: ["M 25 20 L 25 82", "M 25 20 L 75 20 L 75 82", "M 25 50 L 75 50", "M 25 82 L 75 82"],
     exampleWords: [
-      { word: "日", reading: "ひ", meaning: "Mặt trời, ngày" },
-      { word: "日本", reading: "にほん", meaning: "Nhật Bản" },
       { word: "日曜日", reading: "にちようび", meaning: "Chủ nhật" },
+      { word: "～曜日", reading: "ようび", meaning: "Thứ ~" },
+      { word: "今日", reading: "きょう", meaning: "Hôm nay" },
+      { word: "毎日", reading: "まいにち", meaning: "Hàng ngày" },
+      { word: "日本", reading: "にほん", meaning: "Nhật Bản" },
+      { word: "日本人", reading: "にほんじん", meaning: "Người Nhật" },
+      { word: "日本語", reading: "にほんご", meaning: "Tiếng Nhật" },
+      { word: "～日", reading: "にち", meaning: "~ ngày (số lượng), ngày mùng ~" },
+      { word: "日", reading: "ひ", meaning: "Ngày" },
     ],
   },
   // --- 76. 白 ---
@@ -1290,8 +1375,8 @@ export const BASIC_KANJI_WORDS: BasicKanjiWord[] = [
     strokes: 5,
     strokePaths: ["M 50 15 L 42 28", "M 25 28 L 25 82", "M 25 28 L 75 28 L 75 82", "M 25 55 L 75 55", "M 25 82 L 75 82"],
     exampleWords: [
-      { word: "白い", reading: "しろい", meaning: "Màu trắng" },
-      { word: "面白い", reading: "おもしろい", meaning: "Thú vị" },
+      { word: "白い", reading: "しろい", meaning: "Trắng" },
+      { word: "白", reading: "しろ", meaning: "Màu trắng" },
     ],
   },
   // --- 77. 百 ---
@@ -1305,9 +1390,15 @@ export const BASIC_KANJI_WORDS: BasicKanjiWord[] = [
     strokes: 6,
     strokePaths: ["M 20 22 L 80 22", "M 50 22 L 42 35", "M 28 35 L 28 85", "M 28 35 L 72 35 L 72 85", "M 28 60 L 72 60", "M 28 85 L 72 85"],
     exampleWords: [
-      { word: "百", reading: "ひゃく", meaning: "100" },
-      { word: "三百", reading: "さんびゃく", meaning: "300" },
-      { word: "八百屋", reading: "やおや", meaning: "Cửa hàng rau quả" },
+      { word: "百", reading: "ひゃく", meaning: "Một trăm" },
+      { word: "二百", reading: "にひゃく", meaning: "Hai trăm" },
+      { word: "三百", reading: "さんびゃく", meaning: "Ba trăm" },
+      { word: "四百", reading: "よんひゃく", meaning: "Bốn trăm" },
+      { word: "五百", reading: "ごひゃく", meaning: "Năm trăm" },
+      { word: "六百", reading: "ろっぴゃく", meaning: "Sáu trăm" },
+      { word: "七百", reading: "ななひゃく", meaning: "Bảy trăm" },
+      { word: "八百", reading: "はっぴゃく", meaning: "Tám trăm" },
+      { word: "九百", reading: "きゅうひゃく", meaning: "Chín trăm" },
     ],
   },
   // --- 78. 目 ---
@@ -1320,11 +1411,7 @@ export const BASIC_KANJI_WORDS: BasicKanjiWord[] = [
     meaningEn: "Eye / Item",
     strokes: 5,
     strokePaths: ["M 30 18 L 30 85", "M 30 18 L 70 18 L 70 85", "M 30 40 L 70 40", "M 30 62 L 70 62", "M 30 85 L 70 85"],
-    exampleWords: [
-      { word: "目", reading: "め", meaning: "Đôi mắt" },
-      { word: "目的", reading: "もくてき", meaning: "Mục đích" },
-      { word: "目薬", reading: "めぐすり", meaning: "Thuốc nhỏ mắt" },
-    ],
+    exampleWords: [{ word: "目", reading: "め", meaning: "Mắt" }],
   },
   // --- 79. 自 ---
   {
@@ -1344,9 +1431,9 @@ export const BASIC_KANJI_WORDS: BasicKanjiWord[] = [
       "M 30 85 L 70 85",
     ],
     exampleWords: [
-      { word: "自分", reading: "じぶん", meaning: "Bản thân mình" },
+      { word: "自転車", reading: "じてんしゃ", meaning: "Xe đạp" },
       { word: "自動車", reading: "じどうしゃ", meaning: "Xe ô tô" },
-      { word: "自由", reading: "じゆう", meaning: "Tự do" },
+      { word: "自分で", reading: "じぶんで", meaning: "Tự mình" },
     ],
   },
   // --- 80. 貝 ---
@@ -1415,9 +1502,10 @@ export const BASIC_KANJI_WORDS: BasicKanjiWord[] = [
       "M 50 12 L 50 90",
     ],
     exampleWords: [
-      { word: "車", reading: "くるま", meaning: "Xe ô tô" },
+      { word: "車", reading: "くるま", meaning: "Xe, xe ô tô" },
       { word: "電車", reading: "でんしゃ", meaning: "Tàu điện" },
-      { word: "自動車", reading: "じどうしゃ", meaning: "Xe xe hơi" },
+      { word: "自転車", reading: "じてんしゃ", meaning: "Xe đạp" },
+      { word: "自動車", reading: "じどうしゃ", meaning: "Xe ô tô" },
     ],
   },
   // --- 83. 田 ---
@@ -1431,8 +1519,9 @@ export const BASIC_KANJI_WORDS: BasicKanjiWord[] = [
     strokes: 5,
     strokePaths: ["M 22 20 L 22 80", "M 22 20 L 78 20 L 78 80", "M 50 20 L 50 80", "M 22 50 L 78 50", "M 22 80 L 78 80"],
     exampleWords: [
-      { word: "山田", reading: "やまだ", meaning: "Họ Yamada" },
-      { word: "田んぼ", reading: "たんぼ", meaning: "Cánh đồng lúa" },
+      { word: "田中", reading: "たなか", meaning: "Tên họ người Nhật" },
+      { word: "田", reading: "た", meaning: "Đồng, ruộng" },
+      { word: "山田", reading: "やまだ", meaning: "Tên họ người Nhật" },
     ],
   },
   // --- 84. 男 ---
@@ -1454,9 +1543,8 @@ export const BASIC_KANJI_WORDS: BasicKanjiWord[] = [
       "M 32 72 C 48 78, 65 82, 85 82",
     ],
     exampleWords: [
-      { word: "男", reading: "おとこ", meaning: "Con trai, đàn ông" },
-      { word: "男性", reading: "だんせい", meaning: "Nam giới" },
-      { word: "男の子", reading: "おとこのこ", meaning: "Cậu bé" },
+      { word: "男の人", reading: "おとこのひと", meaning: "Người đàn ông" },
+      { word: "男の子", reading: "おとこのこ", meaning: "Bé trai" },
     ],
   },
   // --- 85. 女 ---
@@ -1470,8 +1558,7 @@ export const BASIC_KANJI_WORDS: BasicKanjiWord[] = [
     strokes: 3,
     strokePaths: ["M 48 18 L 28 48 L 62 48 C 65 65, 45 80, 22 88", "M 65 25 C 55 45, 38 65, 15 80", "M 12 48 L 88 48"],
     exampleWords: [
-      { word: "女", reading: "おんな", meaning: "Phụ nữ" },
-      { word: "女性", reading: "じょせい", meaning: "Nữ giới" },
+      { word: "女の人", reading: "おんなのひと", meaning: "Người đàn bà" },
       { word: "女の子", reading: "おんなのこ", meaning: "Bé gái" },
     ],
   },
@@ -1486,9 +1573,9 @@ export const BASIC_KANJI_WORDS: BasicKanjiWord[] = [
     strokes: 3,
     strokePaths: ["M 28 22 L 72 22 L 35 48 C 35 68, 70 78, 65 88", "M 15 48 L 85 48"],
     exampleWords: [
-      { word: "子ども", reading: "こども", meaning: "Trẻ em, con cái" },
-      { word: "男の子", reading: "おとこのこ", meaning: "Cậu bé" },
-      { word: "電子", reading: "でんし", meaning: "Điện tử" },
+      { word: "子ども", reading: "こども", meaning: "Trẻ con" },
+      { word: "男の子", reading: "おとこのこ", meaning: "Bé trai" },
+      { word: "女の子", reading: "おんなのこ", meaning: "Bé gái" },
     ],
   },
   // --- 87. 小 ---
@@ -1502,7 +1589,8 @@ export const BASIC_KANJI_WORDS: BasicKanjiWord[] = [
     strokes: 3,
     strokePaths: ["M 50 15 L 50 78 C 45 85, 38 85, 30 80", "M 32 38 C 24 48, 18 58, 12 65", "M 68 38 C 76 48, 82 58, 88 65"],
     exampleWords: [
-      { word: "小さい", reading: "ちいさい", meaning: "Nhỏ bé" },
+      { word: "小さい", reading: "ちいさい", meaning: "Nhỏ, bé" },
+      { word: "小学校", reading: "しょうがっこう", meaning: "Trường tiểu học" },
       { word: "小学生", reading: "しょうがくせい", meaning: "Học sinh tiểu học" },
     ],
   },
@@ -1518,8 +1606,7 @@ export const BASIC_KANJI_WORDS: BasicKanjiWord[] = [
     strokePaths: ["M 50 15 L 50 68 C 45 75, 38 75, 30 70", "M 32 35 C 24 45, 18 55, 12 62", "M 68 35 C 76 45, 82 55, 88 62", "M 65 52 C 52 68, 35 80, 15 88"],
     exampleWords: [
       { word: "少ない", reading: "すくない", meaning: "Ít" },
-      { word: "少し", reading: "すこし", meaning: "Một chút, một ít" },
-      { word: "少年", reading: "しょうねん", meaning: "Thiếu niên" },
+      { word: "少し", reading: "すこし", meaning: "Một ít" },
     ],
   },
   // --- 89. 多 ---
@@ -1539,10 +1626,7 @@ export const BASIC_KANJI_WORDS: BasicKanjiWord[] = [
       "M 35 65 L 78 65 L 45 92",
       "M 50 78 C 58 84, 65 88, 72 92",
     ],
-    exampleWords: [
-      { word: "多い", reading: "おおい", meaning: "Nhiều" },
-      { word: "多分", reading: "たぶん", meaning: "Có lẽ, chắc là" },
-    ],
+    exampleWords: [{ word: "多い", reading: "おおい", meaning: "Nhiều" }],
   },
   // --- 90. 外 ---
   {
@@ -1557,7 +1641,8 @@ export const BASIC_KANJI_WORDS: BasicKanjiWord[] = [
     exampleWords: [
       { word: "外", reading: "そと", meaning: "Bên ngoài" },
       { word: "外国", reading: "がいこく", meaning: "Nước ngoài" },
-      { word: "海外", reading: "かいがい", meaning: "Hải ngoại, nước ngoài" },
+      { word: "外国人", reading: "がいこくじん", meaning: "Người nước ngoài" },
+      { word: "外来語", reading: "がいらいご", meaning: "Từ ngoại lai" },
     ],
   },
   // --- 91. 川 ---
@@ -1571,8 +1656,9 @@ export const BASIC_KANJI_WORDS: BasicKanjiWord[] = [
     strokes: 3,
     strokePaths: ["M 25 20 C 25 45, 20 68, 12 85", "M 50 25 L 50 78", "M 75 18 L 75 88"],
     exampleWords: [
-      { word: "川", reading: "かわ", meaning: "Con sông" },
-      { word: "小川", reading: "おがわ", meaning: "Dòng suối nhỏ" },
+      { word: "川", reading: "かわ", meaning: "Sông, suối" },
+      { word: "山川", reading: "やまかわ", meaning: "Tên họ người Nhật" },
+      { word: "中川", reading: "なかがわ", meaning: "Tên họ người Nhật" },
     ],
   },
   // --- 92. 寺 ---
@@ -1623,8 +1709,8 @@ export const BASIC_KANJI_WORDS: BasicKanjiWord[] = [
     strokes: 6,
     strokePaths: ["M 20 20 L 80 20", "M 28 32 L 28 78", "M 28 32 L 72 32 L 72 78", "M 42 32 L 42 78", "M 58 32 L 58 78", "M 28 78 L 72 78"],
     exampleWords: [
-      { word: "西", reading: "にし", meaning: "Phía tây" },
-      { word: "西洋", reading: "せいよう", meaning: "Phương Tây" },
+      { word: "西", reading: "にし", meaning: "Phía Tây" },
+      { word: "西ヨーロッパ", reading: "にしヨーロッパ", meaning: "Tây Âu" },
     ],
   },
   // --- 95. 門 ---
@@ -1685,9 +1771,9 @@ export const BASIC_KANJI_WORDS: BasicKanjiWord[] = [
       "M 15 88 L 85 88",
     ],
     exampleWords: [
-      { word: "お金", reading: "おかね", meaning: "Tiền bạc" },
       { word: "金曜日", reading: "きんようび", meaning: "Thứ sáu" },
-      { word: "料金", reading: "りょうきん", meaning: "Giá cước, phí" },
+      { word: "お金", reading: "おかね", meaning: "Tiền" },
+      { word: "金", reading: "きん", meaning: "Vàng" },
     ],
   },
   // --- 98. 己 ---

@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { KANJI_RADICALS, type KanjiRadical } from "@/lib/kanji-radicals";
 import { BASIC_KANJI_WORDS, type BasicKanjiWord } from "@/lib/basic-kanji";
+import { EXTRA_KANJI_WORDS } from "@/lib/extra-kanji";
 import { speakJapanese } from "@/lib/speech";
 import { useLanguage } from "@/lib/language-context";
 import { RadicalStrokeSvg } from "@/components/kana/radical-stroke-svg";
@@ -15,7 +16,9 @@ import { cn } from "@/lib/utils";
 export function KanjiRadicalGuide() {
   const { language } = useLanguage();
   const isVi = language === "vi";
-  const [mainTab, setMainTab] = useState<"kanji-100" | "radicals">("kanji-100");
+  const [mainTab, setMainTab] = useState<"kanji-100" | "kanji-extra" | "radicals">("kanji-100");
+  const isKanjiListTab = mainTab === "kanji-100" || mainTab === "kanji-extra";
+  const currentKanjiSource: BasicKanjiWord[] = mainTab === "kanji-extra" ? EXTRA_KANJI_WORDS : BASIC_KANJI_WORDS;
   const [search, setSearch] = useState("");
   const [selectedStrokeFilter, setSelectedStrokeFilter] = useState<number | "all">("all");
   const [activeRadical, setActiveRadical] = useState<KanjiRadical | null>(null);
@@ -41,10 +44,10 @@ export function KanjiRadicalGuide() {
     });
   }, [search, selectedStrokeFilter]);
 
-  // Filtered Basic 100 Kanji List
+  // Filtered Kanji List (100 Basic Kanji, or Extra Kanji when that tab is active)
   const filteredKanjiWords = useMemo(() => {
     const q = search.trim().toLowerCase();
-    return BASIC_KANJI_WORDS.filter((k) => {
+    return currentKanjiSource.filter((k) => {
       if (selectedStrokeFilter !== "all") {
         if (k.strokes !== selectedStrokeFilter) return false;
       }
@@ -57,11 +60,11 @@ export function KanjiRadicalGuide() {
         k.exampleWords.some((e) => e.word.includes(q) || e.reading.includes(q) || e.meaning.toLowerCase().includes(q))
       );
     });
-  }, [search, selectedStrokeFilter]);
+  }, [search, selectedStrokeFilter, currentKanjiSource]);
 
   // Active items list for Modal navigation
   const activeList = useMemo<KanjiRadical[]>(() => {
-    if (mainTab === "kanji-100") {
+    if (isKanjiListTab) {
       return filteredKanjiWords.map((k) => ({
         id: k.id,
         char: k.char,
@@ -80,7 +83,7 @@ export function KanjiRadicalGuide() {
       }));
     }
     return filteredRadicals;
-  }, [mainTab, filteredKanjiWords, filteredRadicals]);
+  }, [isKanjiListTab, filteredKanjiWords, filteredRadicals]);
 
   // Current Modal Navigation Index & Items
   const currentIndex = useMemo(() => {
@@ -126,7 +129,7 @@ export function KanjiRadicalGuide() {
   }, [activeRadical, prevItem, nextItem]);
 
   const strokeOptions = useMemo(() => {
-    if (mainTab === "kanji-100") {
+    if (isKanjiListTab) {
       return [
         { label: "Tất cả", value: "all" as const },
         { label: "1 nét", value: 1 },
@@ -151,7 +154,7 @@ export function KanjiRadicalGuide() {
       { label: "5 nét", value: 5 },
       { label: "6+ nét", value: 6 },
     ];
-  }, [mainTab]);
+  }, [isKanjiListTab]);
 
   return (
     <div className="flex flex-col gap-6 print:gap-3">
@@ -160,6 +163,8 @@ export function KanjiRadicalGuide() {
         <h1 className="text-xl font-extrabold text-black uppercase tracking-tight">
           {mainTab === "kanji-100"
             ? `BẢNG ${BASIC_KANJI_WORDS.length} CHỮ KANJI CƠ BẢN TIẾNG NHẬT`
+            : mainTab === "kanji-extra"
+            ? `BẢNG ${EXTRA_KANJI_WORDS.length} CHỮ KANJI MỞ RỘNG`
             : `BẢNG ${KANJI_RADICALS.length} BỘ THỦ KANJI TIẾNG NHẬT`}
         </h1>
         <p className="text-xs text-gray-700">
@@ -187,6 +192,24 @@ export function KanjiRadicalGuide() {
           >
             <Sparkles className="size-4 text-amber-300" />
             <span>Chữ Kanji cơ bản ({BASIC_KANJI_WORDS.length} chữ)</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => {
+              setMainTab("kanji-extra");
+              setSearch("");
+              setSelectedStrokeFilter("all");
+            }}
+            className={cn(
+              "flex items-center gap-2 rounded-xl px-3.5 py-2 text-xs font-bold transition-all cursor-pointer whitespace-nowrap select-none",
+              mainTab === "kanji-extra"
+                ? "bg-red-600 text-white shadow-2xs"
+                : "text-muted-foreground hover:bg-accent/60 hover:text-foreground"
+            )}
+          >
+            <Sparkles className="size-4 text-amber-300" />
+            <span>Kanji mở rộng ({EXTRA_KANJI_WORDS.length} chữ)</span>
           </button>
 
           <button
@@ -221,29 +244,31 @@ export function KanjiRadicalGuide() {
       </div>
 
       {/* 2. Title Header Banner Box */}
-      {mainTab === "kanji-100" ? (
+      {isKanjiListTab ? (
         <div className="flex flex-col gap-4 rounded-2xl border border-border/80 bg-card p-5 sm:p-6 shadow-2xs print:hidden">
           <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
             <div className="space-y-1.5">
               <div className="flex items-center gap-2">
                 <span className="rounded-full bg-amber-500/10 dark:bg-amber-950/50 border border-amber-500/20 px-2.5 py-0.5 text-xs font-extrabold text-amber-600">
-                  Chữ cơ bản (N5/N4)
+                  {mainTab === "kanji-100" ? "Chữ cơ bản (N5/N4)" : "Kanji mở rộng"}
                 </span>
-                <span className="text-xs text-muted-foreground font-semibold">100 Kanji</span>
+                <span className="text-xs text-muted-foreground font-semibold">{currentKanjiSource.length} Kanji</span>
               </div>
 
               <h2 className="text-xl sm:text-2xl font-black text-foreground tracking-tight">
-                Bảng Chữ Kanji Cơ Bản (漢字)
+                {mainTab === "kanji-100" ? "Bảng Chữ Kanji Cơ Bản (漢字)" : "Bảng Kanji Mở Rộng (漢字 bổ sung)"}
               </h2>
 
               <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed max-w-2xl">
-                Tổng hợp 100 chữ Kanji cơ bản thường gặp nhất trong giao tiếp & kỳ thi JLPT N5/N4. Bấm vào chữ để xem cách viết, phiên âm Hán-Việt, Hiragana và từ ghép ví dụ!
+                {mainTab === "kanji-100"
+                  ? "Tổng hợp 100 chữ Kanji cơ bản thường gặp nhất trong giao tiếp & kỳ thi JLPT N5/N4. Bấm vào chữ để xem cách viết, phiên âm Hán-Việt, Hiragana và từ ghép ví dụ!"
+                  : "Các chữ Kanji xuất hiện trong bài học nhưng nằm ngoài 100 chữ cơ bản. Bấm vào chữ để xem cách viết, phiên âm Hán-Việt, Hiragana và từ ghép ví dụ!"}
               </p>
             </div>
 
             {/* Total Count Card Badge */}
             <div className="flex flex-col items-center justify-center rounded-2xl border border-amber-200 dark:border-amber-900/60 bg-amber-50/40 dark:bg-amber-950/20 px-5 py-3 text-center shrink-0 self-start sm:self-auto">
-              <span className="text-3xl font-black text-amber-600">100</span>
+              <span className="text-3xl font-black text-amber-600">{currentKanjiSource.length}</span>
               <span className="text-[10px] font-extrabold tracking-widest text-muted-foreground uppercase">CHỮ HÁN</span>
             </div>
           </div>
@@ -352,7 +377,7 @@ export function KanjiRadicalGuide() {
       )}
 
       {/* 3. Grid View Section */}
-      {mainTab === "kanji-100" ? (
+      {isKanjiListTab ? (
         filteredKanjiWords.length === 0 ? (
           <div className="rounded-2xl border border-dashed border-border/80 p-8 text-center text-muted-foreground text-xs font-medium">
             Không tìm thấy chữ Kanji nào phù hợp với từ khóa hoặc bộ lọc.
@@ -483,9 +508,9 @@ export function KanjiRadicalGuide() {
                     <span className="text-[11px] text-muted-foreground shrink-0 font-medium">
                       Ví dụ:
                     </span>
-                    {rad.exampleKanji.slice(0, 2).map((ex) => (
+                    {rad.exampleKanji.slice(0, 2).map((ex, i) => (
                       <span
-                        key={ex.char}
+                        key={`${ex.char}-${i}`}
                         className="rounded-md bg-muted/80 px-1.5 py-0.5 text-xs font-bold text-foreground font-kanji-mincho"
                         title={`${ex.char} (${ex.hanViet}): ${ex.meaning}`}
                       >
@@ -639,9 +664,9 @@ export function KanjiRadicalGuide() {
               <div>
                 <span className="font-bold text-foreground">Chữ / Từ ghép tiêu biểu:</span>
                 <div className="grid grid-cols-2 gap-2 mt-1.5">
-                  {activeRadical.exampleKanji.map((ex) => (
+                  {activeRadical.exampleKanji.map((ex, i) => (
                     <div
-                      key={ex.char}
+                      key={`${ex.char}-${i}`}
                       className="flex items-center gap-2 rounded-lg border bg-background p-2"
                     >
                       <span className="text-2xl font-extrabold text-red-600 font-kanji-mincho">
