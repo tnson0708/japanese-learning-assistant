@@ -23,13 +23,14 @@ import {
 import { filterKana } from "@/lib/kana";
 import { KANJI_RADICALS, type KanjiRadical } from "@/lib/kanji-radicals";
 import { BASIC_KANJI_WORDS, type BasicKanjiWord } from "@/lib/basic-kanji";
+import { EXTRA_KANJI_WORDS } from "@/lib/extra-kanji";
 import { speakJapanese } from "@/lib/speech";
 import { useLanguage } from "@/lib/language-context";
 import { cn } from "@/lib/utils";
 
 export interface PracticeCardItem {
   id: string;
-  type: "hiragana" | "katakana" | "radical" | "kanji";
+  type: "hiragana" | "katakana" | "radical" | "kanji" | "kanji-extra";
   typeLabel: string;
   char: string;
   mainReading: string;
@@ -48,6 +49,7 @@ export default function PracticePage() {
   const [includeKatakana, setIncludeKatakana] = useState(true);
   const [includeRadicals, setIncludeRadicals] = useState(true);
   const [includeKanji, setIncludeKanji] = useState(true);
+  const [includeExtraKanji, setIncludeExtraKanji] = useState(true);
 
   // Timing Settings
   const [promptSeconds, setPromptSeconds] = useState<number>(5);
@@ -137,7 +139,26 @@ export default function PracticePage() {
       });
     }
 
-    // Fallback if user unchecks all 4 options
+    // 5. Hán Tự Mở Rộng (Extra Kanji)
+    if (includeExtraKanji) {
+      EXTRA_KANJI_WORDS.forEach((kanji) => {
+        items.push({
+          id: `kanji-extra-${kanji.id}`,
+          type: "kanji-extra",
+          typeLabel: "HÁN TỰ MỞ RỘNG",
+          char: kanji.char,
+          mainReading: kanji.hanViet,
+          subReading: kanji.hiragana,
+          meaningVi: kanji.meaningVi,
+          strokes: kanji.strokes,
+          example: kanji.exampleWords.length > 0
+            ? kanji.exampleWords.map((e) => `${e.word} (${e.reading}): ${e.meaning}`).slice(0, 2).join(" • ")
+            : undefined,
+        });
+      });
+    }
+
+    // Fallback if user unchecks all 5 options
     if (items.length === 0) {
       const fallbackHira = filterKana("hiragana", "all");
       fallbackHira.forEach((k) => {
@@ -154,7 +175,7 @@ export default function PracticePage() {
     }
 
     return items;
-  }, [includeHiragana, includeKatakana, includeRadicals, includeKanji]);
+  }, [includeHiragana, includeKatakana, includeRadicals, includeKanji, includeExtraKanji]);
 
   // Client Mounting Check (Prevents SSR Hydration Mismatch from Math.random)
   const [mounted, setMounted] = useState(false);
@@ -360,6 +381,7 @@ export default function PracticePage() {
                 setIncludeKatakana(true);
                 setIncludeRadicals(true);
                 setIncludeKanji(true);
+                setIncludeExtraKanji(true);
                 setPromptSeconds(5);
                 setRevealSeconds(2);
                 setAutoPlayAudio(false);
@@ -491,6 +513,33 @@ export default function PracticePage() {
                   </div>
                 </div>
                 <span className="text-sm font-bold font-kanji-mincho text-red-600">日</span>
+              </label>
+
+              {/* Option 5: Hán Tự Mở Rộng (Extra Kanji) */}
+              <label
+                className={cn(
+                  "flex items-center justify-between rounded-xl border p-3 cursor-pointer transition-all select-none",
+                  includeExtraKanji
+                    ? "border-red-600/50 bg-red-500/5 ring-1 ring-red-600/30 text-foreground"
+                    : "bg-muted/30 border-border/70 text-muted-foreground hover:bg-accent/40"
+                )}
+              >
+                <div className="flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    checked={includeExtraKanji}
+                    onChange={(e) => {
+                      setIncludeExtraKanji(e.target.checked);
+                      setStarted(false);
+                    }}
+                    className="size-4 rounded accent-red-600 cursor-pointer"
+                  />
+                  <div className="flex flex-col">
+                    <span className="text-xs font-bold">Kanji Mở Rộng</span>
+                    <span className="text-[10px] text-muted-foreground">{EXTRA_KANJI_WORDS.length} Từ Kanji</span>
+                  </div>
+                </div>
+                <span className="text-sm font-bold font-kanji-mincho text-red-600">友</span>
               </label>
             </div>
           </div>

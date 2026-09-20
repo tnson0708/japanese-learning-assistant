@@ -34,25 +34,43 @@ import { PronunciationGuide } from "@/components/kana/pronunciation-guide";
 import { KanjiRadicalGuide } from "@/components/kana/kanji-radical-guide";
 
 type LearnTab = Script | "pronunciation" | "kanji";
+type KanjiSubTab = "kanji-100" | "kanji-extra" | "radicals";
 
-function KanjiSection() {
-  return <KanjiRadicalGuide />;
+function KanjiSection({ initialMainTab, initialSearch }: { initialMainTab?: KanjiSubTab; initialSearch?: string }) {
+  return <KanjiRadicalGuide initialMainTab={initialMainTab} initialSearch={initialSearch} />;
 }
 
 function KanaPageContent() {
   const { t } = useLanguage();
   const searchParams = useSearchParams();
   const tabParam = searchParams.get("tab") as LearnTab | null;
+  const subtabParam = searchParams.get("subtab") as KanjiSubTab | null;
+  const qParam = searchParams.get("q");
 
   const initialTab: LearnTab =
     tabParam === "katakana" || tabParam === "hiragana" || tabParam === "pronunciation" || tabParam === "kanji"
       ? tabParam
       : "hiragana";
 
+  const initialKanjiSubTab: KanjiSubTab | undefined =
+    subtabParam === "kanji-100" || subtabParam === "kanji-extra" || subtabParam === "radicals"
+      ? subtabParam
+      : undefined;
+
   const [activeTab, setActiveTab] = useState<LearnTab>(initialTab);
   const [section, setSection] = useState<KanaSection>("all");
   const [search, setSearch] = useState("");
   const [showRomaji, setShowRomaji] = useState(true);
+
+  // Re-sync the active tab when the `tab` URL param changes on an already-mounted
+  // page (e.g. clicking a spotlight search result while already on /kana) — the
+  // useState initializer above only runs once on mount, so without this a
+  // client-side navigation to a new `tab` value would otherwise be ignored.
+  useEffect(() => {
+    if (tabParam === "katakana" || tabParam === "hiragana" || tabParam === "pronunciation" || tabParam === "kanji") {
+      setActiveTab(tabParam);
+    }
+  }, [tabParam]);
 
   // Default selected Kana for Inspector Panel
   const currentScriptKana = useMemo(
@@ -279,7 +297,7 @@ function KanaPageContent() {
       ) : activeTab === "pronunciation" ? (
         <PronunciationGuide />
       ) : (
-        <KanjiSection />
+        <KanjiSection initialMainTab={initialKanjiSubTab} initialSearch={qParam ?? undefined} />
       )}
     </div>
   );

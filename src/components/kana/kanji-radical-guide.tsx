@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Search, RotateCcw, PencilLine, Volume2, X, Sparkles, BookOpen, Printer, ArrowLeft, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -13,13 +13,39 @@ import { RadicalStrokeSvg } from "@/components/kana/radical-stroke-svg";
 import { RadicalHandwritingCanvas } from "@/components/kana/radical-handwriting-canvas";
 import { cn } from "@/lib/utils";
 
-export function KanjiRadicalGuide() {
+interface KanjiRadicalGuideProps {
+  initialMainTab?: "kanji-100" | "kanji-extra" | "radicals";
+  initialSearch?: string;
+}
+
+// Shared shape adapter: the detail modal/nav-list is typed as KanjiRadical, so both
+// kanji lists (100 basic + extra) get mapped into that shape wherever they're opened.
+function kanjiWordToDetailItem(k: BasicKanjiWord): KanjiRadical {
+  return {
+    id: k.id,
+    char: k.char,
+    hanViet: k.hanViet,
+    strokes: k.strokes,
+    meaningVi: `${k.meaningVi} (Âm đọc: ${k.hiragana})`,
+    meaningEn: k.meaningEn,
+    strokeGuide: `Chữ Kanji cơ bản gồm ${k.strokes} nét.`,
+    strokePaths: k.strokePaths,
+    exampleKanji: k.exampleWords.map((w) => ({
+      char: w.word,
+      pinyin: w.reading,
+      hanViet: w.reading,
+      meaning: w.meaning,
+    })),
+  };
+}
+
+export function KanjiRadicalGuide({ initialMainTab, initialSearch }: KanjiRadicalGuideProps = {}) {
   const { language } = useLanguage();
   const isVi = language === "vi";
-  const [mainTab, setMainTab] = useState<"kanji-100" | "kanji-extra" | "radicals">("kanji-100");
+  const [mainTab, setMainTab] = useState<"kanji-100" | "kanji-extra" | "radicals">(initialMainTab ?? "kanji-100");
   const isKanjiListTab = mainTab === "kanji-100" || mainTab === "kanji-extra";
   const currentKanjiSource: BasicKanjiWord[] = mainTab === "kanji-extra" ? EXTRA_KANJI_WORDS : BASIC_KANJI_WORDS;
-  const [search, setSearch] = useState("");
+  const [search, setSearch] = useState(initialSearch ?? "");
   const [selectedStrokeFilter, setSelectedStrokeFilter] = useState<number | "all">("all");
   const [activeRadical, setActiveRadical] = useState<KanjiRadical | null>(null);
   const [isPracticing, setIsPracticing] = useState(false);
@@ -65,25 +91,38 @@ export function KanjiRadicalGuide() {
   // Active items list for Modal navigation
   const activeList = useMemo<KanjiRadical[]>(() => {
     if (isKanjiListTab) {
-      return filteredKanjiWords.map((k) => ({
-        id: k.id,
-        char: k.char,
-        hanViet: k.hanViet,
-        strokes: k.strokes,
-        meaningVi: `${k.meaningVi} (Âm đọc: ${k.hiragana})`,
-        meaningEn: k.meaningEn,
-        strokeGuide: `Chữ Kanji cơ bản gồm ${k.strokes} nét.`,
-        strokePaths: k.strokePaths,
-        exampleKanji: k.exampleWords.map((w) => ({
-          char: w.word,
-          pinyin: w.reading,
-          hanViet: w.reading,
-          meaning: w.meaning,
-        })),
-      }));
+      return filteredKanjiWords.map(kanjiWordToDetailItem);
     }
     return filteredRadicals;
   }, [isKanjiListTab, filteredKanjiWords, filteredRadicals]);
+
+  // Re-sync + auto-open the detail modal whenever initialMainTab/initialSearch change
+  // on an already-mounted instance (e.g. clicking a spotlight search result — the
+  // useState initializers above only apply once on mount, so later navigations need
+  // an effect). The target item is looked up directly from the raw data sources
+  // (not the memoized activeList) because that memo still reflects the *previous*
+  // tab/search during this same effect flush and would otherwise open the wrong item.
+  const lastSyncedSearchRef = useRef<string | undefined>(undefined);
+  useEffect(() => {
+    if (initialSearch === undefined || initialSearch === lastSyncedSearchRef.current) return;
+    lastSyncedSearchRef.current = initialSearch;
+    const targetTab = initialMainTab ?? "kanji-100";
+    setMainTab(targetTab);
+    setSearch(initialSearch);
+    setSelectedStrokeFilter("all");
+
+    let target: KanjiRadical | undefined;
+    if (targetTab === "radicals") {
+      target = KANJI_RADICALS.find((r) => r.char === initialSearch);
+    } else {
+      const source = targetTab === "kanji-extra" ? EXTRA_KANJI_WORDS : BASIC_KANJI_WORDS;
+      const match = source.find((k) => k.char === initialSearch);
+      target = match ? kanjiWordToDetailItem(match) : undefined;
+    }
+    setActiveRadical(target ?? null);
+    setIsPracticing(false);
+    setReplayKey((k) => k + 1);
+  }, [initialMainTab, initialSearch]);
 
   // Current Modal Navigation Index & Items
   const currentIndex = useMemo(() => {
@@ -388,22 +427,7 @@ export function KanjiRadicalGuide() {
               <div
                 key={kanji.id}
                 onClick={() => {
-                  setActiveRadical({
-                    id: kanji.id,
-                    char: kanji.char,
-                    hanViet: kanji.hanViet,
-                    strokes: kanji.strokes,
-                    meaningVi: `${kanji.meaningVi} (Âm đọc: ${kanji.hiragana})`,
-                    meaningEn: kanji.meaningEn,
-                    strokeGuide: `Chữ Kanji cơ bản gồm ${kanji.strokes} nét.`,
-                    strokePaths: kanji.strokePaths,
-                    exampleKanji: kanji.exampleWords.map((w) => ({
-                      char: w.word,
-                      pinyin: w.reading,
-                      hanViet: w.reading,
-                      meaning: w.meaning,
-                    })),
-                  });
+                  setActiveRadical(kanjiWordToDetailItem(kanji));
                   setIsPracticing(false);
                   setReplayKey((k) => k + 1);
                 }}

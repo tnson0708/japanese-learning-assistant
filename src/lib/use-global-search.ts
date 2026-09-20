@@ -1,4 +1,5 @@
 import { BASIC_KANJI_WORDS } from "@/lib/basic-kanji";
+import { EXTRA_KANJI_WORDS } from "@/lib/extra-kanji";
 import { KANJI_RADICALS } from "@/lib/kanji-radicals";
 import { DOMAINS } from "@/data/vocabulary";
 import { type VocabWord } from "@/lib/vocabulary";
@@ -33,14 +34,21 @@ export function searchGlobal(rawQuery: string): SearchResultItem[] {
 
   const results: SearchResultItem[] = [];
 
-  // 1. KANJI & RADICALS (Basic Kanji + Radicals)
+  // 1. KANJI & RADICALS (Basic Kanji + Extra Kanji + Radicals)
   BASIC_KANJI_WORDS.forEach((k) => {
+    const matchedExample = k.exampleWords.find(
+      (ex) =>
+        ex.word.toLowerCase().includes(q) ||
+        ex.reading.toLowerCase().includes(q) ||
+        ex.meaning.toLowerCase().includes(q)
+    );
     if (
       k.char.includes(q) ||
       k.hanViet.toLowerCase().includes(q) ||
       k.hiragana.toLowerCase().includes(q) ||
       k.meaningVi.toLowerCase().includes(q) ||
-      k.meaningEn.toLowerCase().includes(q)
+      k.meaningEn.toLowerCase().includes(q) ||
+      matchedExample
     ) {
       const primaryReading = k.hiragana.split("/")[0].trim();
       results.push({
@@ -49,11 +57,47 @@ export function searchGlobal(rawQuery: string): SearchResultItem[] {
         categoryLabelVi: "Kanji cơ bản",
         categoryLabelEn: "Basic Kanji",
         title: k.char,
-        subtitle: `${k.hanViet} (${k.hiragana})`,
-        description: k.meaningVi,
+        subtitle: matchedExample
+          ? `${matchedExample.word} (${matchedExample.reading})`
+          : `${k.hanViet} (${k.hiragana})`,
+        description: matchedExample ? matchedExample.meaning : k.meaningVi,
         badge: `${k.strokes} nét`,
-        audioText: primaryReading || k.char,
-        href: `/kana?tab=kanji`,
+        audioText: matchedExample ? matchedExample.reading : primaryReading || k.char,
+        href: `/kana?tab=kanji&subtab=kanji-100&q=${encodeURIComponent(k.char)}`,
+      });
+    }
+  });
+
+  // 1b. EXTRA KANJI (Kanji mở rộng — appear in the textbook but outside the curated 100)
+  EXTRA_KANJI_WORDS.forEach((k) => {
+    const matchedExample = k.exampleWords.find(
+      (ex) =>
+        ex.word.toLowerCase().includes(q) ||
+        ex.reading.toLowerCase().includes(q) ||
+        ex.meaning.toLowerCase().includes(q)
+    );
+    if (
+      k.char.includes(q) ||
+      k.hanViet.toLowerCase().includes(q) ||
+      k.hiragana.toLowerCase().includes(q) ||
+      k.meaningVi.toLowerCase().includes(q) ||
+      k.meaningEn.toLowerCase().includes(q) ||
+      matchedExample
+    ) {
+      const primaryReading = k.hiragana.split("/")[0].trim();
+      results.push({
+        id: `kanji-extra-${k.id}`,
+        category: "kanji",
+        categoryLabelVi: "Kanji mở rộng",
+        categoryLabelEn: "Extra Kanji",
+        title: k.char,
+        subtitle: matchedExample
+          ? `${matchedExample.word} (${matchedExample.reading})`
+          : `${k.hanViet} (${k.hiragana})`,
+        description: matchedExample ? matchedExample.meaning : k.meaningVi,
+        badge: `${k.strokes} nét`,
+        audioText: matchedExample ? matchedExample.reading : primaryReading || k.char,
+        href: `/kana?tab=kanji&subtab=kanji-extra&q=${encodeURIComponent(k.char)}`,
       });
     }
   });
@@ -76,7 +120,7 @@ export function searchGlobal(rawQuery: string): SearchResultItem[] {
         description: rad.meaningVi,
         badge: `Bộ thủ (${rad.strokes} nét)`,
         audioText: rad.char,
-        href: `/kana?tab=radicals`,
+        href: `/kana?tab=kanji&subtab=radicals&q=${encodeURIComponent(rad.char)}`,
       });
     }
   });
