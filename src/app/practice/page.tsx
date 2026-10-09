@@ -21,6 +21,7 @@ import {
   Shuffle,
   RefreshCw,
   PictureInPicture2,
+  Square,
 } from "lucide-react";
 import { filterKana } from "@/lib/kana";
 import { KANJI_RADICALS, type KanjiRadical } from "@/lib/kanji-radicals";
@@ -30,7 +31,7 @@ import { speakJapanese } from "@/lib/speech";
 import { useLanguage } from "@/lib/language-context";
 import { cn } from "@/lib/utils";
 import { useDocumentPip } from "@/lib/use-document-pip";
-import { PracticePipCard } from "@/components/practice/practice-pip-card";
+import { PracticePipCard, maskUntilReveal } from "@/components/practice/practice-pip-card";
 
 export interface PracticeCardItem {
   id: string;
@@ -224,6 +225,15 @@ export default function PracticePage() {
     setRevealRemainingMs(revealSeconds * 1000);
   };
 
+  const handleStop = () => {
+    setStarted(false);
+    setPaused(false);
+    setPhase("prompt");
+    setPromptRemainingMs(promptSeconds > 0 ? promptSeconds * 1000 : 0);
+    setRevealRemainingMs(revealSeconds * 1000);
+    closePip();
+  };
+
   const handleNext = () => {
     setPhase("prompt");
     setCurrentIndex((prev) => (prev + 1) % (poolCount || 1));
@@ -307,6 +317,11 @@ export default function PracticePage() {
       if (e.key === " ") {
         e.preventDefault();
         setPaused((prev) => !prev);
+      } else if (e.key === "Escape") {
+        if (started) {
+          e.preventDefault();
+          handleStop();
+        }
       } else if (e.key === "Enter") {
         e.preventDefault();
         if (!started) {
@@ -701,15 +716,20 @@ export default function PracticePage() {
           <div className="flex flex-col gap-2.5 pt-3 border-t">
             <button
               type="button"
-              onClick={started ? handleNext : handleStart}
-              className="w-full inline-flex items-center justify-between bg-foreground text-background hover:bg-foreground/90 font-black text-sm py-4 px-5 rounded-xl shadow-sm cursor-pointer transition-all"
+              onClick={started ? handleStop : handleStart}
+              className={cn(
+                "w-full inline-flex items-center justify-between font-black text-sm py-4 px-5 rounded-xl shadow-sm cursor-pointer transition-all",
+                started
+                  ? "bg-red-600 text-white hover:bg-red-600/90"
+                  : "bg-foreground text-background hover:bg-foreground/90"
+              )}
             >
               <span className="flex items-center gap-2.5">
-                <Play className="size-5 fill-current" />
-                <span>{started ? "Thẻ tiếp theo" : "Bắt đầu Luyện Phản Xạ 5s"}</span>
+                {started ? <Square className="size-5 fill-current" /> : <Play className="size-5 fill-current" />}
+                <span>{started ? "Dừng luyện tập" : "Bắt đầu Luyện Phản Xạ 5s"}</span>
               </span>
-              <span className="rounded bg-background/20 text-background px-2.5 py-1 text-[11px] font-mono">
-                Mũi tên →
+              <span className="rounded bg-background/20 px-2.5 py-1 text-[11px] font-mono">
+                {started ? "Esc" : "Enter"}
               </span>
             </button>
           </div>
@@ -860,18 +880,18 @@ export default function PracticePage() {
             <div className="flex flex-col gap-2">
               <div className="flex items-baseline gap-3 flex-wrap">
                 <span className={cn(
-                  "text-2xl sm:text-3xl font-black transition-all",
-                  phase === "reveal" ? "text-red-600 dark:text-red-400 scale-100 opacity-100" : "text-foreground/15 blur-xs scale-95"
+                  "text-2xl sm:text-3xl font-black",
+                  phase === "reveal" ? "transition-all text-red-600 dark:text-red-400 scale-100 opacity-100" : "text-foreground/15 blur-xs scale-95"
                 )}>
-                  {currentItem.mainReading}
+                  {maskUntilReveal(currentItem.mainReading, phase)}
                 </span>
 
                 {currentItem.subReading && (
                   <span className={cn(
-                    "text-sm font-bold transition-all bg-muted/60 px-2.5 py-1 rounded-lg text-foreground",
-                    phase === "reveal" ? "opacity-100" : "opacity-15 blur-xs"
+                    "text-sm font-bold bg-muted/60 px-2.5 py-1 rounded-lg text-foreground",
+                    phase === "reveal" ? "transition-all opacity-100" : "opacity-15 blur-xs"
                   )}>
-                    Âm đọc Nhật: {currentItem.subReading}
+                    Âm đọc Nhật: {maskUntilReveal(currentItem.subReading, phase)}
                   </span>
                 )}
 
@@ -884,19 +904,19 @@ export default function PracticePage() {
 
               {/* Meaning & Explanation */}
               <p className={cn(
-                "text-xs sm:text-sm font-medium transition-all text-muted-foreground leading-relaxed",
-                phase === "reveal" ? "opacity-100" : "opacity-15 blur-xs"
+                "text-xs sm:text-sm font-medium text-muted-foreground leading-relaxed",
+                phase === "reveal" ? "transition-all opacity-100" : "opacity-15 blur-xs"
               )}>
-                {currentItem.meaningVi}
+                {maskUntilReveal(currentItem.meaningVi, phase)}
               </p>
 
               {/* Example Usage */}
               {currentItem.example && (
                 <div className={cn(
-                  "text-[11px] font-semibold text-emerald-700 dark:text-emerald-300 bg-emerald-500/10 p-2.5 rounded-xl transition-all border border-emerald-500/20 mt-1",
-                  phase === "reveal" ? "opacity-100" : "opacity-10 blur-xs"
+                  "text-[11px] font-semibold text-emerald-700 dark:text-emerald-300 bg-emerald-500/10 p-2.5 rounded-xl border border-emerald-500/20 mt-1",
+                  phase === "reveal" ? "transition-all opacity-100" : "opacity-10 blur-xs"
                 )}>
-                  💡 Ví dụ: {currentItem.example}
+                  💡 Ví dụ: {maskUntilReveal(currentItem.example, phase)}
                 </div>
               )}
 

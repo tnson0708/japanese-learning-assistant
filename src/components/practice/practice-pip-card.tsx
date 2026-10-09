@@ -5,6 +5,15 @@ import type { PracticeCardItem } from "@/app/practice/page";
 import { speakJapanese } from "@/lib/speech";
 import { cn } from "@/lib/utils";
 
+/**
+ * The answer text never reaches the DOM before the reveal phase: blur/opacity alone
+ * would still leak it (faintly, and in full during the un-reveal fade between cards).
+ * Transitions are only applied when revealing, so hiding is instant.
+ */
+export function maskUntilReveal(text: string, phase: "prompt" | "reveal") {
+  return phase === "reveal" ? text : text.replace(/\S/g, "•");
+}
+
 interface PracticePipCardProps {
   item: PracticeCardItem;
   phase: "prompt" | "reveal";
@@ -66,7 +75,7 @@ export function PracticePipCard({
       >
         <span
           className={cn(
-            "font-kanji-mincho text-foreground leading-none whitespace-nowrap",
+            "font-black font-kanji-mincho text-foreground leading-none whitespace-nowrap",
             item.char.length === 1 && "text-[min(40vw,30vh)]",
             item.char.length === 2 && "text-[min(28vw,24vh)]",
             item.char.length >= 3 && "text-[min(20vw,18vh)]"
@@ -79,22 +88,22 @@ export function PracticePipCard({
       {/* Result */}
       <div
         className={cn(
-          "flex flex-col gap-1 rounded-xl border p-2.5 transition-all",
-          revealed ? "border-emerald-500/50 bg-emerald-500/5" : "border-border"
+          "flex flex-col gap-1 rounded-xl border p-2.5",
+          revealed ? "transition-all border-emerald-500/50 bg-emerald-500/5" : "border-border"
         )}
       >
         <div className="flex items-baseline gap-2 flex-wrap">
           <span
             className={cn(
-              "text-xl font-black transition-all",
-              revealed ? "text-red-600 dark:text-red-400" : "text-foreground/15 blur-xs"
+              "text-xl font-black",
+              revealed ? "transition-all text-red-600 dark:text-red-400" : "text-foreground/15 blur-xs"
             )}
           >
-            {item.mainReading}
+            {maskUntilReveal(item.mainReading, phase)}
           </span>
           {item.subReading && (
             <span className={cn("text-xs font-bold text-foreground", !revealed && "opacity-15 blur-xs")}>
-              {item.subReading}
+              {maskUntilReveal(item.subReading, phase)}
             </span>
           )}
         </div>
@@ -104,7 +113,7 @@ export function PracticePipCard({
             !revealed && "opacity-15 blur-xs"
           )}
         >
-          {item.meaningVi}
+          {maskUntilReveal(item.meaningVi, phase)}
         </p>
       </div>
 

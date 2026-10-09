@@ -16,11 +16,42 @@ function getPipApi(): DocumentPictureInPicture | null {
 
 const noopSubscribe = () => () => {};
 
-/** Copies every stylesheet (Tailwind, next/font @font-face, ...) into the PiP document. */
+/**
+ * Copies every stylesheet (Tailwind, next/font @font-face, ...) into the PiP document.
+ * The PiP document is about:blank, so stylesheets are linked by absolute URL — a cloned
+ * relative href (and the font files it references) may not resolve there.
+ */
 function copyStyles(target: Document) {
-  document.head.querySelectorAll('link[rel="stylesheet"], style').forEach((node) => {
-    target.head.appendChild(node.cloneNode(true));
-  });
+  const base = target.createElement("base");
+  base.href = document.baseURI;
+  target.head.appendChild(base);
+
+  for (const sheet of Array.from(document.styleSheets)) {
+    const owner = sheet.ownerNode;
+    if (sheet.href) {
+      const link = target.createElement("link");
+      link.rel = "stylesheet";
+      link.href = sheet.href;
+      target.head.appendChild(link);
+    } else if (owner instanceof HTMLStyleElement) {
+      target.head.appendChild(owner.cloneNode(true));
+    }
+  }
+}
+
+/** Resolves once the copied stylesheets have loaded, so the first paint uses the app fonts. */
+function waitForStyles(target: Document) {
+  const links = Array.from(target.head.querySelectorAll<HTMLLinkElement>('link[rel="stylesheet"]'));
+  return Promise.all(
+    links.map(
+      (link) =>
+        new Promise<void>((resolve) => {
+          if (link.sheet) return resolve();
+          link.addEventListener("load", () => resolve(), { once: true });
+          link.addEventListener("error", () => resolve(), { once: true });
+        })
+    )
+  );
 }
 
 /**
@@ -53,6 +84,7 @@ export function useDocumentPip() {
     win.document.documentElement.className = document.documentElement.className;
     win.document.body.className = "bg-background text-foreground font-sans antialiased";
     win.document.title = document.title;
+    await waitForStyles(win.document);
     win.addEventListener("pagehide", () => setPipWindow(null), { once: true });
     setPipWindow(win);
     return win;
