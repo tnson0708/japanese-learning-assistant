@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import { createPortal } from "react-dom";
 import {
   Volume2,
   Clock,
@@ -19,6 +20,7 @@ import {
   Maximize2,
   Shuffle,
   RefreshCw,
+  PictureInPicture2,
 } from "lucide-react";
 import { filterKana } from "@/lib/kana";
 import { KANJI_RADICALS, type KanjiRadical } from "@/lib/kanji-radicals";
@@ -27,6 +29,8 @@ import { EXTRA_KANJI_WORDS } from "@/lib/extra-kanji";
 import { speakJapanese } from "@/lib/speech";
 import { useLanguage } from "@/lib/language-context";
 import { cn } from "@/lib/utils";
+import { useDocumentPip } from "@/lib/use-document-pip";
+import { PracticePipCard } from "@/components/practice/practice-pip-card";
 
 export interface PracticeCardItem {
   id: string;
@@ -39,6 +43,8 @@ export interface PracticeCardItem {
   strokes?: number;
   example?: string;
 }
+
+const PIP_SIZE = { width: 320, height: 440 };
 
 export default function PracticePage() {
   const { language } = useLanguage();
@@ -65,6 +71,9 @@ export default function PracticePage() {
   const [promptRemainingMs, setPromptRemainingMs] = useState(5000);
   const [revealRemainingMs, setRevealRemainingMs] = useState(2000);
   const [completedCount, setCompletedCount] = useState(0);
+
+  // Floating always-on-top window for passive study while using other tabs/apps
+  const { isSupported: pipSupported, pipWindow, open: openPip, close: closePip } = useDocumentPip();
 
   // Build Unified Dataset Pool from selected categories
   const pool = useMemo<PracticeCardItem[]>(() => {
@@ -246,8 +255,10 @@ export default function PracticePage() {
     if (!started || paused) return;
 
     const stepMs = 100;
+    // Background tabs throttle timers to ~1/s; the visible PiP window's timers are not throttled.
+    const host = pipWindow ?? window;
 
-    const timer = setInterval(() => {
+    const timer = host.setInterval(() => {
       if (phase === "prompt") {
         if (promptSeconds <= 0) return; // Manual mode
 
@@ -279,8 +290,8 @@ export default function PracticePage() {
       }
     }, stepMs);
 
-    return () => clearInterval(timer);
-  }, [started, paused, phase, promptSeconds, revealSeconds, autoPlayAudio, currentItem, poolCount]);
+    return () => host.clearInterval(timer);
+  }, [started, paused, phase, promptSeconds, revealSeconds, autoPlayAudio, currentItem, poolCount, pipWindow]);
 
   // Keyboard Navigation Listener
   useEffect(() => {
@@ -318,8 +329,40 @@ export default function PracticePage() {
     };
 
     window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [started, promptSeconds, revealSeconds, autoPlayAudio, currentItem, poolCount]);
+    pipWindow?.addEventListener("keydown", handleKeyDown);
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+      pipWindow?.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [started, promptSeconds, revealSeconds, autoPlayAudio, currentItem, poolCount, pipWindow]);
+
+  // Let Chrome open the floating window automatically when the user switches tab/app
+  // (Chrome's automatic picture-in-picture; only fires when the browser deems the page eligible).
+  useEffect(() => {
+    if (!started || !pipSupported || !("mediaSession" in navigator)) return;
+    try {
+      navigator.mediaSession.setActionHandler(
+        "enterpictureinpicture" as MediaSessionAction,
+        () => void openPip(PIP_SIZE)
+      );
+    } catch {
+      return; // Action not supported by this browser version
+    }
+    return () => {
+      try {
+        navigator.mediaSession.setActionHandler("enterpictureinpicture" as MediaSessionAction, null);
+      } catch {}
+    };
+  }, [started, pipSupported, openPip]);
+
+  const togglePip = () => {
+    if (pipWindow) {
+      closePip();
+      return;
+    }
+    if (!started) handleStart();
+    void openPip(PIP_SIZE);
+  };
 
   // Progress Percentages for Visual Progress Bars
   const promptProgressPercent = promptSeconds > 0 ? (promptRemainingMs / (promptSeconds * 1000)) * 100 : 100;
@@ -695,7 +738,23 @@ export default function PracticePage() {
                 </span>
               </div>
 
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-2">
+                {pipSupported && (
+                  <button
+                    type="button"
+                    onClick={togglePip}
+                    className={cn(
+                      "inline-flex items-center gap-1.5 rounded-lg border px-3 py-1 text-xs font-bold cursor-pointer transition-all",
+                      pipWindow
+                        ? "border-red-600/50 bg-red-500/10 text-red-600 dark:text-red-400"
+                        : "bg-background text-foreground hover:bg-accent"
+                    )}
+                    title="Mở thẻ trong cửa sổ nổi luôn hiển thị trên cùng để vừa làm việc khác vừa học"
+                  >
+                    <PictureInPicture2 className="size-3.5" />
+                    <span>{pipWindow ? "Đóng cửa sổ nổi" : "Cửa sổ nổi"}</span>
+                  </button>
+                )}
                 <button
                   type="button"
                   onClick={() => setPaused((p) => !p)}
@@ -901,6 +960,24 @@ export default function PracticePage() {
           </div>
         </div>
       </div>
+
+      {pipWindow &&
+        createPortal(
+          <PracticePipCard
+            item={currentItem}
+            phase={phase}
+            progressPercent={phase === "prompt" ? promptProgressPercent : revealProgressPercent}
+            remainingSeconds={(phase === "prompt" ? promptRemainingMs : revealRemainingMs) / 1000}
+            paused={paused}
+            position={poolCount > 0 ? safeOrderIndex + 1 : 0}
+            total={poolCount}
+            onPrev={handlePrev}
+            onNext={handleNext}
+            onTogglePause={() => setPaused((p) => !p)}
+            onToggleReveal={toggleReveal}
+          />,
+          pipWindow.document.body
+        )}
     </div>
   );
 }
