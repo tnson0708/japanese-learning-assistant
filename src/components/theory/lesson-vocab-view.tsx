@@ -5,11 +5,13 @@ import {
   BookOpen,
   Info,
   MessageSquare,
+  Printer,
   Search,
   Subtitles,
   Volume2,
 } from "lucide-react";
 import { speakJapanese } from "@/lib/speech";
+import { printVocabulary } from "@/lib/print-vocabulary";
 import { kanaToRomaji } from "@/lib/romaji";
 import { cn } from "@/lib/utils";
 import type { Lesson, VocabItem, ContentBlock } from "@/lib/theory";
@@ -78,18 +80,6 @@ export function LessonVocabView({ lesson }: { lesson: Lesson }) {
     speakJapanese(text.replace(/[\.…]/g, "").trim());
   };
 
-  const handlePlayAllVocab = () => {
-    const wordList = allWords.map((w) => (w.kanji || w.jp).replace(/[\.…]/g, "").trim());
-    let index = 0;
-    const playNext = () => {
-      if (index < wordList.length) {
-        speakJapanese(wordList[index]);
-        index++;
-        setTimeout(playNext, 1800);
-      }
-    };
-    playNext();
-  };
 
   // Check if there are conversation phrase groups
   const conversationGroups = vocabSection.blocks.filter(
@@ -99,7 +89,7 @@ export function LessonVocabView({ lesson }: { lesson: Lesson }) {
 
   return (
     <div className="flex flex-col gap-6 w-full">
-      {/* Top Banner Control Bar (Audio Play & Furigana Toggle) */}
+      {/* Top Banner Control Bar (Print & Furigana Toggle) */}
       <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 bg-card p-4 rounded-xl border border-border/80 shadow-2xs">
         <div className="flex items-center gap-2 text-xs font-semibold text-foreground">
           <BookOpen className="size-4 text-red-600" />
@@ -123,11 +113,12 @@ export function LessonVocabView({ lesson }: { lesson: Lesson }) {
 
           <button
             type="button"
-            onClick={handlePlayAllVocab}
+            onClick={printVocabulary}
             className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-red-600 hover:bg-red-700 text-white font-semibold text-xs shadow-2xs transition-all cursor-pointer"
+            title="In từ vựng của bài (Từ vựng + Tham khảo) ra giấy A4"
           >
-            <Volume2 className="size-3.5" />
-            <span>Nghe toàn bộ từ vựng</span>
+            <Printer className="size-3.5" />
+            <span>In từ vựng</span>
           </button>
         </div>
       </div>

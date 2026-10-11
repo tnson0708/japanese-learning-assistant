@@ -228,6 +228,52 @@
   body[data-print-target] .exercise-card-block.print-target-active {
     display: flex !important;
   }
+
+  /* Vocabulary print sheet (theory lesson "In từ vựng") */
+  body[data-print-vocab] .vocab-print-hide {
+    display: none !important;
+  }
+  body:not([data-print-vocab]) .vocab-print-sheet {
+    display: none !important;
+  }
+  .vocab-print-section {
+    margin: 6mm 0 2mm;
+    padding-bottom: 1mm;
+    border-bottom: 1.5pt solid #000;
+    font-size: 13pt;
+    font-weight: 700;
+  }
+  .vocab-print-table {
+    width: 100%;
+    margin-bottom: 4mm;
+    border-collapse: collapse;
+    font-size: 10.5pt;
+    line-height: 1.35;
+  }
+  .vocab-print-table caption {
+    caption-side: top;
+    text-align: left;
+    padding: 1mm 0;
+    font-size: 11pt;
+    font-weight: 700;
+  }
+  .vocab-print-table th,
+  .vocab-print-table td {
+    border: 0.6pt solid #555;
+    padding: 1.2mm 2mm;
+    text-align: left;
+    vertical-align: top;
+  }
+  .vocab-print-table th {
+    background: #eeeeee !important;
+    font-size: 9.5pt;
+  }
+  .vocab-print-table thead {
+    display: table-header-group;
+  }
+  .vocab-print-table tr {
+    break-inside: avoid;
+  }
 }
 
 /* Bold ink-brush display font for Kanji & Radicals glyphs (falls back to OS Mincho for any

@@ -6,10 +6,12 @@ import {
   Building2,
   Cake,
   Globe2,
+  Printer,
   Subtitles,
   Volume2,
 } from "lucide-react";
 import { speakJapanese } from "@/lib/speech";
+import { printVocabulary } from "@/lib/print-vocabulary";
 import { cn } from "@/lib/utils";
 
 interface VocabCardItem {
@@ -204,27 +206,15 @@ const CONVERSATION_PHRASES = [
 export function Lesson1VocabView() {
   const [showFurigana, setShowFurigana] = useState(true);
 
-  // Play audio for all main words sequentially or play single word
+  // Play audio for a single word
   const handlePlayWord = (text: string) => {
     speakJapanese(text.split("/")[0].trim());
   };
 
-  const handlePlayAllVocab = () => {
-    const wordList = LESSON_1_WORDS.map((w) => w.jp.split("/")[0].trim());
-    let index = 0;
-    const playNext = () => {
-      if (index < wordList.length) {
-        speakJapanese(wordList[index]);
-        index++;
-        setTimeout(playNext, 1800);
-      }
-    };
-    playNext();
-  };
 
   return (
     <div className="flex flex-col gap-6 w-full">
-      {/* Top Banner Control Bar (Audio Play & Furigana Toggle) */}
+      {/* Top Banner Control Bar (Print & Furigana Toggle) */}
       <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 bg-card p-4 rounded-xl border border-border/80 shadow-2xs">
         <div className="flex items-center gap-2 text-xs font-semibold text-foreground">
           <BookOpen className="size-4 text-red-600" />
@@ -248,11 +238,12 @@ export function Lesson1VocabView() {
 
           <button
             type="button"
-            onClick={handlePlayAllVocab}
+            onClick={printVocabulary}
             className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-red-600 hover:bg-red-700 text-white font-semibold text-xs shadow-2xs transition-all cursor-pointer"
+            title="In từ vựng của bài (Từ vựng + Tham khảo) ra giấy A4"
           >
-            <Volume2 className="size-3.5" />
-            <span>Nghe toàn bộ từ vựng</span>
+            <Printer className="size-3.5" />
+            <span>In từ vựng</span>
           </button>
         </div>
       </div>

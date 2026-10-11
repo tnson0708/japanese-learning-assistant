@@ -12,6 +12,8 @@ import { useLanguage } from "@/lib/language-context";
 import { Lesson1VocabView } from "@/components/theory/lesson1-vocab-view";
 import { Lesson2VocabView } from "@/components/theory/lesson2-vocab-view";
 import { LessonVocabView } from "@/components/theory/lesson-vocab-view";
+import { VocabPrintSheet } from "@/components/theory/vocab-print-sheet";
+import { printVocabulary } from "@/lib/print-vocabulary";
 
 const sectionIcons: Record<string, typeof BookOpen> = {
   vocabulary: BookOpen,
@@ -50,6 +52,7 @@ export default function TheoryLessonPage() {
 
   return (
     <div className="mx-auto flex w-full max-w-3xl flex-1 flex-col gap-6 px-4 py-6 sm:px-6 lg:py-8 print:p-0 print:gap-4">
+      <VocabPrintSheet lesson={lesson} />
 
       <Link
         href="/theory"
@@ -62,7 +65,7 @@ export default function TheoryLessonPage() {
         {lesson.title}
       </h1>
 
-      <Tabs defaultValue={lesson.sections[0]?.id} className="gap-4">
+      <Tabs defaultValue={lesson.sections[0]?.id} className="gap-4 vocab-print-hide">
         <TabsList className="grid w-full grid-cols-5 gap-1 rounded-xl bg-muted p-1 sm:flex sm:w-fit sm:justify-center print:hidden">
           {lesson.sections.map((section) => {
             const Icon = sectionIcons[section.id] || BookOpen;
@@ -110,6 +113,28 @@ export default function TheoryLessonPage() {
                 >
                   <Printer className="size-4 text-primary" />
                   <span>{t("theory_print_btn")}</span>
+                </Button>
+              </div>
+            )}
+
+            {/* The vocabulary tab has its own "In từ vựng" button in its control bar */}
+            {section.id === "reference" && (
+              <div className="flex items-center justify-between gap-3 rounded-xl border bg-card p-3 shadow-2xs print:hidden">
+                <div className="flex items-center gap-2">
+                  <BookOpen className="size-4 shrink-0 text-primary" />
+                  <span className="text-xs font-semibold text-foreground">
+                    In toàn bộ từ vựng của bài (Từ vựng + Tham khảo) ra giấy A4
+                  </span>
+                </div>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={printVocabulary}
+                  className="gap-2 shrink-0 font-semibold cursor-pointer border-primary/30 hover:border-primary hover:bg-primary/10 text-foreground"
+                  title="In từ vựng ra giấy A4"
+                >
+                  <Printer className="size-4 text-primary" />
+                  <span>In từ vựng</span>
                 </Button>
               </div>
             )}
