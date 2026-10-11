@@ -67,7 +67,7 @@ export function Nav() {
     <>
       {/* Top Header Navbar */}
       <header className="sticky top-0 z-40 border-b border-border/60 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80">
-        <div className="mx-auto flex h-14 max-w-6xl items-center justify-between gap-3 px-4 sm:px-6">
+        <div className="mx-auto flex h-14 max-w-6xl items-center justify-between gap-2 px-4 sm:gap-3 sm:px-6">
           {/* Brand Logo */}
           <Link
             href="/"
@@ -83,8 +83,9 @@ export function Nav() {
             </div>
           </Link>
 
-          {/* Desktop Navigation Links (hidden on mobile, visible on md+) */}
-          <nav className="hidden md:flex items-center gap-1 lg:gap-2">
+          {/* Desktop Navigation Links (lg+; phones & tablets use the bottom dock).
+              Short labels keep the header within max-w-6xl in both languages. */}
+          <nav className="hidden lg:flex items-center gap-0.5 2xl:gap-2">
             {links.map((link) => {
               const active =
                 link.href === "/"
@@ -94,16 +95,17 @@ export function Nav() {
                 <Link
                   key={link.href}
                   href={link.href}
+                  title={link.label}
                   className={cn(
-                    "relative px-3 py-1.5 text-sm font-medium whitespace-nowrap transition-colors rounded-md",
+                    "relative px-2 py-1.5 text-sm font-medium whitespace-nowrap transition-colors rounded-md 2xl:px-3",
                     active
                       ? "text-red-600 font-semibold bg-red-50/80 dark:bg-red-950/30"
                       : "text-muted-foreground hover:bg-accent hover:text-foreground"
                   )}
                 >
-                  {link.label}
+                  {link.shortLabel}
                   {active && (
-                    <span className="absolute bottom-0 left-3 right-3 h-0.5 bg-red-600 rounded-full" />
+                    <span className="absolute bottom-0 left-2 right-2 2xl:left-3 2xl:right-3 h-0.5 bg-red-600 rounded-full" />
                   )}
                 </Link>
               );
@@ -111,7 +113,7 @@ export function Nav() {
           </nav>
 
           {/* Header Right Controls (Search Trigger, Voice & Language Toggles & Admin Link) */}
-          <div className="flex items-center gap-2 shrink-0">
+          <div className="flex items-center gap-1.5 shrink-0 sm:gap-2">
             {/* Global Spotlight Search Trigger Button */}
             <button
               type="button"
@@ -120,8 +122,8 @@ export function Nav() {
               title="Search characters, words... (⌘K / Ctrl+K)"
             >
               <Search className="size-3.5 text-muted-foreground shrink-0" />
-              <span className="hidden sm:inline-block font-normal text-muted-foreground">{isVi ? "Tìm ký tự, từ..." : "Search characters, words..."}</span>
-              <kbd className="hidden md:inline-flex items-center gap-0.5 rounded border bg-muted px-1.5 py-0.5 text-[10px] font-mono font-bold text-muted-foreground">
+              <span className="hidden sm:inline-block lg:hidden xl:inline-block font-normal text-muted-foreground">{isVi ? "Tìm ký tự, từ..." : "Search characters, words..."}</span>
+              <kbd className="hidden 2xl:inline-flex items-center gap-0.5 rounded border bg-muted px-1.5 py-0.5 text-[10px] font-mono font-bold text-muted-foreground">
                 <span>⌘</span>K
               </kbd>
             </button>
@@ -148,7 +150,7 @@ export function Nav() {
       {/* Floating Mobile Bottom Navigation Dock (App-like Bottom Tab Bar elevated for iPhone & mobile devices) */}
       <nav
         aria-label="Mobile Bottom Navigation"
-        className="fixed bottom-3 inset-x-3 z-50 md:hidden mx-auto max-w-md rounded-2xl border bg-background/95 backdrop-blur-xl shadow-xl ring-1 ring-border/50 p-1.5 mb-[env(safe-area-inset-bottom,0px)]"
+        className="fixed bottom-3 inset-x-3 z-50 lg:hidden mx-auto max-w-md rounded-2xl border bg-background/95 backdrop-blur-xl shadow-xl ring-1 ring-border/50 p-1.5 mb-[env(safe-area-inset-bottom,0px)]"
       >
         <div className="flex items-center justify-around overflow-x-auto scrollbar-none px-1 py-1 gap-1">
           {links.map((link) => {

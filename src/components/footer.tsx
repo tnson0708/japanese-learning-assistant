@@ -9,7 +9,7 @@ export function Footer() {
   const isVi = language === "vi";
 
   return (
-    <footer className="mt-12 border-t border-border/60 bg-muted/20 py-6 px-4 pb-24 md:pb-6 text-xs text-muted-foreground transition-colors print:hidden">
+    <footer className="mt-12 border-t border-border/60 bg-muted/20 py-6 px-4 pb-24 lg:pb-6 text-xs text-muted-foreground transition-colors print:hidden">
       <div className="max-w-6xl mx-auto flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
         {/* Left Column: Branding & Tagline */}
         <div className="flex flex-wrap items-center gap-2">

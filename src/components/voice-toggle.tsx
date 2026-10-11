@@ -30,39 +30,62 @@ export function VoiceToggle() {
   const femaleLabel = language === "vi" ? "Nữ" : "Female";
   const maleLabel = language === "vi" ? "Nam" : "Male";
 
+  const nextGender: VoiceGender = gender === "female" ? "male" : "female";
+
   return (
-    <div className="flex items-center rounded-full border bg-muted/80 p-1 text-xs shadow-2xs">
+    <>
+      {/* Mobile: one button showing the current voice, tap to switch */}
       <button
         type="button"
-        onClick={() => handleGenderChange("female")}
-        className={cn(
-          "inline-flex items-center gap-1 rounded-full px-2.5 py-1 font-semibold transition-all duration-150",
-          gender === "female"
-            ? "bg-primary text-primary-foreground shadow-xs"
-            : "text-muted-foreground hover:text-foreground font-normal opacity-70 hover:opacity-100"
-        )}
-        title={language === "vi" ? "Giọng đọc Nữ" : "Female Japanese Voice"}
-        aria-label="Female Japanese Voice"
+        onClick={() => handleGenderChange(nextGender)}
+        className="sm:hidden flex size-9 items-center justify-center rounded-lg border border-input bg-background text-base shadow-2xs cursor-pointer"
+        title={
+          language === "vi"
+            ? `Giọng đọc ${gender === "female" ? femaleLabel : maleLabel} — chạm để đổi`
+            : `${gender === "female" ? femaleLabel : maleLabel} voice — tap to switch`
+        }
+        aria-label={
+          nextGender === "female"
+            ? "Switch to female Japanese voice"
+            : "Switch to male Japanese voice"
+        }
       >
-        <span>👩</span>
-        <span className="hidden sm:inline">{femaleLabel}</span>
+        <span>{gender === "female" ? "👩" : "👨"}</span>
       </button>
 
-      <button
-        type="button"
-        onClick={() => handleGenderChange("male")}
-        className={cn(
-          "inline-flex items-center gap-1 rounded-full px-2.5 py-1 font-semibold transition-all duration-150",
-          gender === "male"
-            ? "bg-primary text-primary-foreground shadow-xs"
-            : "text-muted-foreground hover:text-foreground font-normal opacity-70 hover:opacity-100"
-        )}
-        title={language === "vi" ? "Giọng đọc Nam" : "Male Japanese Voice"}
-        aria-label="Male Japanese Voice"
-      >
-        <span>👨</span>
-        <span className="hidden sm:inline">{maleLabel}</span>
-      </button>
-    </div>
+      <div className="hidden sm:flex items-center rounded-full border bg-muted/80 p-1 text-xs shadow-2xs">
+        <button
+          type="button"
+          onClick={() => handleGenderChange("female")}
+          className={cn(
+            "inline-flex items-center gap-1 rounded-full px-2.5 py-1 font-semibold transition-all duration-150",
+            gender === "female"
+              ? "bg-primary text-primary-foreground shadow-xs"
+              : "text-muted-foreground hover:text-foreground font-normal opacity-70 hover:opacity-100"
+          )}
+          title={language === "vi" ? "Giọng đọc Nữ" : "Female Japanese Voice"}
+          aria-label="Female Japanese Voice"
+        >
+          <span>👩</span>
+          <span className="hidden 2xl:inline">{femaleLabel}</span>
+        </button>
+
+        <button
+          type="button"
+          onClick={() => handleGenderChange("male")}
+          className={cn(
+            "inline-flex items-center gap-1 rounded-full px-2.5 py-1 font-semibold transition-all duration-150",
+            gender === "male"
+              ? "bg-primary text-primary-foreground shadow-xs"
+              : "text-muted-foreground hover:text-foreground font-normal opacity-70 hover:opacity-100"
+          )}
+          title={language === "vi" ? "Giọng đọc Nam" : "Male Japanese Voice"}
+          aria-label="Male Japanese Voice"
+        >
+          <span>👨</span>
+          <span className="hidden 2xl:inline">{maleLabel}</span>
+        </button>
+      </div>
+    </>
   );
 }
