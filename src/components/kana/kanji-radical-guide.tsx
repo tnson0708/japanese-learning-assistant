@@ -213,61 +213,53 @@ export function KanjiRadicalGuide({ initialMainTab, initialSearch }: KanjiRadica
 
       {/* 1. Top Sub-Tabs Navigation Bar & Print Button */}
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between print:hidden">
-        {/* Sub-Tabs Pills */}
-        <div className="flex items-center gap-1.5 rounded-2xl bg-muted/60 p-1.5 border border-border/40 w-fit overflow-x-auto">
-          <button
-            type="button"
-            onClick={() => {
-              setMainTab("kanji-100");
-              setSearch("");
-              setSelectedStrokeFilter("all");
-            }}
-            className={cn(
-              "flex items-center gap-2 rounded-xl px-3.5 py-2 text-xs font-bold transition-all cursor-pointer whitespace-nowrap select-none",
-              mainTab === "kanji-100"
-                ? "bg-red-600 text-white shadow-2xs"
-                : "text-muted-foreground hover:bg-accent/60 hover:text-foreground"
-            )}
-          >
-            <Sparkles className="size-4 text-amber-300" />
-            <span>Chữ Kanji cơ bản ({BASIC_KANJI_WORDS.length} chữ)</span>
-          </button>
-
-          <button
-            type="button"
-            onClick={() => {
-              setMainTab("kanji-extra");
-              setSearch("");
-              setSelectedStrokeFilter("all");
-            }}
-            className={cn(
-              "flex items-center gap-2 rounded-xl px-3.5 py-2 text-xs font-bold transition-all cursor-pointer whitespace-nowrap select-none",
-              mainTab === "kanji-extra"
-                ? "bg-red-600 text-white shadow-2xs"
-                : "text-muted-foreground hover:bg-accent/60 hover:text-foreground"
-            )}
-          >
-            <Sparkles className="size-4 text-amber-300" />
-            <span>Kanji mở rộng ({EXTRA_KANJI_WORDS.length} chữ)</span>
-          </button>
-
-          <button
-            type="button"
-            onClick={() => {
-              setMainTab("radicals");
-              setSearch("");
-              setSelectedStrokeFilter("all");
-            }}
-            className={cn(
-              "flex items-center gap-2 rounded-xl px-3.5 py-2 text-xs font-bold transition-all cursor-pointer whitespace-nowrap select-none",
-              mainTab === "radicals"
-                ? "bg-red-600 text-white shadow-2xs"
-                : "text-muted-foreground hover:bg-accent/60 hover:text-foreground"
-            )}
-          >
-            <BookOpen className="size-4" />
-            <span>Bộ thủ Kanji ({KANJI_RADICALS.length} bộ)</span>
-          </button>
+        {/* Sub-Tabs Pills — equal-width segmented control on mobile, inline pills from sm up */}
+        <div className="grid w-full grid-cols-3 gap-1 rounded-2xl bg-muted/60 p-1 border border-border/40 sm:flex sm:w-fit sm:items-center sm:gap-1.5 sm:p-1.5">
+          {(
+            [
+              { id: "kanji-100", icon: Sparkles, iconClass: "text-amber-300", label: "Chữ Kanji cơ bản", short: "Cơ bản", count: `${BASIC_KANJI_WORDS.length} chữ` },
+              { id: "kanji-extra", icon: Sparkles, iconClass: "text-amber-300", label: "Kanji mở rộng", short: "Mở rộng", count: `${EXTRA_KANJI_WORDS.length} chữ` },
+              { id: "radicals", icon: BookOpen, iconClass: "", label: "Bộ thủ Kanji", short: "Bộ thủ", count: `${KANJI_RADICALS.length} bộ` },
+            ] as const
+          ).map((tab) => {
+            const Icon = tab.icon;
+            const active = mainTab === tab.id;
+            return (
+              <button
+                key={tab.id}
+                type="button"
+                onClick={() => {
+                  setMainTab(tab.id);
+                  setSearch("");
+                  setSelectedStrokeFilter("all");
+                }}
+                aria-pressed={active}
+                className={cn(
+                  "flex min-w-0 flex-col items-center justify-center gap-0.5 rounded-xl px-1.5 py-2 text-center font-bold transition-all cursor-pointer select-none",
+                  "sm:flex-row sm:gap-2 sm:px-3.5 sm:whitespace-nowrap",
+                  active
+                    ? "bg-red-600 text-white shadow-2xs"
+                    : "text-muted-foreground hover:bg-accent/60 hover:text-foreground"
+                )}
+              >
+                <Icon className={cn("size-4 shrink-0", tab.iconClass)} />
+                {/* Mobile: short label + count on its own line */}
+                <span className="text-xs leading-tight sm:hidden">{tab.short}</span>
+                <span
+                  className={cn(
+                    "text-[10px] font-semibold leading-tight sm:hidden",
+                    active ? "text-white/80" : "text-muted-foreground/80"
+                  )}
+                >
+                  {tab.count}
+                </span>
+                {/* sm and up: full label in one line */}
+                <span className="hidden text-xs sm:inline">
+                  {tab.label} ({tab.count})
+                </span>
+              </button>
+            );
+          })}
         </div>
 
         {/* Print Button */}

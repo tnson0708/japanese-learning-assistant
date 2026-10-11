@@ -170,7 +170,7 @@ export function KanaTableGrid({
                 </span>
               </div>
             </div>
-            <span className="rounded-full bg-red-50 text-red-600 dark:bg-red-950/60 dark:text-red-400 px-3 py-1 text-xs font-bold uppercase tracking-wider">
+            <span className="rounded-full bg-red-50 text-red-600 dark:bg-red-950/60 dark:text-red-400 px-3 py-1 text-xs font-bold uppercase tracking-wider shrink-0 whitespace-nowrap">
               46 KÝ TỰ
             </span>
           </div>
@@ -208,7 +208,7 @@ export function KanaTableGrid({
                 </span>
               </div>
             </div>
-            <span className="rounded-full bg-amber-50 text-amber-700 dark:bg-amber-950/60 dark:text-amber-400 px-3 py-1 text-xs font-bold uppercase tracking-wider">
+            <span className="rounded-full bg-amber-50 text-amber-700 dark:bg-amber-950/60 dark:text-amber-400 px-3 py-1 text-xs font-bold uppercase tracking-wider shrink-0 whitespace-nowrap">
               25 KÝ TỰ
             </span>
           </div>
@@ -245,7 +245,7 @@ export function KanaTableGrid({
                 </span>
               </div>
             </div>
-            <span className="rounded-full bg-purple-50 text-purple-700 dark:bg-purple-950/60 dark:text-purple-400 px-3 py-1 text-xs font-bold uppercase tracking-wider">
+            <span className="rounded-full bg-purple-50 text-purple-700 dark:bg-purple-950/60 dark:text-purple-400 px-3 py-1 text-xs font-bold uppercase tracking-wider shrink-0 whitespace-nowrap">
               33 CỤM ÂM
             </span>
           </div>

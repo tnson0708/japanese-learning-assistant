@@ -19,6 +19,7 @@ import { Button } from "@/components/ui/button";
 import {
   getKanaByScript,
   getKanaById,
+  getKanaSection,
   sortByGroup,
   type Kana,
   type Script,
@@ -92,12 +93,16 @@ function KanaPageContent() {
 
   const isKanaTab = activeTab === "hiragana" || activeTab === "katakana";
 
-  const sectionOptions: { value: KanaSection; label: string }[] = [
-    { value: "all", label: "Tất cả (All)" },
-    { value: "main", label: "Âm chính Ngũ Thập Âm (五十音 • 46)" },
-    { value: "dakuten", label: "Âm đục & Bán đục (濁音・半濁音 • 25)" },
-    { value: "youon", label: "Ảo âm / Âm ghép (拗音 • 33)" },
+  const sectionOptions: { value: KanaSection; label: string; sub: string; title: string }[] = [
+    { value: "all", label: "Tất cả", sub: "全部", title: "Tất cả (All)" },
+    { value: "main", label: "Âm chính", sub: "五十音", title: "Âm chính Ngũ Thập Âm (五十音)" },
+    { value: "dakuten", label: "Âm đục", sub: "濁音・半濁音", title: "Âm đục & Bán đục (濁音・半濁音)" },
+    { value: "youon", label: "Âm ghép", sub: "拗音", title: "Ảo âm / Âm ghép (拗音)" },
   ];
+  const sectionCount = (value: KanaSection) =>
+    value === "all"
+      ? currentScriptKana.length
+      : currentScriptKana.filter((k) => getKanaSection(k.group) === value).length;
 
   return (
     <div className="mx-auto flex w-full max-w-7xl flex-1 flex-col gap-6 px-4 py-6 sm:px-6 lg:py-8 print:p-0 print:gap-4">
@@ -143,66 +148,52 @@ function KanaPageContent() {
       {/* 2. Top Navigation Tabs & Controls */}
       <div className="flex flex-col gap-4 rounded-2xl border border-border/80 bg-card p-4 sm:p-5 shadow-2xs print:hidden">
         <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-          {/* Main Learn Tab Selector */}
-          <div className="flex flex-wrap items-center gap-1.5 rounded-2xl bg-muted/60 p-1.5 border border-border/40 w-full lg:w-auto overflow-x-auto">
-            <button
-              type="button"
-              onClick={() => setActiveTab("hiragana")}
-              className={cn(
-                "flex items-center gap-2 rounded-xl px-3.5 py-2 text-xs font-bold transition-all cursor-pointer whitespace-nowrap select-none",
-                activeTab === "hiragana"
-                  ? "bg-red-600 text-white shadow-2xs"
-                  : "text-muted-foreground hover:bg-accent/60 hover:text-foreground"
-              )}
-            >
-              <span className={cn("size-2 rounded-full shrink-0", activeTab === "hiragana" ? "bg-white" : "bg-red-600")} />
-              <span>Hiragana (ひらがな)</span>
-              <span className={cn("rounded-md px-1.5 py-0.5 text-[10px] font-extrabold", activeTab === "hiragana" ? "bg-white/20 text-white" : "bg-muted/80 text-muted-foreground")}>
-                104
-              </span>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => setActiveTab("katakana")}
-              className={cn(
-                "flex items-center gap-2 rounded-xl px-3.5 py-2 text-xs font-bold transition-all cursor-pointer whitespace-nowrap select-none",
-                activeTab === "katakana"
-                  ? "bg-red-600 text-white shadow-2xs"
-                  : "text-muted-foreground hover:bg-accent/60 hover:text-foreground"
-              )}
-            >
-              <span>Katakana (カタカナ)</span>
-              <span className={cn("rounded-md px-1.5 py-0.5 text-[10px] font-extrabold", activeTab === "katakana" ? "bg-white/20 text-white" : "bg-muted/80 text-muted-foreground")}>
-                104
-              </span>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => setActiveTab("pronunciation")}
-              className={cn(
-                "flex items-center gap-2 rounded-xl px-3.5 py-2 text-xs font-bold transition-all cursor-pointer whitespace-nowrap select-none",
-                activeTab === "pronunciation"
-                  ? "bg-red-600 text-white shadow-2xs"
-                  : "text-muted-foreground hover:bg-accent/60 hover:text-foreground"
-              )}
-            >
-              <span>Phát âm & Âm điệu</span>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => setActiveTab("kanji")}
-              className={cn(
-                "flex items-center gap-2 rounded-xl px-3.5 py-2 text-xs font-bold transition-all cursor-pointer whitespace-nowrap select-none",
-                activeTab === "kanji"
-                  ? "bg-red-600 text-white shadow-2xs"
-                  : "text-muted-foreground hover:bg-accent/60 hover:text-foreground"
-              )}
-            >
-              <span>Kanji & Bộ thủ (漢字)</span>
-            </button>
+          {/* Main Learn Tab Selector — 2×2 grid on phones, 4 equal columns on tablet, inline row on desktop */}
+          <div className="grid w-full grid-cols-2 gap-1 rounded-2xl bg-muted/60 p-1 border border-border/40 md:grid-cols-4 lg:flex lg:w-auto lg:items-center">
+            {(
+              [
+                { id: "hiragana", glyph: "あ", label: "Hiragana", sub: "104 chữ" },
+                { id: "katakana", glyph: "ア", label: "Katakana", sub: "104 chữ" },
+                { id: "pronunciation", glyph: "音", label: "Phát âm", sub: "Âm điệu" },
+                { id: "kanji", glyph: "漢", label: "Kanji", sub: "& Bộ thủ" },
+              ] as const
+            ).map((tab) => {
+              const active = activeTab === tab.id;
+              return (
+                <button
+                  key={tab.id}
+                  type="button"
+                  onClick={() => setActiveTab(tab.id)}
+                  aria-pressed={active}
+                  className={cn(
+                    "flex min-w-0 items-center gap-2 rounded-xl px-2.5 py-2 text-left sm:gap-2.5 sm:px-3 transition-all cursor-pointer select-none",
+                    active
+                      ? "bg-red-600 text-white shadow-2xs"
+                      : "text-muted-foreground hover:bg-accent/60 hover:text-foreground"
+                  )}
+                >
+                  <span
+                    className={cn(
+                      "flex size-7 shrink-0 items-center sm:size-8 justify-center rounded-lg text-base font-black leading-none",
+                      active ? "bg-white/20 text-white" : "bg-background text-red-600 dark:text-red-400"
+                    )}
+                  >
+                    {tab.glyph}
+                  </span>
+                  <span className="flex min-w-0 flex-col">
+                    <span className="truncate text-xs font-bold leading-tight">{tab.label}</span>
+                    <span
+                      className={cn(
+                        "truncate text-[10px] font-semibold leading-tight",
+                        active ? "text-white/80" : "text-muted-foreground/80"
+                      )}
+                    >
+                      {tab.sub}
+                    </span>
+                  </span>
+                </button>
+              );
+            })}
           </div>
 
           {/* Search Input (Shown for Kana tabs) */}
@@ -232,8 +223,8 @@ function KanaPageContent() {
         {/* Section Filter Pills + Status Indicators */}
         {isKanaTab && (
           <div className="flex flex-col gap-3 pt-3 border-t border-border/50 lg:flex-row lg:items-center lg:justify-between">
-            {/* Section Filter Pills */}
-            <div className="flex flex-wrap items-center gap-1.5">
+            {/* Section Filter Pills — 2×2 grid on phones, 4 columns on tablet, inline row on desktop */}
+            <div className="grid grid-cols-2 gap-1.5 md:grid-cols-4 lg:flex lg:items-center">
               {sectionOptions.map((opt) => {
                 const isActive = section === opt.value;
                 return (
@@ -241,30 +232,45 @@ function KanaPageContent() {
                     key={opt.value}
                     type="button"
                     onClick={() => setSection(opt.value)}
+                    aria-pressed={isActive}
+                    title={opt.title}
                     className={cn(
-                      "rounded-lg px-3 py-1.5 text-xs font-semibold transition-all cursor-pointer select-none",
+                      "flex min-w-0 items-center justify-between gap-2 rounded-xl border px-3 py-1.5 text-left transition-all cursor-pointer select-none",
                       isActive
-                        ? "bg-red-600 text-white shadow-2xs"
-                        : "bg-muted/60 text-muted-foreground hover:bg-accent hover:text-foreground"
+                        ? "border-red-600 bg-red-600 text-white shadow-2xs"
+                        : "border-border/60 bg-muted/40 text-muted-foreground hover:bg-accent hover:text-foreground"
                     )}
                   >
-                    {opt.label}
+                    <span className="flex min-w-0 flex-col">
+                      <span className="truncate text-xs font-bold leading-tight">{opt.label}</span>
+                      <span className={cn("truncate text-[10px] leading-tight", isActive ? "text-white/80" : "text-muted-foreground/80")}>
+                        {opt.sub}
+                      </span>
+                    </span>
+                    <span
+                      className={cn(
+                        "shrink-0 rounded-md px-1.5 py-0.5 text-[10px] font-extrabold tabular-nums",
+                        isActive ? "bg-white/20 text-white" : "bg-background text-muted-foreground"
+                      )}
+                    >
+                      {sectionCount(opt.value)}
+                    </span>
                   </button>
                 );
               })}
             </div>
 
             {/* Helper Indicators */}
-            <div className="flex items-center gap-3 text-xs text-muted-foreground shrink-0">
-              <span className="inline-flex items-center gap-1.5 font-medium text-emerald-600 dark:text-emerald-400">
-                <span className="size-1.5 rounded-full bg-emerald-600" />
-                Audio: Chuẩn giọng nữ Tokyo (NHK Standard)
+            <div className="flex items-center justify-between gap-3 text-xs text-muted-foreground lg:shrink-0 lg:justify-end">
+              <span className="inline-flex min-w-0 items-center gap-1.5 font-medium text-emerald-600 dark:text-emerald-400">
+                <span className="size-1.5 shrink-0 rounded-full bg-emerald-600" />
+                <span className="truncate">Audio chuẩn giọng Tokyo (NHK)</span>
               </span>
 
               <button
                 type="button"
                 onClick={() => setShowRomaji(!showRomaji)}
-                className="inline-flex items-center gap-1 rounded-lg border border-border/60 bg-muted/40 px-2.5 py-1 text-xs font-bold text-foreground hover:bg-accent cursor-pointer transition-colors"
+                className="inline-flex shrink-0 items-center gap-1.5 whitespace-nowrap rounded-lg border border-border/60 bg-muted/40 px-2.5 py-1.5 text-xs font-bold text-foreground hover:bg-accent cursor-pointer transition-colors"
               >
                 {showRomaji ? <Eye className="size-3.5" /> : <EyeOff className="size-3.5" />}
                 <span>{showRomaji ? "Ẩn Romaji" : "Hiện Romaji"}</span>
