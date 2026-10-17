@@ -126,7 +126,7 @@ export function KanaTableGrid({
     }
 
     return (
-      <div className="flex flex-col gap-6">
+      <div className="kana-print-plain flex flex-col gap-6">
         {script === "katakana" && <KatakanaConfusingPairs />}
         <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-3">
           {searchResults.map((k) => (
@@ -148,8 +148,9 @@ export function KanaTableGrid({
   const dakutenGroups = GROUP_ORDER.filter((g) => groupedMap.has(g) && getGroupSection(g) === "dakuten");
   const youonGroups = GROUP_ORDER.filter((g) => groupedMap.has(g) && getGroupSection(g) === "youon");
 
+  // kana-print-plain: no backgrounds/shadows on paper (see globals.css)
   return (
-    <div className="flex flex-col gap-8">
+    <div className="kana-print-plain flex flex-col gap-8">
       {/* Katakana Confusing Pairs Notice Banner */}
       {script === "katakana" && <KatakanaConfusingPairs />}
 
@@ -157,9 +158,9 @@ export function KanaTableGrid({
       {(section === "all" || section === "main") && mainGroups.length > 0 && (
         <div className="flex flex-col gap-4 rounded-2xl border border-border/80 bg-card p-4 sm:p-5 shadow-2xs">
           {/* Section Header */}
-          <div className="flex items-center justify-between border-b border-border/50 pb-3">
+          <div className="flex items-center justify-between border-b border-border/50 pb-3 break-after-avoid">
             <div className="flex items-center gap-2.5">
-              <span className="flex size-7 items-center justify-center rounded-full bg-red-600 text-xs font-extrabold text-white shadow-2xs">
+              <span className="flex size-7 items-center justify-center rounded-full bg-red-600 text-xs font-extrabold text-white shadow-2xs print:border print:border-black print:text-black">
                 1
               </span>
               <div className="flex flex-col">
@@ -195,9 +196,9 @@ export function KanaTableGrid({
       {/* 2. Âm đục & Bán đục */}
       {(section === "all" || section === "dakuten") && dakutenGroups.length > 0 && (
         <div className="flex flex-col gap-4 rounded-2xl border border-border/80 bg-card p-4 sm:p-5 shadow-2xs">
-          <div className="flex items-center justify-between border-b border-border/50 pb-3">
+          <div className="flex items-center justify-between border-b border-border/50 pb-3 break-after-avoid">
             <div className="flex items-center gap-2.5">
-              <span className="flex size-7 items-center justify-center rounded-full bg-amber-600 text-xs font-extrabold text-white shadow-2xs">
+              <span className="flex size-7 items-center justify-center rounded-full bg-amber-600 text-xs font-extrabold text-white shadow-2xs print:border print:border-black print:text-black">
                 2
               </span>
               <div className="flex flex-col">
@@ -232,9 +233,9 @@ export function KanaTableGrid({
       {/* 3. Ảo âm / Âm ghép (Yōon) */}
       {(section === "all" || section === "youon") && youonGroups.length > 0 && (
         <div className="flex flex-col gap-4 rounded-2xl border border-border/80 bg-card p-4 sm:p-5 shadow-2xs">
-          <div className="flex items-center justify-between border-b border-border/50 pb-3">
+          <div className="flex items-center justify-between border-b border-border/50 pb-3 break-after-avoid">
             <div className="flex items-center gap-2.5">
-              <span className="flex size-7 items-center justify-center rounded-full bg-purple-600 text-xs font-extrabold text-white shadow-2xs">
+              <span className="flex size-7 items-center justify-center rounded-full bg-purple-600 text-xs font-extrabold text-white shadow-2xs print:border print:border-black print:text-black">
                 3
               </span>
               <div className="flex flex-col">
@@ -287,7 +288,7 @@ function KanaRowItem({
   const is3Cols = items.length === 3;
 
   return (
-    <div className="flex flex-col gap-2 rounded-xl border border-border/40 bg-muted/20 p-3">
+    <div className="flex flex-col gap-2 rounded-xl border border-border/40 bg-muted/20 p-3 break-inside-avoid">
       <span className="text-[11px] font-bold uppercase tracking-wider text-muted-foreground">
         {rowLabel}
       </span>
@@ -328,7 +329,7 @@ function KanaCardItem({
     <div
       onClick={onSelect}
       className={cn(
-        "group relative flex flex-col items-center justify-center rounded-xl border p-2.5 shadow-2xs transition-all duration-150 cursor-pointer min-h-[76px] select-none",
+        "group relative flex flex-col items-center justify-center rounded-xl border p-2.5 shadow-2xs transition-all duration-150 cursor-pointer min-h-[76px] select-none break-inside-avoid",
         confusing ? confusing.borderClass : "",
         isSelected
           ? "border-red-600 bg-red-50/60 dark:bg-red-950/40 ring-1 ring-red-600 shadow-xs"
@@ -387,7 +388,7 @@ function KanaCardItem({
         <button
           type="button"
           onClick={handleAudio}
-          className="rounded-full p-0.5 text-muted-foreground/50 hover:text-red-600 transition-colors"
+          className="rounded-full p-0.5 text-muted-foreground/50 hover:text-red-600 transition-colors print:hidden"
           title={`Nghe: ${kana.char}`}
         >
           <Volume2 className="size-3" />

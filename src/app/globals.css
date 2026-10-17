@@ -229,6 +229,16 @@
     display: flex !important;
   }
 
+  /* Kana chart: plain black-on-white on paper, no tinted cards or shadows */
+  .kana-print-plain,
+  .kana-print-plain * {
+    background: transparent !important;
+    box-shadow: none !important;
+  }
+  .kana-print-plain .ring-1 {
+    --tw-ring-shadow: 0 0 #0000 !important;
+  }
+
   /* Vocabulary print sheet (theory lesson "In từ vựng") */
   body[data-print-vocab] .vocab-print-hide {
     display: none !important;
