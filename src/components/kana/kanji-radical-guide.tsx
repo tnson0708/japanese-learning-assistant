@@ -267,7 +267,7 @@ export function KanjiRadicalGuide({ initialMainTab, initialSearch }: KanjiRadica
           variant="outline"
           size="sm"
           onClick={() => window.print()}
-          className="gap-2 font-bold text-xs rounded-xl border-border/80 hover:bg-accent cursor-pointer self-start sm:self-auto"
+          className="gap-2 font-bold text-xs rounded-xl border-border/80 hover:bg-accent cursor-pointer self-end sm:self-auto"
         >
           <Printer className="size-4 text-red-600" />
           <span>In bảng Kanji A4</span>

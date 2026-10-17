@@ -83,11 +83,16 @@ function KanaPageContent() {
     () => currentScriptKana[0] || getKanaById("hiragana-a")!
   );
 
+  // The inspector always shows a kana (the first one by default), but the grid only
+  // highlights a cell once the learner has actually picked one.
+  const [hasPickedKana, setHasPickedKana] = useState(false);
+
   // Sync selectedKana when script tab changes
   useEffect(() => {
     if (activeTab === "hiragana" || activeTab === "katakana") {
       const firstKana = currentScriptKana[0];
       if (firstKana) setSelectedKana(firstKana);
+      setHasPickedKana(false);
     }
   }, [activeTab, currentScriptKana]);
 
@@ -125,16 +130,6 @@ function KanaPageContent() {
 
         {/* Action Buttons */}
         <div className="flex items-center gap-2.5 shrink-0 pt-1">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => window.print()}
-            className="gap-2 font-bold text-xs rounded-xl border-border/80 hover:bg-accent cursor-pointer"
-          >
-            <Printer className="size-4 text-red-600" />
-            <span>In bảng A4 PDF</span>
-          </Button>
-
           <Link
             href="/practice"
             className="inline-flex items-center gap-2 rounded-xl bg-red-600 hover:bg-red-700 text-white font-bold text-xs px-3.5 py-2 shadow-2xs transition-colors"
@@ -219,66 +214,74 @@ function KanaPageContent() {
             </div>
           )}
         </div>
+      </div>
 
-        {/* Section Filter Pills + Status Indicators */}
-        {isKanaTab && (
-          <div className="flex flex-col gap-3 pt-3 border-t border-border/50 lg:flex-row lg:items-center lg:justify-between">
-            {/* Section Filter Pills — 2×2 grid on phones, 4 columns on tablet, inline row on desktop */}
-            <div className="grid grid-cols-2 gap-1.5 md:grid-cols-4 lg:flex lg:items-center">
-              {sectionOptions.map((opt) => {
-                const isActive = section === opt.value;
-                return (
-                  <button
-                    key={opt.value}
-                    type="button"
-                    onClick={() => setSection(opt.value)}
-                    aria-pressed={isActive}
-                    title={opt.title}
+      {/* Tab toolbar (same row position as the Kanji tab's sub-tabs + print button) */}
+      {isKanaTab && (
+        <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between print:hidden">
+          {/* Section Filter Pills — 2×2 grid on phones, 4 columns on tablet, inline row on desktop */}
+          <div className="grid grid-cols-2 gap-1.5 md:grid-cols-4 lg:flex lg:items-center">
+            {sectionOptions.map((opt) => {
+              const isActive = section === opt.value;
+              return (
+                <button
+                  key={opt.value}
+                  type="button"
+                  onClick={() => setSection(opt.value)}
+                  aria-pressed={isActive}
+                  title={opt.title}
+                  className={cn(
+                    "flex min-w-0 items-center justify-between gap-2 rounded-xl border px-3 py-1.5 text-left transition-all cursor-pointer select-none",
+                    isActive
+                      ? "border-red-600 bg-red-600 text-white shadow-2xs"
+                      : "border-border/60 bg-muted/40 text-muted-foreground hover:bg-accent hover:text-foreground"
+                  )}
+                >
+                  <span className="flex min-w-0 flex-col">
+                    <span className="truncate text-xs font-bold leading-tight">{opt.label}</span>
+                    <span className={cn("truncate text-[10px] leading-tight", isActive ? "text-white/80" : "text-muted-foreground/80")}>
+                      {opt.sub}
+                    </span>
+                  </span>
+                  <span
                     className={cn(
-                      "flex min-w-0 items-center justify-between gap-2 rounded-xl border px-3 py-1.5 text-left transition-all cursor-pointer select-none",
-                      isActive
-                        ? "border-red-600 bg-red-600 text-white shadow-2xs"
-                        : "border-border/60 bg-muted/40 text-muted-foreground hover:bg-accent hover:text-foreground"
+                      "shrink-0 rounded-md px-1.5 py-0.5 text-[10px] font-extrabold tabular-nums",
+                      isActive ? "bg-white/20 text-white" : "bg-background text-muted-foreground"
                     )}
                   >
-                    <span className="flex min-w-0 flex-col">
-                      <span className="truncate text-xs font-bold leading-tight">{opt.label}</span>
-                      <span className={cn("truncate text-[10px] leading-tight", isActive ? "text-white/80" : "text-muted-foreground/80")}>
-                        {opt.sub}
-                      </span>
-                    </span>
-                    <span
-                      className={cn(
-                        "shrink-0 rounded-md px-1.5 py-0.5 text-[10px] font-extrabold tabular-nums",
-                        isActive ? "bg-white/20 text-white" : "bg-background text-muted-foreground"
-                      )}
-                    >
-                      {sectionCount(opt.value)}
-                    </span>
-                  </button>
-                );
-              })}
-            </div>
-
-            {/* Helper Indicators */}
-            <div className="flex items-center justify-between gap-3 text-xs text-muted-foreground lg:shrink-0 lg:justify-end">
-              <span className="inline-flex min-w-0 items-center gap-1.5 font-medium text-emerald-600 dark:text-emerald-400">
-                <span className="size-1.5 shrink-0 rounded-full bg-emerald-600" />
-                <span className="truncate">Audio chuẩn giọng Tokyo (NHK)</span>
-              </span>
-
-              <button
-                type="button"
-                onClick={() => setShowRomaji(!showRomaji)}
-                className="inline-flex shrink-0 items-center gap-1.5 whitespace-nowrap rounded-lg border border-border/60 bg-muted/40 px-2.5 py-1.5 text-xs font-bold text-foreground hover:bg-accent cursor-pointer transition-colors"
-              >
-                {showRomaji ? <Eye className="size-3.5" /> : <EyeOff className="size-3.5" />}
-                <span>{showRomaji ? "Ẩn Romaji" : "Hiện Romaji"}</span>
-              </button>
-            </div>
+                    {sectionCount(opt.value)}
+                  </span>
+                </button>
+              );
+            })}
           </div>
-        )}
-      </div>
+
+          {/* Helper Indicators */}
+          <div className="flex items-center justify-between gap-3 text-xs text-muted-foreground lg:shrink-0 lg:justify-end">
+            <span className="hidden min-w-0 items-center gap-1.5 font-medium text-emerald-600 dark:text-emerald-400 sm:mr-auto sm:inline-flex lg:mr-0">
+              <span className="size-1.5 shrink-0 rounded-full bg-emerald-600" />
+              <span className="truncate">Audio chuẩn giọng Tokyo (NHK)</span>
+            </span>
+
+            <button
+              type="button"
+              onClick={() => setShowRomaji(!showRomaji)}
+              className="inline-flex shrink-0 items-center gap-1.5 whitespace-nowrap rounded-lg border border-border/60 bg-muted/40 px-2.5 py-1.5 text-xs font-bold text-foreground hover:bg-accent cursor-pointer transition-colors"
+            >
+              {showRomaji ? <Eye className="size-3.5" /> : <EyeOff className="size-3.5" />}
+              <span>{showRomaji ? "Ẩn Romaji" : "Hiện Romaji"}</span>
+            </button>
+
+            <PrintButton label="In bảng Kana A4" />
+          </div>
+        </div>
+      )}
+
+      {activeTab === "pronunciation" && (
+        <div className="flex justify-end print:hidden">
+          <PrintButton label="In bảng phát âm A4" />
+        </div>
+      )}
 
       {/* 3. Main Content Layout */}
       {isKanaTab ? (
@@ -290,8 +293,11 @@ function KanaPageContent() {
               section={section}
               searchQuery={search}
               showRomaji={showRomaji}
-              selectedKana={selectedKana}
-              onSelectKana={setSelectedKana}
+              selectedKana={hasPickedKana ? selectedKana : null}
+              onSelectKana={(kana) => {
+                setSelectedKana(kana);
+                setHasPickedKana(true);
+              }}
             />
           </div>
 
@@ -306,6 +312,21 @@ function KanaPageContent() {
         <KanjiSection initialMainTab={initialKanjiSubTab} initialSearch={qParam ?? undefined} />
       )}
     </div>
+  );
+}
+
+/** The one print button of each Learn tab, styled like the Kanji tab's "In bảng Kanji A4". */
+function PrintButton({ label }: { label: string }) {
+  return (
+    <Button
+      variant="outline"
+      size="sm"
+      onClick={() => window.print()}
+      className="shrink-0 gap-2 font-bold text-xs rounded-xl border-border/80 hover:bg-accent cursor-pointer"
+    >
+      <Printer className="size-4 text-red-600" />
+      <span>{label}</span>
+    </Button>
   );
 }
 

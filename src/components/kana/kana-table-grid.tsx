@@ -93,7 +93,8 @@ export function KanaTableGrid({
   section: KanaSection;
   searchQuery: string;
   showRomaji?: boolean;
-  selectedKana: Kana;
+  /** Highlighted cell; null until the learner picks one. */
+  selectedKana: Kana | null;
   onSelectKana: (k: Kana) => void;
 }) {
   const allKana = useMemo(() => sortByGroup(getKanaByScript(script)), [script]);
@@ -133,7 +134,7 @@ export function KanaTableGrid({
               key={k.id}
               kana={k}
               showRomaji={showRomaji}
-              isSelected={selectedKana.id === k.id}
+              isSelected={selectedKana?.id === k.id}
               onSelect={() => onSelectKana(k)}
             />
           ))}
@@ -278,7 +279,8 @@ function KanaRowItem({
   groupKey: string;
   items: Kana[];
   showRomaji: boolean;
-  selectedKana: Kana;
+  /** Highlighted cell; null until the learner picks one. */
+  selectedKana: Kana | null;
   onSelectKana: (k: Kana) => void;
 }) {
   const rowLabel = ROW_DESCRIPTIONS[groupKey] || groupKey;
@@ -295,7 +297,7 @@ function KanaRowItem({
             key={k.id}
             kana={k}
             showRomaji={showRomaji}
-            isSelected={selectedKana.id === k.id}
+            isSelected={selectedKana?.id === k.id}
             onSelect={() => onSelectKana(k)}
           />
         ))}
