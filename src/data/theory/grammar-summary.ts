@@ -1,1338 +1,1386 @@
 /**
- * Condensed grammar-pattern cheat sheet for Bài 1–25 (みんなの日本語).
- * This is a standalone quick-reference dataset, independent from the
- * per-lesson `Lesson`/`ContentBlock` model in `@/lib/theory` — it only
- * powers the /theory/summary overview page and does not require a lesson
- * to have full vocab/translation/exercise data.
+ * Condensed grammar handbook for Bài 1–25 (みんなの日本語 I & II).
+ * A standalone quick-reference dataset, independent from the per-lesson
+ * `Lesson`/`ContentBlock` model in `@/lib/theory` — it only powers the
+ * /theory/summary page (screen + A4 print).
  *
- * Any `{{...}}` inside a line is an inline Vietnamese gloss/annotation and
- * is rendered in a distinct (italic, muted) style by the summary view.
+ * Every grammar point has the same shape (pattern → meaning → notes →
+ * optional table → examples) so the page and the printout line up as one
+ * consistent two-column grid. Japanese is written in kana with spaces
+ * between phrases, as in the early Minna lessons, so it reads without furigana.
  */
 
-export type ExampleLineKind = "jp" | "response" | "note";
-
-export interface SummaryExampleLine {
-  kind: ExampleLineKind;
-  text: string;
+export interface GrammarExample {
+  jp: string;
+  vi: string;
 }
 
-export interface SummaryExampleItem {
-  lines: SummaryExampleLine[];
+export interface GrammarTable {
+  columns: string[];
+  rows: string[][];
 }
 
-export interface SummaryKanaTable {
-  kind: "kana";
-  rows: (string | null)[][];
-}
-
-export interface SummaryNoteTable {
-  kind: "note";
-  text: string;
-}
-
-export type SummaryTable = SummaryKanaTable | SummaryNoteTable;
-
-export type SummaryCardBlock =
-  | { type: "notes"; lines: string[] }
-  | { type: "pattern"; lines: string[] }
-  | { type: "table"; table: SummaryTable }
-  | { type: "examples"; label?: string; items: SummaryExampleItem[] };
-
-export interface SummaryCard {
-  blocks: SummaryCardBlock[];
+export interface GrammarPoint {
+  /** The pattern itself, e.g. "N1 は N2 です". */
+  pattern: string;
+  /** One-line Vietnamese meaning, e.g. "N1 là N2". */
+  meaning: string;
+  notes?: string[];
+  table?: GrammarTable;
+  examples: GrammarExample[];
 }
 
 export interface SummaryLesson {
   id: number;
-  badge: string;
-  heading: string;
-  cards: SummaryCard[];
+  /** Short Vietnamese topic of the lesson. */
+  topic: string;
+  points: GrammarPoint[];
 }
 
-// ---- small builders to keep the data below readable ----------------------
-
-function notes(...lines: string[]): SummaryCardBlock {
-  return { type: "notes", lines };
+function ex(jp: string, vi: string): GrammarExample {
+  return { jp, vi };
 }
-function pattern(...lines: string[]): SummaryCardBlock {
-  return { type: "pattern", lines };
-}
-function kana(rows: (string | null)[][]): SummaryCardBlock {
-  return { type: "table", table: { kind: "kana", rows } };
-}
-function noteTable(text: string): SummaryCardBlock {
-  return { type: "table", table: { kind: "note", text } };
-}
-function examplesBlock(items: SummaryExampleItem[], label = "Ví dụ"): SummaryCardBlock {
-  return { type: "examples", label, items };
-}
-function J(text: string): SummaryExampleLine {
-  return { kind: "jp", text };
-}
-function R(text: string): SummaryExampleLine {
-  return { kind: "response", text };
-}
-function N(text: string): SummaryExampleLine {
-  return { kind: "note", text };
-}
-function itm(...lines: SummaryExampleLine[]): SummaryExampleItem {
-  return { lines };
-}
-function card(...blocks: SummaryCardBlock[]): SummaryCard {
-  return { blocks };
-}
-
-// ---- data ------------------------------------------------------------
 
 export const grammarSummaryLessons: SummaryLesson[] = [
   {
     id: 1,
-    badge: "Bài 1",
-    heading: "第1課 · だい1か",
-    cards: [
-      card(
-        notes("Trọc âm", "が　Tenten", "ぴ　maru"),
-        kana([
-          ["K", "g", "が", "ぎ", "ぐ", "げ", "ご"],
-          ["S", "z", "ざ", "じ", "ず", "ぜ", "ぞ"],
-          ["T", "đ", "だ", "ぢ", "づ", "で", "ど"],
-          ["H", "b", "ば", "び", "ぶ", "べ", "ぼ"],
-          ["H", "p", "ぱ", "ぴ", "ぷ", "ぺ", "ぽ"],
-        ])
-      ),
-      card(
-        notes(
-          "Ghép い",
-          "ghép được với 3 cột あうお{{bao gồm luôn bảng trọc âm}}",
-          "ngoại trừ を、ん"
-        ),
-        kana([
-          [null, "あい", "い", "う", "え", "お"],
-          [null, "か", "き", "く", "け", "こ"],
-          [null, "さ", "し", "すい", "せ", "そ"],
-          [null, "たい", "ち", "つ", "て", "と"],
-          [null, "ない", "に", "ぬ", "ね", "の"],
-          [null, "は", "ひ", "ふ", "へ", "ほ"],
-          [null, "まい", "み", "むい", "め", "もい"],
-          [null, "や", null, "ゆ", null, "よ"],
-          [null, "ら", "り", "る", "れ", "ろ"],
-        ]),
-        pattern("わ　　　　を", "ん")
-      ),
-      card(
-        notes(
-          "Ghép ん",
-          "ん ghép được với tất cả những chữ trong bảng chữ{{bao gồm bảng trọc âm}}　ngoại trừ を　và chính nó．",
-          "Đa số đọc là n",
-          "Đọc là m khi đứng trước 15 âm môi"
-        ),
-        pattern("ま　み　む　め　も", "ば　び　ぶ　べ　ぼ", "ぱ　ぴ　ぷ　ぺ　ぽ"),
-        examplesBlock([itm(J("にほん")), itm(J("こんばん"))])
-      ),
-      card(
-        notes("Xúc âm つ (促音)"),
-        examplesBlock([
-          itm(J("きって"), N("kit　te")),
-          itm(J("ざっし"), N("zas　shi")),
-        ])
-      ),
-      card(
-        notes(
-          "Trường âm",
-          "5 nguyên âm chính あいうえお làm trường âm cho nó và cột của chính nó ngoại trừ を、ん",
-          "い còn làm trường âm cho cột え",
-          "う   ……………　お"
-        ),
-        examplesBlock([itm(J("おかあさん")), itm(J("おとうさん"))]),
-        kana([
-          [null, "ああ", "い", "う", "ええ/い", "お", null],
-          [null, "かあ", "き", "く", "け", null, "こ"],
-          [null, "さ", "し", "す", "せい", null, "そ"],
-          [null, "た", "ち", "つ", "て", null, "と"],
-          [null, "な", "に", "ぬ", "ね", null, "の"],
-          [null, "はあ", "ひ", "ふ", "へ", null, "ほ"],
-          [null, "ま", "み", "む", "め", null, "も"],
-          [null, "や", null, "ゆ", null, null, "よ"],
-          [null, "ら", "り", "る", "れ", null, "ろ"],
-        ]),
-        pattern("わ　　　　を", "ん")
-      ),
-      card(
-        pattern("N1は　N2です。"),
-        notes("N1 là N2", "N : danh từ", "は　là trợ từ, đọc biến âm là わ"),
-        examplesBlock([itm(J("わたしは　せんせいです。"))])
-      ),
-      card(
-        pattern("N1は　N2　では　ありません。{{văn viết}}", "じゃ　ありません。{{văn nói}}"),
-        notes("N1 không phải là N2", "N : danh từ", "は　là trợ từ, đọc biến âm là わ"),
-        examplesBlock([
-          itm(J("わたしは　いしゃでは　ありません。")),
-          itm(J("わたしは　いしゃじゃ　ありません。")),
-        ])
-      ),
-      card(
-        notes("1．Câu hỏi xác nhận thông tin."),
-        pattern(
-          "N1は　N2　ですか。{{N1 có phải là N2 không?}}",
-          "はい、…です。{{Vâng,…}}",
-          "はい、そうです。{{Vâng, đúng vậy}}",
-          "いいえ、…では{{じゃ}}ありません。{{không,…}}",
-          "いいえ、そうでは{{じゃ}}ありません。{{không, không phải vậy}}",
-          "いいえ、ちがいます。{{không, sai rồi}}"
-        ),
-        examplesBlock([
-          itm(
-            J("１．さくらさんは　がくせいですか。"),
-            R("…はい、{{さくらさんは}}　がくせいです。"),
-            R("…いいえ、{{さくらさんは}}　がくせいでは　ありません。")
-          ),
-        ])
-      ),
-      card(
-        notes("2．Câu hỏi có nghi vấn từ:"),
-        examplesBlock([
-          itm(J("あのひとは　だれですか。"), R("…{{あのひとは}}　イーさんです。")),
-          itm(
-            N("3．Câu hỏi lựa chọn: {{hay là/ hoặc là}}"),
-            J("N1 ですか、N2 ですか。"),
-            R("…N1/ N2です。")
-          ),
-          itm(J("ボールペンですか、シャープペンシルですか。"), R("…シャープペンシルです。")),
-        ])
-      ),
-      card(
-        notes("も：cũng {{trợ từ}}"),
-        examplesBlock([
-          itm(J("わたしは　ぎんこういんです。"), J("あなたも　ぎんこういんですか。")),
-          itm(
-            N("N1のN2"),
-            N("の là trợ từ dùng để nối 2 danh từ, danh từ 2 là danh từ chính.")
-          ),
-          itm(J("さくらだいがくのきょうしです。")),
-        ])
-      ),
+    topic: "Giới thiệu bản thân · Câu danh từ",
+    points: [
+      {
+        pattern: "Nhắc lại phát âm",
+        meaning: "Các quy tắc đọc cần nhớ trước khi học câu",
+        table: {
+          columns: ["Quy tắc", "Cách đọc", "Ví dụ"],
+          rows: [
+            ["Âm đục ゛ / bán đục ゜", "か→が, さ→ざ, た→だ, は→ば / ぱ", "がくせい, ぱん"],
+            ["Âm ghép ゃ ゅ ょ", "Cột い + ゃゅょ viết nhỏ, đọc liền 1 âm", "きょう, しゃいん"],
+            ["Âm ngắt っ", "っ nhỏ: ngừng 1 nhịp trước âm sau", "きって, ざっし"],
+            ["Trường âm", "Kéo dài nguyên âm (ああ, いい, うう, えい, おう)", "おかあさん, せんせい"],
+            ["ん", "Đọc \"m\" trước ま・ば・ぱ, còn lại đọc \"n\"", "しんぶん, こんばん"],
+          ],
+        },
+        examples: [],
+      },
+      {
+        pattern: "N1 は N2 です",
+        meaning: "N1 là N2",
+        notes: ["は là trợ từ chủ đề, đọc là \"wa\".", "です làm câu lịch sự, đứng cuối câu danh từ."],
+        examples: [
+          ex("わたしは マイク・ミラーです。", "Tôi là Mike Miller."),
+          ex("わたしは かいしゃいんです。", "Tôi là nhân viên công ty."),
+        ],
+      },
+      {
+        pattern: "N1 は N2 じゃ（では）ありません",
+        meaning: "N1 không phải là N2",
+        notes: ["じゃ ありません dùng khi nói, では ありません dùng khi viết hoặc trang trọng."],
+        examples: [
+          ex("サントスさんは がくせいじゃ ありません。", "Anh Santos không phải là sinh viên."),
+          ex("わたしは せんせいでは ありません。", "Tôi không phải là giáo viên."),
+        ],
+      },
+      {
+        pattern: "N1 は N2 ですか",
+        meaning: "N1 có phải là N2 không?",
+        notes: [
+          "Thêm か vào cuối câu để hỏi, đọc lên giọng.",
+          "Trả lời: はい、そうです。/ いいえ、ちがいます。/ いいえ、N2 じゃ ありません。",
+          "Câu hỏi có nghi vấn từ (だれ、なんさい…) thì không trả lời はい／いいえ.",
+        ],
+        examples: [
+          ex("ミラーさんは アメリカじんですか。…はい、アメリカじんです。", "Anh Miller là người Mỹ phải không? …Vâng, là người Mỹ."),
+          ex("あの ひとは だれですか。…ワットさんです。", "Người kia là ai? …Là anh Watt."),
+          ex("テレーザちゃんは なんさいですか。…9さいです。", "Bé Teresa mấy tuổi? …9 tuổi."),
+        ],
+      },
+      {
+        pattern: "N も",
+        meaning: "N cũng…",
+        notes: ["も thay cho は khi nội dung giống với câu trước."],
+        examples: [
+          ex("ミラーさんは かいしゃいんです。グプタさんも かいしゃいんです。", "Anh Miller là nhân viên công ty. Anh Gupta cũng là nhân viên công ty."),
+        ],
+      },
+      {
+        pattern: "N1 の N2",
+        meaning: "N2 của / thuộc N1",
+        notes: ["の nối 2 danh từ, N1 bổ nghĩa cho N2 (N2 là danh từ chính)."],
+        examples: [
+          ex("ミラーさんは IMCの しゃいんです。", "Anh Miller là nhân viên của công ty IMC."),
+          ex("わたしは さくらだいがくの がくせいです。", "Tôi là sinh viên trường đại học Sakura."),
+        ],
+      },
+      {
+        pattern: "～さん",
+        meaning: "Anh / chị / ông / bà…",
+        notes: [
+          "Đặt sau tên người khác để tỏ sự lịch sự. Không dùng cho chính mình.",
+          "Với trẻ em: ～ちゃん (bé gái), ～くん (bé trai).",
+        ],
+        examples: [ex("あの かたは きむらさんです。", "Vị kia là chị Kimura.")],
+      },
     ],
   },
   {
     id: 2,
-    badge: "Bài 2",
-    heading: "第2課 · だい2か",
-    cards: [
-      card(
-        kana([["これ", "は　N{{đồ vật}}です。", "cái này 　là N{{đồ vật}}"]]),
-        notes("それ 　　　　cái đó", "あれ 　　　　cái kia"),
-        kana([[null, null, "なん", null, "か。", null, null, "Cái gì?"]]),
-        notes(
-          "N{{đồ vật}}は  これです。		N{{đồ vật}} là 　cái này",
-          "それ 　　cái đó",
-          "あれ 　　cái kia",
-          "どれ　　か。 　　Cái nào?"
-        ),
-        examplesBlock([
-          itm(J("これは　かぎです。")),
-          itm(J("かぎは　これです。")),
-        ])
-      ),
-      card(
-        notes(
-          "N1のN2",
-          "Trực thuộc: さくらだいがくのがくせいです。Sinh viên trường đại học Sakura.",
-          "Bổ nghĩa: にほんごのほんです。　　Sách Tiếng Nhật",
-          "なん　か。 Sách gì?"
-        ),
-        kana([
-          ["Sở hữu:", "わたしのほんです。", "Sách của tôi.", null, null, null, null],
-          [null, null, "だれ", null, null, "か。", "Sách của ai？"],
-        ]),
-        pattern(
-          "このほんは　わたしのほんです。",
-          "このほんは　わたしのです。",
-          "このほんは　だれのですか。",
-          "…　わたしのです。"
-        )
-      ),
+    topic: "Đồ vật · これ／それ／あれ",
+    points: [
+      {
+        pattern: "これ／それ／あれ は N です",
+        meaning: "Cái này / cái đó / cái kia là N",
+        notes: [
+          "これ: vật gần người nói. それ: vật gần người nghe. あれ: vật xa cả hai.",
+          "Hỏi: なんですか (là cái gì?) / どれですか (cái nào?).",
+        ],
+        table: {
+          columns: ["", "こ (gần mình)", "そ (gần người nghe)", "あ (xa cả hai)", "ど (hỏi)"],
+          rows: [
+            ["Đồ vật", "これ", "それ", "あれ", "どれ"],
+            ["+ N", "この N", "その N", "あの N", "どの N"],
+          ],
+        },
+        examples: [
+          ex("これは じしょです。", "Đây là quyển từ điển."),
+          ex("それは なんですか。…ボールペンです。", "Đó là cái gì? …Là bút bi."),
+        ],
+      },
+      {
+        pattern: "この／その／あの N",
+        meaning: "N này / N đó / N kia",
+        notes: ["Phải có danh từ đi kèm phía sau, không đứng một mình như これ／それ／あれ."],
+        examples: [
+          ex("この ほんは わたしのです。", "Quyển sách này là của tôi."),
+          ex("あの かたは どなたですか。", "Vị kia là ai ạ?"),
+        ],
+      },
+      {
+        pattern: "そうです／そうじゃ ありません",
+        meaning: "Đúng vậy / Không phải vậy",
+        notes: ["Dùng để trả lời câu hỏi danh từ ～ですか thay vì lặp lại danh từ."],
+        examples: [
+          ex("それは テレホンカードですか。…はい、そうです。", "Đó là thẻ điện thoại phải không? …Vâng, đúng vậy."),
+          ex("…いいえ、そうじゃ ありません。", "…Không, không phải vậy."),
+        ],
+      },
+      {
+        pattern: "N1 ですか、N2 ですか",
+        meaning: "Là N1 hay là N2? (câu hỏi lựa chọn)",
+        notes: ["Trả lời bằng đáp án đã chọn, không dùng はい／いいえ."],
+        examples: [ex("これは「9」ですか、「7」ですか。…「9」です。", "Đây là số 9 hay số 7? …Là số 9.")],
+      },
+      {
+        pattern: "N1 の N2 (nội dung · sở hữu)",
+        meaning: "N2 về N1 / N2 của N1",
+        notes: [
+          "Nội dung: コンピューターの ほん (sách về máy tính). Hỏi: なんの N.",
+          "Sở hữu: わたしの ほん (sách của tôi). Hỏi: だれの N.",
+        ],
+        examples: [
+          ex("これは なんの ざっしですか。…くるまの ざっしです。", "Đây là tạp chí gì? …Là tạp chí về xe hơi."),
+          ex("これは だれの かばんですか。…さとうさんの かばんです。", "Đây là cặp của ai? …Là cặp của chị Sato."),
+        ],
+      },
+      {
+        pattern: "の (thay cho danh từ)",
+        meaning: "Cái của…",
+        notes: ["Khi danh từ đã rõ, N1 の N2 có thể bỏ N2. Không dùng với người: ×さとうさんの (để chỉ người)."],
+        examples: [
+          ex("この かさは わたしのです。", "Cái ô này là của tôi."),
+          ex("あの かばんは だれのですか。…ミラーさんのです。", "Cái cặp kia là của ai? …Của anh Miller."),
+        ],
+      },
     ],
   },
   {
     id: 3,
-    badge: "Bài 3",
-    heading: "第3課 · だい3か",
-    cards: [
-      card(
-        pattern(
-          "ここ／そこ／あそこは　N{{địa điểm}} です。",
-          "N{{địa điểm}}は　ここ／そこ／あそこです。",
-          "どこ　か。"
-        ),
-        notes(
-          "Chỗ này/chỗ đó/chỗ kia là N{{địa điểm}}",
-          "N{{địa điểm}} là{{ở}} chỗ này/chỗ đó/chỗ kia",
-          "chỗ nào?"
-        ),
-        examplesBlock([
-          itm(J("1．ここは　きょうしつです。")),
-          itm(J("2．きょうしつは　ここです。")),
-        ])
-      ),
-      card(
-        notes("N1{{ vật/ người/ địa điểm}} は　N2{{địa điểm}} です。"),
-        pattern("どこ　か。"),
-        notes("N1 {{ vật/ người/ địa điểm}} ở  N2 {{địa điểm}}", "chỗ nào?"),
-        examplesBlock([
-          itm(J("1．くるまの　かぎは　へやです。")),
-          itm(J("2．Aさんは　うけつけです。")),
-          itm(J("3．トイレは　いっかいです。")),
-        ])
-      ),
-      card(
-        notes("N1{{Tên nước/ công ty}}の　N2{{sản phẩm}}"),
-        pattern("どこ　か。"),
-        notes("Sản phẩm được sản xuất ở 1 nước / công ty nào đó．"),
-        examplesBlock([
-          itm(J("にほんのとけいです。")),
-          itm(J("ドイツの　じどうしゃです。")),
-        ])
-      ),
-      card(
-        pattern(
-          "おくには　どちらですか。",
-          "…{{くには}}　にほんです。",
-          "かいしゃ{{がっこう}}は　どちらですか。",
-          "…{{かいしゃは}}　IMCです。"
-        )
-      ),
+    topic: "Địa điểm · ここ／そこ／あそこ",
+    points: [
+      {
+        pattern: "ここ／そこ／あそこ は N (địa điểm) です",
+        meaning: "Chỗ này / chỗ đó / chỗ kia là N",
+        notes: ["こちら／そちら／あちら／どちら là cách nói lịch sự (chỉ phương hướng hoặc địa điểm)."],
+        table: {
+          columns: ["", "こ", "そ", "あ", "ど"],
+          rows: [
+            ["Địa điểm", "ここ", "そこ", "あそこ", "どこ"],
+            ["Lịch sự / hướng", "こちら", "そちら", "あちら", "どちら"],
+          ],
+        },
+        examples: [
+          ex("ここは しょくどうです。", "Đây là nhà ăn."),
+          ex("あそこは じむしょです。", "Chỗ kia là văn phòng."),
+        ],
+      },
+      {
+        pattern: "N は địa điểm です",
+        meaning: "N ở (địa điểm)",
+        notes: ["Hỏi vị trí: N は どこですか / どちらですか (lịch sự)."],
+        examples: [
+          ex("トイレは あそこです。", "Nhà vệ sinh ở đằng kia."),
+          ex("でんわは 2かいです。", "Điện thoại ở tầng 2."),
+          ex("エレベーターは どちらですか。…あちらです。", "Thang máy ở đâu ạ? …Ở phía kia ạ."),
+        ],
+      },
+      {
+        pattern: "どこ／どちら (hỏi nước · trường · công ty)",
+        meaning: "Ở đâu? / Nơi nào?",
+        notes: ["Dùng どちら khi hỏi tên nước, trường, công ty một cách lịch sự."],
+        examples: [
+          ex("おくには どちらですか。…アメリカです。", "Anh là người nước nào? …Mỹ."),
+          ex("かいしゃは どちらですか。…IMCです。", "Anh làm ở công ty nào? …Công ty IMC."),
+        ],
+      },
+      {
+        pattern: "N1 の N2 (xuất xứ)",
+        meaning: "N2 sản xuất ở / của hãng N1",
+        notes: ["Hỏi xuất xứ: どこの N ですか."],
+        examples: [ex("これは どこの くるまですか。…にほんの くるまです。", "Đây là xe của nước nào? …Xe Nhật.")],
+      },
+      {
+        pattern: "N は いくらですか",
+        meaning: "N giá bao nhiêu?",
+        examples: [ex("この ネクタイは いくらですか。…1,500えんです。", "Cái cà vạt này giá bao nhiêu? …1.500 yên.")],
+      },
     ],
   },
   {
     id: 4,
-    badge: "Bài 4",
-    heading: "第4課 · だい4か",
-    cards: [
-      card(
-        notes(
-          "Ｖ　ます。Hiện tại, tương lai khẳng định",
-          "ません。Hiện tại, tương lai phủ định",
-          "ました。Quá khứ khẳng định"
-        ),
-        pattern("ませんでした。Quá khứ phủ định"),
-        examplesBlock([
-          itm(
-            N("はたらきます。{{làm việc, sẽ làm việc}}"),
-            N("はたらきません。{{không làm việc, sẽ không làm việc}}"),
-            J("はたらきました。{{đã làm việc}}"),
-            J("はたらきませんでした。{{đã không làm việc}}")
-          ),
-        ])
-      ),
-      card(
-        notes(
-          "Danh từ chỉ thời gian xác định に",
-          "Danh từ chỉ thời gian không xác định 　X",
-          "{{ bảng trang 173}}",
-          "Từ …đến…:　…から　…まで"
-        )
-      ),
-      card(
-        pattern(
-          "ぎんこうは　なんじから　なんじまで　ですか。",
-          "…７じから　４じはんまで　です。",
-          "ぎんこうは　なんじから　ですか。",
-          "…７じから　です。",
-          "ぎんこうは　なんじまで　ですか。",
-          "… ４じはんまで　です。",
-          "なんじから　なんじまで　はたらきますか。",
-          "…８じから　５じまで　はたらきます。",
-          "けさ　なんじに　おきましたか。",
-          "…けさ　５じに　おきました。"
-        )
-      ),
+    topic: "Thời gian · Động từ ます",
+    points: [
+      {
+        pattern: "いま ～じ ～ふん です",
+        meaning: "Bây giờ là … giờ … phút",
+        notes: ["ふん đọc thành ぷん sau 1, 3, 4, 6, 8, 10: いっぷん, さんぷん, よんぷん, ろっぷん, はっぷん, じゅっぷん.", "Rưỡi: ～じはん."],
+        examples: [
+          ex("いま なんじですか。…7じ10ぷんです。", "Bây giờ là mấy giờ? …7 giờ 10 phút."),
+          ex("ニューヨークは いま なんじですか。…ごぜん 4じです。", "Ở New York bây giờ là mấy giờ? …4 giờ sáng."),
+        ],
+      },
+      {
+        pattern: "V ます／ません／ました／ませんでした",
+        meaning: "4 dạng lịch sự của động từ",
+        table: {
+          columns: ["", "Khẳng định", "Phủ định"],
+          rows: [
+            ["Hiện tại / tương lai", "おきます (thức dậy)", "おきません"],
+            ["Quá khứ", "おきました", "おきませんでした"],
+          ],
+        },
+        examples: [
+          ex("まいあさ 6じに おきます。", "Mỗi sáng tôi dậy lúc 6 giờ."),
+          ex("きのう べんきょうしませんでした。", "Hôm qua tôi đã không học."),
+        ],
+      },
+      {
+        pattern: "N (thời gian) に V",
+        meaning: "Làm V vào lúc N",
+        notes: [
+          "Dùng に với thời điểm có con số: ～じ, ～がつ～にち, ～ねん. Thứ trong tuần: có thể có hoặc không.",
+          "Không dùng に với: きょう, あした, きのう, まいにち, けさ, こんばん, いつ…",
+        ],
+        examples: [
+          ex("6じはんに おきます。", "Tôi dậy lúc 6 giờ rưỡi."),
+          ex("にちようび［に］ならへ いきます。", "Chủ nhật tôi đi Nara."),
+          ex("きのう べんきょうしました。", "Hôm qua tôi đã học."),
+        ],
+      },
+      {
+        pattern: "N1 から N2 まで",
+        meaning: "Từ N1 đến N2 (thời gian, địa điểm)",
+        notes: ["Có thể dùng riêng から hoặc まで, và đặt です ngay sau."],
+        examples: [
+          ex("9じから 5じまで はたらきます。", "Tôi làm việc từ 9 giờ đến 5 giờ."),
+          ex("ぎんこうは 9じから 3じまでです。", "Ngân hàng mở cửa từ 9 giờ đến 3 giờ."),
+        ],
+      },
+      {
+        pattern: "N1 と N2",
+        meaning: "N1 và N2",
+        notes: ["Chỉ dùng để nối danh từ, không nối câu."],
+        examples: [ex("ぎんこうの やすみは どようびと にちようびです。", "Ngân hàng nghỉ thứ Bảy và Chủ nhật.")],
+      },
+      {
+        pattern: "～ね",
+        meaning: "…nhỉ / …nhé (mong đồng tình, xác nhận)",
+        examples: [ex("まいにち 10じまで べんきょうします。…たいへんですね。", "Ngày nào tôi cũng học đến 10 giờ. …Vất vả nhỉ.")],
+      },
     ],
   },
   {
     id: 5,
-    badge: "Bài 5",
-    heading: "第5課 · だい5か",
-    cards: [
-      card(
-        notes(
-          "Sは　N xác định　に　người/vậtと　phương tiệnで　địa điểmへ　いきます。",
-          "N ko xác định X　　　　　　きます。"
-        ),
-        pattern("…から…まで　　かえります。"),
-        kana([[null, null, null, "ひとりで", "と　　あるいてで", "どこ（へ）も　いきません。"]]),
-        pattern("いきませんでした。"),
-        kana([[null, "いつ", null, "だれと", null, "なんで", null, "どこへ", "か。"]]),
-        pattern("（なんじ、", "なんがつ、", "なんにち、"),
-        notes("…）"),
-        examplesBlock([
-          itm(
-            J("わたしは　らいねん　ともだちと　ひこうきで　にほんへ　いきます。"),
-            J("らいねん　わたしは　ともだちと　ひこうきで　にほんへ　いきます。")
-          ),
-        ])
-      ),
+    topic: "Di chuyển · へ／で／と",
+    points: [
+      {
+        pattern: "N (địa điểm) へ いきます／きます／かえります",
+        meaning: "Đi / đến / về N",
+        notes: ["へ chỉ hướng di chuyển, đọc là \"e\"."],
+        examples: [
+          ex("きょうとへ いきます。", "Tôi đi Kyoto."),
+          ex("にほんへ きました。", "Tôi đã đến Nhật."),
+          ex("うちへ かえります。", "Tôi về nhà."),
+        ],
+      },
+      {
+        pattern: "どこ［へ］も いきません",
+        meaning: "Không đi đâu cả",
+        notes: ["Nghi vấn từ + も + phủ định = phủ định hoàn toàn: なにも, だれも, どこも."],
+        examples: [
+          ex("どこ［へ］も いきません。", "Tôi không đi đâu cả."),
+          ex("なにも たべません。", "Tôi không ăn gì cả."),
+        ],
+      },
+      {
+        pattern: "N (phương tiện) で いきます",
+        meaning: "Đi bằng N",
+        notes: ["Đi bộ: あるいて (không có で)."],
+        examples: [
+          ex("でんしゃで いきます。", "Tôi đi bằng tàu điện."),
+          ex("えきから あるいて かえりました。", "Tôi đã đi bộ từ ga về."),
+          ex("なんで きましたか。…タクシーで きました。", "Bạn đến bằng gì? …Bằng taxi."),
+        ],
+      },
+      {
+        pattern: "N (người · động vật) と V",
+        meaning: "Làm V cùng với N",
+        notes: ["Làm một mình: ひとりで (không dùng と)."],
+        examples: [
+          ex("かぞくと にほんへ きました。", "Tôi đã đến Nhật cùng gia đình."),
+          ex("ひとりで とうきょうへ いきます。", "Tôi đi Tokyo một mình."),
+        ],
+      },
+      {
+        pattern: "いつ",
+        meaning: "Khi nào?",
+        notes: ["Không dùng に sau いつ."],
+        examples: [ex("いつ にほんへ きましたか。…3がつ 25にちに きました。", "Bạn đến Nhật khi nào? …Ngày 25 tháng 3.")],
+      },
+      {
+        pattern: "～よ",
+        meaning: "…đấy (báo thông tin người nghe chưa biết)",
+        examples: [
+          ex("この でんしゃは こうしえんへ いきますか。…いいえ、いきません。つぎの「ふつう」ですよ。", "Tàu này có đi Koshien không? …Không. Chuyến tàu thường kế tiếp cơ."),
+        ],
+      },
     ],
   },
   {
     id: 6,
-    badge: "Bài 6",
-    heading: "第6課 · だい6か",
-    cards: [
-      card(
-        notes("1.	N を　V{{ Tha động từ/ ngoại động từ}}"),
-        examplesBlock([
-          itm(J("やさいを　たべます。{{ăn rau}}"), N("なに　か。{{ăn cái gì?}}"), J("なにも　たべません。{{không ăn gì cả}}")),
-          itm(J("ひとに　あいます。{{gặp…}}"), N("だれ　か。{{gặp ai?}}"), J("だれにも　あいません。{{không gặp ai cả}}")),
-          itm(N("2.	Nを　します。{{làm/chơi…}}")),
-          itm(J("しゅくだいを　します。{{làm bài tập}}"), N("なに　か。{{làm cái gì?}}"), J("なにも　しません。{{không làm gì cả}}")),
-        ])
-      ),
-      card(
-        notes("3. Ｎ{{địa điểm}} で　V{{hành động}}"),
-        examplesBlock([
-          itm(J("うちで　べんきょうします。"), J("どこ　か。")),
-          itm(J("4．Vます　ませんか。Rủ rê"), J("ましょう。")),
-          itm(
-            J("いっしょに　えいがを　みませんか。"),
-            J("はい{{ええ}}、みましょう。"),
-            J("はい{{ええ}}、いいですね。"),
-            J("はい{{ええ}}、いいですよ。"),
-            J("すみません。ちょっと…")
-          ),
-        ])
-      ),
-      card(
-        pattern("なんと", "なんの", "なんで　{{なにで}}", "なんさい"),
-        notes("Còn lại là なに")
-      ),
-      card(
-        notes(
-          "Sは　N xác định　に　người/vậtと　phương tiệnで　địa điểmへ　いきます。",
-          "N ko xác định X　　　　　　きます。"
-        ),
-        pattern("…から…まで　　かえります。"),
-        kana([[null, null, null, "ひとりで", "と　　あるいてで", "どこ（へ）も　いきません。"]]),
-        pattern("いきませんでした。"),
-        kana([[null, "いつ", null, "だれと", null, "なんで", null, "どこへ", "か。"]]),
-        pattern("（なんじ、　なにで", "なんがつ、", "なんにち、"),
-        notes("…）"),
-        examplesBlock([
-          itm(J("わたしは　らいねん　ともだちと　ひこうきで　にほんへ　いきます。")),
-        ])
-      ),
+    topic: "Hành động · を／で · Mời rủ",
+    points: [
+      {
+        pattern: "N を V (ngoại động từ)",
+        meaning: "Làm V cái N",
+        notes: ["を chỉ đối tượng của hành động, đọc là \"o\".", "Hỏi: なにを V ますか."],
+        examples: [
+          ex("ジュースを のみます。", "Tôi uống nước hoa quả."),
+          ex("にちようび なにを しますか。…テニスを します。", "Chủ nhật bạn làm gì? …Tôi chơi tennis."),
+        ],
+      },
+      {
+        pattern: "N を します",
+        meaning: "Làm / chơi N",
+        notes: ["します đi với nhiều danh từ: サッカー (chơi bóng), しゅくだい (làm bài tập), パーティー (tổ chức tiệc)."],
+        examples: [
+          ex("しゅくだいを します。", "Tôi làm bài tập."),
+          ex("ともだちと サッカーを しました。", "Tôi đã chơi bóng đá với bạn."),
+        ],
+      },
+      {
+        pattern: "なん／なに",
+        meaning: "Cái gì? — cách chọn なん hay なに",
+        notes: [
+          "なん: trước âm hàng た・だ・な (なんですか, なんで, なんの), hoặc trước từ đếm (なんさい, なんじ).",
+          "Các trường hợp còn lại dùng なに: なにを, なにが.",
+        ],
+        examples: [
+          ex("それは なんですか。", "Đó là cái gì?"),
+          ex("なにを かいましたか。", "Bạn đã mua gì?"),
+        ],
+      },
+      {
+        pattern: "N (địa điểm) で V",
+        meaning: "Làm V ở N",
+        notes: ["で chỉ nơi diễn ra hành động (khác へ chỉ hướng đi)."],
+        examples: [
+          ex("えきで しんぶんを かいます。", "Tôi mua báo ở nhà ga."),
+          ex("どこで その かばんを かいましたか。…デパートで かいました。", "Bạn mua cái cặp đó ở đâu? …Ở cửa hàng bách hóa."),
+        ],
+      },
+      {
+        pattern: "V ませんか",
+        meaning: "…cùng (với tôi) không? (mời rủ)",
+        notes: ["Đồng ý: ええ、いいですね。/ Từ chối khéo: すみません、ちょっと…。"],
+        examples: [ex("いっしょに きょうとへ いきませんか。…ええ、いいですね。", "Cùng đi Kyoto với tôi không? …Ừ, hay đấy.")],
+      },
+      {
+        pattern: "V ましょう",
+        meaning: "Chúng ta cùng … đi",
+        notes: ["Dùng khi rủ rê tích cực hoặc khi đáp lại lời mời."],
+        examples: [ex("ちょっと やすみましょう。", "Chúng ta nghỉ một chút đi.")],
+      },
     ],
   },
   {
     id: 7,
-    badge: "Bài 7",
-    heading: "第7課 · だい7か",
-    cards: [
-      card(
-        examplesBlock([
-          itm(J("1．はしで　たべます。")),
-          itm(J("2．にほんごで　レポートを　かきます。")),
-        ]),
-        noteTable("N {{ công cụ, dung cụ}}で　V なんで　. Bằng")
-      ),
-      card(
-        noteTable(
-          "「Từ/ Câu」 は…ごで　なんですか。 …です。 「Từ/ Câu」 tiếng… nói thế nào? nói là… Hỏi 1 từ/ 1 câu được diễn tả như thế nào bằng ngôn ngữ khác."
-        ),
-        examplesBlock([
-          itm(J("1．「ありがとう」　は　ベトナムごで　なんですか。"), R("…　cảm ơn です。")),
-          itm(J("2．「Chào buổi sáng」は　にほんごで　なんですか。"), R("…   おはようございます　です。")),
-        ])
-      ),
-      card(
-        pattern("S は　ひとに　もの{{ ĐỒ VẬT}} を　あげます。", "わたし"),
-        notes(
-          "。Mình tặng/ cho/ biếu người khác 1 đồ vật.",
-          "。Người khác tặng/ cho/ biếu người khác 1 đồ vật."
-        ),
-        examplesBlock([
-          itm(J("1．わたしは　たなかさんに　にほんごのほんを　あげます。")),
-          itm(J("2．やまださんは　きむらさんに　はなを　あげました。")),
-          itm(
-            J("ひとに　ものを　かします。{{cho ai mượn cái gì}}"),
-            N("おしえます。{{dạy cái gì cho ai}}"),
-            N("かきます。{{viết cái gì cho ai}}"),
-            N("おくります。{{gửi cái gì cho ai}}"),
-            J("ひとに　でんわを　かけます。{{gọi điện thoại cho ai}}"),
-            J("でんわします。")
-          ),
-        ])
-      ),
-      card(
-        pattern("S は　人に/から　もの{{ ĐỒ VẬT}} を　もらいます。", "わたし"),
-        notes(
-          "。Mình nhận từ người khác 1 đồ vật.",
-          "。Người khác nhận từ  người khác 1 đồ vật."
-        ),
-        examplesBlock([
-          itm(J("1．わたしは　ちちに　とけいを　もらいました。")),
-          itm(J("2．きむらさんは　やまださんに　はなを　もらいました。")),
-          itm(N("Tổ chức")),
-          itm(
-            J("人に/から　ものを　かります。{{mượn cái gì từ ai}}"),
-            N("ならいます。{{học cái gì từ ai}}")
-          ),
-          itm(N("Tổ chức")),
-        ])
-      ),
-      card(
-        noteTable(
-          "S 　は　{{わたしに}}　もの{{ ĐỒ VẬT}} を　くれます。 わたし だれが 。người khác tặng/ cho/ biếu mình/người thân trong gia đình mình 1 đồ vật."
-        ),
-        examplesBlock([
-          itm(J("1．さとうさんは  わたしに　シャツを　くれました。")),
-          itm(J("2．きむらさんは　ちちに　ワインを　くれました。")),
-        ])
-      ),
-      card(
-        pattern(
-          "もう、…ましたか。{{Đã… chưa?}}",
-          "はい、もう　…ました。",
-          "いいえ、まだです。",
-          "はい、もう　たべました。",
-          "いいえ、まだです。"
-        )
-      ),
+    topic: "Công cụ · Cho và nhận",
+    points: [
+      {
+        pattern: "N (công cụ · phương tiện) で V",
+        meaning: "Làm V bằng N",
+        examples: [
+          ex("はしで たべます。", "Tôi ăn bằng đũa."),
+          ex("にほんごで レポートを かきます。", "Tôi viết báo cáo bằng tiếng Nhật."),
+        ],
+      },
+      {
+        pattern: "「từ / câu」は ～ごで なんですか",
+        meaning: "\"…\" tiếng … nói là gì?",
+        examples: [
+          ex("「ありがとう」は えいごで なんですか。…「Thank you」です。", "\"Arigatou\" tiếng Anh nói là gì? …Là \"Thank you\"."),
+        ],
+      },
+      {
+        pattern: "N1 (người) に N2 を あげます",
+        meaning: "Cho / tặng N1 cái N2",
+        notes: ["Cùng cấu trúc: かします (cho mượn), おしえます (dạy), おくります (gửi), でんわを かけます (gọi điện)."],
+        examples: [
+          ex("わたしは きむらさんに はなを あげました。", "Tôi đã tặng hoa cho chị Kimura."),
+          ex("イーさんに ほんを かしました。", "Tôi đã cho anh Lee mượn sách."),
+        ],
+      },
+      {
+        pattern: "N1 (người) に／から N2 を もらいます",
+        meaning: "Nhận N2 từ N1",
+        notes: [
+          "Cùng cấu trúc: かります (mượn), ならいます (học).",
+          "Khi N1 là tổ chức (công ty, trường…) thì dùng から.",
+        ],
+        examples: [
+          ex("わたしは カリナさんに チョコレートを もらいました。", "Tôi đã nhận sô-cô-la từ chị Karina."),
+          ex("ぎんこうから おかねを かりました。", "Tôi đã vay tiền từ ngân hàng."),
+        ],
+      },
+      {
+        pattern: "もう V ました",
+        meaning: "Đã … rồi",
+        notes: ["Trả lời phủ định: いいえ、まだです。(Chưa.) — không dùng ～ませんでした."],
+        examples: [
+          ex("もう にもつを おくりましたか。…はい、もう おくりました。", "Bạn đã gửi hành lý chưa? …Rồi, đã gửi rồi."),
+          ex("…いいえ、まだです。", "…Chưa, vẫn chưa."),
+        ],
+      },
     ],
   },
   {
     id: 8,
-    badge: "Bài 8",
-    heading: "第8課 · だい8か",
-    cards: [
-      card(pattern("Ｖ　ます。", "ません。", "ました。", "ませんでした。")),
-      card(
-        pattern("Aイ　です。", "Aイ　くないです。", "Aイ　かったです。", "Aイ　くなかったです。"),
-        examplesBlock([
-          itm(
-            J("ひろいです。{{RỘNG}}"),
-            J("ひろいくないです。"),
-            J("ひろいかったです。"),
-            J("ひろいくなかったです。")
-          ),
-          itm(J("いいです / よいです。"), J("よくないです"), J("よかったです。"), J("よくなかったです。")),
-        ])
-      ),
-      card(
-        pattern(
-          "Aナ / N 　です。",
-          "Aナ / N  　では{{じゃ}}ありません。",
-          "Aナ / N 　でした。",
-          "Aナ / N 　では{{じゃ}}ありませんでした。"
-        ),
-        examplesBlock([
-          itm(
-            J("ひま　です。"),
-            J("ひま　では{{じゃ}}ありません。"),
-            J("ひま　でした。"),
-            J("ひま　では{{じゃ}}ありませんでした。"),
-            J("がくせい　です。"),
-            J("がくせい　では{{じゃ}}ありません。"),
-            J("がくせい　でした。"),
-            J("がくせい　では{{じゃ}}ありませんでした。")
-          ),
-        ])
-      ),
-      card(
-        pattern("S は　　　A", "どうですか。", "どうでしたか。"),
-        examplesBlock([
-          itm(J("1．ワットせんせいは　しんせつです。")),
-          itm(J("2．わたしの　へやは　ひろくないです。")),
-          itm(
-            J("3．A さんの　くには　あついですか。"),
-            J("はい、あついです。"),
-            J("いいえ、あつくないです/さむいです。")
-          ),
-        ])
-      ),
-      card(
-        pattern("Aイ　　　　Ｎ", "Aナ　な", "どんな"),
-        examplesBlock([
-          itm(J("1．ワットせんせいは　しんせつなひとです。")),
-          itm(J("2．ふじさんは　たかいやまです。")),
-          itm(J("3. コーヒーは　おいしいです。"), J("おいしいコーヒーです。")),
-        ])
-      ),
-      card(
-        notes(
-          "とても…　A{{KHẲNG ĐỊNH}}  : Rất",
-          "あまり…   A{{PHỦ ĐỊNH}}       : Không…lắm",
-          "Phó từ biểu thị mức độ, khi bổ nghĩa cho A thì đứng trước A"
-        ),
-        examplesBlock([
-          itm(J("1．にほんは　とても　さむいです。")),
-          itm(J("2．ベトナムは　あまり　さむくないです。")),
-        ])
-      ),
-      card(
-        pattern("。そして、…　{{và}}"),
-        notes("…が、… 　{{nhưng}}"),
-        pattern("。でも、", "。しかし、…"),
-        notes("liên từ nối tiếp câu"),
-        examplesBlock([
-          itm(J("1．にほんのたべものは　おいしいです。そして、きれいです。")),
-          itm(J("2．にほんのたべものは　おいしいですが、たかいです。")),
-        ])
-      ),
-      card(
-        pattern("これ", "それ", "あれ", "どれ", "この　　N", "その", "あの", "どの")
-      ),
+    topic: "Tính từ",
+    points: [
+      {
+        pattern: "Tính từ đuôi い／Tính từ đuôi な",
+        meaning: "Hai loại tính từ, chia khác nhau",
+        notes: ["きれい(な), ゆうめい(な) là tính từ な dù kết thúc bằng い."],
+        table: {
+          columns: ["", "Tính từ い (おおきい)", "Tính từ な (しずか)"],
+          rows: [
+            ["Khẳng định", "おおきいです", "しずかです"],
+            ["Phủ định", "おおきくないです", "しずかじゃ ありません"],
+            ["+ Danh từ", "おおきい まち", "しずかな まち"],
+          ],
+        },
+        examples: [],
+      },
+      {
+        pattern: "N は Aな です／Aい です",
+        meaning: "N thì (tính từ)",
+        notes: ["Phủ định: Aい bỏ い + くないです; Aな + じゃ ありません.", "Ngoại lệ: いいです → よくないです."],
+        examples: [
+          ex("ワット せんせいは しんせつです。", "Thầy Watt tốt bụng."),
+          ex("ふじさんは たかいです。", "Núi Phú Sĩ cao."),
+          ex("この ほんは おもしろくないです。", "Quyển sách này không hay."),
+        ],
+      },
+      {
+        pattern: "Aな な N／Aい N",
+        meaning: "Tính từ bổ nghĩa cho danh từ",
+        examples: [
+          ex("ワット せんせいは しんせつな せんせいです。", "Thầy Watt là giáo viên tốt bụng."),
+          ex("ふじさんは たかい やまです。", "Núi Phú Sĩ là ngọn núi cao."),
+        ],
+      },
+      {
+        pattern: "とても／あまり",
+        meaning: "Rất / không … lắm",
+        notes: ["とても + khẳng định. あまり + phủ định."],
+        examples: [
+          ex("ペキンは とても さむいです。", "Bắc Kinh rất lạnh."),
+          ex("この えいがは あまり おもしろくないです。", "Bộ phim này không hay lắm."),
+        ],
+      },
+      {
+        pattern: "N は どうですか",
+        meaning: "N thế nào?",
+        examples: [ex("にほんの せいかつは どうですか。…たのしいです。", "Cuộc sống ở Nhật thế nào? …Vui lắm.")],
+      },
+      {
+        pattern: "N1 は どんな N2 ですか",
+        meaning: "N1 là N2 như thế nào?",
+        examples: [ex("ならは どんな まちですか。…ふるい まちです。", "Nara là thành phố như thế nào? …Là thành phố cổ.")],
+      },
+      {
+        pattern: "S1 が、S2",
+        meaning: "S1 nhưng S2",
+        examples: [ex("にほんの たべものは おいしいですが、たかいです。", "Đồ ăn Nhật ngon nhưng đắt.")],
+      },
+      {
+        pattern: "どれ",
+        meaning: "Cái nào? (chọn trong 3 vật trở lên)",
+        examples: [ex("ミラーさんの かさは どれですか。…あの あおい かさです。", "Ô của anh Miller là cái nào? …Là cái ô màu xanh kia.")],
+      },
     ],
   },
   {
     id: 9,
-    badge: "Bài 9",
-    heading: "第9課 · だい9か",
-    cards: [
-      card(
-        pattern(
-          "N が	すきです。{{ Thích}}",
-          "きらいです。{{ ghét }}",
-          "じょうずです。{{ giỏi, khéo}}",
-          "へたです。{{ kém, dở}}"
-        ),
-        examplesBlock([
-          itm(J("わたしは　タイりょうりが　すきです。")),
-          itm(J("だいすきです　＝　とても　すきです"), J("だいきらいです　＝　とても　きらいです")),
-          itm(J("おとうと{{ em trai}}は　さかなが　だいきらいです。")),
-          itm(J("どんなのみものが　すきですか。"), R("…ジュースが　すきです。")),
-        ])
-      ),
-      card(
-        kana([[null, null, null, "N が", "あります。", "(có, sở hữu)"]]),
-        notes("わかります。{{hiểu, nắm được}}"),
-        examplesBlock([
-          itm(J("1. おかねが　あります。")),
-          itm(J("2. にほんごが　わかります。")),
-          itm(N("Phó từ đặt trước V để bổ nghĩa cho V")),
-        ]),
-        noteTable(
-          "Chỉ mức độ (KĐ): よく／だいたい／すこし　わかります · (PĐ): あまり／ぜんぜん　わかりません　・　Chỉ số lượng (KĐ): たくさん／すこし　あります · (PĐ): あまり／ぜんぜん　ありません"
-        ),
-        notes("すこし、あまり、ぜんぜん　có thể dùng bổ nghĩa cho tính từ"),
-        examplesBlock([
-          itm(J("1. おかねが　ぜんぜん　ありません。")),
-          itm(J("2. このえいがは　ぜんぜん　おもしろくないです。")),
-        ])
-      ),
-      card(
-        notes("6．Câu から"),
-        pattern("どうして/ なぜ/　なんで"),
-        examplesBlock([
-          itm(
-            J("じかんが　ありませんから、あさごはんを　たべません。"),
-            J("あさごはんを　たべません。じかんが　ありませんから。")
-          ),
-          itm(J("どうして　あさごはんを　たべませんか。"), R("…じかんが　ありませんから。")),
-          itm(J("A: 	きょう　はやく　かえります。"), J("B: 	どうしてですか。"), J("A: 	ようじが　ありますから。")),
-        ])
-      ),
+    topic: "Sở thích · Khả năng · Lý do",
+    points: [
+      {
+        pattern: "N が すきです／きらいです／じょうずです／へたです",
+        meaning: "Thích / ghét / giỏi / kém N",
+        notes: ["Đối tượng của cảm xúc, khả năng dùng が (không dùng を)."],
+        examples: [
+          ex("わたしは イタリアりょうりが すきです。", "Tôi thích món Ý."),
+          ex("わたしは えが へたです。", "Tôi vẽ kém."),
+        ],
+      },
+      {
+        pattern: "N が あります／わかります",
+        meaning: "Có N / hiểu N",
+        examples: [
+          ex("わたしは くるまが あります。", "Tôi có xe hơi."),
+          ex("わたしは にほんごが わかります。", "Tôi hiểu tiếng Nhật."),
+        ],
+      },
+      {
+        pattern: "どんな N",
+        meaning: "N loại nào? / N như thế nào?",
+        examples: [ex("どんな スポーツが すきですか。…サッカーが すきです。", "Bạn thích môn thể thao nào? …Tôi thích bóng đá.")],
+      },
+      {
+        pattern: "Phó từ mức độ · số lượng",
+        meaning: "よく, だいたい, たくさん, すこし, あまり, ぜんぜん",
+        table: {
+          columns: ["Đi với khẳng định", "Đi với phủ định"],
+          rows: [
+            ["よく (rõ, giỏi) · だいたい (đại khái)", "あまり (không … lắm)"],
+            ["たくさん (nhiều) · すこし (một chút)", "ぜんぜん (hoàn toàn không)"],
+          ],
+        },
+        examples: [
+          ex("えいごが よく わかります。", "Tôi hiểu tiếng Anh rõ."),
+          ex("かんじが ぜんぜん わかりません。", "Tôi hoàn toàn không hiểu chữ Hán."),
+        ],
+      },
+      {
+        pattern: "S1 から、S2",
+        meaning: "Vì S1 nên S2",
+        examples: [ex("じかんが ありませんから、しんぶんを よみません。", "Vì không có thời gian nên tôi không đọc báo.")],
+      },
+      {
+        pattern: "どうして",
+        meaning: "Tại sao?",
+        notes: ["Trả lời bằng ～から。"],
+        examples: [ex("どうして あさ しんぶんを よみませんか。…じかんが ありませんから。", "Tại sao buổi sáng bạn không đọc báo? …Vì không có thời gian.")],
+      },
     ],
   },
   {
     id: 10,
-    badge: "Bài 10",
-    heading: "第10課 · だい10か",
-    cards: [
-      card(
-        notes(
-          "N1{{ vật/ người/ địa điểm}} の　N2{{ vị trí}}",
-          "N1{{ v/ n/ đđ}} とN2 {{ v/ n/ đđ}}の　あいだ"
-        ),
-        examplesBlock([
-          itm(J("1．つくえのした")),
-          itm(J("2．ぎんこうのちかく")),
-          itm(J("3．Aさんと　Ｂさんの　あいだ")),
-        ])
-      ),
-      card(
-        pattern(
-          "N{{ Địa điểm}}に　Ｎが　あります。",
-          "なに",
-          "だれ・　どんなどうぶつ　　　います。"
-        ),
-        examplesBlock([
-          itm(J("1．じむしょ{{のなか}}に　ファクスが　あります。"), J("なに　か。")),
-          itm(J("2．おくじょうに　イーさんが　います。"), J("だれ　か。")),
-          itm(
-            J("3．にわに　にわとりが　います。"),
-            J("どんなどうぶつ　か。"),
-            J("なにも　ありません"),
-            J("だれも　いません"),
-            J("どんなどうぶつも　いません")
-          ),
-        ])
-      ),
-      card(
-        kana([["N( Địa điểm)に", "Ｎが", "あります。"]]),
-        pattern("います。"),
-        kana([
-          ["Ｎは", null, "N( Địa điểm)に", "あります。", null, null],
-          [null, null, null, "どこ", "に", "います。"],
-        ]),
-        examplesBlock([
-          itm(
-            J("1．じむしょに　ファクスが　あります。"),
-            J("ファクスは　じむしょに　あります。"),
-            J("どこ　に　か。")
-          ),
-        ])
-      ),
-      card(
-        notes(
-          "Nと　N　{{ liệt kê tất cả }}",
-          "Nや　N{{など}}　(liệt kê đối tượng tiêu biểu",
-          "từ 2 trở lên)"
-        ),
-        examplesBlock([
-          itm(J("1．つくえのうえに　おさらや　ナイフが　あります。")),
-          itm(J("2．つくえのうえに　おさらや　ナイフなどが　あります。")),
-          itm(J("3．つくえのうえに　はしや　おさらや　ナイフなどが　あります。")),
-        ])
-      ),
+    topic: "Tồn tại · あります／います · Vị trí",
+    points: [
+      {
+        pattern: "N が あります／います",
+        meaning: "Có N",
+        notes: ["あります: đồ vật, cây cối (không tự chuyển động). います: người, động vật."],
+        examples: [
+          ex("コンピューターが あります。", "Có máy tính."),
+          ex("おとこの ひとが います。", "Có người đàn ông."),
+        ],
+      },
+      {
+        pattern: "địa điểm に N が あります／います",
+        meaning: "Ở (địa điểm) có N",
+        notes: ["Hỏi: なにが ありますか / だれが いますか."],
+        examples: [
+          ex("わたしの へやに つくえが あります。", "Trong phòng tôi có cái bàn."),
+          ex("じむしょに ミラーさんが います。", "Ở văn phòng có anh Miller."),
+        ],
+      },
+      {
+        pattern: "N は địa điểm に あります／います",
+        meaning: "N ở (địa điểm)",
+        notes: ["Hỏi: N は どこに ありますか / いますか. Có thể nói gọn: N は địa điểm です."],
+        examples: [
+          ex("ミラーさんは じむしょに います。", "Anh Miller ở văn phòng."),
+          ex("とうきょうディズニーランドは ちばけんに あります。", "Tokyo Disneyland ở tỉnh Chiba."),
+        ],
+      },
+      {
+        pattern: "N1 の N2 (vị trí)",
+        meaning: "Vị trí N2 của N1 (trên, dưới, trong…)",
+        table: {
+          columns: ["うえ", "した", "まえ", "うしろ", "みぎ", "ひだり"],
+          rows: [
+            ["trên", "dưới", "trước", "sau", "phải", "trái"],
+            ["なか: trong", "そと: ngoài", "となり: bên cạnh", "ちかく: gần", "あいだ: giữa", ""],
+          ],
+        },
+        examples: [
+          ex("つくえの うえに しゃしんが あります。", "Trên bàn có tấm ảnh."),
+          ex("ゆうびんきょくは ぎんこうの となりです。", "Bưu điện ở bên cạnh ngân hàng."),
+        ],
+      },
+      {
+        pattern: "N1 や N2［など］",
+        meaning: "N1, N2… (liệt kê vài ví dụ tiêu biểu)",
+        notes: ["と liệt kê đầy đủ, や chỉ nêu ví dụ. など: vân vân."],
+        examples: [ex("はこの なかに てがみや しゃしん［など］が あります。", "Trong hộp có thư, ảnh…")],
+      },
     ],
   },
   {
     id: 11,
-    badge: "Bài 11",
-    heading: "第11課 · だい11か",
-    cards: [
-      card(
-        notes(
-          "1. Số lượng từ {{ gồm số từ + trợ số từ}}",
-          "Từ chỉ đơn vị",
-          "tùy thuộc vào đối tượng mà trợ số từ sẽ khác nhau"
-        ),
-        examplesBlock([
-          itm(J("1．りんごを　４つ　かいました。"), J("いくつ　か。")),
-          itm(J("2．４かげつ　にほんごを　べんきょうします。"), J("なんかげつ　か。")),
-        ])
-      ),
-      card(
-        pattern("1．どのくらい  : bao lâu"),
-        examplesBlock([
-          itm(J("どのくらい　にほんごを　べんきょうしますか。"), R("…４かげつ　べんきょうします。")),
-          itm(
-            N("2．かかります　: mất/ tốn về thời gian hay tiền bạc"),
-            J("どのくらい　かかりますか  :  mất/tốn bao lâu")
-          ),
-          itm(J("がっこうから　うちへ　バスで　どのくらい　かかりますか。"), R("… 30ぷん　かかります")),
-          itm(N("3．Số lượng từ + ぐらい　:{{khoảng}}")),
-          itm(J("きょうしつに　がくせいが　４０にんぐらい　います。")),
-        ])
-      ),
-      card(
-        notes("Số lượng từ {{thời gian}} に　số lần   V {{tần suất}}"),
-        pattern("なんかい"),
-        examplesBlock([
-          itm(J("１かげつに　２かい　テニスを　します。"), J("なんかい　か。")),
-          itm(N("N　だけ　:　chỉ"), N("Số lượng từ")),
-          itm(J("1．かいしゃに　がいこくじんの　かいしゃいんが　２人だけ　います。")),
-          itm(J("2．やすみは　にちようびだけ　です。")),
-        ])
-      ),
+    topic: "Số lượng · Đếm",
+    points: [
+      {
+        pattern: "Cách đếm",
+        meaning: "Từ đếm thường gặp",
+        table: {
+          columns: ["Từ đếm", "Dùng cho", "1", "2", "3", "Hỏi"],
+          rows: [
+            ["～つ", "đồ vật nói chung", "ひとつ", "ふたつ", "みっつ", "いくつ"],
+            ["～にん", "người", "ひとり", "ふたり", "さんにん", "なんにん"],
+            ["～だい", "máy móc, xe", "いちだい", "にだい", "さんだい", "なんだい"],
+            ["～まい", "vật mỏng (giấy, áo)", "いちまい", "にまい", "さんまい", "なんまい"],
+            ["～かい", "số lần", "いっかい", "にかい", "さんかい", "なんかい"],
+          ],
+        },
+        examples: [],
+      },
+      {
+        pattern: "N を／が  số lượng  V",
+        meaning: "Vị trí của số lượng từ",
+        notes: ["Số lượng từ đứng ngay trước động từ, sau trợ từ."],
+        examples: [
+          ex("りんごを 4つ かいました。", "Tôi đã mua 4 quả táo."),
+          ex("がいこくじんの がくせいが ふたり います。", "Có 2 sinh viên nước ngoài."),
+        ],
+      },
+      {
+        pattern: "khoảng thời gian に ～かい V",
+        meaning: "Làm V … lần trong (khoảng thời gian)",
+        notes: ["Hỏi độ dài thời gian: どのくらい. Khoảng chừng: ～ぐらい."],
+        examples: [
+          ex("1かげつに 2かい えいがを みます。", "Tôi xem phim 2 lần một tháng."),
+          ex("どのくらい にほんごを べんきょうしましたか。…3ねん べんきょうしました。", "Bạn đã học tiếng Nhật bao lâu? …3 năm."),
+          ex("がっこうに せんせいが 30にんぐらい います。", "Ở trường có khoảng 30 giáo viên."),
+        ],
+      },
+      {
+        pattern: "số lượng／N だけ",
+        meaning: "Chỉ …",
+        examples: [
+          ex("やすみは にちようびだけです。", "Ngày nghỉ chỉ có Chủ nhật."),
+          ex("パワーでんきに がいこくじんの しゃいんが ひとりだけ います。", "Ở công ty Power chỉ có 1 nhân viên người nước ngoài."),
+        ],
+      },
     ],
   },
   {
     id: 12,
-    badge: "Bài 12",
-    heading: "第12課 · だい12か",
-    cards: [
-      card(
-        notes(
-          "N1は  N2より　A{{ khẳng định}}",
-          "So sánh hơn",
-          "Lấy N2 Làm chuẩn để nói trạng thái, tính chất của N1"
-        ),
-        examplesBlock([itm(J("1．くろいかばんは　しろいかばんより　たかいです。"))])
-      ),
-      card(
-        notes("N1は  N2ほど　A{{ phủ định}}", "So sánh không bằng"),
-        examplesBlock([itm(J("1．ぎゅうにくは　とりにくほど　やすくないです。"))])
-      ),
-      card(
-        pattern("N1と  N2と　どちらが　A　ですか。", "…N1 / N2のほうが　 Aです。"),
-        notes("Lựa chọn 1 trong 2"),
-        examplesBlock([
-          itm(
-            J("1．サッカーと　やきゅうと　どちらが　おもしろいですか。"),
-            R("…やきゅうの　ほうが　おもしろいです。"),
-            R("…どちらも　おもしろいです。{{chọn cả 2}}"),
-            R("…どちらも　おもしろくないです。{{ko chọn cả 2}}")
-          ),
-        ])
-      ),
-      card(
-        pattern("N1{{のなか}}で　N2が　いちばん　A　です。"),
-        kana([[null, null, null, "だれ", null, null, null, null, "か。"]]),
-        pattern("いつ", "なに", "どこ", "N1と　N2と　N3のなかで  N1 /N2 /N3が いちばん　A　です。"),
-        notes("So sánh nhất"),
-        examplesBlock([
-          itm(J("1.かぞくで　ちちが　いちばん　せが　たかいです。")),
-          itm(J("2. みかんと　りんごと　オレンジのなかで　みかんが　いちばん　すきです。")),
-        ])
-      ),
-      card(
-        notes("の{{ vai trò thay thế cho danh từ}}"),
-        examplesBlock([itm(J("1．C さんの　くつは　どれですか。"), J("くろいのです。"))])
-      ),
+    topic: "Quá khứ · So sánh",
+    points: [
+      {
+        pattern: "Quá khứ của câu danh từ / tính từ な",
+        meaning: "でした／じゃ ありませんでした",
+        table: {
+          columns: ["", "Khẳng định", "Phủ định"],
+          rows: [
+            ["Hiện tại", "あめです / ひまです", "あめじゃ ありません"],
+            ["Quá khứ", "あめでした / ひまでした", "あめじゃ ありませんでした"],
+          ],
+        },
+        examples: [
+          ex("きのうは あめでした。", "Hôm qua trời mưa."),
+          ex("きのうの しけんは かんたんじゃ ありませんでした。", "Bài kiểm tra hôm qua không dễ."),
+        ],
+      },
+      {
+        pattern: "Quá khứ của câu tính từ い",
+        meaning: "～かったです／～くなかったです",
+        notes: ["Ngoại lệ: いい → よかったです / よくなかったです."],
+        table: {
+          columns: ["", "Khẳng định", "Phủ định"],
+          rows: [
+            ["Hiện tại", "あついです", "あつくないです"],
+            ["Quá khứ", "あつかったです", "あつくなかったです"],
+          ],
+        },
+        examples: [
+          ex("きのうは あつかったです。", "Hôm qua trời nóng."),
+          ex("パーティーは あまり たのしくなかったです。", "Bữa tiệc không vui lắm."),
+        ],
+      },
+      {
+        pattern: "N1 は N2 より A です",
+        meaning: "N1 (tính từ) hơn N2",
+        examples: [ex("この くるまは あの くるまより おおきいです。", "Chiếc xe này to hơn chiếc xe kia.")],
+      },
+      {
+        pattern: "N1 と N2 と どちらが A ですか",
+        meaning: "N1 và N2, cái nào (tính từ) hơn?",
+        notes: ["Trả lời: N の ほうが A です. Bằng nhau: どちらも A です."],
+        examples: [
+          ex("サッカーと やきゅうと どちらが おもしろいですか。…サッカーの ほうが おもしろいです。", "Bóng đá và bóng chày, môn nào hay hơn? …Bóng đá hay hơn."),
+        ],
+      },
+      {
+        pattern: "N［の なか］で なに／どこ／だれ／いつ が いちばん A ですか",
+        meaning: "Trong N, cái gì / ở đâu / ai / khi nào (tính từ) nhất?",
+        examples: [
+          ex("にほんりょうり［の なか］で なにが いちばん おいしいですか。…てんぷらが いちばん おいしいです。", "Trong các món Nhật, món nào ngon nhất? …Tempura ngon nhất."),
+        ],
+      },
     ],
   },
   {
     id: 13,
-    badge: "Bài 13",
-    heading: "第13課 · だい13か",
-    cards: [
-      card(
-        pattern("Nが　ほしいです。", "Aイ", "なに"),
-        notes(
-          "{{Muốn, muốn có}}",
-          "Biểu hiện ham muốn sở hữu vật/ người của người nói",
-          "Dùng để hỏi ham muốn của người nghe"
-        ),
-        examplesBlock([
-          itm(J("1．	わたしは　車{{くるま}}が　ほしいです。"), J("？　なに　か。")),
-          itm(N("2 …………… "), J("なにも　ほしくないです。")),
-        ])
-      ),
-      card(
-        pattern("Vます  たいです。"),
-        notes(
-          "{{Muốn làm}}",
-          "Biểu hiện ý muốn của người nói、để hỏi ý muốn của người nghe",
-          "V 	đi kèm với を thì có thể thay thế bằng が",
-          "đi kèm với những trợ từ còn lại{{で、に、と、…}} thì giữ nguyên."
-        ),
-        examplesBlock([
-          itm(J("ラーメンを{{が}}　たべたいです。"), J("？　なに　か。")),
-          itm(J("2．日本{{にほん}}へ　いきたいです。")),
-          itm(J("なにを　したいですか。"), J("なにも　したくないです。")),
-        ])
-      ),
-      card(
-        notes("Người ta không dùng たい、ほしい  khi đưa ra lời mời."),
-        pattern("あした　テニスを　しませんか。", "おちゃは　いかがですか。")
-      ),
-      card(
-        kana([["N(địa điểm)へ", "Vます　に", "いきます"]]),
-        pattern("N		きます", "かえります", "なにをしに　か。"),
-        notes(
-          "Đi/ đến/ quay về đâu để làm gì.",
-          "Ｎ　là lễ hội, buổi hòa nhạc… thì mục đích là xem lễ hội hay là nghe nhạc…"
-        ),
-        examplesBlock([
-          itm(J("ともだちのうちへ　あそびに　いきました。")),
-          itm(J("2．にほんへ　かいものに　きました。")),
-          itm(J("3．かぞくと　きょうとへ　おまつりに　いきます。")),
-        ])
-      ),
-      card(
-        pattern("日本へ　けいざいのべんきょうに　きました。"),
-        notes("N"),
-        pattern("日本へ　けいざいをべんきょうしに　きました。"),
-        notes("V")
-      ),
-      card(
-        notes("どこか:  đâu đó, chỗ nào đó."),
-        examplesBlock([
-          itm(J("あした　どこか{{へ}}　いきますか。")),
-          itm(N("なにか:  cái gì đó.")),
-          itm(J("おなかが　すきましたから、なにか{{を}}　たべましょう。")),
-          itm(J("ごちゅうもんは／　おすし　：　thể hiện sự kính trọng")),
-        ])
-      ),
+    topic: "Mong muốn · Mục đích",
+    points: [
+      {
+        pattern: "N が ほしいです",
+        meaning: "Muốn có N",
+        notes: ["ほしい chia như tính từ い (ほしくないです).", "Chỉ nói về mong muốn của mình hoặc hỏi người nghe."],
+        examples: [
+          ex("わたしは ともだちが ほしいです。", "Tôi muốn có bạn."),
+          ex("いま なにが いちばん ほしいですか。…くるまが ほしいです。", "Bây giờ bạn muốn có gì nhất? …Tôi muốn có xe hơi."),
+        ],
+      },
+      {
+        pattern: "V ます (bỏ ます) たいです",
+        meaning: "Muốn làm V",
+        notes: ["を có thể đổi thành が. Chia như tính từ い: ～たくないです, ～たかったです."],
+        examples: [
+          ex("わたしは おきなわへ いきたいです。", "Tôi muốn đi Okinawa."),
+          ex("わたしは てんぷらが／を たべたいです。", "Tôi muốn ăn tempura."),
+          ex("おなかが いたいですから、なにも たべたくないです。", "Vì đau bụng nên tôi không muốn ăn gì."),
+        ],
+      },
+      {
+        pattern: "N (địa điểm) へ V ます／N に いきます",
+        meaning: "Đi đến … để làm V (mục đích)",
+        notes: ["V bỏ ます + に. Với danh từ hành động: かいもの, しょくじ + に."],
+        examples: [
+          ex("こうべへ インドりょうりを たべに いきます。", "Tôi đi Kobe để ăn món Ấn Độ."),
+          ex("こうべへ かいものに いきます。", "Tôi đi Kobe để mua sắm."),
+        ],
+      },
+      {
+        pattern: "どこか／なにか",
+        meaning: "Đâu đó / cái gì đó",
+        notes: ["へ và を sau どこか, なにか có thể lược bỏ."],
+        examples: [
+          ex("ふゆやすみは どこか［へ］いきましたか。…はい、いきました。", "Kỳ nghỉ đông bạn có đi đâu không? …Có, tôi có đi."),
+          ex("のどが かわきましたから、なにか［を］のみたいです。", "Vì khát nên tôi muốn uống gì đó."),
+        ],
+      },
     ],
   },
   {
     id: 14,
-    badge: "Bài 14",
-    heading: "第14課 · だい14か",
-    cards: [
-      card(
-        notes(
-          "Phân biệt nhóm của động từ {{3 nhóm }}",
-          "Nhóm 1: trước ます là những chữ thuộc cột い　れい： いきます",
-          "Nhóm 2: trước ます là những chữ thuộc cột え　れい：  たべます",
-          "Ngoại lệ:"
-        ),
-        pattern("おきます{{起きます}}{{thức dậy}}"),
-        notes("みます      {{xem, nhìn}}"),
-        pattern("おります   {{xuống}}", "あびます  {{tắm}}", "きます {{ 着ます  }}   {{mặc đồ}}", "Nhóm 3: します"),
-        notes("Nします{{danh động từ}}"),
-        pattern("きます{{来ます}}"),
-        examplesBlock([
-          itm(J("べんきょうします")),
-          itm(
-            J("にます      {{nấu ăn}}"),
-            N("できます   {{hoàn thành, có thể}}"),
-            J("おちます   {{rơi, rớt}}"),
-            J("かります    {{mượn}}"),
-            J("たります     {{đầy đủ}}"),
-            J("います         {{có}}")
-          ),
-          itm(N("はなします　NÓI, NÓI CHUYỆN")),
-        ])
-      ),
-      card(pattern("置きます{{I}} TRÍ", "起きます{{II}} KHỞI")),
-      card(notes("着ます{{II}} TRƯỚC", "来ます{{III}} LAI")),
-      card(
-        notes("Cách chia thể て, た", "Nhóm 1:"),
-        kana([["い", null, null, "れい：　かいます", "かって、かった"]]),
-        pattern("ち	って、った", "り"),
-        kana([["び", null, null, "れい：　よみます", "よんで、よんだ"]]),
-        pattern("み	んで、んだ", "に"),
-        kana([
-          ["き", "いて、いた", "れい：　かきます", "かいて、かいた"],
-          ["ぎ", "いで、いだ", "れい：　およぎます", "およいで、およいだ"],
-          ["し", "して、した", "れい：　はなします", "はなして、はなした"],
-        ]),
-        pattern("いきます　	いって、いった")
-      ),
-      card(
-        notes("Nhóm 2：	bỏ ます＋て、た"),
-        examplesBlock([itm(J("たべます　たべて、たべた"), J("おきます　おきて、おきた"))]),
-        kana([["Nhóm 3:", "します", "して、した"]])
-      ),
-      card(
-        pattern("Ｎします　　Ｎして、Ｎした", "きます	きて、きた"),
-        examplesBlock([itm(J("べんきょうします	べんきょうして、べんきょうした"))])
-      ),
-      card(
-        pattern("Vて　ください"),
-        notes("Hãy, xin hãy…", "Người nói sai khiến, khuyên nhủ, nhờ vả người nghe làm 1 việc gì đó."),
-        examplesBlock([
-          itm(J("1．ボールペンで　なまえを　かいてください。")),
-          itm(J("2．どうぞ　たくさん　たべてください。")),
-          itm(J("3．すみませんが、みちを　おしえてください。")),
-        ])
-      ),
-      card(
-        pattern("Vて　います"),
-        notes("Đang", "Hành động đang diễn ra"),
-        examplesBlock([itm(J("1．かんじを　かいています。"))])
-      ),
-      card(
-        pattern("Vます　ましょうか"),
-        notes("…nhé, …cho nhé", "Người nói đề nghị làm 1 việc gì đó cho người nghe"),
-        examplesBlock([
-          itm(
-            J("1．にもつを　もちましょうか。"),
-            J("はい{{ええ}}、もってください。"),
-            J("すみません{{ええ}}、おねがいします。")
-          ),
-          itm(J("いいえ、けっこうです。")),
-        ])
-      ),
+    topic: "Nhóm động từ · Thể て",
+    points: [
+      {
+        pattern: "3 nhóm động từ",
+        meaning: "Cách nhận biết nhóm từ thể ます",
+        table: {
+          columns: ["Nhóm", "Nhận biết", "Ví dụ"],
+          rows: [
+            ["I", "Âm trước ます thuộc hàng い", "かきます, のみます, かえります"],
+            ["II", "Âm trước ます thuộc hàng え (và một số hàng い)", "たべます, ねます / みます, おきます"],
+            ["III", "します, きます, N + します", "します, きます, べんきょうします"],
+          ],
+        },
+        examples: [],
+      },
+      {
+        pattern: "Thể て",
+        meaning: "Cách chia từ thể ます",
+        table: {
+          columns: ["Nhóm", "Đuôi ます", "→ Thể て", "Ví dụ"],
+          rows: [
+            ["I", "い・ち・り", "って", "かいます → かって"],
+            ["I", "み・び・に", "んで", "のみます → のんで"],
+            ["I", "き / ぎ", "いて / いで", "かきます → かいて, いそぎます → いそいで"],
+            ["I", "し", "して", "かします → かして"],
+            ["I", "Ngoại lệ", "いって", "いきます → いって"],
+            ["II", "bỏ ます", "+ て", "たべます → たべて"],
+            ["III", "", "して / きて", "します → して, きます → きて"],
+          ],
+        },
+        examples: [],
+      },
+      {
+        pattern: "V て ください",
+        meaning: "Hãy làm V (nhờ vả, mời, chỉ dẫn)",
+        notes: ["Thêm すみませんが ở đầu để nhờ lịch sự hơn."],
+        examples: [
+          ex("すみませんが、この かんじの よみかたを おしえて ください。", "Xin lỗi, hãy chỉ cho tôi cách đọc chữ Hán này."),
+          ex("どうぞ たくさん たべて ください。", "Xin mời ăn nhiều vào."),
+        ],
+      },
+      {
+        pattern: "V て います (đang làm)",
+        meaning: "Đang làm V",
+        examples: [
+          ex("ミラーさんは いま でんわを かけて います。", "Anh Miller bây giờ đang gọi điện thoại."),
+          ex("いま あめが ふって いますか。…はい、ふって います。", "Bây giờ trời có đang mưa không? …Có, đang mưa."),
+        ],
+      },
+      {
+        pattern: "V ます (bỏ ます) ましょうか",
+        meaning: "Để tôi làm V nhé? (đề nghị giúp)",
+        examples: [
+          ex("タクシーを よびましょうか。…ええ、おねがいします。", "Để tôi gọi taxi nhé? …Vâng, nhờ anh."),
+          ex("てつだいましょうか。…すみません。おねがいします。", "Để tôi giúp nhé? …Cảm ơn, nhờ anh."),
+        ],
+      },
     ],
   },
   {
     id: 15,
-    badge: "Bài 15",
-    heading: "第15課 · だい15か",
-    cards: [
-      card(
-        pattern("Vては　いけません。", "だめです。"),
-        notes("Biểu thị ý nghĩa cấm/ không được làm 1 việc gì {{cấm/ không được }}"),
-        examplesBlock([itm(J("1．このビルで　しゃしんをとっては　いけません。")), itm(N("2 …………… "))])
-      ),
-      card(
-        pattern("Vても　いいです。"),
-        notes("Biểu thị sự được phép làm 1 việc gì　{{ được…}}", "Vても　いいですか。{{Xin phép: …có được không?}}"),
-        pattern("ええ{{はい}}、いいですよ。どうぞ。", "すみません。ちょっと…", "いいえ、{{Ｖては}}　いけません。"),
-        examplesBlock([
-          itm(J("1．このへやで　でんわを　つかっても　いいです。")),
-          itm(J("2．たばこを　すっても　いいですか。")),
-          itm(N("3 …………… ")),
-        ])
-      ),
-      card(
-        pattern("Vて　います"),
-        notes(
-          "Hành động đang diễn ra {{Đang}}",
-          "Trạng thái {{ là kết quả của 1 hành động}} vẫn còn lại, vẫn tiếp diễn ở hiện tại."
-        ),
-        pattern("けっこんしています。", "すんでいます。"),
-        notes("もっています。{{đang cầm, có(sở hữu)}}"),
-        pattern("しっています。　　　　しりません。"),
-        notes("Tập quán, thói quen {{hành vi lặp đi lặp lại}}"),
-        examplesBlock([
-          itm(J("1．にほんごを　べんきょうしています。")),
-          itm(J("2．ひとりで　ベトナムに　すんでいます。")),
-          itm(J("3．さくらだいがくで　えいごを　おしえています。")),
-          itm(N("4 …………… ")),
-        ])
-      ),
+    topic: "Xin phép · Cấm đoán · Trạng thái",
+    points: [
+      {
+        pattern: "V て も いいですか",
+        meaning: "Tôi làm V có được không? (xin phép)",
+        notes: ["Đồng ý: ええ、いいですよ。/ Từ chối: すみません、ちょっと…。"],
+        examples: [
+          ex("しゃしんを とっても いいですか。…ええ、いいですよ。", "Tôi chụp ảnh có được không? …Vâng, được ạ."),
+          ex("この ほんを かりても いいですか。…すみません、ちょっと…。", "Tôi mượn quyển sách này được không? …Xin lỗi, hơi…"),
+        ],
+      },
+      {
+        pattern: "V て は いけません",
+        meaning: "Không được làm V (cấm)",
+        notes: ["Trả lời phủ định câu xin phép: いいえ、いけません。"],
+        examples: [
+          ex("ここで たばこを すっては いけません。", "Không được hút thuốc ở đây."),
+          ex("せんせい、ここで あそんでも いいですか。…いいえ、いけません。", "Thưa thầy, em chơi ở đây được không? …Không, không được."),
+        ],
+      },
+      {
+        pattern: "V て います (trạng thái · nghề nghiệp)",
+        meaning: "Trạng thái kết quả, thói quen, công việc",
+        notes: ["しって います (biết) — phủ định là しりません (không phải しって いません)."],
+        examples: [
+          ex("わたしは けっこんして います。", "Tôi đã kết hôn."),
+          ex("わたしは IMCで はたらいて います。", "Tôi đang làm việc ở IMC."),
+          ex("たなかさんの でんわばんごうを しって いますか。…いいえ、しりません。", "Bạn có biết số điện thoại của anh Tanaka không? …Không, tôi không biết."),
+        ],
+      },
+      {
+        pattern: "N に V (はいります, すわります, のります, のぼります)",
+        meaning: "Vào / ngồi lên / lên (xe) / leo lên N",
+        notes: ["に chỉ nơi người hoặc vật có mặt sau khi hành động kết thúc."],
+        examples: [
+          ex("ここに はいっては いけません。", "Không được vào đây."),
+          ex("ここに すわっても いいですか。", "Tôi ngồi đây được không?"),
+          ex("きょうとえきから 16ばんの バスに のって ください。", "Hãy lên xe buýt số 16 từ ga Kyoto."),
+        ],
+      },
+      {
+        pattern: "N1 に N2 を V (おきます, かきます)",
+        meaning: "Đặt / viết N2 vào N1",
+        examples: [
+          ex("ここに くるまを とめて ください。", "Hãy đỗ xe ở đây."),
+          ex("ここに じゅうしょを かいて ください。", "Hãy viết địa chỉ vào đây."),
+        ],
+      },
     ],
   },
   {
     id: 16,
-    badge: "Bài 16",
-    heading: "第16課 · だい16か",
-    cards: [
-      card(
-        notes("V1て　V2て　V3て…. V", "Nối V, liệt kê hành động theo trình tự thời gian {{ rồi}}"),
-        examplesBlock([itm(J("1．にほんへきて、おすしを　たべて、おはなみを　しました。"))])
-      ),
-      card(
-        pattern("V1てから　V2"),
-        notes("V2 được thực hiện sau khi V1 kết thúc  {{sau khi}}"),
-        examplesBlock([itm(J("1．くにへ　かえってから、にほんのかいしゃで　はたらきます。"))])
-      ),
-      card(
-        pattern("Aイくて", "Aナ / N で"),
-        notes(
-          "Nối Aイ, Aナ, N.",
-          "dùng với câu 1 chủ đề, nhiều chủ đề.",
-          "Không dùng nối những bộ phận có ý nghĩa trái ngược nhau."
-        ),
-        examplesBlock([
-          itm(J("1．ミラーさんは　わかくて、あたまが　よくて、おもしろいです。")),
-          itm(J("2．カリナさんは　がくせいで、マリアさんは　いしゃです。")),
-          itm(J("3．このへやは　せまくて、きれいです。x"), J("せまいですが、きれいです。")),
-        ])
-      ),
-      card(
-        notes("N1は N2が　A。", "は trợ từ mệnh đề chính", "が …………… phụ"),
-        examplesBlock([itm(J("1．かんじは　よみかたが　むずかしいです。"))])
-      ),
-      card(
-        pattern("どうやって"),
-        notes("Hỏi trình tự, hoặc cách làm 1 việc nào đó {{bằng cách nào}}"),
-        examplesBlock([
-          itm(J("1．どうやって　にほんごを　べんきょうしますか。"), J("えいがを　みて、しんぶんを　よんで、おんがくを　ききます。")),
-        ])
-      ),
+    topic: "Nối câu · Trình tự hành động",
+    points: [
+      {
+        pattern: "V て、［V て、］～",
+        meaning: "Làm V1, rồi V2, rồi… (theo thứ tự)",
+        notes: ["Thì của cả câu do động từ cuối câu quyết định."],
+        examples: [
+          ex("あさ ジョギングを して、シャワーを あびて、かいしゃへ いきます。", "Buổi sáng tôi chạy bộ, tắm rồi đi làm."),
+          ex("こうべへ いって、えいがを みて、おちゃを のみました。", "Tôi đã đi Kobe, xem phim rồi uống trà."),
+        ],
+      },
+      {
+        pattern: "Aい (～い → ～くて)／Aな・N + で、～",
+        meaning: "Nối tính từ, danh từ: … và …",
+        notes: ["Không nối hai tính từ trái chiều đánh giá (tốt + xấu) — khi đó dùng が."],
+        examples: [
+          ex("ミラーさんは わかくて、げんきです。", "Anh Miller trẻ và khỏe."),
+          ex("ならは しずかで、きれいな まちです。", "Nara là thành phố yên tĩnh và đẹp."),
+          ex("カリナさんは インドネシアじんで、きょうとだいがくの りゅうがくせいです。", "Chị Karina là người Indonesia, là du học sinh ở ĐH Kyoto."),
+        ],
+      },
+      {
+        pattern: "V1 て から、V2",
+        meaning: "Sau khi làm V1 thì làm V2",
+        examples: [
+          ex("くにへ かえって から、ちちの かいしゃで はたらきます。", "Sau khi về nước, tôi sẽ làm việc ở công ty của bố."),
+          ex("コンサートが おわって から、レストランで しょくじしました。", "Sau khi buổi hòa nhạc kết thúc, chúng tôi ăn ở nhà hàng."),
+        ],
+      },
+      {
+        pattern: "N1 は N2 が A",
+        meaning: "N1 thì N2 (tính từ) — miêu tả đặc điểm",
+        examples: [
+          ex("おおさかは たべものが おいしいです。", "Osaka đồ ăn ngon."),
+          ex("マリアさんは かみが ながいです。", "Chị Maria tóc dài."),
+        ],
+      },
+      {
+        pattern: "N を V (でます, おります)",
+        meaning: "Rời khỏi / xuống khỏi N",
+        notes: ["を chỉ điểm xuất phát, nơi rời đi."],
+        examples: [
+          ex("7じに うちを でます。", "Tôi ra khỏi nhà lúc 7 giờ."),
+          ex("うめだで でんしゃを おりました。", "Tôi đã xuống tàu ở Umeda."),
+        ],
+      },
+      {
+        pattern: "どうやって",
+        meaning: "Bằng cách nào?",
+        examples: [
+          ex("だいがくまで どうやって いきますか。…きょうとえきから 16ばんの バスに のって、だいがくまえで おります。", "Đến trường đại học đi như thế nào? …Từ ga Kyoto lên xe buýt số 16, xuống ở trạm Trước trường."),
+        ],
+      },
+      {
+        pattern: "どの N",
+        meaning: "N nào? (chọn trong 3 cái trở lên)",
+        examples: [ex("サントスさんは どの ひとですか。…あの せが たかくて、かみが くろい ひとです。", "Anh Santos là người nào? …Là người cao, tóc đen kia.")],
+      },
     ],
   },
   {
     id: 17,
-    badge: "Bài 17",
-    heading: "第17課 · だい17か",
-    cards: [
-      card(
-        notes("Cách chia thể ない", "Nhóm 1:　cột い　	cột あ + ない"),
-        pattern("い　	わ + ない"),
-        examplesBlock([
-          itm(J("よみます	よまない"), J("かいます	かわない"), J("あります	　ない"), J("Nhóm 2:　bỏ ます+ ない")),
-          itm(J("おしえます	　　おしえない"), J("おきます	　　おきない")),
-        ]),
-        kana([["Nhóm 3:", "します", null, "しない"]]),
-        pattern("Ｎします　　	Ｎしない", "来ます		こない"),
-        examplesBlock([itm(J("べんきょうします	べんきょうしない"))])
-      ),
-      card(
-        pattern("Vない　でください"),
-        notes("Xin đừng, đừng", "Yêu cầu người khác đừng làm 1 việc gì"),
-        examplesBlock([itm(J("1．ここで　しゃしんを　とらないでください。")), itm(N("2 …………… "))])
-      ),
-      card(
-        pattern("Vない　なくても　いいです。"),
-        notes("Không phải…", "Không phải làm 1 việc gì đó"),
-        examplesBlock([itm(J("1．くつを　ぬがなくても　いいです。")), itm(N("2 …………… "))])
-      ),
-      card(
-        notes("N{{ thời gian}} までに  V　：trước", "…まで 　:Đến"),
-        examplesBlock([
-          itm(J("1.きんようびまでに　レポートを　ださなければ　なりません。")),
-          itm(J("2.こんしゅうは　きんようびまで　はたらきます。")),
-          itm(
-            J("あした　レポートを　かきます。"),
-            J("レポートは　あした　かきます。"),
-            J("あしたは　レポートを　かきます"),
-            J("レストランでは　ごはんを　たべます。")
-          ),
-        ])
-      ),
+    topic: "Thể ない · Bắt buộc · Không cần",
+    points: [
+      {
+        pattern: "Thể ない",
+        meaning: "Cách chia từ thể ます",
+        table: {
+          columns: ["Nhóm", "Cách chia", "Ví dụ"],
+          rows: [
+            ["I", "Âm hàng い → hàng あ + ない (い → わ)", "かきます → かかない, かいます → かわない"],
+            ["II", "bỏ ます + ない", "たべます → たべない"],
+            ["III", "", "します → しない, きます → こない"],
+          ],
+        },
+        examples: [],
+      },
+      {
+        pattern: "V ない で ください",
+        meaning: "Xin đừng làm V",
+        examples: [
+          ex("ここで しゃしんを とらないで ください。", "Xin đừng chụp ảnh ở đây."),
+          ex("わたしは げんきですから、しんぱいしないで ください。", "Tôi khỏe nên xin đừng lo lắng."),
+        ],
+      },
+      {
+        pattern: "V ない (bỏ い) ければ なりません",
+        meaning: "Phải làm V",
+        examples: [
+          ex("くすりを のまなければ なりません。", "Phải uống thuốc."),
+          ex("あしたまでに レポートを ださなければ なりません。", "Phải nộp báo cáo trước ngày mai."),
+        ],
+      },
+      {
+        pattern: "V ない (bỏ い) くても いいです",
+        meaning: "Không làm V cũng được (không cần)",
+        examples: [ex("あした こなくても いいです。", "Ngày mai không đến cũng được.")],
+      },
+      {
+        pattern: "N (tân ngữ) は V",
+        meaning: "Đưa tân ngữ lên làm chủ đề",
+        notes: ["を được thay bằng は để nhấn mạnh hoặc nêu chủ đề."],
+        examples: [ex("にもつは ここに おかないで ください。", "Hành lý thì xin đừng để ở đây.")],
+      },
+      {
+        pattern: "N (thời gian) までに V",
+        meaning: "Làm V trước (hạn) N",
+        notes: ["まで: hành động kéo dài liên tục đến N. までに: hạn chót, xong trước N."],
+        examples: [
+          ex("かいぎは 5じまでに おわります。", "Cuộc họp sẽ kết thúc trước 5 giờ."),
+          ex("どようびまでに ほんを かえさなければ なりません。", "Phải trả sách trước thứ Bảy."),
+        ],
+      },
     ],
   },
   {
     id: 18,
-    badge: "Bài 18",
-    heading: "第18課 · だい18か",
-    cards: [
-      card(
-        notes("Cách chia thể từ điển", "Nhóm 1:　cột い　	cột う"),
-        examplesBlock([
-          itm(J("よみます	よむ")),
-          itm(N("Nhóm 2:　bỏ ます+ る")),
-          itm(J("おしえます	　　おしえる"), J("起きます	　　おきる")),
-        ]),
-        kana([["Nhóm 3:", "します", null, "する"]]),
-        pattern("Ｎします　　	Ｎする", "来ます		くる"),
-        examplesBlock([itm(J("べんきょうします	べんきょうする"))])
-      ),
-      card(
-        pattern("N	ができます。", "Vる　こと"),
-        notes("Có thể", "Ｎ chỉ động tác, hành vi{{うんてん、ダンス}}, danh từ ám chỉ động tác hoặc hành vi{{にほんご、ピアノ}}"),
-        examplesBlock([itm(J("1．にほんごが　できます。")), itm(J("2．およぐことが　できます。")), itm(N("3 …………… "))])
-      ),
-      card(
-        pattern("しゅみは　N　　　　です。", "Vること"),
-        notes("Sở thích là…"),
-        examplesBlock([
-          itm(J("1．私{{わたし}}のしゅみは　えいがです。")),
-          itm(J("2．私{{わたし}}のしゅみは　えいがを　みることです。")),
-          itm(N("3 …………… ")),
-        ])
-      ),
-      card(
-        pattern("V１る", "N の		　まえに、Ｖ２"),
-        notes(
-          "Lượng từ{{khoảng thời gian}}",
-          "Trước khi, Trước… {{V2 xảy ra trước V1, N biểu thị hoặc ám chỉ hành động}}"
-        ),
-        examplesBlock([
-          itm(J("1．ねるまえに、ほんを　よみます。")),
-          itm(J("2．しょくじのまえに、　手を　あらいます。")),
-          itm(J("3．５ねんまえに、にほんへ　きました。")),
-          itm(N("4 …………… ")),
-        ])
-      ),
-      card(
-        notes("なかなか +　phủ định　：mãi mà không"),
-        examplesBlock([
-          itm(J("なかなか　にほんへ　いくことができません。")),
-          itm(N("ぜひ　: nhất định"), J("ぜひ　にほんへ　いきたいです。"), J("ぜひ　あそびに　きてください。")),
-        ])
-      ),
+    topic: "Thể từ điển · Khả năng · Sở thích",
+    points: [
+      {
+        pattern: "Thể từ điển (thể る)",
+        meaning: "Cách chia từ thể ます",
+        table: {
+          columns: ["Nhóm", "Cách chia", "Ví dụ"],
+          rows: [
+            ["I", "Âm hàng い → hàng う", "かきます → かく, のみます → のむ"],
+            ["II", "bỏ ます + る", "たべます → たべる"],
+            ["III", "", "します → する, きます → くる"],
+          ],
+        },
+        examples: [],
+      },
+      {
+        pattern: "N／V る こと が できます",
+        meaning: "Có thể làm V / có thể N",
+        examples: [
+          ex("ミラーさんは かんじを よむ ことが できます。", "Anh Miller có thể đọc chữ Hán."),
+          ex("カードで はらう ことが できます。", "Có thể trả bằng thẻ."),
+          ex("わたしは ピアノが できます。", "Tôi biết chơi piano."),
+        ],
+      },
+      {
+        pattern: "わたしの しゅみは N／V る こと です",
+        meaning: "Sở thích của tôi là …",
+        examples: [
+          ex("わたしの しゅみは おんがくです。", "Sở thích của tôi là âm nhạc."),
+          ex("わたしの しゅみは おんがくを きく ことです。", "Sở thích của tôi là nghe nhạc."),
+        ],
+      },
+      {
+        pattern: "V1 る／N の／khoảng thời gian  まえに、V2",
+        meaning: "Trước khi V1 / trước N / … trước, làm V2",
+        notes: ["Động từ trước まえに luôn ở thể từ điển, kể cả khi câu ở quá khứ."],
+        examples: [
+          ex("ねる まえに、ほんを よみます。", "Trước khi ngủ tôi đọc sách."),
+          ex("しょくじの まえに、てを あらいます。", "Trước bữa ăn tôi rửa tay."),
+          ex("たなかさんは 1じかん まえに、でかけました。", "Anh Tanaka đã ra ngoài cách đây 1 tiếng."),
+        ],
+      },
+      {
+        pattern: "なかなか ～ません",
+        meaning: "Mãi mà không… / khó mà…",
+        examples: [ex("にほんでは なかなか うまを みる ことが できません。", "Ở Nhật khó mà thấy được ngựa.")],
+      },
+      {
+        pattern: "ぜひ",
+        meaning: "Nhất định, rất muốn",
+        notes: ["Đi với ～たいです, ～て ください."],
+        examples: [ex("ぜひ ほっかいどうへ いきたいです。", "Tôi rất muốn đi Hokkaido.")],
+      },
     ],
   },
   {
     id: 19,
-    badge: "Bài 19",
-    heading: "第19課 · だい19か",
-    cards: [
-      card(
-        pattern("Vた　こと   があります。"),
-        notes("Đã từng…", "Biểu thị đã từng làm 1 việc gì đó trong quá khứ như là 1 kinh nghiệm."),
-        examplesBlock([
-          itm(J("1．すもうを　みたことが　あります。")),
-          itm(J("2．ふじさんに　のぼったことが　ありません。")),
-          itm(N("3 …………… ")),
-        ])
-      ),
-      card(
-        pattern("Vたり、 Vたり　します。"),
-        notes("Làm…làm…", "Liệt kê hành động mang tính chất tiêu biểu."),
-        examplesBlock([
-          itm(J("1．やすみのひは　テニスを　したり、さんぽに　いったり　します。")),
-          itm(J("2．そうじ　したり、せんたく　したり　しなければ　なりません。")),
-          itm(N("3 …………… ")),
-        ])
-      ),
-      card(
-        pattern("Aイ　く　　　　　　なります。", "Aナ	 / N に"),
-        notes("Trở nên, trở thành, lên…　{{diễn tả sự thay đổi trạng thái}}"),
-        examplesBlock([
-          itm(J("1．あつく　なります。")),
-          itm(J("2．べんりに　なります。")),
-          itm(J("3．いもうとは　いしゃに　なります。")),
-          itm(N("4 …………… ")),
-        ])
-      ),
-      card(
-        notes(
-          "そうですか　：　biểu hiện sự cảm thán, tiếp nhận của người nói với thông tin mới nhận được",
-          "そうですね :     biểu thị người nghe đồng ý, thông cảm khi đối phương nói ra điều mình biết, hoặc cũng nghĩ thế"
-        )
-      ),
+    topic: "Thể た · Kinh nghiệm · Thay đổi",
+    points: [
+      {
+        pattern: "Thể た",
+        meaning: "Chia giống thể て, đổi て → た, で → だ",
+        table: {
+          columns: ["Thể て", "→ Thể た"],
+          rows: [
+            ["かいて, かって, かして", "かいた, かった, かした"],
+            ["のんで, いそいで", "のんだ, いそいだ"],
+            ["たべて, して, きて", "たべた, した, きた"],
+          ],
+        },
+        examples: [],
+      },
+      {
+        pattern: "V た ことが あります",
+        meaning: "Đã từng làm V",
+        examples: [
+          ex("うまに のった ことが あります。", "Tôi đã từng cưỡi ngựa."),
+          ex("ほっかいどうへ いった ことが ありますか。…いいえ、いちども ありません。", "Bạn đã từng đi Hokkaido chưa? …Chưa, chưa lần nào."),
+        ],
+      },
+      {
+        pattern: "V1 た り、V2 た り します",
+        meaning: "Lúc thì V1, lúc thì V2 / làm những việc như V1, V2",
+        notes: ["Chỉ liệt kê vài hành động tiêu biểu, không theo thứ tự."],
+        examples: [ex("にちようびは テニスを したり、えいがを みたり します。", "Chủ nhật tôi chơi tennis, xem phim…")],
+      },
+      {
+        pattern: "Aい (～い → ～く)／Aな・N + に  なります",
+        meaning: "Trở nên / trở thành …",
+        examples: [
+          ex("さむく なります。", "Trời trở nên lạnh."),
+          ex("げんきに なりました。", "Tôi đã khỏe lại."),
+          ex("らいねん 25さいに なります。", "Sang năm tôi 25 tuổi."),
+        ],
+      },
     ],
   },
   {
     id: 20,
-    badge: "Bài 20",
-    heading: "第20課 · だい20か",
-    cards: [
-      card(
-        pattern(
-          "Vます　 			V る",
-          "Vません　 		V ない",
-          "Vました　 		V た",
-          "Vませんでした　		Vないなかった",
-          "Aイ　です",
-          "Aイ　くないです 		        bỏです",
-          "Aイ　かったです",
-          "Aイ　くなかったです"
-        )
-      ),
-      card(
-        pattern(
-          "Aナ/N　です				Aナ/N　だ",
-          "Aナ/N　では{{じゃ}}ありません　 		Aナ/N　では{{じゃ}}ない",
-          "Aナ/N　でした　 			 Aナ/N　だった",
-          "Aナ/N　では{{じゃ}}ありませんでした		 Aナ/N　では{{じゃ}}なかった",
-          "Vています　	　　　Vて{{い}}る",
-          "Vてくだいさい	　　　　Vて"
-        )
-      ),
-      card(
-        pattern(
-          "おちゃを　のむ？{{　}}",
-          "…うん、のむ。{{　}}",
-          "…ううん、のまない。",
-          "あした　ひま{{だ}}",
-          "…うん、ひま/  ひまだ/  ひまだよ。{{nam}}",
-          "…うん、ひま/  ひまよ。{{nữ}}",
-          "…ううん、ひま　じゃない。"
-        ),
-        notes("Trợ từ: を、へ、が、は　có thể lược bỏ", "で、に、から、まで、と　không thể lược bỏ")
-      ),
+    topic: "Thể thông thường",
+    points: [
+      {
+        pattern: "Thể lịch sự ↔ thể thông thường",
+        meaning: "Bảng đối chiếu",
+        table: {
+          columns: ["", "Hiện tại khẳng định", "Hiện tại phủ định", "Quá khứ khẳng định", "Quá khứ phủ định"],
+          rows: [
+            ["Động từ", "いく", "いかない", "いった", "いかなかった"],
+            ["Tính từ い", "おおきい", "おおきくない", "おおきかった", "おおきくなかった"],
+            ["Tính từ な", "きれいだ", "きれいじゃ ない", "きれいだった", "きれいじゃ なかった"],
+            ["Danh từ", "あめだ", "あめじゃ ない", "あめだった", "あめじゃ なかった"],
+          ],
+        },
+        examples: [],
+      },
+      {
+        pattern: "Khi nào dùng thể thông thường",
+        meaning: "Nói với người thân thiết, viết văn",
+        notes: [
+          "Lịch sự (です／ます): với người mới gặp, người trên, người không thân.",
+          "Thông thường: với bạn bè, gia đình, đồng nghiệp thân; trong báo, nhật ký, luận văn.",
+        ],
+        examples: [],
+      },
+      {
+        pattern: "Hội thoại thể thông thường",
+        meaning: "Những điểm thay đổi khi nói chuyện thân mật",
+        notes: [
+          "Câu hỏi thường bỏ か, chỉ lên giọng cuối câu.",
+          "Với danh từ, tính từ な: bỏ だ khi hỏi và trả lời (ひま？ — うん、ひま。).",
+          "Trợ từ は, を, へ thường được lược bỏ.",
+          "はい → うん, いいえ → ううん. が (nhưng) → けど.",
+        ],
+        examples: [
+          ex("コーヒーを のむ？…うん、のむ。", "Uống cà phê không? …Ừ, uống."),
+          ex("あした ひま？…うん、ひま。", "Mai rảnh không? …Ừ, rảnh."),
+          ex("その カレー、おいしい？…うん、からいけど、おいしい。", "Món cà ri đó ngon không? …Ừ, cay nhưng ngon."),
+        ],
+      },
     ],
   },
   {
     id: 21,
-    badge: "Bài 21",
-    heading: "第21課 · だい21か",
-    cards: [
-      card(
-        notes("Thể thông thường/ thể ngắn と　おもいます。"),
-        pattern("Nについて　どう　おもいますか。", "わたしも　そう　おもいます。", "わたしは　そう{{は}}　おもいません。"),
-        notes("Nêu phán đoán, ý kiến{{ Tôi nghĩ…}}", "Hỏi ý kiến ai về 1 cái gì đó{{ Nghĩ như thế nào về N}}"),
-        examplesBlock([itm(J("1.あした　あめが　ふると　おもいます。"))])
-      ),
-      card(
-        pattern("「Câu」		と　いいます。"),
-        notes("Thể ngắn"),
-        pattern("なん"),
-        notes("Trích dẫn câu trực tiếp hoặc gián tiếp {{ Nói…}}"),
-        examplesBlock([
-          itm(J("1.しゅしょうは　らいげつ　アメリカに　いくと　いいました。")),
-          itm(J("2．しゅしょうは「らいげつ　アメリカに　いきます」"), J("と　いいました。")),
-          itm(N(".")),
-        ])
-      ),
-      card(
-        pattern("Ｔhể ngắn 	でしょう。"),
-        notes("{{Aナ/N だ}}", "Xác nhận sự đồng ý của người nghe, có kì vọng người nghe sẽ đồng ý {{phải không?}}"),
-        examplesBlock([itm(J("1.あした　パーティーに　いくでしょう。"))])
-      ),
-      card(
-        pattern(
-          "とうきょうで　日本と　ブラジルのサッカーのしあいが　あります。",
-          "かいぎで　なにか　いけんを　いいましたか。",
-          "ちょっと　ビールでも　のみませんか。"
-        )
-      ),
+    topic: "Ý kiến · Lời nói · Xác nhận",
+    points: [
+      {
+        pattern: "Thể thông thường と おもいます",
+        meaning: "Tôi nghĩ rằng …",
+        notes: ["Hỏi ý kiến: N に ついて どう おもいますか.", "Phủ định: ～ないと おもいます."],
+        examples: [
+          ex("あした あめが ふると おもいます。", "Tôi nghĩ ngày mai trời sẽ mưa."),
+          ex("テレーザちゃんは もう ねたと おもいます。", "Tôi nghĩ bé Teresa ngủ rồi."),
+          ex("しんかんせんに ついて どう おもいますか。…はやくて、べんりだと おもいます。", "Bạn nghĩ gì về tàu Shinkansen? …Tôi nghĩ nó nhanh và tiện."),
+        ],
+      },
+      {
+        pattern: "「câu」／thể thông thường と いいます",
+        meaning: "Nói rằng …",
+        examples: [
+          ex("ねる まえに、「おやすみなさい」と いいます。", "Trước khi ngủ người ta nói \"Oyasumi nasai\"."),
+          ex("ミラーさんは らいしゅう とうきょうへ しゅっちょうすると いいました。", "Anh Miller nói rằng tuần sau sẽ đi công tác Tokyo."),
+        ],
+      },
+      {
+        pattern: "Thể thông thường でしょう？",
+        meaning: "… phải không? (xác nhận, lên giọng)",
+        notes: ["Với danh từ, tính từ な: bỏ だ (ひまでしょう？)."],
+        examples: [
+          ex("あした パーティーに いくでしょう？…ええ、いきます。", "Mai anh đi dự tiệc phải không? …Vâng, tôi đi."),
+          ex("ほっかいどうは さむかったでしょう？…いいえ、そんなに さむくなかったです。", "Hokkaido lạnh lắm phải không? …Không, không lạnh lắm."),
+        ],
+      },
+      {
+        pattern: "N1 (địa điểm) で N2 が あります",
+        meaning: "Ở N1 có / diễn ra N2 (sự kiện)",
+        examples: [ex("とうきょうで にほんと ブラジルの サッカーの しあいが あります。", "Ở Tokyo có trận bóng đá giữa Nhật và Brazil.")],
+      },
+      {
+        pattern: "N (tình huống) で",
+        meaning: "Trong / tại (cuộc họp, bữa tiệc…)",
+        examples: [ex("かいぎで なにか いけんを いいましたか。…いいえ、なにも いいませんでした。", "Trong cuộc họp bạn có nói ý kiến gì không? …Không, tôi không nói gì cả.")],
+      },
+      {
+        pattern: "N でも V ませんか",
+        meaning: "… hay gì đó nhé? (gợi ý nhẹ nhàng)",
+        examples: [ex("ちょっと ビールでも のみませんか。", "Đi uống chút bia hay gì đó không?")],
+      },
     ],
   },
   {
     id: 22,
-    badge: "Bài 22",
-    heading: "第22課 · だい22か",
-    cards: [
-      card(
-        pattern("N の  	 N", "Aイ", "Aナ な"),
-        notes("V thể ngắn"),
-        examplesBlock([
-          itm(J("1．これは　これから　つかうほんです。")),
-          itm(J("2．私{{わたし}}が　生{{う}}まれた　ところは　よこはまです。")),
-        ])
-      ),
+    topic: "Mệnh đề bổ nghĩa cho danh từ",
+    points: [
+      {
+        pattern: "Thể thông thường + N",
+        meaning: "Mệnh đề đứng trước để bổ nghĩa cho danh từ",
+        notes: [
+          "Động từ, tính từ trong mệnh đề ở thể thông thường. Tính từ な giữ な, danh từ dùng の.",
+          "Chủ ngữ trong mệnh đề dùng が (không dùng は).",
+        ],
+        table: {
+          columns: ["Mệnh đề", "+ Danh từ", "Nghĩa"],
+          rows: [
+            ["きょうとへ いく", "ひと", "người (sẽ) đi Kyoto"],
+            ["きょうとへ いかない", "ひと", "người không đi Kyoto"],
+            ["きょうとへ いった", "ひと", "người đã đi Kyoto"],
+            ["めがねを かけて いる", "ひと", "người đang đeo kính"],
+          ],
+        },
+        examples: [
+          ex("これは ミラーさんが すんで いた うちです。", "Đây là ngôi nhà anh Miller đã từng sống."),
+          ex("あそこで しゃしんを とって いる ひとは だれですか。", "Người đang chụp ảnh ở đằng kia là ai?"),
+          ex("わたしは カリナさんが かいた えが すきです。", "Tôi thích bức tranh chị Karina vẽ."),
+        ],
+      },
+      {
+        pattern: "V る  じかん／やくそく／ようじ",
+        meaning: "Thời gian / cuộc hẹn / việc bận để làm V",
+        examples: [
+          ex("わたしは あさ ごはんを たべる じかんが ありません。", "Buổi sáng tôi không có thời gian ăn sáng."),
+          ex("わたしは ともだちと えいがを みる やくそくが あります。", "Tôi có hẹn đi xem phim với bạn."),
+          ex("きょうは しやくしょへ いく ようじが あります。", "Hôm nay tôi có việc phải đến văn phòng thành phố."),
+        ],
+      },
     ],
   },
   {
     id: 23,
-    badge: "Bài 23",
-    heading: "第23課 · だい23か",
-    cards: [
-      card(
-        pattern("Vる		とき、", "vない", "Aイ", "Aナ な", "N の"),
-        notes("Khi", "Biểu thị thời điểm mà trạng thái, động tác, hiện tượng ở mệnh đề sau diễn ra"),
-        examplesBlock([itm(J("1．みちを　わたるとき、くるまに　きをつけます。"))])
-      ),
-      card(
-        pattern("Vる とき＝Vる まえに{{ trước khi}}", "Vた とき＝Vて から    {{sau khi}}"),
-        examplesBlock([
-          itm(J("1．うちへ　かえるとき、　ケーキをかいます。")),
-          itm(J("2．うちへ　かえったとき、「ただいま」と　いいます。")),
-        ])
-      ),
-      card(
-        pattern("Vる　　と、"),
-        notes("Là/ thì", "Nối 2 mệnh đề của câu, biểu thị 1 kết quả tất yếu của 1 hành động"),
-        examplesBlock([
-          itm(J("1．このボータンを　おすと、　おつりが　出ます。")),
-          itm(
-            J("2. じかんが　あると、　　　えいがを　見に　いきます。　{{ý chí}}"),
-            J("えいがを　見に　いきたいです。{{nguyện vọng}}"),
-            J("えいがを　見に　いきませんか。{{lời mời}}"),
-            J("ちょっと　てつだってくだいさい。{{yêu cầu}}")
-          ),
-        ])
-      ),
+    topic: "Khi · Hễ … thì",
+    points: [
+      {
+        pattern: "V る／V ない／Aい／Aな な／N の  とき、～",
+        meaning: "Khi …",
+        examples: [
+          ex("としょかんで ほんを かりる とき、カードが いります。", "Khi mượn sách ở thư viện thì cần thẻ."),
+          ex("ひまな とき、うちで ビデオを みます。", "Lúc rảnh tôi xem video ở nhà."),
+          ex("こどもの とき、よく かわで およぎました。", "Hồi nhỏ tôi hay bơi ở sông."),
+        ],
+      },
+      {
+        pattern: "V る とき／V た とき",
+        meaning: "Khi (sắp) làm V / khi (đã) làm V xong",
+        notes: [
+          "V る とき: hành động ở mệnh đề chính xảy ra trước V.",
+          "V た とき: hành động ở mệnh đề chính xảy ra sau khi V đã xong.",
+        ],
+        examples: [
+          ex("くにへ かえる とき、かばんを かいます。", "Trước khi về nước tôi mua cặp (mua ở đây)."),
+          ex("くにへ かえった とき、かばんを かいます。", "Khi đã về đến nước tôi mua cặp (mua ở quê)."),
+        ],
+      },
+      {
+        pattern: "V る と、～",
+        meaning: "Hễ V thì … (kết quả tất yếu, chỉ đường)",
+        notes: ["Mệnh đề sau không dùng ý chí, mong muốn, nhờ vả."],
+        examples: [
+          ex("この ボタンを おすと、おつりが でます。", "Hễ nhấn nút này thì tiền thừa sẽ ra."),
+          ex("これを まわすと、おとが おおきく なります。", "Vặn cái này thì âm thanh sẽ to lên."),
+          ex("みぎへ まがると、ゆうびんきょくが あります。", "Rẽ phải thì có bưu điện."),
+        ],
+      },
+      {
+        pattern: "N (địa điểm) を V (di chuyển)",
+        meaning: "Đi qua / dạo quanh N",
+        notes: ["Đi với さんぽします, わたります, まがります…"],
+        examples: [
+          ex("こうえんを さんぽします。", "Tôi đi dạo trong công viên."),
+          ex("みちを わたります。", "Tôi băng qua đường."),
+          ex("かどを みぎへ まがります。", "Rẽ phải ở góc đường."),
+        ],
+      },
     ],
   },
   {
     id: 24,
-    badge: "Bài 24",
-    heading: "第24課 · だい24か",
-    cards: [
-      card(
-        noteTable(
-          "S は　人に/を/と　　Vてあげます。 わたし 。Mình làm 1 việc gì đó tốt cho người khác. 。Người khác làm 1 việc gì đó tốt cho người khác"
-        ),
-        examplesBlock([
-          itm(J("1．わたしは　きむらさんに　ほんを　貸してあげました。")),
-          itm(J("2．やまださんは　たなかさんを　えきで"), J("むかえてあげました。")),
-          itm(N("3 …………… ")),
-        ])
-      ),
-      card(
-        examplesBlock([
-          itm(J("1．わたしは　ちちに　とけいを　かってもらいました。")),
-          itm(J("2．きむらさんは　やまださんに　びょういんのでんわば"), J("んごうを　おしえてもらいました。")),
-          itm(N("3 …………… ")),
-        ]),
-        noteTable(
-          "S は　人に　　Vてもらいます。 わたし 。Mình nhận từ người khác hành động tốt 。Người khác nhận từ người khác hành động tốt"
-        )
-      ),
-      card(
-        noteTable(
-          "S 　は/が　{{わたしに/を/と}}　　Vてくれます。 わたし 。người khác làm cho mình/người thân trong gia đình mình hành động tốt"
-        ),
-        examplesBlock([
-          itm(J("1．かれは　セーターを　おくってくれました。")),
-          itm(J("2．みせの人は　ははに　おふろのはいりかたを"), J("せいつめしてくれました。")),
-          itm(N("3 …………… ")),
-        ])
-      ),
+    topic: "Cho nhận hành động",
+    points: [
+      {
+        pattern: "くれます",
+        meaning: "(Người khác) cho tôi / người nhà tôi",
+        notes: ["あげます: mình (hoặc người khác) cho người khác. くれます: người khác cho mình."],
+        examples: [
+          ex("さとうさんは わたしに クリスマスカードを くれました。", "Chị Sato đã tặng tôi thiệp Giáng sinh."),
+          ex("ははは いもうとに おかしを くれました。", "Mẹ đã cho em gái tôi bánh kẹo."),
+        ],
+      },
+      {
+        pattern: "V て あげます／もらいます／くれます",
+        meaning: "Làm V cho ai / được ai làm V cho / ai làm V cho mình",
+        notes: [
+          "V て あげます với người trên có thể gây cảm giác kẻ cả — nên dùng ～ましょうか.",
+          "V て もらいます / くれます thể hiện lòng biết ơn.",
+        ],
+        examples: [
+          ex("わたしは きむらさんに ほんを かして あげました。", "Tôi đã cho chị Kimura mượn sách."),
+          ex("わたしは やまださんに としょかんの でんわばんごうを おしえて もらいました。", "Tôi đã được anh Yamada chỉ cho số điện thoại thư viện."),
+          ex("ははは［わたしに］セーターを おくって くれました。", "Mẹ đã gửi áo len cho tôi."),
+        ],
+      },
+      {
+        pattern: "N1 は N2 が V",
+        meaning: "N1 thì (chính) N2 đã làm V",
+        notes: ["Nhấn mạnh người thực hiện hành động (N2 là chủ ngữ, dùng が)."],
+        examples: [
+          ex("すてきな ネクタイですね。…ええ、さとうさんが くれました。", "Cà vạt đẹp nhỉ. …Vâng, chị Sato tặng tôi đấy."),
+          ex("おいしい ケーキですね。…この ケーキは ワンさんが つくりました。", "Bánh ngon nhỉ. …Bánh này là anh Wang làm đấy."),
+        ],
+      },
     ],
   },
   {
     id: 25,
-    badge: "Bài 25",
-    heading: "第25課 · だい25か",
-    cards: [
-      card(
-        kana([["（もし）　  Vたら", null, null, "Vない", null, null, "かったら"]]),
-        pattern("Aイかったら		Aイくない", "Aナ/ Nだったら		Aナ/ N　ではない", "じゃない"),
-        notes("Nếu…thì…/ Nếu không…thì…", "Điều kiện giả định"),
-        examplesBlock([
-          itm(J("1．あめがふったら、でかけません。")),
-          itm(J("2．やすかったら、あのみせで　かいます。")),
-          itm(
-            J("3．ひまだったら、あそびに　いきます。"),
-            J("じかんがなかったら、えいがを　見ません。"),
-            J("Vたら"),
-            N("Sau khi")
-          ),
-          itm(J("家へかえったら、すぐ　シャワーをあびます。")),
-        ])
-      ),
-      card(
-        pattern("（いくら）　Vても", "Aイくても", "Aナ/ Nでも"),
-        notes(
-          "Dù …cũng…",
-          "Hành động đáng ra phải làm nhưng không làm, 1 việc đáng ra phải xảy ra nhưng không xảy ra, 1 kết quả trái với quan niệm thông thường"
-        ),
-        examplesBlock([itm(J("1．（いくら）あめがふっても、でかけます"))])
-      ),
+    topic: "Điều kiện · Nhượng bộ",
+    points: [
+      {
+        pattern: "Thể thông thường quá khứ + ら、～",
+        meaning: "Nếu … thì … (giả định)",
+        notes: ["Mệnh đề sau có thể dùng ý chí, mong muốn, nhờ vả, mời rủ."],
+        examples: [
+          ex("おかねが あったら、りょこうします。", "Nếu có tiền thì tôi sẽ đi du lịch."),
+          ex("やすかったら、パソコンを かいたいです。", "Nếu rẻ thì tôi muốn mua máy tính."),
+          ex("いい てんきだったら、さんぽしませんか。", "Nếu trời đẹp thì đi dạo không?"),
+        ],
+      },
+      {
+        pattern: "V たら、～",
+        meaning: "Sau khi / khi V (việc chắc chắn sẽ xảy ra)",
+        examples: [
+          ex("10じに なったら、でかけましょう。", "Đến 10 giờ thì chúng ta đi nhé."),
+          ex("うちへ かえったら、すぐ シャワーを あびます。", "Về đến nhà là tôi tắm ngay."),
+        ],
+      },
+      {
+        pattern: "V て／Aい (～くて)／Aな・N + で  も、～",
+        meaning: "Dù … cũng …",
+        examples: [
+          ex("あめが ふっても、せんたくします。", "Dù trời mưa tôi cũng giặt đồ."),
+          ex("やすくても、わたしは グループりょこうが きらいです。", "Dù rẻ tôi cũng không thích du lịch theo đoàn."),
+          ex("にちようびでも、はたらきます。", "Dù là Chủ nhật tôi cũng làm việc."),
+        ],
+      },
+      {
+        pattern: "もし ～たら／いくら ～ても",
+        meaning: "Nếu như … / Dù … bao nhiêu đi nữa",
+        notes: ["もし nhấn mạnh giả định; いくら nhấn mạnh mức độ."],
+        examples: [
+          ex("もし 1おくえん あったら、いろいろな くにを りょこうしたいです。", "Nếu có 100 triệu yên, tôi muốn du lịch nhiều nước."),
+          ex("いくら かんがえても、わかりません。", "Nghĩ mãi mà vẫn không hiểu."),
+        ],
+      },
+      {
+        pattern: "Chủ ngữ trong mệnh đề phụ dùng が",
+        meaning: "～たら, ～ても, ～とき, ～と, ～まえに",
+        examples: [ex("ともだちが きたら、いっしょに でかけます。", "Bạn đến thì chúng tôi cùng đi chơi.")],
+      },
     ],
   },
 ];
-
