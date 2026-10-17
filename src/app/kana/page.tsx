@@ -33,6 +33,8 @@ import { KanaTableGrid } from "@/components/kana/kana-table-grid";
 import { KanaInspectorCard } from "@/components/kana/kana-inspector-card";
 import { PronunciationGuide } from "@/components/kana/pronunciation-guide";
 import { KanjiRadicalGuide } from "@/components/kana/kanji-radical-guide";
+import { KatakanaWordsPrintSheet } from "@/components/kana/katakana-words-print-sheet";
+import { printVocabulary } from "@/lib/print-vocabulary";
 
 type LearnTab = Script | "pronunciation" | "kanji";
 type KanjiSubTab = "kanji-100" | "kanji-extra" | "radicals";
@@ -257,7 +259,7 @@ function KanaPageContent() {
           </div>
 
           {/* Helper Indicators */}
-          <div className="flex items-center justify-between gap-3 text-xs text-muted-foreground lg:shrink-0 lg:justify-end">
+          <div className="flex flex-wrap items-center justify-end gap-2 text-xs text-muted-foreground sm:justify-between sm:gap-3 lg:shrink-0 lg:justify-end">
             <span className="hidden min-w-0 items-center gap-1.5 font-medium text-emerald-600 dark:text-emerald-400 sm:mr-auto sm:inline-flex lg:mr-0">
               <span className="size-1.5 shrink-0 rounded-full bg-emerald-600" />
               <span className="truncate">Audio chuẩn giọng Tokyo (NHK)</span>
@@ -272,7 +274,14 @@ function KanaPageContent() {
               <span>{showRomaji ? "Ẩn Romaji" : "Hiện Romaji"}</span>
             </button>
 
-            <PrintButton label="In bảng Kana A4" />
+            {activeTab === "katakana" && (
+              <PrintButton
+                label="In từ vựng"
+                title="In danh sách từ vựng Katakana để luyện đọc (khoảng 2 trang A4)"
+                onClick={printVocabulary}
+              />
+            )}
+            <PrintButton label="In bảng Kana" labelSuffix=" A4" />
           </div>
         </div>
       )}
@@ -283,49 +292,68 @@ function KanaPageContent() {
         </div>
       )}
 
-      {/* 3. Main Content Layout */}
-      {isKanaTab ? (
-        <div className="grid grid-cols-1 lg:grid-cols-[1fr_360px] gap-6 print:block">
-          {/* Left Column: Kana Table Grid */}
-          <div className="flex flex-col gap-6">
-            <KanaTableGrid
-              script={activeTab === "katakana" ? "katakana" : "hiragana"}
-              section={section}
-              searchQuery={search}
-              showRomaji={showRomaji}
-              selectedKana={hasPickedKana ? selectedKana : null}
-              onSelectKana={(kana) => {
-                setSelectedKana(kana);
-                setHasPickedKana(true);
-              }}
-            />
-          </div>
+      {/* 3. Main Content Layout (hidden when printing the katakana word list) */}
+      <div className="vocab-print-hide contents">
+        {isKanaTab ? (
+          <div className="grid grid-cols-1 lg:grid-cols-[1fr_360px] gap-6 print:block">
+            {/* Left Column: Kana Table Grid */}
+            <div className="flex flex-col gap-6">
+              <KanaTableGrid
+                script={activeTab === "katakana" ? "katakana" : "hiragana"}
+                section={section}
+                searchQuery={search}
+                showRomaji={showRomaji}
+                selectedKana={hasPickedKana ? selectedKana : null}
+                onSelectKana={(kana) => {
+                  setSelectedKana(kana);
+                  setHasPickedKana(true);
+                }}
+              />
+            </div>
 
-          {/* Right Column: Sticky Inspector Panel */}
-          <div className="print:hidden">
-            <KanaInspectorCard kana={selectedKana} />
+            {/* Right Column: Sticky Inspector Panel */}
+            <div className="print:hidden">
+              <KanaInspectorCard kana={selectedKana} />
+            </div>
           </div>
-        </div>
-      ) : activeTab === "pronunciation" ? (
-        <PronunciationGuide />
-      ) : (
-        <KanjiSection initialMainTab={initialKanjiSubTab} initialSearch={qParam ?? undefined} />
-      )}
+        ) : activeTab === "pronunciation" ? (
+          <PronunciationGuide />
+        ) : (
+          <KanjiSection initialMainTab={initialKanjiSubTab} initialSearch={qParam ?? undefined} />
+        )}
+      </div>
+
+      {activeTab === "katakana" && <KatakanaWordsPrintSheet showRomaji={showRomaji} />}
     </div>
   );
 }
 
-/** The one print button of each Learn tab, styled like the Kanji tab's "In bảng Kanji A4". */
-function PrintButton({ label }: { label: string }) {
+/** Print button of the Learn tabs, styled like the Kanji tab's "In bảng Kanji A4". */
+function PrintButton({
+  label,
+  labelSuffix,
+  title,
+  onClick,
+}: {
+  label: string;
+  /** Extra text hidden on phones to keep the toolbar on one line. */
+  labelSuffix?: string;
+  title?: string;
+  onClick?: () => void;
+}) {
   return (
     <Button
       variant="outline"
       size="sm"
-      onClick={() => window.print()}
+      title={title}
+      onClick={onClick ?? (() => window.print())}
       className="shrink-0 gap-2 font-bold text-xs rounded-xl border-border/80 hover:bg-accent cursor-pointer"
     >
       <Printer className="size-4 text-red-600" />
-      <span>{label}</span>
+      <span>
+        {label}
+        {labelSuffix && <span className="hidden sm:inline">{labelSuffix}</span>}
+      </span>
     </Button>
   );
 }

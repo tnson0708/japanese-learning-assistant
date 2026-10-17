@@ -284,6 +284,21 @@
   .vocab-print-table tr {
     break-inside: avoid;
   }
+  .vocab-print-table.vocab-print-compact {
+    font-size: 9.5pt;
+    line-height: 1.25;
+    margin-bottom: 0;
+  }
+  .vocab-print-table.vocab-print-compact th,
+  .vocab-print-table.vocab-print-compact td {
+    padding: 0.7mm 1.5mm;
+    vertical-align: middle;
+  }
+  .vocab-print-table td.vocab-print-group {
+    background: #f3f3f3 !important;
+    font-weight: 700;
+    font-size: 10pt;
+  }
 }
 
 /* Bold ink-brush display font for Kanji & Radicals glyphs (falls back to OS Mincho for any
