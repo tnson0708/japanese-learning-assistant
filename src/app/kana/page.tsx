@@ -62,7 +62,9 @@ function KanaPageContent() {
 
   const [activeTab, setActiveTab] = useState<LearnTab>(initialTab);
   const [section, setSection] = useState<KanaSection>("all");
-  const [search, setSearch] = useState("");
+  // A spotlight result (?tab=hiragana&q=き) opens the chart pre-filtered to that kana
+  const kanaQuery = initialTab === "hiragana" || initialTab === "katakana" ? qParam ?? "" : "";
+  const [search, setSearch] = useState(kanaQuery);
   const [showRomaji, setShowRomaji] = useState(true);
 
   // Re-sync the active tab when the `tab` URL param changes on an already-mounted
@@ -73,7 +75,10 @@ function KanaPageContent() {
     if (tabParam === "katakana" || tabParam === "hiragana" || tabParam === "pronunciation" || tabParam === "kanji") {
       setActiveTab(tabParam);
     }
-  }, [tabParam]);
+    if ((tabParam === "katakana" || tabParam === "hiragana") && qParam) {
+      setSearch(qParam);
+    }
+  }, [tabParam, qParam]);
 
   // Default selected Kana for Inspector Panel
   const currentScriptKana = useMemo(
@@ -81,22 +86,25 @@ function KanaPageContent() {
     [activeTab]
   );
 
+  const searchedKana = qParam ? currentScriptKana.find((k) => k.char === qParam) : undefined;
+
   const [selectedKana, setSelectedKana] = useState<Kana>(
-    () => currentScriptKana[0] || getKanaById("hiragana-a")!
+    () => searchedKana || currentScriptKana[0] || getKanaById("hiragana-a")!
   );
 
   // The inspector always shows a kana (the first one by default), but the grid only
   // highlights a cell once the learner has actually picked one.
-  const [hasPickedKana, setHasPickedKana] = useState(false);
+  // (A kana opened from the spotlight search counts as picked.)
+  const [hasPickedKana, setHasPickedKana] = useState(Boolean(searchedKana));
 
   // Sync selectedKana when script tab changes
   useEffect(() => {
     if (activeTab === "hiragana" || activeTab === "katakana") {
-      const firstKana = currentScriptKana[0];
-      if (firstKana) setSelectedKana(firstKana);
-      setHasPickedKana(false);
+      const target = searchedKana ?? currentScriptKana[0];
+      if (target) setSelectedKana(target);
+      setHasPickedKana(Boolean(searchedKana));
     }
-  }, [activeTab, currentScriptKana]);
+  }, [activeTab, currentScriptKana, searchedKana]);
 
   const isKanaTab = activeTab === "hiragana" || activeTab === "katakana";
 

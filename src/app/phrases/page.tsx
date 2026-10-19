@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { Suspense, useEffect, useMemo, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import { Check, Copy, MessageSquare, Search, Volume2, X, ChevronLeft, ChevronRight, Eye, EyeOff } from "lucide-react";
 import { OptionGroup } from "@/components/option-group";
 import { speakJapanese } from "@/lib/speech";
@@ -34,13 +35,27 @@ function getPageNumbers(currentPage: number, totalPages: number): (number | "...
 }
 
 export default function PhrasesPage() {
+  return (
+    <Suspense fallback={null}>
+      <PhrasesFromUrl />
+    </Suspense>
+  );
+}
+
+/** A spotlight result opens /phrases?q=… pre-filtered to that phrase; a new ?q remounts the list. */
+function PhrasesFromUrl() {
+  const q = useSearchParams().get("q") ?? "";
+  return <PhrasesContent key={q} initialQuery={q} />;
+}
+
+function PhrasesContent({ initialQuery }: { initialQuery: string }) {
   const { t, language } = useLanguage();
   const isVi = language === "vi";
 
   const [theme, setTheme] = useState<PhraseTheme>("all");
   const [topic, setTopic] = useState<PhraseTopic>("all");
   const [formality, setFormality] = useState<PhraseFormality | "all">("all");
-  const [query, setQuery] = useState("");
+  const [query, setQuery] = useState(initialQuery);
   const [showRomaji, setShowRomaji] = useState(true);
   const [copiedId, setCopiedId] = useState<string | null>(null);
 

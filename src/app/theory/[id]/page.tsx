@@ -1,7 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { useParams } from "next/navigation";
+import { Suspense, useRef } from "react";
+import { useParams, useSearchParams } from "next/navigation";
 import { ArrowLeft, BookOpen, ChevronLeft, ChevronRight, FileText, GraduationCap, Languages, Sparkles, Printer } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
@@ -14,6 +15,7 @@ import { Lesson2VocabView } from "@/components/theory/lesson2-vocab-view";
 import { LessonVocabView } from "@/components/theory/lesson-vocab-view";
 import { VocabPrintSheet } from "@/components/theory/vocab-print-sheet";
 import { printVocabulary } from "@/lib/print-vocabulary";
+import { useHighlightTarget } from "@/lib/use-highlight-target";
 
 const sectionIcons: Record<string, typeof BookOpen> = {
   vocabulary: BookOpen,
@@ -32,10 +34,27 @@ const shortTitles: Record<string, string> = {
 };
 
 export default function TheoryLessonPage() {
+  return (
+    <Suspense fallback={null}>
+      <TheoryLessonContent />
+    </Suspense>
+  );
+}
+
+function TheoryLessonContent() {
   const { t } = useLanguage();
   const params = useParams<{ id: string }>();
+  const searchParams = useSearchParams();
   const lessonId = Number(params.id);
   const lesson = getLessonById(lessonId);
+
+  // Spotlight search deep link: ?tab=vocabulary&w=寮&k=りょう opens that tab and
+  // scrolls to / highlights the word (w = written form, k = kana fallback).
+  const tabParam = searchParams.get("tab");
+  const wordParam = searchParams.get("w");
+  const kanaParam = searchParams.get("k");
+  const tabsRef = useRef<HTMLDivElement>(null);
+  useHighlightTarget(tabsRef, [wordParam, kanaParam], [lessonId, tabParam]);
 
   if (!lesson) {
     return (
@@ -65,7 +84,15 @@ export default function TheoryLessonPage() {
         {lesson.title}
       </h1>
 
-      <Tabs defaultValue={lesson.sections[0]?.id} className="gap-4 vocab-print-hide">
+      <Tabs
+        // Remount on a new ?tab so a search result opens its tab even on the same lesson
+        key={`${lessonId}-${tabParam ?? ""}`}
+        ref={tabsRef}
+        defaultValue={
+          lesson.sections.some((section) => section.id === tabParam) ? tabParam! : lesson.sections[0]?.id
+        }
+        className="gap-4 vocab-print-hide"
+      >
         <TabsList className="grid w-full grid-cols-5 gap-1 rounded-xl bg-muted p-1 sm:flex sm:w-fit sm:justify-center print:hidden">
           {lesson.sections.map((section) => {
             const Icon = sectionIcons[section.id] || BookOpen;

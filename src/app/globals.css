@@ -187,6 +187,19 @@
   }
 }
 
+/* Spotlight search: the word a search result points to (see useHighlightTarget) */
+.search-highlight {
+  outline: 2px solid var(--primary);
+  outline-offset: 3px;
+  border-radius: 0.75rem;
+  animation: search-highlight-pulse 1s ease-in-out 3;
+}
+@keyframes search-highlight-pulse {
+  50% {
+    background-color: color-mix(in oklab, var(--primary) 14%, transparent);
+  }
+}
+
 /* Printable layout optimization for A4 paper */
 .only-print {
   display: none !important;

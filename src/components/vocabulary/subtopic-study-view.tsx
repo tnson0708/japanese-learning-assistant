@@ -1,6 +1,8 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
+import { useSearchParams } from "next/navigation";
+import { useHighlightTarget } from "@/lib/use-highlight-target";
 import Link from "next/link";
 import {
   ChevronRight,
@@ -34,6 +36,11 @@ export function SubtopicStudyView({ domain, subtopic }: { domain: Domain; subtop
   const [selectedLevel, setSelectedLevel] = useState<JlptLevel | "all">("all");
   const [showFurigana, setShowFurigana] = useState<boolean>(true);
   const [viewMode, setViewMode] = useState<"cards" | "list" | "labels">("cards");
+
+  // Spotlight search deep link: ?w=寮&k=りょう scrolls to and highlights that word card
+  const searchParams = useSearchParams();
+  const cardsRef = useRef<HTMLDivElement>(null);
+  useHighlightTarget(cardsRef, [searchParams.get("w"), searchParams.get("k")], [viewMode]);
 
   const domainName = getDomainName(domain, language);
   const subtopicName = getSubtopicName(subtopic, language);
@@ -276,7 +283,7 @@ export function SubtopicStudyView({ domain, subtopic }: { domain: Domain; subtop
 
       {/* 5. Main Content Views */}
       {viewMode === "cards" && (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4.5 print:hidden">
+        <div ref={cardsRef} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4.5 print:hidden">
           {filteredWords.map((word) => (
             <WordCard key={word.id} word={word} showFurigana={showFurigana} />
           ))}

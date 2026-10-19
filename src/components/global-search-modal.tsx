@@ -38,19 +38,16 @@ export function GlobalSearchModal({ isOpen, onClose }: GlobalSearchModalProps) {
     return searchGlobal(query);
   }, [query]);
 
-  // Group results by category
-  const groupedResults = useMemo(() => {
-    const map: Record<SearchResultCategory, SearchResultItem[]> = {
-      kanji: [],
-      vocabulary: [],
-      phrases: [],
-      theory: [],
-      kana: [],
-    };
-    results.forEach((item) => {
-      map[item.category].push(item);
-    });
-    return map;
+  // Group results by category; groups are ordered by their best-ranked result, and the
+  // flat `orderedResults` follows the on-screen order so ↑/↓/Enter pick what is highlighted.
+  const { sections, orderedResults } = useMemo(() => {
+    const map = new Map<SearchResultCategory, SearchResultItem[]>();
+    for (const item of results) {
+      if (!map.has(item.category)) map.set(item.category, []);
+      map.get(item.category)!.push(item);
+    }
+    const sections = Array.from(map, ([category, items]) => ({ category, items }));
+    return { sections, orderedResults: sections.flatMap((s) => s.items) };
   }, [results]);
 
   // Reset selected index when query changes
@@ -68,21 +65,30 @@ export function GlobalSearchModal({ isOpen, onClose }: GlobalSearchModalProps) {
         onClose();
       } else if (e.key === "ArrowDown") {
         e.preventDefault();
-        setSelectedIndex((prev) => (results.length > 0 ? (prev + 1) % results.length : 0));
+        setSelectedIndex((prev) => (orderedResults.length > 0 ? (prev + 1) % orderedResults.length : 0));
       } else if (e.key === "ArrowUp") {
         e.preventDefault();
-        setSelectedIndex((prev) => (results.length > 0 ? (prev - 1 + results.length) % results.length : 0));
+        setSelectedIndex((prev) =>
+          orderedResults.length > 0 ? (prev - 1 + orderedResults.length) % orderedResults.length : 0
+        );
       } else if (e.key === "Enter") {
         e.preventDefault();
-        if (results.length > 0 && results[selectedIndex]) {
-          handleSelectResult(results[selectedIndex]);
+        if (orderedResults[selectedIndex]) {
+          handleSelectResult(orderedResults[selectedIndex]);
         }
       }
     };
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [isOpen, results, selectedIndex]);
+  }, [isOpen, orderedResults, selectedIndex]);
+
+  // Keep the keyboard-selected result visible
+  useEffect(() => {
+    resultsContainerRef.current
+      ?.querySelector(`[data-result-index="${selectedIndex}"]`)
+      ?.scrollIntoView({ block: "nearest" });
+  }, [selectedIndex]);
 
   const handleSelectResult = (item: SearchResultItem) => {
     onClose();
@@ -208,140 +214,37 @@ export function GlobalSearchModal({ isOpen, onClose }: GlobalSearchModalProps) {
             </div>
           ) : (
             <div className="flex flex-col gap-4">
-              {/* Category 1: Kanji & Radicals */}
-              {groupedResults.kanji.length > 0 && (
-                <div className="flex flex-col gap-1.5">
-                  <div className="flex items-center gap-1.5 px-2 text-[11px] font-bold uppercase tracking-wider text-muted-foreground">
-                    <BookOpen className="size-3.5 text-amber-500" />
-                    <span>{isVi ? "Kanji & Bộ thủ" : "Kanji & Radicals"} ({groupedResults.kanji.length})</span>
+              {sections.map(({ category, items }) => {
+                const meta = CATEGORY_META[category];
+                const Icon = meta.icon;
+                return (
+                  <div key={category} className="flex flex-col gap-1.5">
+                    <div className="flex items-center gap-1.5 px-2 text-[11px] font-bold uppercase tracking-wider text-muted-foreground">
+                      <Icon className={cn("size-3.5", meta.iconClass)} />
+                      <span>
+                        {isVi ? meta.labelVi : meta.labelEn} ({items.length})
+                      </span>
+                    </div>
+                    <div className="flex flex-col gap-1">
+                      {items.map((item) => {
+                        const itemIdx = globalIndexCounter++;
+                        return (
+                          <ResultCard
+                            key={item.id}
+                            item={item}
+                            index={itemIdx}
+                            isVi={isVi}
+                            isSelected={itemIdx === selectedIndex}
+                            onSelect={() => handleSelectResult(item)}
+                            onAudio={(e) => handleAudio(e, item.audioText)}
+                            badgeColor={getCategoryBadgeColor(item.category)}
+                          />
+                        );
+                      })}
+                    </div>
                   </div>
-
-                  <div className="flex flex-col gap-1">
-                    {groupedResults.kanji.map((item) => {
-                      const itemIdx = globalIndexCounter++;
-                      const isSelected = itemIdx === selectedIndex;
-                      return (
-                        <ResultCard
-                          key={item.id}
-                          item={item}
-                          isSelected={isSelected}
-                          onSelect={() => handleSelectResult(item)}
-                          onAudio={(e) => handleAudio(e, item.audioText)}
-                          badgeColor={getCategoryBadgeColor(item.category)}
-                        />
-                      );
-                    })}
-                  </div>
-                </div>
-              )}
-
-              {/* Category 2: Vocabulary */}
-              {groupedResults.vocabulary.length > 0 && (
-                <div className="flex flex-col gap-1.5">
-                  <div className="flex items-center gap-1.5 px-2 text-[11px] font-bold uppercase tracking-wider text-muted-foreground">
-                    <LayoutGrid className="size-3.5 text-emerald-500" />
-                    <span>{isVi ? "Từ vựng" : "Vocabulary"} ({groupedResults.vocabulary.length})</span>
-                  </div>
-
-                  <div className="flex flex-col gap-1">
-                    {groupedResults.vocabulary.slice(0, 15).map((item) => {
-                      const itemIdx = globalIndexCounter++;
-                      const isSelected = itemIdx === selectedIndex;
-                      return (
-                        <ResultCard
-                          key={item.id}
-                          item={item}
-                          isSelected={isSelected}
-                          onSelect={() => handleSelectResult(item)}
-                          onAudio={(e) => handleAudio(e, item.audioText)}
-                          badgeColor={getCategoryBadgeColor(item.category)}
-                        />
-                      );
-                    })}
-                  </div>
-                </div>
-              )}
-
-              {/* Category 3: Situational Phrases */}
-              {groupedResults.phrases.length > 0 && (
-                <div className="flex flex-col gap-1.5">
-                  <div className="flex items-center gap-1.5 px-2 text-[11px] font-bold uppercase tracking-wider text-muted-foreground">
-                    <MessageSquare className="size-3.5 text-blue-500" />
-                    <span>{isVi ? "Mẫu câu giao tiếp" : "Phrases"} ({groupedResults.phrases.length})</span>
-                  </div>
-
-                  <div className="flex flex-col gap-1">
-                    {groupedResults.phrases.map((item) => {
-                      const itemIdx = globalIndexCounter++;
-                      const isSelected = itemIdx === selectedIndex;
-                      return (
-                        <ResultCard
-                          key={item.id}
-                          item={item}
-                          isSelected={isSelected}
-                          onSelect={() => handleSelectResult(item)}
-                          onAudio={(e) => handleAudio(e, item.audioText)}
-                          badgeColor={getCategoryBadgeColor(item.category)}
-                        />
-                      );
-                    })}
-                  </div>
-                </div>
-              )}
-
-              {/* Category 4: Theory Lessons */}
-              {groupedResults.theory.length > 0 && (
-                <div className="flex flex-col gap-1.5">
-                  <div className="flex items-center gap-1.5 px-2 text-[11px] font-bold uppercase tracking-wider text-muted-foreground">
-                    <GraduationCap className="size-3.5 text-purple-500" />
-                    <span>{isVi ? "Ngữ pháp & Lý thuyết" : "Grammar Theory"} ({groupedResults.theory.length})</span>
-                  </div>
-
-                  <div className="flex flex-col gap-1">
-                    {groupedResults.theory.map((item) => {
-                      const itemIdx = globalIndexCounter++;
-                      const isSelected = itemIdx === selectedIndex;
-                      return (
-                        <ResultCard
-                          key={item.id}
-                          item={item}
-                          isSelected={isSelected}
-                          onSelect={() => handleSelectResult(item)}
-                          onAudio={(e) => handleAudio(e, item.audioText)}
-                          badgeColor={getCategoryBadgeColor(item.category)}
-                        />
-                      );
-                    })}
-                  </div>
-                </div>
-              )}
-
-              {/* Category 5: Kana */}
-              {groupedResults.kana.length > 0 && (
-                <div className="flex flex-col gap-1.5">
-                  <div className="flex items-center gap-1.5 px-2 text-[11px] font-bold uppercase tracking-wider text-muted-foreground">
-                    <Sparkles className="size-3.5 text-rose-500" />
-                    <span>{isVi ? "Bảng chữ cái Kana" : "Kana Alphabet"} ({groupedResults.kana.length})</span>
-                  </div>
-
-                  <div className="flex flex-col gap-1">
-                    {groupedResults.kana.map((item) => {
-                      const itemIdx = globalIndexCounter++;
-                      const isSelected = itemIdx === selectedIndex;
-                      return (
-                        <ResultCard
-                          key={item.id}
-                          item={item}
-                          isSelected={isSelected}
-                          onSelect={() => handleSelectResult(item)}
-                          onAudio={(e) => handleAudio(e, item.audioText)}
-                          badgeColor={getCategoryBadgeColor(item.category)}
-                        />
-                      );
-                    })}
-                  </div>
-                </div>
-              )}
+                );
+              })}
             </div>
           )}
         </div>
@@ -370,14 +273,29 @@ export function GlobalSearchModal({ isOpen, onClose }: GlobalSearchModalProps) {
   );
 }
 
+const CATEGORY_META: Record<
+  SearchResultCategory,
+  { labelVi: string; labelEn: string; icon: typeof BookOpen; iconClass: string }
+> = {
+  vocabulary: { labelVi: "Từ vựng", labelEn: "Vocabulary", icon: LayoutGrid, iconClass: "text-emerald-500" },
+  kanji: { labelVi: "Kanji & Bộ thủ", labelEn: "Kanji & Radicals", icon: BookOpen, iconClass: "text-amber-500" },
+  phrases: { labelVi: "Mẫu câu giao tiếp", labelEn: "Phrases", icon: MessageSquare, iconClass: "text-blue-500" },
+  theory: { labelVi: "Ngữ pháp & Lý thuyết", labelEn: "Grammar Theory", icon: GraduationCap, iconClass: "text-purple-500" },
+  kana: { labelVi: "Bảng chữ cái Kana", labelEn: "Kana Alphabet", icon: Sparkles, iconClass: "text-rose-500" },
+};
+
 function ResultCard({
   item,
+  index,
+  isVi,
   isSelected,
   onSelect,
   onAudio,
   badgeColor,
 }: {
   item: SearchResultItem;
+  index: number;
+  isVi: boolean;
   isSelected: boolean;
   onSelect: () => void;
   onAudio: (e: React.MouseEvent) => void;
@@ -386,6 +304,7 @@ function ResultCard({
   return (
     <div
       onClick={onSelect}
+      data-result-index={index}
       className={cn(
         "group flex items-center justify-between gap-3 rounded-xl border p-3 transition-all cursor-pointer select-none",
         isSelected
@@ -413,6 +332,10 @@ function ResultCard({
           </div>
           <span className="text-xs text-muted-foreground truncate">
             {item.description}
+          </span>
+          {/* Where the result lives, e.g. "Từ vựng · Bài 12" */}
+          <span className="text-[10px] font-medium text-muted-foreground/80 truncate">
+            {isVi ? item.categoryLabelVi : item.categoryLabelEn}
           </span>
         </div>
       </div>
