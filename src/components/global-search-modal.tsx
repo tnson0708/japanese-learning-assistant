@@ -3,11 +3,22 @@
 import { useEffect, useState, useMemo, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { Search, X, Volume2, ArrowRight, CornerDownLeft, Sparkles, BookOpen, LayoutGrid, MessageSquare, GraduationCap } from "lucide-react";
-import { searchGlobal, type SearchResultItem, type SearchResultCategory } from "@/lib/use-global-search";
+import {
+  prepareSearchIndex,
+  searchGlobal,
+  type SearchResultItem,
+  type SearchResultCategory,
+} from "@/lib/use-global-search";
 import { speakJapanese } from "@/lib/speech";
 import { useLanguage } from "@/lib/language-context";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
+
+/** Wait this long after the last keystroke before searching, so typing never stutters. */
+const SEARCH_DEBOUNCE_MS = 150;
+/** Results shown per group before "Xem thêm"; keeps each render small. */
+const RESULTS_PER_GROUP = 5;
+const NO_CATEGORIES: SearchResultCategory[] = [];
 
 interface GlobalSearchModalProps {
   isOpen: boolean;
@@ -20,7 +31,13 @@ export function GlobalSearchModal({ isOpen, onClose }: GlobalSearchModalProps) {
   const isVi = language === "vi";
 
   const [query, setQuery] = useState("");
+  const [debouncedQuery, setDebouncedQuery] = useState("");
   const [selectedIndex, setSelectedIndex] = useState(0);
+  // Groups expanded with "Xem thêm", remembered only for the query they were expanded for
+  const [expanded, setExpanded] = useState<{ query: string; categories: SearchResultCategory[] }>({
+    query: "",
+    categories: [],
+  });
   const inputRef = useRef<HTMLInputElement>(null);
   const resultsContainerRef = useRef<HTMLDivElement>(null);
 
@@ -30,30 +47,43 @@ export function GlobalSearchModal({ isOpen, onClose }: GlobalSearchModalProps) {
       setQuery("");
       setSelectedIndex(0);
       setTimeout(() => inputRef.current?.focus(), 50);
+      // Build the search index while the learner starts typing, not on the first keystroke
+      setTimeout(prepareSearchIndex, 0);
     }
   }, [isOpen]);
 
-  // Execute global search
-  const results = useMemo(() => {
-    return searchGlobal(query);
+  // Search only once typing pauses; clearing the box takes effect immediately
+  useEffect(() => {
+    const timer = setTimeout(() => setDebouncedQuery(query), SEARCH_DEBOUNCE_MS);
+    return () => clearTimeout(timer);
   }, [query]);
+  const activeQuery = query.trim() ? debouncedQuery : "";
+  const isSearching = query.trim() !== debouncedQuery.trim();
+
+  const results = useMemo(() => searchGlobal(activeQuery), [activeQuery]);
+  const expandedCategories = expanded.query === activeQuery ? expanded.categories : NO_CATEGORIES;
 
   // Group results by category; groups are ordered by their best-ranked result, and the
   // flat `orderedResults` follows the on-screen order so ↑/↓/Enter pick what is highlighted.
+  // Only the first RESULTS_PER_GROUP of a group are rendered until it is expanded.
   const { sections, orderedResults } = useMemo(() => {
     const map = new Map<SearchResultCategory, SearchResultItem[]>();
     for (const item of results) {
       if (!map.has(item.category)) map.set(item.category, []);
       map.get(item.category)!.push(item);
     }
-    const sections = Array.from(map, ([category, items]) => ({ category, items }));
+    const sections = Array.from(map, ([category, items]) => ({
+      category,
+      total: items.length,
+      items: expandedCategories.includes(category) ? items : items.slice(0, RESULTS_PER_GROUP),
+    }));
     return { sections, orderedResults: sections.flatMap((s) => s.items) };
-  }, [results]);
+  }, [results, expandedCategories]);
 
-  // Reset selected index when query changes
+  // Reset selected index when the searched query changes
   useEffect(() => {
     setSelectedIndex(0);
-  }, [query]);
+  }, [activeQuery]);
 
   // Keyboard navigation inside spotlight search
   useEffect(() => {
@@ -196,7 +226,10 @@ export function GlobalSearchModal({ isOpen, onClose }: GlobalSearchModalProps) {
                   <button
                     key={item.q}
                     type="button"
-                    onClick={() => setQuery(item.q)}
+                    onClick={() => {
+                      setQuery(item.q);
+                      setDebouncedQuery(item.q);
+                    }}
                     className="rounded-full border bg-muted/50 px-2.5 py-1 text-xs font-semibold transition-colors hover:bg-primary/10 hover:text-primary cursor-pointer"
                   >
                     {item.label}
@@ -204,6 +237,8 @@ export function GlobalSearchModal({ isOpen, onClose }: GlobalSearchModalProps) {
                 ))}
               </div>
             </div>
+          ) : results.length === 0 && isSearching ? (
+            <div className="p-8 text-center text-xs text-muted-foreground">{isVi ? "Đang tìm…" : "Searching…"}</div>
           ) : results.length === 0 ? (
             <div className="flex flex-col items-center justify-center p-8 text-center text-muted-foreground">
               <BookOpen className="size-10 mb-2 opacity-40" />
@@ -214,7 +249,7 @@ export function GlobalSearchModal({ isOpen, onClose }: GlobalSearchModalProps) {
             </div>
           ) : (
             <div className="flex flex-col gap-4">
-              {sections.map(({ category, items }) => {
+              {sections.map(({ category, items, total }) => {
                 const meta = CATEGORY_META[category];
                 const Icon = meta.icon;
                 return (
@@ -222,7 +257,7 @@ export function GlobalSearchModal({ isOpen, onClose }: GlobalSearchModalProps) {
                     <div className="flex items-center gap-1.5 px-2 text-[11px] font-bold uppercase tracking-wider text-muted-foreground">
                       <Icon className={cn("size-3.5", meta.iconClass)} />
                       <span>
-                        {isVi ? meta.labelVi : meta.labelEn} ({items.length})
+                        {isVi ? meta.labelVi : meta.labelEn} ({total})
                       </span>
                     </div>
                     <div className="flex flex-col gap-1">
@@ -241,6 +276,17 @@ export function GlobalSearchModal({ isOpen, onClose }: GlobalSearchModalProps) {
                           />
                         );
                       })}
+                      {total > items.length && (
+                        <button
+                          type="button"
+                          onClick={() =>
+                            setExpanded({ query: activeQuery, categories: [...expandedCategories, category] })
+                          }
+                          className="self-start rounded-lg px-2 py-1 text-xs font-semibold text-primary hover:bg-primary/10 cursor-pointer"
+                        >
+                          {isVi ? `Xem thêm (${total - items.length})` : `Show more (${total - items.length})`}
+                        </button>
+                      )}
                     </div>
                   </div>
                 );

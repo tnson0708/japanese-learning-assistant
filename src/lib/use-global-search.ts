@@ -29,20 +29,31 @@ export interface SearchResultItem {
   href: string;
 }
 
-/** Ranked result; higher score = better match. */
-interface Scored {
-  item: SearchResultItem;
-  score: number;
-}
-
-/** Fields of one searchable entry, grouped by how they should be compared. */
+/** Raw fields of one searchable entry, grouped by how they should be compared. */
 interface SearchFields {
   /** Japanese forms (kana / kanji), compared as-is. */
   jp?: (string | undefined)[];
-  /** Romaji, compared ignoring long-vowel spelling. */
+  /** Romaji (or kana to convert), compared ignoring long-vowel spelling. */
   romaji?: (string | undefined)[];
   /** Vietnamese / English text, compared without diacritics. */
   text?: (string | undefined)[];
+}
+
+/**
+ * One entry of the prebuilt index: every field is already normalized, so a keystroke
+ * only does plain string comparisons (no kana → romaji, no diacritic stripping).
+ */
+interface IndexEntry {
+  item: SearchResultItem;
+  jp: string[];
+  romaji: string[];
+  text: string[];
+  /** Comma-separated parts of `text` ("đi, đến" → "đi", "đến"), scored slightly lower. */
+  parts: string[];
+  /** Added to the score (e.g. -10 for example words, so the headword ranks first). */
+  offset: number;
+  /** Ignore matches scoring below this (kana only count on exact / prefix hits). */
+  minScore: number;
 }
 
 interface Query {
@@ -67,40 +78,6 @@ function displayRomaji(kana: string) {
   return kanaToRomaji(kana).replace(/([aiueo])-/g, (_, v: string) => MACRON[v]).replace(/-/g, "");
 }
 
-function scoreString(value: string, q: string): number {
-  if (!value || !q) return 0;
-  if (value === q) return 100;
-  if (value.startsWith(q)) return 70;
-  // Whole-word hit inside a longer text ("ký túc xá" in "ký túc xá, nhà tập thể")
-  if (new RegExp(`(^|[\\s,;/(・、])${q.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}($|[\\s,;/)・、])`).test(value)) return 55;
-  if (value.includes(q)) return 30;
-  return 0;
-}
-
-function scoreFields(fields: SearchFields, query: Query): number {
-  let best = 0;
-  for (const value of fields.jp ?? []) {
-    if (!value) continue;
-    best = Math.max(best, scoreString(value, query.raw), scoreString(stripAnnotations(value), query.raw));
-  }
-  if (query.isLatin) {
-    for (const value of fields.romaji ?? []) {
-      if (!value) continue;
-      const s = scoreString(normalizeRomaji(stripAnnotations(value)), query.romaji);
-      // Short romaji fragments ("a", "ka") only count as whole/prefix matches
-      best = Math.max(best, s >= 70 || query.romaji.length >= 3 ? s : 0);
-    }
-  }
-  for (const value of fields.text ?? []) {
-    if (!value) continue;
-    // Meanings like "đi, đến" — also score each comma-separated part on its own
-    const normalized = normalizeSearch(value);
-    best = Math.max(best, scoreString(normalized, query.text));
-    for (const part of normalized.split(/[,;/]/)) best = Math.max(best, scoreString(part.trim(), query.text) - 5);
-  }
-  return best;
-}
-
 function theoryHref(lessonId: number, tab: string, targets: (string | undefined)[]) {
   const params = new URLSearchParams({ tab });
   const [word, kana] = targets.map((t) => (t ? stripAnnotations(t) : undefined));
@@ -109,21 +86,37 @@ function theoryHref(lessonId: number, tab: string, targets: (string | undefined)
   return `/theory/${lessonId}?${params.toString()}`;
 }
 
-export function searchGlobal(rawQuery: string): SearchResultItem[] {
-  const raw = rawQuery.trim().toLowerCase();
-  if (!raw) return [];
+// ---- index ------------------------------------------------------------------
 
-  const query: Query = {
-    raw,
-    text: normalizeSearch(raw),
-    romaji: normalizeRomaji(raw),
-    isLatin: /^[a-z\s'-]+$/.test(normalizeSearch(raw)),
-  };
+function present(values: (string | undefined)[] | undefined): string[] {
+  return (values ?? []).filter((v): v is string => Boolean(v));
+}
 
-  const scored: Scored[] = [];
-  const add = (score: number, item: SearchResultItem) => {
-    if (score > 0) scored.push({ item, score });
+function makeEntry(
+  item: SearchResultItem,
+  fields: SearchFields,
+  { offset = 0, minScore = 1 }: { offset?: number; minScore?: number } = {}
+): IndexEntry {
+  const jp = new Set<string>();
+  for (const value of present(fields.jp)) {
+    const lower = value.toLowerCase();
+    jp.add(lower);
+    jp.add(stripAnnotations(lower));
+  }
+  const text = present(fields.text).map(normalizeSearch);
+  return {
+    item,
+    jp: [...jp].filter(Boolean),
+    romaji: present(fields.romaji).map((r) => normalizeRomaji(stripAnnotations(r))).filter(Boolean),
+    text,
+    parts: text.flatMap((t) => t.split(/[,;/]/).map((p) => p.trim())).filter(Boolean),
+    offset,
+    minScore,
   };
+}
+
+function buildIndex(): IndexEntry[] {
+  const entries: IndexEntry[] = [];
 
   // 1. LESSON VOCABULARY (Từ vựng + Tham khảo tabs of every theory lesson)
   for (const lesson of lessonList) {
@@ -134,47 +127,50 @@ export function searchGlobal(rawQuery: string): SearchResultItem[] {
       section.blocks.forEach((block, bIdx) => {
         if (block.type === "vocab-list" || block.type === "vocab-group") {
           block.items.forEach((v, vIdx) => {
-            const score = scoreFields(
-              { jp: [v.jp, v.kanji], romaji: [kanaToRomaji(stripAnnotations(v.jp))], text: [v.meaning, v.note] },
-              query
-            );
+            const kana = stripAnnotations(v.jp);
             const word = v.kanji && !/^[［\[]/.test(v.kanji) ? v.kanji : undefined;
-            add(score, {
-              id: `lesson-vocab-${lesson.id}-${section.id}-${bIdx}-${vIdx}`,
-              category: "vocabulary",
-              categoryLabelVi: isReference ? `Tham khảo · Bài ${lesson.id}` : `Từ vựng · Bài ${lesson.id}`,
-              categoryLabelEn: isReference ? `Reference · Lesson ${lesson.id}` : `Vocabulary · Lesson ${lesson.id}`,
-              title: word ?? v.jp,
-              subtitle: `${word ? `${v.jp} · ` : ""}${displayRomaji(stripAnnotations(v.jp))}`,
-              description: v.meaning,
-              badge: `Bài ${lesson.id}`,
-              audioText: stripAnnotations(v.jp),
-              href: theoryHref(lesson.id, section.id, [word, v.jp]),
-            });
+            entries.push(
+              makeEntry(
+                {
+                  id: `lesson-vocab-${lesson.id}-${section.id}-${bIdx}-${vIdx}`,
+                  category: "vocabulary",
+                  categoryLabelVi: isReference ? `Tham khảo · Bài ${lesson.id}` : `Từ vựng · Bài ${lesson.id}`,
+                  categoryLabelEn: isReference ? `Reference · Lesson ${lesson.id}` : `Vocabulary · Lesson ${lesson.id}`,
+                  title: word ?? v.jp,
+                  subtitle: `${word ? `${v.jp} · ` : ""}${displayRomaji(kana)}`,
+                  description: v.meaning,
+                  badge: `Bài ${lesson.id}`,
+                  audioText: kana,
+                  href: theoryHref(lesson.id, section.id, [word, v.jp]),
+                },
+                { jp: [v.jp, v.kanji], romaji: [kanaToRomaji(kana)], text: [v.meaning, v.note] }
+              )
+            );
           });
         } else if (block.type === "table") {
           const jpColumns = block.speakableColumns ?? [];
           block.rows.forEach((row, rIdx) => {
             const jpCells = jpColumns.map((c) => row[c]).filter(Boolean);
             const otherCells = row.filter((_, c) => !jpColumns.includes(c));
-            const score = scoreFields(
-              { jp: jpCells, romaji: jpCells.map((c) => kanaToRomaji(c)), text: otherCells },
-              query
-            );
-            if (score === 0) return;
-            const matchedJp = jpCells.find((c) => scoreFields({ jp: [c], romaji: [kanaToRomaji(c)] }, query) > 0);
-            const title = matchedJp ?? jpCells[0] ?? row[0];
-            add(score, {
+            const base = {
               id: `lesson-table-${lesson.id}-${section.id}-${bIdx}-${rIdx}`,
-              category: "vocabulary",
+              category: "vocabulary" as const,
               categoryLabelVi: `Bảng tham khảo · Bài ${lesson.id}`,
               categoryLabelEn: `Reference table · Lesson ${lesson.id}`,
-              title,
               subtitle: block.title,
               description: otherCells.join(" · "),
               badge: `Bài ${lesson.id}`,
-              audioText: title,
-              href: theoryHref(lesson.id, section.id, [title]),
+            };
+            // One variant per Japanese cell, so the result shows (and links to) the cell that
+            // matched; variants share an id and only the best-scoring one is kept.
+            const titles = jpCells.length > 0 ? jpCells : [row[0]];
+            titles.forEach((cell, i) => {
+              entries.push(
+                makeEntry(
+                  { ...base, title: cell, audioText: cell, href: theoryHref(lesson.id, section.id, [cell]) },
+                  { jp: [cell], romaji: [kanaToRomaji(cell)], text: i === 0 ? otherCells : [] }
+                )
+              );
             });
           });
         }
@@ -186,28 +182,30 @@ export function searchGlobal(rawQuery: string): SearchResultItem[] {
   for (const domain of DOMAINS) {
     for (const subtopic of domain.subtopics) {
       for (const w of subtopic.words) {
-        const score = scoreFields(
-          {
-            jp: [w.word, w.reading],
-            romaji: [kanaToRomaji(w.reading)],
-            text: [w.meaning, w.hanVietHint, w.englishSource],
-          },
-          query
-        );
         const params = new URLSearchParams({ w: w.word });
         if (w.reading !== w.word) params.set("k", w.reading);
-        add(score, {
-          id: `vocab-${w.id}`,
-          category: "vocabulary",
-          categoryLabelVi: `Từ vựng chủ đề · ${subtopic.nameVi ?? subtopic.name}`,
-          categoryLabelEn: `Topic vocab · ${subtopic.name}`,
-          title: w.word,
-          subtitle: w.reading !== w.word ? `${w.reading}${w.hanVietHint ? ` [${w.hanVietHint}]` : ""}` : w.hanVietHint ? `[${w.hanVietHint}]` : undefined,
-          description: w.meaning,
-          badge: w.jlptLevel || domain.nameVi || domain.name,
-          audioText: w.reading || w.word,
-          href: `/vocabulary/${domain.id}/${subtopic.id}?${params.toString()}`,
-        });
+        entries.push(
+          makeEntry(
+            {
+              id: `vocab-${w.id}`,
+              category: "vocabulary",
+              categoryLabelVi: `Từ vựng chủ đề · ${subtopic.nameVi ?? subtopic.name}`,
+              categoryLabelEn: `Topic vocab · ${subtopic.name}`,
+              title: w.word,
+              subtitle:
+                w.reading !== w.word
+                  ? `${w.reading}${w.hanVietHint ? ` [${w.hanVietHint}]` : ""}`
+                  : w.hanVietHint
+                    ? `[${w.hanVietHint}]`
+                    : undefined,
+              description: w.meaning,
+              badge: w.jlptLevel || domain.nameVi || domain.name,
+              audioText: w.reading || w.word,
+              href: `/vocabulary/${domain.id}/${subtopic.id}?${params.toString()}`,
+            },
+            { jp: [w.word, w.reading], romaji: [kanaToRomaji(w.reading)], text: [w.meaning, w.hanVietHint, w.englishSource] }
+          )
+        );
       }
     }
   }
@@ -219,152 +217,235 @@ export function searchGlobal(rawQuery: string): SearchResultItem[] {
   ] as const) {
     for (const k of list) {
       const readings = k.hiragana.split("/").map((r) => r.trim());
-      const ownScore = scoreFields(
-        { jp: [k.char, ...readings], romaji: readings.map((r) => kanaToRomaji(r)), text: [k.hanViet, k.meaningVi, k.meaningEn] },
-        query
-      );
-      // Example words count, slightly below the kanji itself
-      let exampleScore = 0;
-      let matchedExample: (typeof k.exampleWords)[number] | undefined;
-      for (const ex of k.exampleWords) {
-        const s = scoreFields({ jp: [ex.word, ex.reading], romaji: [kanaToRomaji(ex.reading)], text: [ex.meaning] }, query) - 10;
-        if (s > exampleScore) {
-          exampleScore = s;
-          matchedExample = ex;
-        }
-      }
-      const useExample = exampleScore > ownScore;
-      add(Math.max(ownScore, exampleScore), {
+      const base = {
         id: `${idPrefix}-${k.id}`,
-        category: "kanji",
+        category: "kanji" as const,
         categoryLabelVi: labelVi,
         categoryLabelEn: labelEn,
         title: k.char,
-        subtitle: useExample && matchedExample ? `${matchedExample.word} (${matchedExample.reading})` : `${k.hanViet} (${k.hiragana})`,
-        description: useExample && matchedExample ? matchedExample.meaning : k.meaningVi,
         badge: `${k.strokes} nét`,
-        audioText: useExample && matchedExample ? matchedExample.reading : readings[0] || k.char,
         href: `/kana?tab=kanji&subtab=${subtab}&q=${encodeURIComponent(k.char)}`,
-      });
+      };
+      entries.push(
+        makeEntry(
+          { ...base, subtitle: `${k.hanViet} (${k.hiragana})`, description: k.meaningVi, audioText: readings[0] || k.char },
+          { jp: [k.char, ...readings], romaji: readings.map((r) => kanaToRomaji(r)), text: [k.hanViet, k.meaningVi, k.meaningEn] }
+        )
+      );
+      // Example words: same result (same id), shown with the matched example, ranked a bit lower
+      for (const ex of k.exampleWords) {
+        entries.push(
+          makeEntry(
+            { ...base, subtitle: `${ex.word} (${ex.reading})`, description: ex.meaning, audioText: ex.reading },
+            { jp: [ex.word, ex.reading], romaji: [kanaToRomaji(ex.reading)], text: [ex.meaning] },
+            { offset: -10 }
+          )
+        );
+      }
     }
   }
 
   for (const rad of KANJI_RADICALS) {
-    const score = scoreFields(
-      {
-        jp: [rad.char, ...rad.exampleKanji.map((ex) => ex.char)],
-        text: [rad.hanViet, rad.meaningVi, rad.meaningEn, ...rad.exampleKanji.map((ex) => ex.hanViet)],
-      },
-      query
+    entries.push(
+      makeEntry(
+        {
+          id: `rad-${rad.id}`,
+          category: "kanji",
+          categoryLabelVi: "Bộ thủ Kanji",
+          categoryLabelEn: "Kanji Radical",
+          title: rad.char,
+          subtitle: rad.hanViet,
+          description: rad.meaningVi,
+          badge: `Bộ thủ (${rad.strokes} nét)`,
+          audioText: rad.char,
+          href: `/kana?tab=kanji&subtab=radicals&q=${encodeURIComponent(rad.char)}`,
+        },
+        {
+          jp: [rad.char, ...rad.exampleKanji.map((ex) => ex.char)],
+          text: [rad.hanViet, rad.meaningVi, rad.meaningEn, ...rad.exampleKanji.map((ex) => ex.hanViet)],
+        }
+      )
     );
-    add(score, {
-      id: `rad-${rad.id}`,
-      category: "kanji",
-      categoryLabelVi: "Bộ thủ Kanji",
-      categoryLabelEn: "Kanji Radical",
-      title: rad.char,
-      subtitle: rad.hanViet,
-      description: rad.meaningVi,
-      badge: `Bộ thủ (${rad.strokes} nét)`,
-      audioText: rad.char,
-      href: `/kana?tab=kanji&subtab=radicals&q=${encodeURIComponent(rad.char)}`,
-    });
   }
 
   // 4. SITUATIONAL PHRASES (/phrases, pre-filtered to the phrase)
   for (const p of PHRASE_LIST) {
-    const score = scoreFields(
-      { jp: [p.japanese, p.hiragana], romaji: [p.romaji], text: [p.vietnamese, p.english] },
-      query
+    entries.push(
+      makeEntry(
+        {
+          id: `phrase-${p.id}`,
+          category: "phrases",
+          categoryLabelVi: "Mẫu câu giao tiếp",
+          categoryLabelEn: "Situational Phrase",
+          title: p.japanese,
+          subtitle: p.hiragana,
+          description: p.vietnamese,
+          badge: p.formality === "polite" ? "Lịch sự" : p.formality === "formal" ? "Trang trọng" : "Thân mật",
+          audioText: p.hiragana || p.japanese,
+          href: `/phrases?q=${encodeURIComponent(p.japanese)}`,
+        },
+        { jp: [p.japanese, p.hiragana], romaji: [p.romaji], text: [p.vietnamese, p.english] }
+      )
     );
-    add(score, {
-      id: `phrase-${p.id}`,
-      category: "phrases",
-      categoryLabelVi: "Mẫu câu giao tiếp",
-      categoryLabelEn: "Situational Phrase",
-      title: p.japanese,
-      subtitle: p.hiragana,
-      description: p.vietnamese,
-      badge: p.formality === "polite" ? "Lịch sự" : p.formality === "formal" ? "Trang trọng" : "Thân mật",
-      audioText: p.hiragana || p.japanese,
-      href: `/phrases?q=${encodeURIComponent(p.japanese)}`,
-    });
   }
 
   // 5. GRAMMAR (lesson titles + grammar points → the lesson's Ngữ pháp tab)
   for (const lesson of lessonList) {
     const lessonTitle = lesson.title || `Bài ${lesson.id}`;
-    add(scoreFields({ jp: [lessonTitle], text: [lessonTitle, `bai ${lesson.id}`] }, query), {
-      id: `theory-lesson-${lesson.id}`,
-      category: "theory",
-      categoryLabelVi: "Bài học",
-      categoryLabelEn: "Lesson",
-      title: lessonTitle,
-      subtitle: `Bài ${lesson.id}`,
-      description: "Lý thuyết Minna no Nihongo",
-      badge: `Bài ${lesson.id}`,
-      audioText: lessonTitle,
-      href: `/theory/${lesson.id}`,
-    });
+    entries.push(
+      makeEntry(
+        {
+          id: `theory-lesson-${lesson.id}`,
+          category: "theory",
+          categoryLabelVi: "Bài học",
+          categoryLabelEn: "Lesson",
+          title: lessonTitle,
+          subtitle: `Bài ${lesson.id}`,
+          description: "Lý thuyết Minna no Nihongo",
+          badge: `Bài ${lesson.id}`,
+          audioText: lessonTitle,
+          href: `/theory/${lesson.id}`,
+        },
+        { jp: [lessonTitle], text: [lessonTitle, `bai ${lesson.id}`] }
+      )
+    );
 
     for (const section of lesson.sections) {
       section.blocks.forEach((block, bIdx) => {
         if (block.type !== "grammar-pattern") return;
-        const score = scoreFields(
-          {
-            jp: [block.pattern, ...(block.examples?.map((ex) => ex.jp) ?? [])],
-            text: [block.pattern, block.explanation, ...(block.examples?.map((ex) => ex.vi) ?? [])],
-          },
-          query
+        entries.push(
+          makeEntry(
+            {
+              id: `theory-gp-${lesson.id}-${bIdx}`,
+              category: "theory",
+              categoryLabelVi: "Điểm ngữ pháp",
+              categoryLabelEn: "Grammar Point",
+              title: block.pattern,
+              subtitle: `Bài ${lesson.id} · Ngữ pháp`,
+              description: block.explanation || "Mẫu cấu trúc ngữ pháp",
+              badge: `Bài ${lesson.id}`,
+              audioText: block.pattern,
+              href: theoryHref(lesson.id, section.id, [block.pattern]),
+            },
+            {
+              jp: [block.pattern, ...(block.examples?.map((ex) => ex.jp) ?? [])],
+              text: [block.pattern, block.explanation, ...(block.examples?.map((ex) => ex.vi) ?? [])],
+            },
+            { offset: -10 }
+          )
         );
-        add(score - 10, {
-          id: `theory-gp-${lesson.id}-${bIdx}`,
-          category: "theory",
-          categoryLabelVi: "Điểm ngữ pháp",
-          categoryLabelEn: "Grammar Point",
-          title: block.pattern,
-          subtitle: `Bài ${lesson.id} · Ngữ pháp`,
-          description: block.explanation || "Mẫu cấu trúc ngữ pháp",
-          badge: `Bài ${lesson.id}`,
-          audioText: block.pattern,
-          href: theoryHref(lesson.id, section.id, [block.pattern]),
-        });
       });
     }
   }
 
   // 6. KANA (Hiragana & Katakana chart, pre-filtered to the character)
   for (const kana of kanaList) {
-    const score = scoreFields({ jp: [kana.char], romaji: [kana.romaji] }, query);
-    // Kana only on exact / prefix hits, otherwise "a" lists half the chart
-    if (score < 70) continue;
-    add(score - 15, {
-      id: `kana-${kana.id}`,
-      category: "kana",
-      categoryLabelVi: "Bảng chữ cái Kana",
-      categoryLabelEn: "Kana Character",
-      title: kana.char,
-      subtitle: `Romaji: /${kana.romaji}/`,
-      description: kana.script === "hiragana" ? "Chữ Hiragana" : "Chữ Katakana",
-      badge: kana.script.toUpperCase(),
-      audioText: kana.char,
-      href: `/kana?tab=${kana.script}&q=${encodeURIComponent(kana.char)}`,
-    });
+    entries.push(
+      makeEntry(
+        {
+          id: `kana-${kana.id}`,
+          category: "kana",
+          categoryLabelVi: "Bảng chữ cái Kana",
+          categoryLabelEn: "Kana Character",
+          title: kana.char,
+          subtitle: `Romaji: /${kana.romaji}/`,
+          description: kana.script === "hiragana" ? "Chữ Hiragana" : "Chữ Katakana",
+          badge: kana.script.toUpperCase(),
+          audioText: kana.char,
+          href: `/kana?tab=${kana.script}&q=${encodeURIComponent(kana.char)}`,
+        },
+        { jp: [kana.char], romaji: [kana.romaji] },
+        // Only exact / prefix hits, otherwise "a" lists half the chart
+        { offset: -15, minScore: 70 }
+      )
+    );
+  }
+
+  return entries;
+}
+
+let cachedIndex: IndexEntry[] | null = null;
+
+function getIndex(): IndexEntry[] {
+  if (!cachedIndex) cachedIndex = buildIndex();
+  return cachedIndex;
+}
+
+/** Builds the search index once (a few thousand entries) so the first keystroke is fast. */
+export function prepareSearchIndex() {
+  getIndex();
+}
+
+// ---- scoring ----------------------------------------------------------------
+
+const WORD_BOUNDARY = /[\s,;/()・、]/;
+
+/** `q` appears in `value` as a whole word ("ký túc xá" in "ký túc xá, nhà tập thể"). */
+function containsWord(value: string, q: string) {
+  let i = value.indexOf(q);
+  while (i !== -1) {
+    const before = i === 0 || WORD_BOUNDARY.test(value[i - 1]);
+    const end = i + q.length;
+    const after = end === value.length || WORD_BOUNDARY.test(value[end]);
+    if (before && after) return true;
+    i = value.indexOf(q, i + 1);
+  }
+  return false;
+}
+
+function scoreString(value: string, q: string): number {
+  if (value === q) return 100;
+  if (value.startsWith(q)) return 70;
+  if (!value.includes(q)) return 0;
+  return containsWord(value, q) ? 55 : 30;
+}
+
+function scoreEntry(entry: IndexEntry, query: Query): number {
+  let best = 0;
+  for (const value of entry.jp) best = Math.max(best, scoreString(value, query.raw));
+  if (query.isLatin && query.romaji) {
+    for (const value of entry.romaji) {
+      const s = scoreString(value, query.romaji);
+      // Short romaji fragments ("a", "ka") only count as whole / prefix matches
+      best = Math.max(best, s >= 70 || query.romaji.length >= 3 ? s : 0);
+    }
+  }
+  for (const value of entry.text) best = Math.max(best, scoreString(value, query.text));
+  for (const value of entry.parts) best = Math.max(best, scoreString(value, query.text) - 5);
+  if (best < entry.minScore) return 0;
+  return best > 0 ? best + entry.offset : 0;
+}
+
+export function searchGlobal(rawQuery: string): SearchResultItem[] {
+  const raw = rawQuery.trim().toLowerCase();
+  if (!raw) return [];
+
+  const text = normalizeSearch(raw);
+  const query: Query = { raw, text, romaji: normalizeRomaji(raw), isLatin: /^[a-z\s'-]+$/.test(text) };
+
+  const scored: { item: SearchResultItem; score: number }[] = [];
+  for (const entry of getIndex()) {
+    const score = scoreEntry(entry, query);
+    if (score > 0) scored.push({ item: entry.item, score });
   }
 
   // Best matches first, capped per category so one big source cannot crowd out the rest
   scored.sort((a, b) => b.score - a.score);
   const perCategory: Record<string, number> = {};
   const results: SearchResultItem[] = [];
-  const seen = new Set<string>();
+  const seenIds = new Set<string>();
+  const seenWords = new Set<string>();
   for (const { item } of scored) {
     if (results.length >= MAX_RESULTS) break;
+    // Variants of one result (kanji example words, table cells) share an id → keep the best
+    if (seenIds.has(item.id)) continue;
+    // Same word listed twice on one page (e.g. vocab list + reference) → keep the best one
+    const wordKey = `${item.category}|${item.title}|${item.href.split("?")[0]}`;
+    if (seenWords.has(wordKey)) continue;
     const count = perCategory[item.category] ?? 0;
     if (count >= MAX_PER_CATEGORY) continue;
-    // Same word listed twice in one place (e.g. vocab list + reference) → keep the best one
-    const dedupeKey = `${item.category}|${item.title}|${item.href.split("?")[0]}`;
-    if (seen.has(dedupeKey)) continue;
-    seen.add(dedupeKey);
+    seenIds.add(item.id);
+    seenWords.add(wordKey);
     perCategory[item.category] = count + 1;
     results.push(item);
   }
