@@ -11,6 +11,7 @@ import { speakJapanese } from "@/lib/speech";
 import { useLanguage } from "@/lib/language-context";
 import { RadicalStrokeSvg } from "@/components/kana/radical-stroke-svg";
 import { RadicalHandwritingCanvas } from "@/components/kana/radical-handwriting-canvas";
+import { KanjiWritingSheetButton } from "@/components/kana/kanji-writing-sheet";
 import { cn } from "@/lib/utils";
 
 interface KanjiRadicalGuideProps {
@@ -262,16 +263,19 @@ export function KanjiRadicalGuide({ initialMainTab, initialSearch }: KanjiRadica
           })}
         </div>
 
-        {/* Print Button */}
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => window.print()}
-          className="gap-2 font-bold text-xs rounded-xl border-border/80 hover:bg-accent cursor-pointer self-end sm:self-auto"
-        >
-          <Printer className="size-4 text-red-600" />
-          <span>In bảng Kanji A4</span>
-        </Button>
+        {/* Print Buttons */}
+        <div className="flex items-center gap-2 self-end sm:self-auto">
+          <KanjiWritingSheetButton />
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => window.print()}
+            className="gap-2 font-bold text-xs rounded-xl border-border/80 hover:bg-accent cursor-pointer"
+          >
+            <Printer className="size-4 text-red-600" />
+            <span>In bảng Kanji A4</span>
+          </Button>
+        </div>
       </div>
 
       {/* 2. Title Header Banner Box */}

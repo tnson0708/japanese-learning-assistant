@@ -252,6 +252,23 @@
     --tw-ring-shadow: 0 0 #0000 !important;
   }
 
+  /* Kanji writing practice paper (Kanji tab "In giấy tập viết") — portaled into <body> */
+  body[data-print-kanji-sheet] > :not(.kanji-writing-sheet) {
+    display: none !important;
+  }
+  body:not([data-print-kanji-sheet]) .kanji-writing-sheet {
+    display: none !important;
+  }
+  .kanji-writing-sheet {
+    page: kanji-sheet;
+  }
+  .kanji-sheet-page {
+    break-after: page;
+  }
+  .kanji-sheet-page:last-child {
+    break-after: auto;
+  }
+
   /* Vocabulary print sheet (theory lesson "In từ vựng") */
   body[data-print-vocab] .vocab-print-hide {
     display: none !important;
@@ -312,6 +329,13 @@
     font-weight: 700;
     font-size: 10pt;
   }
+}
+
+/* Kanji writing sheet: A4 portrait with a slightly taller printable area than the site
+   default, so 13 rows fit per page. */
+@page kanji-sheet {
+  size: A4 portrait;
+  margin: 7mm 10mm;
 }
 
 /* Bold ink-brush display font for Kanji & Radicals glyphs (falls back to OS Mincho for any

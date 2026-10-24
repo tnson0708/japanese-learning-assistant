@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Plus_Jakarta_Sans, Geist_Mono, Yuji_Boku } from "next/font/google";
+import { Plus_Jakarta_Sans, Geist_Mono, Yuji_Boku, Klee_One } from "next/font/google";
 import { Nav } from "@/components/nav";
 import { Footer } from "@/components/footer";
 import { Providers } from "@/app/providers";
@@ -26,6 +26,15 @@ const kanjiFont = Yuji_Boku({
   display: "swap",
 });
 
+// Textbook-style (教科書体) face for the model glyphs on the printable kanji writing sheet —
+// its strokes mirror handwriting, unlike Mincho or the brush display face.
+const textbookFont = Klee_One({
+  weight: "600",
+  variable: "--font-kanji-textbook",
+  subsets: ["latin"],
+  display: "swap",
+  preload: false,
+});
 
 export const metadata: Metadata = {
   title: "Kana Dojo — Japanese Handwriting & Vocabulary",
@@ -71,7 +80,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${sansFont.variable} ${geistMono.variable} ${kanjiFont.variable} h-full antialiased font-sans`}
+      className={`${sansFont.variable} ${geistMono.variable} ${kanjiFont.variable} ${textbookFont.variable} h-full antialiased font-sans`}
       suppressHydrationWarning
     >
       <head>
