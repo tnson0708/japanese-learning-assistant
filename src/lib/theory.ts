@@ -275,6 +275,9 @@ export type ContentBlock =
       title: string;
       instruction?: string;
       audioUrl?: string;
+      /** Path under /public to a textbook picture the questions refer to (e.g. a street scene for 位置 words). */
+      imageUrl?: string;
+      imageAlt?: string;
       questions: FillInBlankQuestion[];
     }
   | {
@@ -354,6 +357,8 @@ export type ContentBlock =
       /** Path under /public to an illustration accompanying the passage, once someone saves it into the repo. */
       passageImageUrl?: string;
       items: ListeningTrueFalseItem[];
+      /** A "which picture matches the passage?" question (e.g. ①/②/③ maps), asked after or instead of the ○/× items. */
+      pictureQuestion?: { questionJp: string; group: ListeningPictureGroup };
     }
   | {
       type: "exercise-picture-particle-write";

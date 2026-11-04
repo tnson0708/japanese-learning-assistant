@@ -313,6 +313,8 @@ export function BlockRenderer({ block }: { block: ContentBlock }) {
           title={block.title}
           instruction={block.instruction}
           audioUrl={block.audioUrl}
+          imageUrl={block.imageUrl}
+          imageAlt={block.imageAlt}
           questions={block.questions}
         />
       );
@@ -411,6 +413,7 @@ export function BlockRenderer({ block }: { block: ContentBlock }) {
           passageVi={block.passageVi}
           passageImageUrl={block.passageImageUrl}
           items={block.items}
+          pictureQuestion={block.pictureQuestion}
         />
       );
     case "exercise-picture-particle-write":

@@ -20,7 +20,7 @@ export const KANJI_RADICALS: KanjiRadical[] = [
     meaningEn: "Dot / Point",
     strokes: 1,
     strokeGuide: "Nét chấm nghiêng nhẹ từ trên trái xuống dưới phải.",
-    strokePaths: ["M 48 30 C 52 38, 58 48, 62 55"],
+    strokePaths: ["M 41.1 39.9 C 50.9 47.6, 56.6 55.7, 59.6 62.8"],
     exampleKanji: [
       { char: "主", pinyin: "zhǔ", hanViet: "Chủ", meaning: "Chủ nhân, chính" },
       { char: "丸", pinyin: "wán", hanViet: "Hoàn", meaning: "Tròn, viên thuốc" },
@@ -34,7 +34,7 @@ export const KANJI_RADICALS: KanjiRadical[] = [
     meaningEn: "Slash / Sweep",
     strokes: 1,
     strokeGuide: "Kéo nét phẩy cong từ trên xuống dưới về phía trái.",
-    strokePaths: ["M 65 20 C 58 45, 42 70, 25 85"],
+    strokePaths: ["M 50.4 12.6 C 51.1 14.7, 52.2 16.3, 52.2 18.9 C 52.2 42.4, 55 76.4, 31 88.5"],
     exampleKanji: [
       { char: "乃", pinyin: "nǎi", hanViet: "Nãi", meaning: "Bèn, là" },
       { char: "久", pinyin: "jiǔ", hanViet: "Cửu", meaning: "Lâu dài" },
@@ -48,7 +48,7 @@ export const KANJI_RADICALS: KanjiRadical[] = [
     meaningEn: "Vertical Line",
     strokes: 1,
     strokeGuide: "Kéo nét sổ thẳng đứng từ trên xuống dưới.",
-    strokePaths: ["M 50 15 L 50 85"],
+    strokePaths: ["M 47.9 7.8 C 49.4 9.2, 49.5 10.3, 49.5 12.6 C 49.5 13.4, 49.5 59.9, 49.5 80.9 C 49.5 85.4, 49.5 88.8, 49.5 90.1"],
     exampleKanji: [
       { char: "中", pinyin: "zhōng", hanViet: "Trung", meaning: "Ở giữa, Trung Quốc" },
       { char: "十", pinyin: "shí", hanViet: "Thập", meaning: "Số 10" },
@@ -62,7 +62,7 @@ export const KANJI_RADICALS: KanjiRadical[] = [
     meaningEn: "Hook",
     strokes: 1,
     strokeGuide: "Kéo nét sổ đứng từ trên xuống rồi hất nhọn móc sang trái.",
-    strokePaths: ["M 50 15 L 50 80 C 45 83, 40 80, 35 75"],
+    strokePaths: ["M 47.3 11.3 C 47.9 12.2, 49.1 14.1, 49.1 16.9 C 49.4 30.3, 49 82.1, 49 86.6 C 49 96.3, 42.6 86.8, 41.8 86"],
     exampleKanji: [
       { char: "了", pinyin: "liǎo", hanViet: "Liễu", meaning: "Xong, rồi" },
       { char: "予", pinyin: "yǔ", hanViet: "Dự", meaning: "Sẵn, dự báo" },
@@ -76,7 +76,7 @@ export const KANJI_RADICALS: KanjiRadical[] = [
     meaningEn: "Knife (standing)",
     strokes: 2,
     strokeGuide: "Nét 1: sổ ngắn trái; Nét 2: sổ dài móc lên phải.",
-    strokePaths: ["M 38 25 L 38 60", "M 62 15 L 62 80 C 58 83, 52 80, 48 76"],
+    strokePaths: ["M 35.8 24.2 C 36.8 25.2, 37 26.1, 37 28.5 C 37 34.9, 36.9 50, 36.9 58.9", "M 57.6 9.5 C 58.8 10.7, 59.2 11.8, 59.2 14.1 C 59.2 27.4, 59.2 76.8, 59.2 81.4 C 59.2 92, 52.5 83.4, 51 81.4"],
     exampleKanji: [
       { char: "切", pinyin: "qiē", hanViet: "Thiết", meaning: "Cắt (切ります)" },
       { char: "前", pinyin: "qián", hanViet: "Tiền", meaning: "Trước, phía trước" },
@@ -92,7 +92,7 @@ export const KANJI_RADICALS: KanjiRadical[] = [
     meaningEn: "Lid / Head cover",
     strokes: 2,
     strokeGuide: "Nét 1: chấm giữa; Nét 2: ngang dài phủ dưới.",
-    strokePaths: ["M 50 20 L 50 35", "M 20 40 L 80 40"],
+    strokePaths: ["M 46.9 31.9 C 47.9 32.4, 49.6 34.6, 49.6 35.7 C 49.6 39.8, 49.3 44.3, 49.5 47.8", "M 13.3 51.5 C 15.1 51.8, 16.8 52.2, 18.9 52 C 31.4 50.5, 67.2 47.5, 81.8 46.8 C 84 46.6, 85.1 46.8, 86.7 47.4"],
     exampleKanji: [
       { char: "京", pinyin: "jīng", hanViet: "Kinh", meaning: "Kinh đô (東京)" },
       { char: "高", pinyin: "gāo", hanViet: "Cao", meaning: "Cao, đắt (高い)" },
@@ -106,7 +106,7 @@ export const KANJI_RADICALS: KanjiRadical[] = [
     meaningEn: "Roof",
     strokes: 3,
     strokeGuide: "Nét 1: chấm đỉnh; Nét 2: phẩy đứng trái; Nét 3: ngang gập phải.",
-    strokePaths: ["M 50 15 L 50 28", "M 28 32 L 24 55", "M 25 35 L 75 35 L 75 55"],
+    strokePaths: ["M 46 28.4 C 47.2 28.8, 48.9 30.8, 48.9 31.9 C 48.8 35.5, 48.8 41.6, 48.8 44.8", "M 16.4 46.9 C 16.4 50.1, 13.7 58.9, 12.4 61", "M 18.1 47.9 C 26.8 47, 73.4 43.8, 80.4 43.4 C 91.5 42.9, 82.8 50, 80 51.9"],
     exampleKanji: [
       { char: "家", pinyin: "jiā", hanViet: "Gia", meaning: "Nhà, gia đình" },
       { char: "安", pinyin: "ān", hanViet: "An", meaning: "An toàn, rẻ (安い)" },
@@ -120,7 +120,7 @@ export const KANJI_RADICALS: KanjiRadical[] = [
     meaningEn: "Cover / Canopy",
     strokes: 2,
     strokeGuide: "Nét 1: phẩy đứng trái; Nét 2: ngang gập đè lên.",
-    strokePaths: ["M 25 30 L 22 60", "M 23 35 L 75 35 L 75 60"],
+    strokePaths: ["M 16.7 40.3 C 16.5 45.1, 12.1 57.5, 10.6 60.3", "M 16.3 44 C 19.5 44, 63.3 40.6, 79.5 40.6 C 90.6 40.6, 83 45.9, 78.9 49.3"],
     exampleKanji: [
       { char: "写", pinyin: "xiě", hanViet: "Tả", meaning: "Chụp ảnh (写真)" },
       { char: "冠", pinyin: "guān", hanViet: "Quan", meaning: "Vương miện" },
@@ -136,7 +136,7 @@ export const KANJI_RADICALS: KanjiRadical[] = [
     meaningEn: "Person (standing)",
     strokes: 2,
     strokeGuide: "Nét 1: phẩy từ trên xuống trái; Nét 2: sổ thẳng đứng xuống dưới.",
-    strokePaths: ["M 55 20 C 45 40, 32 60, 20 75", "M 42 42 L 42 88"],
+    strokePaths: ["M 59.4 9.5 C 59.6 10.9, 59.5 12.6, 58.8 14.2 C 53.1 26, 40.1 45.3, 25.1 58.1", "M 48.8 38.9 C 49.7 39.8, 49.9 40.8, 49.9 42.5 C 49.9 51.6, 49.9 70, 49.9 81.4 C 49.9 84.6, 49.9 87.2, 49.9 89"],
     exampleKanji: [
       { char: "休", pinyin: "xiū", hanViet: "Hưu", meaning: "Nghỉ ngơi (休みます)" },
       { char: "体", pinyin: "tǐ", hanViet: "Thể", meaning: "Cơ thể" },
@@ -150,7 +150,7 @@ export const KANJI_RADICALS: KanjiRadical[] = [
     meaningEn: "Person (lying / top)",
     strokes: 2,
     strokeGuide: "Nét 1: phẩy nằm trên; Nét 2: nét ngang móc/gập nghiêng.",
-    strokePaths: ["M 65 20 C 50 30, 35 45, 25 55", "M 32 35 L 78 35"],
+    strokePaths: ["M 36.7 23.5 C 36.8 24.7, 37.1 26.7, 36.6 28.4 C 32.9 40.7, 24.7 61.6, 12 76.5", "M 34.8 48.2 C 36.7 48.6, 40.2 48.2, 41.2 48.2 C 51.9 47.5, 68.4 43.3, 84.6 42.2 C 86.4 42.1, 87.5 42.2, 88 42.3"],
     exampleKanji: [
       { char: "午", pinyin: "wǔ", hanViet: "Ngọ", meaning: "Buổi trưa (午前/午後)" },
       { char: "年", pinyin: "nián", hanViet: "Niên", meaning: "Năm (今年)" },
@@ -164,7 +164,7 @@ export const KANJI_RADICALS: KanjiRadical[] = [
     meaningEn: "Person (roof / hat)",
     strokes: 2,
     strokeGuide: "Nét 1: phẩy trái rộng; Nét 2: mác phải rộng cân xứng.",
-    strokePaths: ["M 50 18 C 40 40, 28 65, 18 82", "M 48 35 C 58 50, 72 70, 85 85"],
+    strokePaths: ["M 50 18.3 C 50.3 20.3, 50.2 22, 49.8 24.1 C 47.4 36.2, 35.1 66.3, 15.1 80", "M 42.2 49.8 C 47.8 55.3, 65.6 70.2, 74.8 77 C 78.1 79.5, 81.2 81.3, 85.3 82.1"],
     exampleKanji: [
       { char: "人", pinyin: "rén", hanViet: "Nhân", meaning: "Người" },
       { char: "今", pinyin: "jīn", hanViet: "Kim", meaning: "Bây giờ (今)" },
@@ -178,7 +178,7 @@ export const KANJI_RADICALS: KanjiRadical[] = [
     meaningEn: "Person walking / Legs",
     strokes: 2,
     strokeGuide: "Nét 1: phẩy đứng trái; Nét 2: sổ cong móc hất sang phải.",
-    strokePaths: ["M 40 30 C 35 55, 28 75, 18 88", "M 60 30 L 60 70 C 60 80, 68 85, 80 85"],
+    strokePaths: ["M 37.9 14.4 C 38.7 16.5, 39.2 19.5, 39.2 22 C 39.2 45.4, 42.9 77.7, 17 89.7", "M 58 12.2 C 58.6 13.3, 59.2 14.9, 59.4 16.4 C 59.6 17.9, 58.8 71.7, 59.6 76.2 C 60.4 80.6, 61 85.8, 64.2 86.1 C 67.4 86.5, 84.2 87.3, 86.3 84.1 C 87.8 81.7, 88.1 79, 88.1 74.9"],
     exampleKanji: [
       { char: "元", pinyin: "yuán", hanViet: "Nguyên", meaning: "Khỏe mạnh (元気)" },
       { char: "先", pinyin: "xiān", hanViet: "Tiên", meaning: "Trước, thầy giáo (先生)" },
@@ -194,7 +194,7 @@ export const KANJI_RADICALS: KanjiRadical[] = [
     meaningEn: "Hair / 3 Strokes",
     strokes: 3,
     strokeGuide: "Vẽ 3 nét phẩy song song xuôi từ trên xuống dưới về phía trái.",
-    strokePaths: ["M 65 20 C 50 30, 40 40, 30 50", "M 68 42 C 53 52, 43 62, 33 72", "M 72 65 C 57 75, 47 85, 35 93"],
+    strokePaths: ["M 60.8 13.3 C 60.9 13.9, 61.1 15, 60.6 15.8 C 57.1 21.1, 46.8 32.3, 28.2 38.7", "M 68.8 33.4 C 68.9 34, 69.2 35.1, 68.6 36 C 64.5 41.7, 51.6 54.8, 30.9 61.2", "M 75 54.1 C 75.1 55, 75.3 56.3, 74.7 57.5 C 71.5 64.4, 52.9 79.8, 27.4 89.2"],
     exampleKanji: [
       { char: "形", pinyin: "xíng", hanViet: "Hình", meaning: "Hình dáng" },
       { char: "影", pinyin: "yǐng", hanViet: "Ảnh", meaning: "Bóng dáng, hình ảnh" },
@@ -208,7 +208,7 @@ export const KANJI_RADICALS: KanjiRadical[] = [
     meaningEn: "Step / Short step / Walk",
     strokes: 3,
     strokeGuide: "Nét 1: phẩy ngắn trên; Nét 2: phẩy ngắn dưới; Nét 3: sổ đứng.",
-    strokePaths: ["M 62 18 C 50 28, 40 38, 30 48", "M 66 40 C 53 50, 42 60, 30 70", "M 46 36 L 46 88"],
+    strokePaths: ["M 58.7 11.9 C 58.8 12.5, 59.1 13.5, 58.6 14.2 C 54.8 19.3, 45 28, 31.2 36.5", "M 63.3 29.1 C 63.4 30, 63.8 31.4, 63.1 32.5 C 58.2 39.7, 45.2 52.2, 27.1 64.4", "M 49.4 50 C 49.8 50.2, 50.1 51.1, 50.2 51.5 C 50.3 52, 50.2 87.4, 50.1 90.4"],
     exampleKanji: [
       { char: "行", pinyin: "xíng", hanViet: "Hành", meaning: "Đi (行きます)" },
       { char: "待", pinyin: "dài", hanViet: "Đãi", meaning: "Chờ đợi (待つ)" },
@@ -222,7 +222,7 @@ export const KANJI_RADICALS: KanjiRadical[] = [
     meaningEn: "Heart (standing)",
     strokes: 3,
     strokeGuide: "Nét 1: chấm phẩy trái; Nét 2: chấm phải; Nét 3: sổ dài giữa xuyên xuống.",
-    strokePaths: ["M 25 38 C 22 48, 18 58, 15 65", "M 40 32 C 43 40, 45 48, 48 55", "M 30 15 L 30 88"],
+    strokePaths: ["M 37 33 C 37 40.2, 34.2 50.7, 33.5 52.8", "M 59.5 25.8 C 61.3 28.1, 64.1 35.4, 64.6 39", "M 48.3 9.9 C 49.5 11.1, 49.8 12.3, 49.8 14 C 49.8 14.8, 49.9 59.2, 49.9 79.2 C 49.9 83.5, 49.9 86.7, 49.9 88.1"],
     exampleKanji: [
       { char: "忙", pinyin: "máng", hanViet: "Mang", meaning: "Bận rộn (忙しい)" },
       { char: "情", pinyin: "qíng", hanViet: "Tình", meaning: "Tình cảm" },
@@ -236,7 +236,7 @@ export const KANJI_RADICALS: KanjiRadical[] = [
     meaningEn: "Hill / Mound (left side)",
     strokes: 3,
     strokeGuide: "Nét 1: ngang cong gập xuống; Nét 2: cong tròn móc; Nét 3: sổ đứng dài.",
-    strokePaths: ["M 28 20 L 48 20 C 55 20, 55 35, 42 40", "M 42 40 C 60 47, 58 58, 43 63", "M 28 20 L 28 88"],
+    strokePaths: ["M 36.5 12.4 C 37.9 12.7, 39.6 13.2, 41.4 12.9 C 49.7 11.5, 57.3 10, 60.3 9 C 63.5 8, 65.2 10.7, 63.9 13.2 C 62 16.9, 56.5 27.2, 54 30.7", "M 53.9 31 C 68.6 41.1, 67.1 64.9, 53.1 56.4", "M 38.2 13.3 C 38.9 14, 39.1 14.8, 39.1 15.8 C 39.1 16.6, 39.1 62.8, 39.1 82.2 C 39.1 86.2, 39.1 89, 39.1 90.1"],
     exampleKanji: [
       { char: "阪", pinyin: "bǎn", hanViet: "Phản", meaning: "Độ dốc (大阪 - Osaka)" },
       { char: "院", pinyin: "yuàn", hanViet: "Viện", meaning: "Bệnh viện (病院)" },
@@ -250,7 +250,7 @@ export const KANJI_RADICALS: KanjiRadical[] = [
     meaningEn: "City / Town (right side)",
     strokes: 3,
     strokeGuide: "Nét 1: ngang cong gập xuống; Nét 2: cong tròn móc; Nét 3: sổ đứng dài bên phải.",
-    strokePaths: ["M 62 20 L 82 20 C 89 20, 89 35, 76 40", "M 76 40 C 94 47, 92 58, 77 63", "M 62 20 L 62 88"],
+    strokePaths: ["M 36.5 12.4 C 37.9 12.7, 39.6 13.2, 41.4 12.9 C 49.7 11.5, 57.3 10, 60.3 9 C 63.5 8, 65.2 10.7, 63.9 13.2 C 62 16.9, 56.5 27.2, 54 30.7", "M 53.9 31 C 68.6 41.1, 67.1 64.9, 53.1 56.4", "M 38.2 13.3 C 38.9 14, 39.1 14.8, 39.1 15.8 C 39.1 16.6, 39.1 62.8, 39.1 82.2 C 39.1 86.2, 39.1 89, 39.1 90.1"],
     exampleKanji: [
       { char: "部", pinyin: "bù", hanViet: "Bộ", meaning: "Bộ phận, căn phòng (部屋)" },
       { char: "都", pinyin: "dū", hanViet: "Đô", meaning: "Đô thành (京都)" },
@@ -264,7 +264,7 @@ export const KANJI_RADICALS: KanjiRadical[] = [
     meaningEn: "Seal / Knee joint",
     strokes: 2,
     strokeGuide: "Nét 1: ngang gập cong đứng; Nét 2: sổ đứng xiên.",
-    strokePaths: ["M 30 25 L 65 25 L 65 50 C 65 62, 60 68, 52 70", "M 38 25 L 38 92"],
+    strokePaths: ["M 36.9 13.5 C 37.8 13.8, 39.7 15.1, 41.5 14.9 S 63.8 12.6, 66.1 12.4 S 71.8 11.9, 72 16.7 C 72.1 19, 69.1 51.6, 66.7 62.2 C 64.4 72.2, 58 63.3, 57.3 62.8", "M 38.4 14.7 C 38.6 15.6, 38.4 83.7, 38.2 89.4"],
     exampleKanji: [
       { char: "印", pinyin: "yìn", hanViet: "Ấn", meaning: "Con dấu (印鑑)" },
       { char: "危", pinyin: "wēi", hanViet: "Nguy", meaning: "Nguy hiểm (危ない)" },
@@ -280,7 +280,7 @@ export const KANJI_RADICALS: KanjiRadical[] = [
     meaningEn: "Ice (2 dots)",
     strokes: 2,
     strokeGuide: "Nét 1: chấm hất nhẹ dưới trái; Nét 2: phẩy hất đứng trên.",
-    strokePaths: ["M 32 30 C 38 35, 42 42, 45 48", "M 28 65 C 38 65, 48 58, 55 50"],
+    strokePaths: ["M 43.6 17 C 48.3 19.2, 55.7 26.1, 56.9 29.6", "M 38.1 78.7 C 40.4 81.1, 43.3 80.7, 45 78.7 C 46.5 76.7, 56 60.9, 61.9 50.7"],
     exampleKanji: [
       { char: "冷", pinyin: "lěng", hanViet: "Lãnh", meaning: "Lạnh buốt (冷たい)" },
       { char: "冬", pinyin: "dōng", hanViet: "Đông", meaning: "Mùa đông (冬)" },
@@ -294,7 +294,7 @@ export const KANJI_RADICALS: KanjiRadical[] = [
     meaningEn: "Water (3 dots)",
     strokes: 3,
     strokeGuide: "Nét 1: chấm trên; Nét 2: chấm giữa; Nét 3: hất nhẹ dưới lên.",
-    strokePaths: ["M 35 22 C 40 28, 42 35, 45 40", "M 30 46 C 36 50, 40 56, 42 60", "M 25 78 C 32 74, 45 62, 52 54"],
+    strokePaths: ["M 44.6 12.7 C 48.9 14.6, 55.6 20.2, 56.6 23", "M 36.6 34.9 C 41.3 36.6, 48.8 42, 50 44.7", "M 41.7 83.8 C 43.9 84.5, 45.4 83.8, 46.6 82.2 C 49.8 77.3, 57.2 63.4, 60.2 57.2"],
     exampleKanji: [
       { char: "水", pinyin: "shuǐ", hanViet: "Thủy", meaning: "Nước (水)" },
       { char: "海", pinyin: "hǎi", hanViet: "Hải", meaning: "Biển (海)" },
@@ -308,12 +308,7 @@ export const KANJI_RADICALS: KanjiRadical[] = [
     meaningEn: "Fire (4 dots bottom)",
     strokes: 4,
     strokeGuide: "Xếp 4 chấm dài từ trái sang phải, kéo dài từ giữa xuống chân chữ.",
-    strokePaths: [
-      "M 22 42 C 19 55, 16 68, 12 80",
-      "M 42 42 C 43 55, 45 68, 47 82",
-      "M 62 42 C 64 55, 67 68, 70 82",
-      "M 82 42 C 85 55, 90 68, 94 82",
-    ],
+    strokePaths: ["M 18.9 40.3 C 18.5 49.7, 13.4 58, 11.2 60.2", "M 34.1 38.2 C 38 41.7, 41.8 51.4, 42.8 57", "M 55.4 36.7 C 58.5 40, 63.3 50.5, 64.1 55.7", "M 75.6 36.8 C 80.2 40.3, 87.4 51.2, 88.6 56.6"],
     exampleKanji: [
       { char: "黒", pinyin: "hēi", hanViet: "Hắc", meaning: "Màu đen (黒い)" },
       { char: "点", pinyin: "diǎn", hanViet: "Điểm", meaning: "Điểm số, chấm" },
@@ -329,7 +324,7 @@ export const KANJI_RADICALS: KanjiRadical[] = [
     meaningEn: "Cliff",
     strokes: 2,
     strokeGuide: "Nét 1: ngang trên dài; Nét 2: phẩy vuốt dài bên trái.",
-    strokePaths: ["M 22 25 L 82 25", "M 28 25 C 26 50, 20 72, 12 88"],
+    strokePaths: ["M 20.8 16.7 C 22.2 17.2, 24.7 17.3, 26.1 17.2 C 42.4 16.5, 61.2 13.5, 79.4 13.3 C 81.7 13.3, 83.1 13.6, 84.3 13.8", "M 25.2 19.3 C 25.3 20.8, 25.3 23.3, 25.2 25.5 C 24.3 38.7, 22.5 70.6, 13.6 84.8"],
     exampleKanji: [
       { char: "原", pinyin: "yuán", hanViet: "Nguyên", meaning: "Cánh đồng, nguồn cội" },
       { char: "厚", pinyin: "hòu", hanViet: "Hậu", meaning: "Dày dặn" },
@@ -343,7 +338,7 @@ export const KANJI_RADICALS: KanjiRadical[] = [
     meaningEn: "Dotted cliff / House on hill",
     strokes: 3,
     strokeGuide: "Nét 1: chấm đỉnh; Nét 2: ngang dài; Nét 3: phẩy vuốt trái.",
-    strokePaths: ["M 50 15 L 50 28", "M 22 28 L 82 28", "M 28 28 C 26 52, 20 74, 12 88"],
+    strokePaths: ["M 48 10.7 C 48.7 11, 50.2 13.3, 50.3 14 C 50.4 14.7, 50.4 18.3, 50.2 22.7", "M 19.8 25 C 21.2 25.5, 23.8 25.6, 25.2 25.5 C 39.7 24.6, 60.3 21.8, 78.5 21.6 C 80.8 21.6, 82.2 21.8, 83.4 22.1", "M 24.3 27.5 C 24.3 29, 24.4 31.3, 24.2 33.4 C 23.2 45.7, 21 75.7, 10.4 89"],
     exampleKanji: [
       { char: "店", pinyin: "diàn", hanViet: "Điếm", meaning: "Cửa hàng (店)" },
       { char: "広", pinyin: "guǎng", hanViet: "Quảng", meaning: "Rộng rãi (広い)" },
@@ -357,13 +352,7 @@ export const KANJI_RADICALS: KanjiRadical[] = [
     meaningEn: "Sickness / Disease",
     strokes: 5,
     strokeGuide: "Nét 1: chấm đỉnh; Nét 2: ngang; Nét 3: phẩy trái; Nét 4: chấm trái; Nét 5: phẩy dưới.",
-    strokePaths: [
-      "M 50 12 L 50 22",
-      "M 25 22 L 80 22",
-      "M 30 22 C 28 50, 22 72, 14 88",
-      "M 15 40 C 18 45, 20 50, 22 55",
-      "M 18 60 L 30 60",
-    ],
+    strokePaths: ["M 55.1 6.3 C 56.3 7.5, 56.5 8.8, 56.5 10.3 C 56.5 11.1, 56.4 17.7, 56.4 20.2", "M 28.8 21.2 C 30.3 22.1, 32.9 22.4, 34.3 22.5 C 36.2 22.6, 37.6 22.6, 38.7 22.5 C 52 21.9, 65.5 20.6, 79 19.5 C 82.2 19.2, 85.3 19.2, 88.4 19.7", "M 31.2 22.7 C 31.9 23.4, 31.8 24.7, 31.8 25.7 C 30.7 55.2, 23.4 69.8, 12.7 84.8", "M 9.9 26.8 C 13.4 28.9, 19.1 35.2, 20 38.3", "M 6.6 55.6 C 8.3 56.3, 8.9 56.1, 10.4 55.3 C 16.6 52, 20.2 50, 24.9 47.1"],
     exampleKanji: [
       { char: "病", pinyin: "bìng", hanViet: "Bệnh", meaning: "Bệnh tật (病院)" },
       { char: "痛", pinyin: "tòng", hanViet: "Thống", meaning: "Đau đớn (痛い)" },
@@ -377,7 +366,7 @@ export const KANJI_RADICALS: KanjiRadical[] = [
     meaningEn: "Claw / Hand from top",
     strokes: 4,
     strokeGuide: "Nét 1: phẩy nằm trên; Nét 2, 3, 4: ba phẩy song song dưới.",
-    strokePaths: ["M 70 20 C 55 28, 38 35, 25 40", "M 32 45 L 22 75", "M 50 42 L 45 75", "M 70 40 L 75 75"],
+    strokePaths: ["M 67.1 29.1 C 67 30.8, 65.8 31.9, 64.5 32.7 C 56.9 37, 38.6 43.6, 17.5 47.4", "M 12 56 C 15.7 58.6, 21.2 66.8, 22.1 70.9", "M 44.1 50.6 C 47.4 53, 52.8 60.7, 53.6 64.5", "M 87.8 41.8 C 88 43.3, 87.8 44.2, 87 45.7 C 84.1 51.1, 77 58.9, 66.9 67.1"],
     exampleKanji: [
       { char: "采", pinyin: "cǎi", hanViet: "Thải", meaning: "Hái lượm" },
       { char: "受", pinyin: "shòu", hanViet: "Thụ", meaning: "Nhận (受けます)" },
@@ -391,14 +380,7 @@ export const KANJI_RADICALS: KanjiRadical[] = [
     meaningEn: "Bamboo",
     strokes: 6,
     strokeGuide: "Hai cụm nét tre nhỏ đặt cân xứng ở đỉnh chữ.",
-    strokePaths: [
-      "M 35 18 L 22 30",
-      "M 20 32 L 45 32",
-      "M 32 32 L 28 45",
-      "M 70 18 L 57 30",
-      "M 55 32 L 85 32",
-      "M 68 32 L 68 45",
-    ],
+    strokePaths: ["M 25.6 37.1 C 25.7 37.6, 25.7 38.5, 25.5 39.4 C 24.6 44.2, 19.3 54.4, 12 60.9", "M 25.3 49.8 C 28.4 49.8, 38 47.4, 43.8 46.5 C 45.3 46.3, 46.8 46.1, 47.9 46.4", "M 31.9 52.4 C 34.1 54.3, 37.6 60.1, 38.1 62.9", "M 61.4 37.1 C 61.4 37.5, 61.6 38.2, 61.3 38.9 C 59.8 43.7, 55.5 50.6, 49.8 56.5", "M 60.9 48.4 C 64.8 48.4, 76.3 46.2, 83.6 45.3 C 85.4 45.1, 86.6 45, 88 45.2", "M 72.8 50.3 C 72.9 50.5, 72.9 51, 72.8 51.4 C 72.2 53.2, 69.5 56.9, 65.6 59.8"],
     exampleKanji: [
       { char: "竹", pinyin: "zhú", hanViet: "Trúc", meaning: "Cây tre" },
       { char: "答", pinyin: "dá", hanViet: "Đáp", meaning: "Trả lời (答え)" },
@@ -414,7 +396,7 @@ export const KANJI_RADICALS: KanjiRadical[] = [
     meaningEn: "Private / Selfish",
     strokes: 2,
     strokeGuide: "Nét 1: phẩy gấp ngang; Nét 2: chấm hất phải.",
-    strokePaths: ["M 50 20 L 25 60 L 75 60", "M 55 45 C 65 52, 75 62, 85 70"],
+    strokePaths: ["M 48.9 17.7 C 49.5 18.8, 49.9 20.3, 49.5 21.8 C 44.5 40.4, 34 60.8, 24.5 73.9 C 21.6 78, 21.6 78.9, 25.9 78 C 35.1 76.1, 60.3 70.6, 74.1 68.6", "M 63.3 53.7 C 70 58.6, 80.5 73.6, 82.2 81.2"],
     exampleKanji: [
       { char: "私", pinyin: "sī", hanViet: "Tư", meaning: "Tôi, riêng tư (私)" },
       { char: "公", pinyin: "gōng", hanViet: "Công", meaning: "Công cộng (公園)" },
@@ -428,7 +410,7 @@ export const KANJI_RADICALS: KanjiRadical[] = [
     meaningEn: "Short thread / Tiny",
     strokes: 3,
     strokeGuide: "Nét 1: phẩy gập 1; Nét 2: phẩy gập 2; Nét 3: chấm dưới.",
-    strokePaths: ["M 50 18 L 32 38 L 55 45", "M 55 45 L 28 68 L 68 68", "M 48 70 C 58 75, 68 80, 75 85"],
+    strokePaths: ["M 48.1 13.6 C 48.6 15.3, 48.7 16.4, 47.8 18.3 C 44 26.4, 36.5 35.3, 30.4 40.8 C 29.4 41.8, 29.8 43.7, 30.9 44 C 36.7 45.7, 43.3 46.6, 51.2 49.7", "M 68.8 25.1 C 69.3 25.9, 69 29, 68.3 29.9 C 60.3 42, 38.2 66.7, 24.9 80.2 C 23.2 82, 23.8 84.2, 26.1 83.8 C 38.1 81.4, 59.3 77.5, 71.2 75.3", "M 62.7 62.3 C 68 66.6, 76.3 79.9, 77.6 86.5"],
     exampleKanji: [
       { char: "幼", pinyin: "yòu", hanViet: "Ấu", meaning: "Thơ ấu, trẻ con" },
       { char: "幽", pinyin: "yōu", hanViet: "U", meaning: "U uất, sâu thẳm" },
@@ -442,14 +424,7 @@ export const KANJI_RADICALS: KanjiRadical[] = [
     meaningEn: "Silk / Thread",
     strokes: 6,
     strokeGuide: "Nét 1-2: hai nét cong chéo bắt chéo nhau phía trên (như búi tơ); Nét 3: chấm nhỏ; Nét 4: sổ đứng giữa; Nét 5: phẩy chân trái; Nét 6: chấm chân phải.",
-    strokePaths: [
-      "M 47 12 C 43 22, 34 32, 30 38",
-      "M 65 20 C 62 28, 48 42, 32 56 C 40 54, 55 50, 68 48",
-      "M 66 43 C 71 48, 75 53, 76 58",
-      "M 49 58 L 50 91",
-      "M 30 68 C 25 75, 20 81, 15 86",
-      "M 70 67 C 75 73, 79 78, 82 84",
-    ],
+    strokePaths: ["M 47 10.6 C 47.5 11.9, 47.3 13.2, 46.3 14.7 C 42.2 21.1, 35 29.1, 29.6 32.8 C 27.8 34, 28.9 36, 29.8 36.2 C 34.6 37.6, 39.7 39.9, 43.8 42.4", "M 64.7 19.3 C 65.2 20.5, 65 21.8, 63.8 23.2 C 53.7 34.2, 43.3 45, 30.7 57.1 C 29.2 58.6, 29.8 59.4, 31.7 58.9 C 40.3 57, 60.8 52.5, 70.6 50.7", "M 66.3 43.3 C 69.7 45.9, 75.1 53.8, 75.9 57.8", "M 48.6 57.8 C 49.3 58.5, 49.9 59.5, 50 61 C 50.3 66.3, 50 78.7, 49.9 86 C 49.8 88.8, 49.8 90.8, 49.8 91.5", "M 30.3 68.5 C 30.6 69.8, 30.5 70.9, 29.6 72.3 C 26.9 76.1, 19.7 82.4, 15.4 85.4", "M 69.9 67.4 C 73.9 70.9, 80.8 80, 82.2 83.5"],
     exampleKanji: [
       { char: "紙", pinyin: "zhǐ", hanViet: "Chỉ", meaning: "Tờ giấy (紙)" },
       { char: "線", pinyin: "xiàn", hanViet: "Tuyến", meaning: "Tuyến đường, sợi dây" },
@@ -465,7 +440,7 @@ export const KANJI_RADICALS: KanjiRadical[] = [
     meaningEn: "Right hand / Again",
     strokes: 2,
     strokeGuide: "Nét 1: ngang gập phẩy; Nét 2: mác chéo phải.",
-    strokePaths: ["M 28 32 L 72 32 L 35 82", "M 32 45 C 48 58, 65 72, 85 85"],
+    strokePaths: ["M 25.2 23.9 C 27.1 24.3, 29.4 24.5, 33 23.9 S 62.2 17.7, 64.7 17 S 69.3 18.8, 68.3 21.3 C 57.2 50, 39.8 73.6, 15.1 87.2", "M 22.5 35.8 C 27.9 36.8, 50.7 60.9, 70.8 75.8 C 75.2 79, 79.7 82.3, 84.9 84.2"],
     exampleKanji: [
       { char: "友", pinyin: "yǒu", hanViet: "Hữu", meaning: "Bạn bè (友達)" },
       { char: "取", pinyin: "qǔ", hanViet: "Thủ", meaning: "Lấy (取ります)" },
@@ -479,7 +454,7 @@ export const KANJI_RADICALS: KanjiRadical[] = [
     meaningEn: "Slow walk / Follow",
     strokes: 3,
     strokeGuide: "Nét 1: phẩy trái; Nét 2: ngang gập phẩy; Nét 3: mác xiên phải.",
-    strokePaths: ["M 48 20 C 40 35, 32 50, 22 65", "M 32 35 L 72 35 C 60 55, 48 70, 25 88", "M 42 50 C 55 65, 70 78, 85 88"],
+    strokePaths: ["M 40 10.8 C 40 11.8, 40.1 13.4, 39.8 14.8 C 38.1 23.3, 28.4 41.8, 15.1 53.2", "M 35.6 31.2 C 36 31.3, 38.2 31.7, 39.4 31.5 C 44.5 31, 58.9 28.9, 64.3 27.5 C 68 26.5, 69.1 28.6, 68.1 31.2 C 63 45.7, 36.9 81.1, 13.8 88.5", "M 30.7 37.4 C 37.6 45.4, 68.8 75.9, 78.1 83.3 C 80.9 85.4, 83.1 86.5, 85.8 87.2"],
     exampleKanji: [
       { char: "夏", pinyin: "xià", hanViet: "Hạ", meaning: "Mùa hè (夏)" },
       { char: "変", pinyin: "biàn", hanViet: "Biến", meaning: "Thay đổi (大変)" },
@@ -493,7 +468,7 @@ export const KANJI_RADICALS: KanjiRadical[] = [
     meaningEn: "Whip / Strike / Action",
     strokes: 4,
     strokeGuide: "Nét 1: phẩy ngắn trên bên trái; Nét 2: ngang trên bên phải; Nét 3: phẩy dài xuyên chéo từ trên phải xuống dưới trái; Nét 4: mác phải xuống dưới cùng.",
-    strokePaths: ["M 40 14 C 39 20, 32 36, 22 52", "M 38 32 C 50 30, 65 28, 77 27", "M 65 32 C 66 36, 64 40, 61 45 C 50 62, 36 78, 23 90", "M 33 45 C 45 55, 65 70, 79 83 Q 84 87, 86 90"],
+    strokePaths: ["M 39.9 13.9 C 40 14.8, 40.2 16.2, 39.8 17.4 C 37.2 26.4, 31.2 41.5, 22 52.3", "M 38.5 31.8 C 39.9 32.1, 42.5 31.8, 43.2 31.8 C 50.9 31.3, 62.8 28.2, 74.6 27.4 C 75.9 27.4, 76.7 27.4, 77.1 27.5", "M 65 32.5 C 65.7 33.9, 66 34.9, 65.3 37.4 C 58.9 60.3, 44.5 80, 23.4 89.7", "M 33.3 45.4 C 35.1 45.4, 36.2 46.4, 37.6 47.7 C 47.5 56.9, 65.6 74.5, 78.8 83.2 C 81.2 84.8, 83.7 85.8, 85.8 86"],
     exampleKanji: [
       { char: "教", pinyin: "jiào", hanViet: "Giáo", meaning: "Dạy học (教えます)" },
       { char: "政", pinyin: "zhèng", hanViet: "Chính", meaning: "Chính trị" },
@@ -506,8 +481,8 @@ export const KANJI_RADICALS: KanjiRadical[] = [
     meaningVi: "Cành cây, tay cầm gậy nâng đỡ, chi nhánh.",
     meaningEn: "Branch / Support",
     strokes: 4,
-    strokeGuide: "Nét 1: thập trên; Nét 2: hựu dưới.",
-    strokePaths: ["M 25 30 L 75 30", "M 50 15 L 50 48", "M 30 48 L 72 48 L 35 88", "M 32 58 C 48 68, 65 78, 85 88"],
+    strokeGuide: "Nét 1-2: chữ thập (十) ở trên; Nét 3-4: bộ hựu (又) ở dưới.",
+    strokePaths: ["M 17.1 31.2 C 19.7 31.8, 22.2 31.6, 24.7 31.2 C 40.3 28.9, 59 25.8, 70.4 24.6 C 72.9 24.3, 75.2 24.2, 77.7 24.7", "M 47.7 10.9 C 48.7 11.9, 49.6 13.5, 49.6 15.3 C 49.6 16.1, 49.6 36.3, 49.6 45.1", "M 27.8 48.7 C 29.4 49.1, 31.9 49.2, 35.1 48.6 C 42 47.4, 58.5 43.6, 63.6 42.4 C 65.8 41.9, 66.9 43.6, 65.9 45.7 C 56.2 66.5, 36.7 83.5, 17.9 89.2", "M 32 56.8 C 36.7 57.5, 56.5 74.7, 73.4 83.9 C 76.7 85.7, 79.6 87.1, 83 88.7"],
     exampleKanji: [
       { char: "支", pinyin: "zhī", hanViet: "Chi", meaning: "Chi nhánh, hỗ trợ" },
       { char: "技", pinyin: "jì", hanViet: "Kỹ", meaning: "Kỹ năng, kỹ thuật" },
@@ -523,7 +498,7 @@ export const KANJI_RADICALS: KanjiRadical[] = [
     meaningEn: "Mouth",
     strokes: 3,
     strokeGuide: "Nét 1: sổ trái; Nét 2: ngang gập xuống phải; Nét 3: ngang đáy đóng ô.",
-    strokePaths: ["M 25 25 L 25 78", "M 25 25 L 75 25 L 75 78", "M 25 78 L 75 78"],
+    strokePaths: ["M 20.4 30.5 C 21.6 31.7, 22.2 33.1, 22.5 34.6 C 23.6 41, 25.4 56.2, 26.8 69.3 C 27 71.6, 27.3 73.9, 27.5 76.1", "M 23.2 32.7 C 39.2 30.7, 61.4 28.1, 74.1 27.3 C 77.7 27.1, 79.9 29.8, 79.4 32 C 77.3 40.1, 73.3 56.3, 71.1 67.7", "M 27.8 71.3 C 37.4 70.9, 55.8 69.2, 69 68.5 C 70.9 68.4, 72.7 68.4, 74.3 68.3"],
     exampleKanji: [
       { char: "口", pinyin: "kǒu", hanViet: "Khẩu", meaning: "Miệng, cổng (出口)" },
       { char: "古", pinyin: "gǔ", hanViet: "Cổ", meaning: "Cổ kính, cũ (古い)" },
@@ -537,7 +512,7 @@ export const KANJI_RADICALS: KanjiRadical[] = [
     meaningEn: "Enclosure (large box)",
     strokes: 3,
     strokeGuide: "Ô vuông to bao bọc toàn bộ thành phần bên trong.",
-    strokePaths: ["M 18 18 L 18 85", "M 18 18 L 82 18 L 82 85", "M 18 85 L 82 85"],
+    strokePaths: ["M 17.2 14.5 C 17.9 15.8, 18.9 16.8, 18.9 18.6 C 19 31.7, 19 62.6, 18.6 87.6", "M 20.4 16.7 C 36.9 15.1, 68.1 13.8, 79.1 13.8 C 81.7 13.8, 82.4 16, 82.3 18.8 C 82.1 33.3, 81.4 64.9, 81.9 85.3", "M 19.5 84.9 C 31.5 84.9, 65.3 82.9, 81.9 82.6"],
     exampleKanji: [
       { char: "国", pinyin: "guó", hanViet: "Quốc", meaning: "Đất nước (外国)" },
       { char: "園", pinyin: "yuán", hanViet: "Viên", meaning: "Công viên (公園)" },
@@ -551,7 +526,7 @@ export const KANJI_RADICALS: KanjiRadical[] = [
     meaningEn: "Border / Down box",
     strokes: 2,
     strokeGuide: "Khung chữ U úp ngược mở ở phía dưới.",
-    strokePaths: ["M 22 25 L 22 85", "M 22 25 L 78 25 L 78 85"],
+    strokePaths: ["M 17.7 15.4 C 18.3 16.5, 18.8 18.3, 18.6 20.4 S 18.8 83.3, 18.8 86.7", "M 18.6 17.7 C 27.3 16.7, 75.1 13.4, 76.8 13.1 C 80.5 12.4, 83.2 14.8, 82.8 15.8 C 82.1 17.7, 82.1 75.7, 82.1 81 C 82.1 89.4, 78.2 85.3, 75.5 82.3"],
     exampleKanji: [
       { char: "同", pinyin: "tóng", hanViet: "Đồng", meaning: "Giống nhau ( me )" },
       { char: "周", pinyin: "zhōu", hanViet: "Chu", meaning: "Chu vi, xung quanh" },
@@ -565,7 +540,7 @@ export const KANJI_RADICALS: KanjiRadical[] = [
     meaningEn: "Pig's head / Hand",
     strokes: 3,
     strokeGuide: "Nét 1: ngang trên rồi gập xuống phải (không có sổ trái); Nét 2: ngang giữa, vượt ra ngoài khung; Nét 3: ngang đáy.",
-    strokePaths: ["M 26 38 C 50 36, 70 36, 78 40 C 78 48, 75 54, 70 58", "M 15 51 L 86 46", "M 26 61 L 72 59"],
+    strokePaths: ["M 24.5 37.2 C 26.8 37.4, 27.9 37.8, 30 37.6 C 42.9 36.7, 58.5 34.6, 68.6 34.6 C 71.6 34.6, 73.6 35.8, 73.2 38.1 C 72 44.1, 71.1 47, 69.5 57.3", "M 14.7 50.2 C 16.7 50.5, 18.4 50.9, 20.6 50.7 C 40.6 48.9, 64 45.6, 79.8 45 C 82.3 44.8, 84.4 45.4, 85.6 45.6", "M 25.9 60.5 C 27.1 60.6, 29.1 61, 30.5 60.9 C 43.1 60.2, 56 59.1, 67.4 58.8 C 69.3 58.8, 70.4 58.8, 71.8 59"],
     exampleKanji: [
       { char: "帰", pinyin: "guī", hanViet: "Quy", meaning: "Trở về (帰ります)" },
       { char: "尋", pinyin: "xún", hanViet: "Tầm", meaning: "Hỏi thăm, tìm kiếm" },
@@ -581,7 +556,7 @@ export const KANJI_RADICALS: KanjiRadical[] = [
     meaningEn: "Tree / Wood",
     strokes: 4,
     strokeGuide: "Nét 1: ngang; Nét 2: sổ giữa; Nét 3: phẩy trái; Nét 4: mác phải.",
-    strokePaths: ["M 18 40 L 82 40", "M 50 15 L 50 88", "M 50 40 C 40 58, 28 74, 15 85", "M 50 40 C 60 58, 72 74, 85 85"],
+    strokePaths: ["M 17.9 36.6 C 20.1 37.1, 22.7 37.3, 25.3 37.1 C 37.4 36.1, 57.8 33.5, 73.2 33.2 C 75.8 33.1, 77.4 33.3, 79.9 33.6", "M 47.5 9.6 C 48.6 10.7, 49.3 12.4, 49.3 14.2 C 49.3 22.2, 49.3 64.8, 49.2 82.8 C 49.2 86.6, 49.1 89.4, 49.1 90.4", "M 46.6 36.2 C 46.6 37.3, 46 38.5, 45.3 39.9 C 38.3 52.8, 24.5 67.8, 14.4 73.6", "M 50 35.8 C 54.2 41.3, 71.1 59.4, 79.1 67.5 C 81.2 69.6, 83.4 71.6, 86 72.7"],
     exampleKanji: [
       { char: "木", pinyin: "mù", hanViet: "Mộc", meaning: "Cây gỗ (木)" },
       { char: "林", pinyin: "lín", hanViet: "Lâm", meaning: "Rừng thưa (林)" },
@@ -595,7 +570,7 @@ export const KANJI_RADICALS: KanjiRadical[] = [
     meaningEn: "Grain / Rice plant",
     strokes: 5,
     strokeGuide: "Như bộ mộc nhưng có thêm nét phẩy nhỏ trên đỉnh.",
-    strokePaths: ["M 65 15 C 52 22, 38 26, 28 28", "M 18 48 L 82 48", "M 50 25 L 50 88", "M 50 48 C 40 64, 28 78, 15 86", "M 50 48 C 60 64, 72 78, 85 86"],
+    strokePaths: ["M 68.8 10.6 C 68.6 11.7, 67.5 12.7, 66.5 13.2 C 58.4 17.4, 47.7 21.7, 25.7 26.8", "M 15.1 41.3 C 18.6 42.3, 22.3 41.8, 25.8 41.5 C 41.5 39.9, 59.4 38.6, 73.7 38 C 77.3 37.8, 80.9 37.9, 84.4 38.4", "M 49.3 23.6 C 50.2 24.5, 50.3 25.7, 50.3 26.6 C 50.3 29.9, 50.2 63.1, 50.1 80.6 C 50.1 85.5, 50.1 89.1, 50.1 90.6", "M 48.2 40.5 C 48.2 41.6, 46.3 44.4, 45.4 45.6 C 37.8 56.1, 24.8 68.5, 14 75.7", "M 51.4 41.7 C 54.9 45.1, 65 57.3, 73.8 65.9 C 77.3 69.3, 83.9 75.3, 89 76.6"],
     exampleKanji: [
       { char: "私", pinyin: "sī", hanViet: "Tư", meaning: "Tôi (私)" },
       { char: "秋", pinyin: "qiū", hanViet: "Thu", meaning: "Mùa thu (秋)" },
@@ -609,7 +584,7 @@ export const KANJI_RADICALS: KanjiRadical[] = [
     meaningEn: "Inch / Hand measure",
     strokes: 3,
     strokeGuide: "Nét 1: ngang dài; Nét 2: sổ móc đứng; Nét 3: chấm giữa.",
-    strokePaths: ["M 20 32 L 80 32", "M 58 15 L 58 78 C 54 86, 46 86, 38 80", "M 38 48 C 42 52, 45 56, 48 60"],
+    strokePaths: ["M 10.4 37.3 C 13.8 38.3, 18.2 38, 21.3 37.7 C 40.8 35.4, 61 33.4, 79.4 32.1 C 82.9 31.8, 87 32, 90 32.6", "M 60.8 10.9 C 61.8 11.8, 62.4 13.1, 62.4 15 C 62.4 33.7, 62.4 78.4, 62.4 83 C 62.4 95.2, 55.5 84.6, 53.5 83.2", "M 37 47.4 C 40.4 50, 45.7 58.2, 46.5 62.3"],
     exampleKanji: [
       { char: "寺", pinyin: "sì", hanViet: "Tự", meaning: "Chùa chiền (金閣寺)" },
       { char: "時", pinyin: "shí", hanViet: "Thời", meaning: "Thời gian (時間)" },
@@ -623,7 +598,7 @@ export const KANJI_RADICALS: KanjiRadical[] = [
     meaningEn: "Hand (left side)",
     strokes: 3,
     strokeGuide: "Nét 1: ngang ngắn; Nét 2: sổ móc hất trái; Nét 3: hất xiên dưới lên.",
-    strokePaths: ["M 25 35 L 68 35", "M 48 18 L 48 78 C 42 86, 35 86, 28 80", "M 22 72 L 62 50"],
+    strokePaths: ["M 32.3 28.7 C 34.6 29.7, 36.7 29.5, 39 29.1 C 44.6 27.9, 52.8 25.9, 60.3 24.4 C 62.2 24, 64.9 23.8, 66.7 24.3", "M 50.2 6.7 C 51.3 7.8, 51.9 9.5, 51.9 11.7 C 51.9 25.1, 51.9 76.3, 51.9 80.9 C 51.9 91.1, 45.9 84, 42.5 80.9", "M 30.7 59.4 C 32.7 60.7, 35 60.6, 37.3 58.9 C 44.8 53.3, 54.4 46.2, 63.5 39.3"],
     exampleKanji: [
       { char: "持", pinyin: "chí", hanViet: "Trì", meaning: "Cầm nắm (持ちます)" },
       { char: "打", pinyin: "dǎ", hanViet: "Đả", meaning: "Đánh, gõ" },
@@ -637,7 +612,7 @@ export const KANJI_RADICALS: KanjiRadical[] = [
     meaningEn: "Cow / Ox",
     strokes: 4,
     strokeGuide: "Nét 1: phẩy trên; Nét 2: ngang ngắn; Nét 3: ngang dài; Nét 4: sổ thẳng.",
-    strokePaths: ["M 45 15 C 38 22, 30 28, 22 32", "M 28 35 L 72 35", "M 18 55 L 82 55", "M 50 25 L 50 88"],
+    strokePaths: ["M 32.2 20.1 C 32.3 21.3, 32.1 22.5, 31.6 23.6 C 29.3 28.9, 24.6 38.3, 18.6 43.8", "M 28.6 35.5 C 30.5 35.7, 32.2 35.5, 33.5 35.4 C 44.5 34.3, 58.3 32, 68.8 30 C 70.9 29.6, 73.1 29.4, 74.2 29.6", "M 12.5 58 C 14.7 58.5, 18 58.9, 20.9 58.5 C 40.8 56.2, 54.3 53.6, 78.7 52.3 C 82.3 52.1, 84.5 52.3, 86.3 52.6", "M 48.9 10.9 C 50 11.9, 50.8 13.5, 50.8 15.3 C 50.8 16, 50.7 67.5, 50.6 85.1 C 50.6 87.9, 50.5 89.9, 50.5 90.6"],
     exampleKanji: [
       { char: "牛", pinyin: "niú", hanViet: "Ngưu", meaning: "Con bò (牛肉)" },
       { char: "特", pinyin: "tè", hanViet: "Đặc", meaning: "Đặc biệt (特別)" },
@@ -651,7 +626,7 @@ export const KANJI_RADICALS: KanjiRadical[] = [
     meaningEn: "Dog / Animal (standing)",
     strokes: 3,
     strokeGuide: "Nét 1: phẩy chéo trái trên; Nét 2: cong gập hất xuống; Nét 3: phẩy chéo trái dưới (song song nét 1).",
-    strokePaths: ["M 48 18 C 38 32, 28 48, 18 62", "M 28 35 C 45 42, 52 58, 38 82", "M 34 47 C 28 55, 20 62, 14 70"],
+    strokePaths: ["M 36.1 16.1 C 36.2 17.1, 35.9 18.1, 35.3 18.9 C 30.7 25.6, 25 30.6, 14.4 37.9", "M 18.8 19 C 45.9 32.8, 35.1 94.5, 23.2 81.9", "M 31.5 42.9 C 31.5 43.9, 31.3 45, 30.9 45.6 C 26.3 53.1, 21.8 58.8, 12.8 66.1"],
     exampleKanji: [
       { char: "犬", pinyin: "quǎn", hanViet: "Khuyển", meaning: "Con chó (犬)" },
       { char: "猫", pinyin: "māo", hanViet: "Miêu", meaning: "Con mèo (猫)" },
@@ -665,7 +640,7 @@ export const KANJI_RADICALS: KanjiRadical[] = [
     meaningEn: "Dipper / Measure unit",
     strokes: 4,
     strokeGuide: "Nét 1: chấm chéo trên; Nét 2: chấm chéo dưới, lệch trái hơn nét 1; Nét 3: ngang dài; Nét 4: sổ xiên phải dài.",
-    strokePaths: ["M 30 19 C 34 23, 38 27, 40 30", "M 24 38 C 28 41, 32 44, 35 48", "M 15 60 L 90 57", "M 54 12 L 55 90"],
+    strokePaths: ["M 30.3 19.2 C 33.5 20.6, 38.6 24.8, 39.4 26.8", "M 24.2 37.6 C 27.8 38.9, 33.5 42.8, 34.4 44.7", "M 11.9 60.6 C 14.9 61.5, 17.7 61.2, 20.8 60.8 C 38.5 58.6, 67.4 55.9, 81.4 54.5 C 84.3 54.2, 86.1 54.3, 88.8 54.8", "M 51.4 11.5 C 52.5 12.6, 53 14, 53 16.1 C 53 23.2, 53 62.6, 53 81.9 C 53 86.1, 53 89.3, 53 90.8"],
     exampleKanji: [
       { char: "斗", pinyin: "dǒu", hanViet: "Đẩu", meaning: "Cái đẩu đong gạo" },
       { char: "料", pinyin: "liào", hanViet: "Liệu", meaning: "Nguyên liệu (料理)" },
@@ -679,17 +654,7 @@ export const KANJI_RADICALS: KanjiRadical[] = [
     meaningEn: "Page / Head",
     strokes: 9,
     strokeGuide: "Nét 1: ngang trên (nắp); Nét 2: phẩy chéo nhỏ; Nét 3: sổ trái khung; Nét 4: ngang trên rồi gập sổ phải (khung); Nét 5-7: ba nét ngang giữa; Nét 8: phẩy chân trái; Nét 9: chấm chân phải.",
-    strokePaths: [
-      "M 20 20 L 80 20",
-      "M 46 20 C 45 23, 42 27, 38 30",
-      "M 32 32 L 32 68",
-      "M 32 32 L 68 32 L 68 68",
-      "M 32 44 L 68 44",
-      "M 32 56 L 68 56",
-      "M 32 65 L 68 63",
-      "M 40 75 C 32 82, 24 86, 16 88",
-      "M 60 75 C 68 82, 76 86, 84 88",
-    ],
+    strokePaths: ["M 17.3 17 C 18.7 17.4, 21.3 17.6, 22.7 17.4 C 38.1 15.8, 67.2 13.8, 80.6 13.1 C 82.9 13, 84.3 13.3, 85.4 13.6", "M 50.5 17 C 50.5 17.2, 50.5 17.7, 50.4 18 C 50.1 20.3, 47.6 25.7, 44.7 28.7", "M 31 29.8 C 31.6 30.8, 32.5 31.6, 32.5 32.9 C 32.5 34.2, 32.1 69.6, 32.1 70.2 C 32.1 70.9, 32.3 70.9, 32.5 72.2", "M 33.6 31.6 C 37.1 31.5, 66.5 27.5, 69.7 27.3 C 72.4 27.1, 72.9 28.4, 72.9 30.4 C 72.9 32, 72.1 67.8, 72.1 68.8", "M 33.5 44.3 C 39.7 43.6, 64.4 40.6, 72.1 40.2", "M 33.3 57 C 41.5 56.2, 61.9 53.7, 71.6 53.2", "M 32.9 70.3 C 41.1 69.3, 60.8 66.5, 71.2 66", "M 39.9 75.5 C 40.4 76.7, 40.3 77.4, 39.4 78.4 C 36.7 81.9, 29.4 87.2, 21.8 90.8", "M 63.8 76.2 C 69.7 79.2, 77.1 85.9, 78.7 88.5"],
     exampleKanji: [
       { char: "頁", pinyin: "yè", hanViet: "Hiệt", meaning: "Trang sách (ページ)" },
       { char: "頭", pinyin: "tóu", hanViet: "Đầu", meaning: "Cái đầu (頭)" },
@@ -705,7 +670,7 @@ export const KANJI_RADICALS: KanjiRadical[] = [
     meaningEn: "Arrow with string / Stake",
     strokes: 3,
     strokeGuide: "Nét 1: ngang; Nét 2: nghiêng móc dài; Nét 3: chấm trên.",
-    strokePaths: ["M 25 35 L 75 35", "M 48 18 L 65 85 C 68 88, 75 88, 80 82", "M 68 22 C 72 26, 75 30, 78 35"],
+    strokePaths: ["M 14.4 36.4 C 15.8 36.9, 18.4 37.2, 19.8 36.9 C 25.4 36, 61.9 29.8, 76.8 29.4 C 79.1 29.3, 80.5 29.6, 81.6 29.9", "M 45.2 11 C 47 12.6, 48 13, 48.2 16.5 C 49.5 40.4, 60.2 74.4, 81.4 85.3 C 88.5 89, 87.6 86, 86.7 78.9", "M 61.5 11.9 C 64.9 13.5, 70.4 17.2, 72 20"],
     exampleKanji: [
       { char: "式", pinyin: "shì", hanViet: "Thức", meaning: "Hình thức, lễ nghi" },
       { char: "弐", pinyin: "èr", hanViet: "Nhị", meaning: "Số 2 (dùng trong ngân hàng)" },
@@ -719,7 +684,7 @@ export const KANJI_RADICALS: KanjiRadical[] = [
     meaningEn: "Halberd / Dagger-axe",
     strokes: 4,
     strokeGuide: "Nét 1: ngang dài; Nét 2: nghiêng móc dài; Nét 3: phẩy ngắn; Nét 4: chấm trên.",
-    strokePaths: ["M 20 38 L 80 38", "M 48 18 L 65 88 C 68 90, 75 90, 80 82", "M 48 45 C 38 58, 28 72, 18 82", "M 68 22 C 72 26, 75 30, 78 35"],
+    strokePaths: ["M 14.4 36.2 C 17.1 36.9, 19.7 36.9, 22.2 36.3 C 34.7 34.6, 64.3 31.2, 77.1 30.4 C 79.2 30.2, 81.4 30.3, 83.5 30.8", "M 41.7 10.8 C 43.6 12.4, 44.1 14, 44.5 17.4 C 47.7 46.3, 58.9 73.6, 81.4 84.4 C 88.6 87.9, 87.6 85.1, 86.7 78", "M 71.3 39.3 C 71.6 41.2, 71.3 42.9, 70.5 44.5 C 65.8 53.6, 49.9 71.2, 27.6 81.8", "M 61.7 11.5 C 64.6 13.3, 69.3 17.5, 70.6 20.6"],
     exampleKanji: [
       { char: "成", pinyin: "chéng", hanViet: "Thành", meaning: "Hoàn thành, trở thành" },
       { char: "戦", pinyin: "zhàn", hanViet: "Chiến", meaning: "Chiến đấu, chiến tranh" },
@@ -733,7 +698,7 @@ export const KANJI_RADICALS: KanjiRadical[] = [
     meaningEn: "Altar / Spirits (standing)",
     strokes: 4,
     strokeGuide: "Nét 1: chấm; Nét 2: ngang gập phẩy; Nét 3: sổ đứng; Nét 4: chấm phải.",
-    strokePaths: ["M 32 18 C 36 22, 38 26, 40 30", "M 22 38 L 52 38 L 28 65", "M 38 38 L 38 88", "M 48 60 C 52 65, 55 70, 58 75"],
+    strokePaths: ["M 41.3 6.9 C 46.6 8.9, 52.3 11.9, 56.9 15.5", "M 26.6 30.5 C 29.5 31.9, 31.8 31.9, 34.7 31.4 C 41.8 30, 57.3 26.2, 60.3 25.4 C 63.8 24.5, 65.5 26.8, 63.4 29.6 C 54.8 41.4, 39 57.8, 22.9 68.5", "M 49 49 C 49.9 49.8, 49.9 51, 49.9 52.8 C 49.9 59.3, 49.9 75, 49.9 84.3 C 49.9 87.4, 49.9 89.8, 49.9 90.9", "M 52.8 49.3 C 67 56.5, 74 62.4, 77.9 69.4"],
     exampleKanji: [
       { char: "社", pinyin: "shè", hanViet: "Xã", meaning: "Công ty, xã hội (会社)" },
       { char: "神", pinyin: "shén", hanViet: "Thần", meaning: "Thần thần linh (神社)" },
@@ -747,13 +712,7 @@ export const KANJI_RADICALS: KanjiRadical[] = [
     meaningEn: "Clothes / Garment (standing)",
     strokes: 5,
     strokeGuide: "Khá giống bộ thị nhưng có thêm 1 nét chấm ở trên và hất ở dưới bên phải.",
-    strokePaths: [
-      "M 32 16 C 36 20, 38 24, 40 28",
-      "M 22 35 L 65 32 L 25 68",
-      "M 38 35 L 38 88",
-      "M 68 46 C 65 50, 60 54, 55 58",
-      "M 50 58 C 60 66, 72 74, 80 82",
-    ],
+    strokePaths: ["M 41.5 6.9 C 46.8 8.8, 52.7 12, 57.2 15.4", "M 26.8 30.3 C 28.6 31.7, 32.7 31.6, 34.7 31.2 C 41.5 29.8, 58.7 25.8, 61.4 25.1 C 64.7 24.4, 66.2 26.3, 64.3 28.7 C 53.6 42.4, 39.1 57.9, 23.3 68.3", "M 48.9 49.6 C 49.7 50.5, 50 51.5, 50 53.2 C 50 58.2, 50 73.1, 50.1 83 C 50.1 86.5, 50.1 89.4, 50.1 91.1", "M 75.5 41.9 C 75.3 42.9, 75 43.8, 74.4 44.5 C 72.4 46.6, 66.8 50.9, 62.8 53.4", "M 53.1 50.8 C 66.3 57.4, 72.9 62.6, 78.3 70.9"],
     exampleKanji: [
       { char: "初", pinyin: "chū", hanViet: "Sơ", meaning: "Ban đầu, lần đầu (初めて)" },
       { char: "袋", pinyin: "dài", hanViet: "Đại", meaning: "Cái túi, bao tải" },
@@ -767,7 +726,7 @@ export const KANJI_RADICALS: KanjiRadical[] = [
     meaningEn: "Long stride / Move",
     strokes: 3,
     strokeGuide: "Nét 1: gập cong nhỏ trên; Nét 2: gập cong nhỏ dưới; Nét 3: mác dẹp dài ôm chân.",
-    strokePaths: ["M 20 18 C 25 19, 32 17, 37 15 C 38 17, 36 20, 22 42", "M 22 46 C 30 44, 40 41, 43 45 C 40 60, 28 80, 14 90", "M 20 54 C 40 65, 65 80, 88 88"],
+    strokePaths: ["M 16.3 16.7 C 17.4 17.4, 19.3 17.9, 20.9 17.4 S 31.4 15.4, 34.6 14.4 S 38.5 15.1, 37.4 16.3 S 24.8 35.6, 21.6 41.1", "M 20.9 42 C 25.2 41.1, 34.6 37.2, 37.6 36.9 S 43.2 36.8, 42.4 40.8 C 39.2 56.9, 30 77.5, 11 86.2", "M 18.6 50.9 C 23.9 50.7, 59.9 77.5, 76.4 84.5 C 79.1 85.7, 81.3 86.5, 83.9 86.9"],
     exampleKanji: [
       { char: "延", pinyin: "yán", hanViet: "Diên", meaning: "Kéo dài, hoãn lại" },
       { char: "建", pinyin: "jiàn", hanViet: "Kiến", meaning: "Xây dựng (建物)" },
@@ -781,7 +740,7 @@ export const KANJI_RADICALS: KanjiRadical[] = [
     meaningEn: "Walk / Movement (road)",
     strokes: 3,
     strokeGuide: "Nét 1: chấm trên; Nét 2: dẹp ngoằn ngoèo; Nét 3: mác dài kéo ôm dưới.",
-    strokePaths: ["M 32 20 C 36 24, 38 28, 40 32", "M 22 42 L 48 42 L 28 62 L 45 66", "M 18 62 C 28 62, 45 78, 88 88"],
+    strokePaths: ["M 19 13.2 C 22.3 14.9, 26.8 19.1, 28.2 21.7", "M 12.5 43.7 C 14.7 44.5, 16.1 44.1, 17.1 43.9 S 25.8 40.6, 27.2 40.1 C 30.1 39.3, 31.3 40.4, 29.6 43.1 C 23.3 53.1, 23 51.3, 29.5 57 C 31.8 59.1, 31.6 60.4, 29 62.3 C 24.6 65.5, 21 67.6, 16.8 70.3", "M 12 72.9 C 15 72.5, 20.9 72.1, 25.5 72.2 C 32.4 72.5, 55.7 80.2, 60.1 81.4 C 72.1 84.6, 78.9 86.3, 88 86.8"],
     exampleKanji: [
       { char: "道", pinyin: "dào", hanViet: "Đạo", meaning: "Con đường (道)" },
       { char: "送", pinyin: "sòng", hanViet: "Tống", meaning: "Gửi đi (送ります)" },
@@ -795,7 +754,7 @@ export const KANJI_RADICALS: KanjiRadical[] = [
     meaningEn: "Corpse / Sitting body",
     strokes: 3,
     strokeGuide: "Nét 1: ngang gập; Nét 2: ngang; Nét 3: phẩy đứng dài bên trái.",
-    strokePaths: ["M 25 25 L 75 25 L 75 52", "M 25 52 L 75 52", "M 25 25 C 23 50, 18 72, 12 88"],
+    strokePaths: ["M 18.8 16.7 C 20.6 17.4, 24.2 18, 26.2 17.9 C 36.7 17.1, 68.5 14.6, 72.7 14.4 C 74.8 14.2, 75.7 16.1, 75.7 18.1 C 75.7 21.6, 74.5 26.8, 72.9 34.2", "M 24.8 37.6 C 30 37.4, 69 34.6, 74.5 34.4", "M 24.5 18.8 C 24.5 22.5, 24.8 36, 24.8 39.4 C 24.5 58.3, 21.1 72.9, 11.9 85.8"],
     exampleKanji: [
       { char: "屋", pinyin: "wū", hanViet: "Ốc", meaning: "Căn nhà, cửa hàng (部屋)" },
       { char: "局", pinyin: "jú", hanViet: "Cục", meaning: "Cơ quan, cục (郵便局)" },
@@ -809,7 +768,7 @@ export const KANJI_RADICALS: KanjiRadical[] = [
     meaningEn: "Door / Household",
     strokes: 4,
     strokeGuide: "Nét 1: ngang đỉnh; Nét 2: ngang gập; Nét 3: ngang giữa; Nét 4: phẩy trái.",
-    strokePaths: ["M 20 22 L 78 22", "M 32 38 L 78 38 L 78 60", "M 32 60 L 78 60", "M 32 38 C 30 58, 22 76, 12 88"],
+    strokePaths: ["M 26.1 17.7 C 27.6 17.9, 31.1 18, 32.5 17.9 C 45.3 17.1, 56.2 15.6, 68.6 15.1 C 71.1 14.9, 73.6 15.2, 74.8 15.3", "M 28.3 33.1 C 29.4 33.5, 30.9 33.8, 33 33.6 C 42.8 32.7, 62.1 30.7, 68.8 30 C 70.6 29.9, 72.5 31.2, 71.8 33.7 C 70.8 37.2, 69.3 44.3, 68.2 49.3", "M 32.6 52.5 C 38.5 52.2, 53.7 51, 65.1 50.6 C 67.1 50.5, 68.8 50.5, 70.2 50.5", "M 30.7 34.1 C 31.7 35.3, 31.7 36.4, 31.7 38.2 C 31.9 60.8, 22.7 81.7, 14 86.9"],
     exampleKanji: [
       { char: "戸", pinyin: "hù", hanViet: "Hộ", meaning: "Cánh cửa (神戸 - Kobe)" },
       { char: "所", pinyin: "suǒ", hanViet: "Sở", meaning: "Nơi chốn (所)" },
@@ -823,7 +782,7 @@ export const KANJI_RADICALS: KanjiRadical[] = [
     meaningEn: "Evening / Sunset",
     strokes: 3,
     strokeGuide: "Nét 1: phẩy nghiêng trái; Nét 2: ngang gập phẩy; Nét 3: chấm giữa.",
-    strokePaths: ["M 52 18 C 42 32, 32 45, 22 55", "M 50 22 C 58 21, 68 20, 78 22 C 62 45, 35 70, 16 85", "M 42 55 C 50 62, 58 68, 65 72"],
+    strokePaths: ["M 48.6 12.1 C 48.9 13.5, 48.6 15.2, 48.2 16.3 C 45 23.9, 38 36, 25.3 44.9", "M 49.5 21.6 C 51.1 22, 52.7 22.1, 53.9 21.9 C 58.7 20.9, 64 19.5, 70 17.7 C 73.9 16.5, 75.7 18.2, 74.1 21.8 C 64.2 44.5, 44.6 71.9, 16.3 85.3", "M 41.5 39.1 C 46 41.3, 52.6 47.5, 53.7 50.9"],
     exampleKanji: [
       { char: "夕", pinyin: "xī", hanViet: "Tịch", meaning: "Chiều tối (夕方)" },
       { char: "多", pinyin: "duō", hanViet: "Đa", meaning: "Nhiều (多い)" },
@@ -837,7 +796,7 @@ export const KANJI_RADICALS: KanjiRadical[] = [
     meaningEn: "Death / Decay",
     strokes: 4,
     strokeGuide: "Nét 1: ngang trên; Nét 2: phẩy chéo trái (không gập); Nét 3: ngang nhỏ rồi mác dài xuống trái; Nét 4: chấm ngắn giữa.",
-    strokePaths: ["M 25 22 L 85 18", "M 44 22 C 38 32, 28 45, 20 58", "M 42 34 C 54 33, 66 32, 72 34 C 60 55, 38 78, 19 89", "M 34 50 C 42 58, 48 64, 50 66"],
+    strokePaths: ["M 12.6 21.3 C 14 21.8, 16.6 21.9, 18 21.8 C 29.6 20.4, 69.3 17.2, 82.3 17 C 84.6 16.9, 86 17.2, 87.1 17.5", "M 46.2 21.7 C 46.5 22.3, 46.8 24.3, 46.3 25.5 C 43.1 33.9, 34.2 49.4, 20.2 59.6", "M 45.5 35.8 C 45.9 35.8, 47.9 35.8, 49 35.7 C 52.4 35.2, 62.2 33.9, 68.1 33.2 C 71.6 32.8, 72.2 35.3, 71.3 37.8 C 66.6 51.5, 42.8 83.8, 21.6 90.8", "M 36.3 50.8 C 41.1 53.1, 48.8 60.5, 50.1 64.2"],
     exampleKanji: [
       { char: "死", pinyin: "sǐ", hanViet: "Tử", meaning: "Chết (死にます)" },
       { char: "残", pinyin: "cán", hanViet: "Tàn", meaning: "Còn lại, tàn dư" },
@@ -851,7 +810,7 @@ export const KANJI_RADICALS: KanjiRadical[] = [
     meaningEn: "Sun / Day",
     strokes: 4,
     strokeGuide: "Nét 1: sổ trái; Nét 2: ngang gập; Nét 3: ngang giữa; Nét 4: ngang đáy.",
-    strokePaths: ["M 25 20 L 25 82", "M 25 20 L 75 20 L 75 82", "M 25 50 L 75 50", "M 25 82 L 75 82"],
+    strokePaths: ["M 28.9 22.5 C 29.9 23.5, 30.5 25, 30.5 26.8 C 30.5 28.3, 30.3 61.8, 30.4 75.9 C 30.4 79.4, 30.5 81.7, 30.5 82.1", "M 30.7 23.9 C 31.4 23.8, 65.3 21.1, 68.1 20.9 C 71 20.6, 72.7 22.5, 72.7 24.8 C 72.7 28.4, 72.5 62.2, 72.5 76.1 C 72.5 79.3, 72.5 81.4, 72.5 81.7", "M 31.4 50.7 C 38.5 50.2, 64.3 48.4, 71.8 48.2", "M 31.4 79.4 C 41.1 78.7, 62.7 77.4, 71.6 77.3"],
     exampleKanji: [
       { char: "日", pinyin: "rì", hanViet: "Nhật", meaning: "Mặt trời, ngày (日本)" },
       { char: "明", pinyin: "míng", hanViet: "Minh", meaning: "Sáng sủa (明るい)" },
@@ -865,7 +824,7 @@ export const KANJI_RADICALS: KanjiRadical[] = [
     meaningEn: "Say / Speak",
     strokes: 4,
     strokeGuide: "Giống bộ nhật nhưng hình dáng rộng bẹt chiều ngang hơn.",
-    strokePaths: ["M 18 28 L 18 78", "M 18 28 L 82 28 L 82 78", "M 18 52 L 82 52", "M 18 78 L 82 78"],
+    strokePaths: ["M 19.7 27.6 C 20.1 28.3, 20.1 28.8, 20.3 29.8 C 22.1 37.6, 22.9 62.9, 24.1 77.5", "M 22 30 C 37.8 28.4, 60.8 26.8, 74.8 26.2 C 78.7 26.1, 80.6 27.8, 80.4 29.9 C 79.7 37.8, 76.4 62.2, 72.9 75.2", "M 22.8 51.1 C 28.4 50.5, 52.1 48.9, 65.4 47.8 C 68.2 47.6, 70.2 48.1, 70.9 48.1", "M 24.3 74.4 C 35.8 74.1, 58.5 72.5, 72.9 71.9"],
     exampleKanji: [
       { char: "書", pinyin: "shū", hanViet: "Thư", meaning: "Viết, cuốn sách (書きます)" },
       { char: "最", pinyin: "zuì", hanViet: "Tối", meaning: "Nhất, tối đa (最近)" },
@@ -879,7 +838,7 @@ export const KANJI_RADICALS: KanjiRadical[] = [
     meaningEn: "Towel / Cloth",
     strokes: 3,
     strokeGuide: "Nét 1: sổ trái; Nét 2: ngang gập; Nét 3: sổ dài chính giữa.",
-    strokePaths: ["M 22 30 L 22 70", "M 22 30 L 78 30 L 78 70", "M 50 15 L 50 88"],
+    strokePaths: ["M 23 31.1 C 23.8 31.9, 24.1 33.6, 24.1 34.8 C 24.1 35.6, 24.1 65.2, 24.1 71.9", "M 25 33.9 C 29.4 33.6, 71.8 29.3, 75.1 29.1 C 78.9 28.9, 79.9 30.7, 79.6 34.4 C 78.7 45, 77.1 57.1, 74.5 66.7 C 72.8 73.4, 68.8 68.1, 67 65.8", "M 48.2 10.2 C 49.3 11.3, 49.6 13, 49.6 14.3 C 49.6 15, 49.6 55.7, 49.6 77.5 C 49.6 84.4, 49.6 89.3, 49.6 90.7"],
     exampleKanji: [
       { char: "市", pinyin: "shì", hanViet: "Thị", meaning: "Thành phố, chợ (市民)" },
       { char: "布", pinyin: "bù", hanViet: "Bố", meaning: "Vải vóc" },
@@ -893,7 +852,7 @@ export const KANJI_RADICALS: KanjiRadical[] = [
     meaningEn: "Axe / Weight unit",
     strokes: 4,
     strokeGuide: "Nét 1: phẩy nằm; Nét 2: phẩy đứng; Nét 3: ngang; Nét 4: sổ đứng.",
-    strokePaths: ["M 65 18 C 50 25, 38 32, 28 38", "M 32 38 C 28 55, 20 74, 12 88", "M 32 48 L 80 48", "M 62 48 L 62 88"],
+    strokePaths: ["M 60.1 9.6 C 60.1 10.8, 59.1 11.8, 58.3 12.3 C 53 16.5, 41.4 23.3, 28 28.2", "M 25.2 27.9 C 26.3 29, 26.6 30.5, 26.6 32.4 C 26.7 58.1, 24.5 70.5, 15.2 82.7", "M 29.6 40.5 C 32.1 41.3, 35.9 40.7, 38.4 40.3 C 48 38.8, 65 36.2, 74.8 35.2 C 77.6 35, 80.7 34.7, 83.5 35.2", "M 55.8 41.1 C 56.8 42.1, 57.3 43.2, 57.3 45 C 57.3 50.9, 57.2 71.5, 57.2 85.9 C 57.2 88.5, 57.2 90.8, 57.2 92.9"],
     exampleKanji: [
       { char: "新", pinyin: "xīn", hanViet: "Tân", meaning: "Mới mẻ (新しい)" },
       { char: "所", pinyin: "suǒ", hanViet: "Sở", meaning: "Nơi chốn" },
@@ -909,7 +868,7 @@ export const KANJI_RADICALS: KanjiRadical[] = [
     meaningEn: "Grass / Vegetation",
     strokes: 3,
     strokeGuide: "Nét 1: ngang dài; Nét 2: sổ ngắn trái; Nét 3: sổ ngắn phải.",
-    strokePaths: ["M 18 35 L 82 35", "M 38 20 L 38 50", "M 62 20 L 62 50"],
+    strokePaths: ["M 12.7 49.3 C 16.2 50.7, 20.5 50.5, 24.8 50.1 C 39.6 48.6, 60.7 46.9, 74.7 46.3 C 79 46.1, 82.9 46.2, 87.3 47.1", "M 32.8 36.8 C 33.5 37.7, 33.9 39, 34.1 40.5 C 35.4 48, 36.3 54.9, 36.6 57.7", "M 67.4 35.1 C 67.8 36.1, 67.6 37, 67.3 38.3 C 65.2 45.5, 64.3 49.1, 62 55.8"],
     exampleKanji: [
       { char: "花", pinyin: "huā", hanViet: "Hoa", meaning: "Bông hoa (花)" },
       { char: "茶", pinyin: "chá", hanViet: "Trà", meaning: "Nước trà (お茶)" },
@@ -923,7 +882,7 @@ export const KANJI_RADICALS: KanjiRadical[] = [
     meaningEn: "Old / Elderly",
     strokes: 4,
     strokeGuide: "Nét 1: ngang ngắn; Nét 2: sổ đứng; Nét 3: ngang dài; Nét 4: phẩy xiên qua nét ngang.",
-    strokePaths: ["M 28 35 L 72 35", "M 50 18 L 50 48", "M 18 55 L 82 55", "M 65 22 L 25 85"],
+    strokePaths: ["M 23.2 30.8 C 25 31.7, 28.4 31.6, 30.4 31.4 C 39.8 30.2, 49.8 28.7, 60.8 27.2 C 63 26.9, 65.1 26.6, 67.3 27.2", "M 46.9 13.4 C 47.9 14.4, 48.1 15.6, 48.1 17 C 48.1 25.2, 48 41.4, 48 44.3", "M 9.1 48.6 C 13.1 50.2, 17.5 49.4, 21.4 48.8 C 36 46.7, 57.2 44, 81.6 42.9 C 85.1 42.7, 89.2 42.6, 92.7 43.6", "M 79.7 20.7 C 79.6 22.6, 78.4 24.9, 77 26.6 C 58.2 47.9, 35.8 65.9, 7.3 79.6"],
     exampleKanji: [
       { char: "老", pinyin: "lǎo", hanViet: "Lão", meaning: "Người già (老人)" },
       { char: "孝", pinyin: "xiào", hanViet: "Hiếu", meaning: "Hiếu thảo (親孝行)" },
@@ -938,7 +897,7 @@ export const KANJI_RADICALS: KanjiRadical[] = [
     meaningEn: "Arrow",
     strokes: 5,
     strokeGuide: "Nét 1: phẩy nằm; Nét 2: ngang ngắn; Nét 3: ngang dài; Nét 4: phẩy trái; Nét 5: mác phải.",
-    strokePaths: ["M 55 15 C 42 22, 32 26, 25 28", "M 28 35 L 72 35", "M 18 52 L 82 52", "M 50 35 C 40 55, 28 72, 14 86", "M 50 52 C 60 65, 72 78, 85 86"],
+    strokePaths: ["M 36.3 10.8 C 36.4 12, 36.3 13.2, 35.9 14.4 C 34.1 20.5, 26.4 33.1, 18.8 38", "M 32 28.8 C 33.7 28.9, 35.1 28.7, 36.3 28.5 C 41.9 27.9, 55.5 25.5, 63.1 23.7 C 65 23.2, 66.4 23.2, 67.9 23.4", "M 17.4 49.6 C 19.4 50, 22 50.2, 24.2 50 C 43 47.9, 59.4 45.8, 74 45.1 C 75.6 45, 79 45.2, 81 45.8", "M 48 29.6 C 48.4 30.5, 48.8 31.3, 48.8 33 C 47.9 62.9, 35.4 77.9, 15.4 87.3", "M 48.9 48.6 C 57.6 59.9, 68.9 73.8, 77.3 81.3 C 79.4 83.2, 82 85.3, 85.2 86.6"],
     exampleKanji: [
       { char: "知", pinyin: "zhī", hanViet: "Tri", meaning: "Biết, tri thức (知ります)" },
       { char: "短", pinyin: "duǎn", hanViet: "Đoản", meaning: "Ngắn" },
@@ -952,15 +911,7 @@ export const KANJI_RADICALS: KanjiRadical[] = [
     meaningEn: "Pig / Swine",
     strokes: 7,
     strokeGuide: "Nét 1: ngang trên; Nét 2: xiên trái từ giữa đỉnh xuống trái (mái); Nét 3: sổ cong giữa, hất móc sang trái ở đáy (sống lưng); Nét 4: phẩy trái ngắn (chân trước); Nét 5: phẩy trái dài hơn, thấp hơn (chân sau); Nét 6: xiên trái ngắn phía trên bên phải; Nét 7: mác phải xuống dưới cùng bên phải (đuôi).",
-    strokePaths: [
-      "M 18 19 L 82 17",
-      "M 58 20 C 54 28, 40 36, 22 43",
-      "M 47 33 C 53 45, 58 65, 57 82 Q 56 90, 46 88",
-      "M 49 40 C 40 48, 28 58, 18 67",
-      "M 54 55 C 44 66, 30 80, 19 88",
-      "M 80 32 C 74 38, 66 45, 60 50",
-      "M 59 52 C 70 63, 83 75, 90 84",
-    ],
+    strokePaths: ["M 18.5 18.8 C 19.6 19.3, 21.7 19.4, 22.9 19.3 C 31.2 18.6, 63.3 15.1, 76.3 14.9 C 78.3 14.9, 79.4 15.2, 80.4 15.4", "M 52 16.7 C 52.1 17.2, 52.2 18, 51.8 18.7 C 49.6 22.9, 37.1 32.3, 20.1 38", "M 42.4 28.9 C 51.6 33.9, 60.7 62.1, 53.5 82.4 C 50.5 91.1, 44.7 83.4, 43.5 82.5", "M 45.2 35.1 C 45.3 35.7, 45.3 36.7, 45 37.6 C 43.1 42.8, 31.9 54.2, 16.6 61.2", "M 49.3 48.4 C 49.4 49.2, 49.5 50.4, 49.1 51.5 C 47 58.1, 34.5 72.6, 17.4 81.4", "M 73.9 28.4 C 73.9 28.9, 74 29.5, 73.8 30.1 C 72.5 33.6, 65.2 41.4, 55.3 46.1", "M 54.4 47.7 C 58.5 51.9, 76.7 71.7, 81.2 75.8 C 82.7 77.2, 84 77.8, 85.6 78.2"],
     exampleKanji: [
       { char: "豚", pinyin: "tún", hanViet: "Đốn", meaning: "Thịt lợn (豚肉)" },
       { char: "象", pinyin: "xiàng", hanViet: "Tượng", meaning: "Con voi, hình tượng" },
@@ -974,7 +925,7 @@ export const KANJI_RADICALS: KanjiRadical[] = [
     meaningEn: "Yawn / Lack",
     strokes: 4,
     strokeGuide: "Nét 1: phẩy ngắn; Nét 2: ngang gập; Nét 3: phẩy trái; Nét 4: mác phải.",
-    strokePaths: ["M 55 18 C 45 25, 38 30, 30 35", "M 32 35 L 75 35 L 48 55", "M 48 55 C 38 68, 28 80, 15 88", "M 48 55 C 58 68, 72 80, 85 88"],
+    strokePaths: ["M 37.4 13.4 C 37.4 14.2, 37.5 15.2, 37.3 16.3 C 36.1 22.9, 29.3 37.2, 19.7 46.1", "M 33.9 32.1 C 35.1 32.4, 37.3 32.7, 39.1 32.4 C 45.9 31.4, 63.5 27.8, 69.3 26.9 C 76.3 25.8, 73.8 31, 64.7 39.2", "M 47.1 42.1 C 47.4 43.5, 47.4 44.5, 47.2 46.1 C 45.7 55.6, 34.9 75.3, 16.1 86.2", "M 47.2 53.9 C 52.4 59.2, 65.8 72.1, 75.5 80.3 C 77.8 82.2, 80.4 84.1, 83.4 84.8"],
     exampleKanji: [
       { char: "歌", pinyin: "gē", hanViet: "Ca", meaning: "Bài hát, ca hát (歌)" },
       { char: "飲", pinyin: "yǐn", hanViet: "Ẩm", meaning: "Uống (飲みます)" },
@@ -988,7 +939,7 @@ export const KANJI_RADICALS: KanjiRadical[] = [
     meaningEn: "Weapon / Strike",
     strokes: 4,
     strokeGuide: "Nét 1: phẩy chéo trái (không gập); Nét 2: khung nhỏ trên bên phải (đầu búa); Nét 3: ngang gập phẩy dài; Nét 4: mác phải.",
-    strokePaths: ["M 38 14 C 33 24, 27 36, 22 47", "M 38 18 L 66 16 C 68 22, 66 30, 66 36 C 66 42, 72 44, 82 43", "M 30 51 C 45 49, 60 47, 65 50 C 53 70, 32 85, 15 90", "M 35 61 C 50 72, 66 84, 84 91"],
+    strokePaths: ["M 34.7 12.5 C 35.1 13.3, 35.5 15, 35.5 16.2 C 35.2 28.1, 31.8 41.9, 21.9 46.9", "M 36.4 14.7 C 39.4 15, 55.4 13.2, 57.5 12.5 C 60.6 11.6, 62.1 14.5, 61.8 16.5 C 61.2 20.5, 60.9 27.2, 60.9 31.2 C 60.9 36.7, 62.4 40.7, 72.5 40.7 C 84.4 40.7, 84.1 40.1, 84.1 28.7", "M 30.3 50.7 C 32.1 51.1, 32.3 51.6, 36 51.1 S 58.3 48.1, 60.8 47.5 C 63.3 47, 65.3 49.7, 64.2 51.5 C 52.6 71, 37.6 82, 15.6 91", "M 33 56.3 C 37.6 57.1, 60.4 78.5, 76.6 87.3 C 79.1 88.7, 81 89.6, 83.3 90"],
     exampleKanji: [
       { char: "段", pinyin: "duàn", hanViet: "Đoạn", meaning: "Giai đoạn, bậc thang" },
       { char: "役", pinyin: "yì", hanViet: "Dịch", meaning: "Vai trò, phục vụ" },
@@ -1002,7 +953,7 @@ export const KANJI_RADICALS: KanjiRadical[] = [
     meaningEn: "Spoon / Dagger",
     strokes: 2,
     strokeGuide: "Nét 1: phẩy nằm trái; Nét 2: sổ gập móc hất lên.",
-    strokePaths: ["M 68 25 C 52 32, 38 40, 25 45", "M 38 18 L 38 68 C 38 82, 60 85, 78 78"],
+    strokePaths: ["M 71.9 24.4 C 72.2 25, 72.5 26.8, 71.5 27.8 C 65.4 34.1, 44.5 51.4, 24.8 57.8", "M 35.3 13.1 C 36.3 14.2, 36.4 14.9, 36.7 16.3 C 37 17.8, 37 71.5, 37 76.1 C 37 87.8, 50.2 86, 61.5 86 C 70.2 86, 77.5 85.4, 80.7 82.1 S 83.6 75, 84 71.7"],
     exampleKanji: [
       { char: "北", pinyin: "běi", hanViet: "Bắc", meaning: "Phía bắc (北)" },
       { char: "匙", pinyin: "chí", hanViet: "Thìa", meaning: "Cái thìa" },
@@ -1016,7 +967,7 @@ export const KANJI_RADICALS: KanjiRadical[] = [
     meaningEn: "Bow",
     strokes: 3,
     strokeGuide: "Nét 1: ngang trên rồi gập xuống (khung trên); Nét 2: ngang giữa, bắt đầu lại từ bên trái; Nét 3: cong hình cánh cung, móc lên ở cuối.",
-    strokePaths: ["M 28 18 C 45 16, 62 14, 72 17 C 70 22, 68 26, 66 30", "M 30 34 C 45 33, 60 32, 70 32", "M 31 35 C 20 48, 22 62, 35 68 C 50 74, 60 80, 50 90"],
+    strokePaths: ["M 27.6 16.2 C 29.2 16.9, 31.4 17, 33.3 16.9 C 41.3 16.3, 63 13.5, 66.8 12.8 C 70.6 12.2, 71.7 13.8, 70.8 16.2 C 70 18.4, 67.6 25.1, 66.8 28.4", "M 30.2 32.1 C 31.7 32.6, 33.2 32.7, 34.8 32.5 C 42.4 31.9, 59.2 30.2, 63.3 29.6 C 65 29.4, 67.1 29.1, 68.8 29.6", "M 30.9 32.4 C 31.4 32.9, 31.8 34.5, 31.1 36 C 30 38.5, 26.2 46.2, 24.4 49.3 C 22.9 51.6, 24.2 52.8, 27.2 52.2 C 40 49.7, 61.9 46.5, 70.5 45.1 C 75.3 44.4, 75.6 47.1, 74.7 51.3 C 72.6 61.1, 65.3 77.9, 60.2 84.9 C 56.7 89.9, 51 84.8, 49.3 83"],
     exampleKanji: [
       { char: "強", pinyin: "qiáng", hanViet: "Cường", meaning: "Mạnh mẽ (勉強します)" },
       { char: "引", pinyin: "yǐn", hanViet: "Dẫn", meaning: "Kéo" },
@@ -1030,7 +981,7 @@ export const KANJI_RADICALS: KanjiRadical[] = [
     meaningEn: "Wrap / Package",
     strokes: 2,
     strokeGuide: "Nét 1: phẩy nghiêng trái; Nét 2: ngang gập móc bao bọc.",
-    strokePaths: ["M 55 18 C 42 28, 32 38, 22 45", "M 32 32 L 80 32 L 60 88 C 55 92, 45 92, 38 85"],
+    strokePaths: ["M 35.1 11.2 C 35.1 12.1, 35.2 13.4, 35 14.6 C 33.6 21.6, 25.6 37, 14.7 46.4", "M 34.2 26.6 C 35.3 27.3, 36.9 27.5, 38.8 27.1 S 74.3 22.7, 78.9 22.5 S 84.4 24.8, 83.7 29.6 S 77.8 71.3, 67.7 84.4 C 64.6 88.3, 62.8 86.7, 59.4 82.3"],
     exampleKanji: [
       { char: "包", pinyin: "bāo", hanViet: "Bao", meaning: "Gói lại, bao bọc" },
       { char: "句", pinyin: "jù", hanViet: "Cú", meaning: "Câu văn (文句)" },
@@ -1046,7 +997,7 @@ export const KANJI_RADICALS: KanjiRadical[] = [
     meaningEn: "Net",
     strokes: 5,
     strokeGuide: "Khung hình chữ nhật bẹt có 2 nét sổ ngắn bên trong.",
-    strokePaths: ["M 18 35 L 18 65", "M 18 35 L 82 35 L 82 65", "M 38 35 L 38 65", "M 62 35 L 62 65", "M 18 65 L 82 65"],
+    strokePaths: ["M 17.3 36.3 C 18.2 37.3, 18.6 38, 18.8 39.3 C 19.8 45, 20.9 52.3, 21.7 58.7 C 22 60.5, 22.2 62.2, 22.4 63.9", "M 19.6 38.7 C 39.3 36.5, 60.9 34.5, 77.9 33.2 C 81.5 32.9, 82.9 34.8, 82.3 38.2 C 81.7 42.3, 80.3 48.4, 79.1 53.8 C 78.7 55.8, 78.2 57.6, 77.9 59.2", "M 37.8 38 C 38.5 38.7, 38.9 39.6, 39 40.9 C 39.5 46.3, 40.4 55.8, 40.5 58.5", "M 59.2 36.1 C 59.8 37.3, 59.7 38.2, 59.6 39.6 C 59 45.5, 57.9 53.1, 57.3 56.8", "M 23 61.4 C 27.6 60.7, 64.2 56.7, 77.5 56.9"],
     exampleKanji: [
       { char: "署", pinyin: "shǔ", hanViet: "Thự", meaning: "Ký tên, cơ quan" },
       { char: "罪", pinyin: "zuì", hanViet: "Tội", meaning: "Tội lỗi, tội phạm" },
@@ -1060,7 +1011,7 @@ export const KANJI_RADICALS: KanjiRadical[] = [
     meaningEn: "Dish / Plate",
     strokes: 5,
     strokeGuide: "Khung đáy hình bát đĩa bẹt nằm ở chân chữ.",
-    strokePaths: ["M 22 45 L 22 78", "M 22 45 L 78 45 L 78 78", "M 40 45 L 40 78", "M 60 45 L 60 78", "M 15 78 L 85 78"],
+    strokePaths: ["M 20.9 29.6 C 21.9 30.6, 22.6 31.9, 22.7 32.9 C 23.6 41.9, 25 58.5, 25.9 71.8", "M 23.8 32 C 34.7 30.6, 63.7 28.3, 74 27.7 C 77.8 27.5, 80.3 28.8, 79.6 33 C 78.2 41.8, 75 64.1, 74 70.1", "M 39.1 32.2 C 39.8 32.9, 40.2 33.9, 40.3 34.8 C 40.9 43, 41.8 58.7, 42.5 71.2", "M 58.6 30.6 C 59.2 31.4, 59.5 32.9, 59.4 33.9 C 58.5 44.7, 57.5 56.7, 56.4 70.5", "M 9.3 72.8 C 11.9 73.6, 16.6 73.8, 19.2 73.6 C 42 72.2, 61.8 71.3, 80.6 71.1 C 84.8 71.1, 87.4 71.6, 89.6 72"],
     exampleKanji: [
       { char: "皿", pinyin: "mǐn", hanViet: "Mãnh", meaning: "Cái đĩa" },
       { char: "盛", pinyin: "shèng", hanViet: "Thịnh", meaning: "Sầm uất, thịnh vượng" },
@@ -1074,7 +1025,7 @@ export const KANJI_RADICALS: KanjiRadical[] = [
     meaningEn: "West / Cover",
     strokes: 6,
     strokeGuide: "Nét 1: ngang trên (nắp); Nét 2: sổ trái của khung; Nét 3: ngang trên rồi gập xuống sổ phải (khung phải); Nét 4: sổ dọc giữa bên trái; Nét 5: sổ dọc rồi hất móc sang phải, nối vào khung phải; Nét 6: ngang dưới (đáy).",
-    strokePaths: ["M 20 20 L 80 20", "M 28 32 L 28 68", "M 28 32 L 72 32 L 72 68", "M 42 32 L 42 68", "M 58 32 C 58 42, 58 50, 60 54 C 63 58, 68 58, 72 58", "M 28 68 L 72 68"],
+    strokePaths: ["M 12 32.5 C 14.1 33.3, 18 33.5, 20.1 33.3 C 36.3 32.3, 66.9 29.4, 79.8 28.6 C 83.3 28.4, 85.5 28.2, 87.2 28.6", "M 14.1 49 C 15 49.9, 15.8 51.1, 15.9 52.4 C 16.9 56, 17.7 61.7, 18.4 66.8 C 18.7 68.6, 18.9 70.3, 19.2 71.8", "M 17.1 51.5 C 41.3 48.2, 65.4 46, 81.4 44.9 C 85.7 44.6, 88 46, 86.7 50.9 C 85.7 54.3, 84.5 58.4, 82.9 62.5 C 82.3 64.2, 81.7 65.8, 81 67.4", "M 37.3 35.7 C 38.6 37.1, 39.2 38.7, 39.3 39.9 C 39.8 45.5, 40.7 55.3, 41.3 66.5", "M 61.9 33.4 C 62.9 34.4, 63.6 36.9, 63.2 39.6 C 62 46.7, 61.7 52, 59.4 65.3", "M 20.3 69.3 C 38.8 67.9, 58.5 66.5, 80.3 65.6"],
     exampleKanji: [
       { char: "要", pinyin: "yào", hanViet: "Yếu", meaning: "Cần thiết (必要)" },
       { char: "栗", pinyin: "lì", hanViet: "Lật", meaning: "Hạt dẻ" },
@@ -1088,15 +1039,7 @@ export const KANJI_RADICALS: KanjiRadical[] = [
     meaningEn: "Wine vessel / Liquor",
     strokes: 7,
     strokeGuide: "Nét 1: ngang đỉnh; Nét 2: sổ trái; Nét 3: ngang gập; Nét 4-6: ruột bên trong; Nét 7: ngang đáy.",
-    strokePaths: [
-      "M 22 20 L 78 20",
-      "M 28 32 L 28 78",
-      "M 28 32 L 72 32 L 72 78",
-      "M 42 32 L 42 58",
-      "M 58 32 L 58 58",
-      "M 28 58 L 72 58",
-      "M 28 78 L 72 78",
-    ],
+    strokePaths: ["M 23.9 17.6 C 27.1 18.3, 30.8 17.7, 33.6 17.5 C 42.6 16.6, 59.2 15.4, 69 14.9 C 72 14.7, 75.5 14.8, 78.4 15.5", "M 21.8 35.5 C 22.8 36.5, 22.8 37.7, 22.8 39.4 C 22.8 40.1, 22.8 69.5, 22.8 82 C 22.8 85.3, 22.8 87.4, 22.8 87.6", "M 24 37.4 C 30 37, 69 34.1, 72.8 33.9 C 76.7 33.7, 78.2 34.6, 78.2 37.8 C 78.2 39.1, 78.1 65.5, 78.1 80.2 C 78.1 82.9, 78.1 85.2, 78.1 86.9", "M 41.7 19.3 C 42.9 20.4, 43 22, 43 23.6 C 43.1 39, 42.1 51.8, 31.2 60.3", "M 55 18.1 C 56 19, 56.4 20.7, 56.4 22.5 C 56.4 26.9, 56.3 43.2, 56.3 47.4 C 56.3 53.4, 57.1 54.6, 63.3 54.6 C 68.9 54.6, 70.3 53.8, 71.3 52.2", "M 23.8 70.6 C 36.6 69.7, 63.9 68.2, 76.9 67.8", "M 24 84.9 C 39.3 83.9, 62.7 82.8, 76.9 82.4"],
     exampleKanji: [
       { char: "酒", pinyin: "jiǔ", hanViet: "Tửu", meaning: "Rượu (お酒)" },
       { char: "配", pinyin: "pèi", hanViet: "Phối", meaning: "Phân phối, lo lắng (心配)" },
@@ -1110,16 +1053,7 @@ export const KANJI_RADICALS: KanjiRadical[] = [
     meaningEn: "Short-tailed bird",
     strokes: 8,
     strokeGuide: "Nét 1: phẩy dài bên trái (đầu chim); Nét 2: sổ đứng trái dài; Nét 3: phẩy ngắn bên phải (đầu chim 2); Nét 4: ngang trên nối liền với sổ trái; Nét 5: sổ đứng phải dài xuyên thân; Nét 6-8: ba nét ngang thân mình song song.",
-    strokePaths: [
-      "M 38 13 C 30 23, 20 33, 13 47",
-      "M 27 32 L 25 90",
-      "M 58 12 C 55 18, 52 24, 50 30",
-      "M 27 33 L 80 28",
-      "M 51 30 L 49 88",
-      "M 27 50 L 78 46",
-      "M 26 67 L 79 63",
-      "M 26 89 L 82 84",
-    ],
+    strokePaths: ["M 36.7 9.9 C 37 11.7, 36.6 14.1, 35.7 15.6 C 30.1 25.6, 23 34, 10.1 46.1", "M 24.8 33 C 25.7 33.9, 26.4 36, 26.4 37.4 C 26.9 50.1, 25.7 83.5, 26.1 90.1", "M 59 9.9 C 59.1 10.9, 59 12.2, 58.7 13.1 C 56.9 18.6, 54.6 22.9, 50.5 29.6", "M 26.2 33.3 C 36.5 32.1, 75.6 28.6, 80 28", "M 52 31.7 C 52.5 32.1, 52.9 32.8, 52.9 33.6 C 52.9 41.8, 52.9 71.2, 52.6 84.2", "M 27.6 48.9 C 37.3 47.9, 73.4 45, 77.5 44.5", "M 26.4 65.6 C 36.6 64.8, 74.5 63.1, 78.9 62.6", "M 26.4 86.9 C 36.7 85.7, 78.6 83.4, 83 82.8"],
     exampleKanji: [
       { char: "難", pinyin: "nán", hanViet: "Nan", meaning: "Khó khăn (難しい)" },
       { char: "集", pinyin: "jí", hanViet: "Tập", meaning: "Tập hợp, thu thập" },
@@ -1133,7 +1067,7 @@ export const KANJI_RADICALS: KanjiRadical[] = [
     meaningEn: "Second / Twist",
     strokes: 1,
     strokeGuide: "Kéo nét ngang gập cong hất móc nhẹ.",
-    strokePaths: ["M 25 30 L 70 30 L 45 55 C 45 75, 78 78, 80 88"],
+    strokePaths: ["M 17.9 25.9 C 19.6 26.5, 22.7 26.7, 23.9 26.6 C 32.5 25.8, 50.2 22.4, 55.5 21.3 C 57.3 21, 58.7 22.7, 56.7 24.8 C 44.8 36.6, 29.5 58.1, 25.7 64.4 C 18.3 76.8, 18.9 82.2, 53.7 82.2 C 78.9 82.2, 80 80.5, 80 71.8"],
     exampleKanji: [
       { char: "乙", pinyin: "yǐ", hanViet: "Ất", meaning: "Thứ hai, can Ất" },
       { char: "九", pinyin: "jiǔ", hanViet: "Cửu", meaning: "Số 9 (九)" },
@@ -1147,7 +1081,7 @@ export const KANJI_RADICALS: KanjiRadical[] = [
     meaningEn: "Variant of Radical 乙 (Ất) / Hidden / Hook",
     strokes: 1,
     strokeGuide: "Nét sổ kéo dài xuống rồi uốn cong móc hất lên phải.",
-    strokePaths: ["M 35 20 L 35 70 C 35 85, 65 85, 82 78"],
+    strokePaths: ["M 31.9 12 C 33.3 13.4, 33.8 15.1, 33.8 17.6 C 33.8 26.5, 33.8 69.8, 33.8 75.8 C 33.8 86.2, 36.1 88, 52 88 C 66.6 88, 68.1 85.5, 68.1 78.4"],
     exampleKanji: [
       { char: "乱", pinyin: "luàn", hanViet: "Loạn", meaning: "Hỗn loạn, lộn xộn" },
       { char: "乳", pinyin: "rǔ", hanViet: "Nhũ", meaning: "Sữa (牛乳)" },
@@ -1163,7 +1097,7 @@ export const KANJI_RADICALS: KanjiRadical[] = [
     meaningEn: "Open box / Pit",
     strokes: 2,
     strokeGuide: "Khung hình chữ U ngửa miệng lên trên.",
-    strokePaths: ["M 25 25 L 25 75 L 75 75", "M 75 25 L 75 75"],
+    strokePaths: ["M 17 18.5 C 17.7 18.9, 18.9 20.4, 18.9 22.4 C 18.9 23.2, 18.7 81.7, 18.6 83.6 S 19.3 86.9, 21.5 86.7 C 34.1 85.6, 75.1 83.2, 82.3 82.8", "M 80.6 14.6 C 81.9 15.1, 82.9 16.3, 82.9 18.5 C 82.9 22.9, 82.6 67, 82.6 86.1"],
     exampleKanji: [
       { char: "出", pinyin: "chū", hanViet: "Xuất", meaning: "Ra ngoài" },
       { char: "函", pinyin: "hán", hanViet: "Hàm", meaning: "Hòm, thư từ" },
@@ -1177,7 +1111,7 @@ export const KANJI_RADICALS: KanjiRadical[] = [
     meaningEn: "Table / Stool",
     strokes: 2,
     strokeGuide: "Nét 1: phẩy trái; Nét 2: ngang gập móc phải.",
-    strokePaths: ["M 30 25 C 28 48, 22 70, 15 85", "M 30 25 L 75 25 L 75 75 C 75 85, 80 88, 85 85"],
+    strokePaths: ["M 32.2 19.7 C 32.8 21.5, 33.6 22.8, 33.6 25 C 33.6 44.8, 35.1 73.3, 14.9 83.5", "M 33.9 21.6 C 37.4 20.9, 53.7 18.6, 56.4 17.9 S 62.2 18.6, 61.5 22 S 61 72.5, 61 75 S 61.7 82.6, 72.2 82.6 C 87.8 82.6, 84.6 78.9, 84.6 73.6"],
     exampleKanji: [
       { char: "机", pinyin: "jī", hanViet: "Kỷ", meaning: "Cái bàn học (机)" },
       { char: "風", pinyin: "fēng", hanViet: "Phong", meaning: "Gió (風)" },
@@ -1191,7 +1125,7 @@ export const KANJI_RADICALS: KanjiRadical[] = [
     meaningEn: "Two hands / Hold",
     strokes: 3,
     strokeGuide: "Nét 1: ngang dài; Nét 2: phẩy trái; Nét 3: sổ thẳng phải.",
-    strokePaths: ["M 18 35 L 82 35", "M 38 20 C 35 45, 28 68, 18 85", "M 62 20 L 62 85"],
+    strokePaths: ["M 13.7 46.8 C 15 47.3, 17.6 47.3, 19 47.3 C 33.5 46.4, 64.9 42, 83.3 41.6 C 85.6 41.5, 87 41.8, 88.2 42", "M 36.8 13.3 C 37.4 14.9, 38 16.6, 38 18.9 C 38.5 40.4, 36 70.9, 19.3 82.6", "M 62.3 10.3 C 63.6 11.7, 64.1 11.5, 64.1 13.3 C 64.1 19.5, 64.1 83.7, 63.9 89.4"],
     exampleKanji: [
       { char: "弁", pinyin: "biàn", hanViet: "Biện", meaning: "Biện luận, cơm hộp (弁当)" },
       { char: "弊", pinyin: "bì", hanViet: "Tệ", meaning: "Tệ hại, nhún nhường" },
@@ -1205,14 +1139,7 @@ export const KANJI_RADICALS: KanjiRadical[] = [
     meaningEn: "Stopping / Tough",
     strokes: 6,
     strokeGuide: "Nét 1: ngang rồi gập xuống phải (khung trên-phải); Nét 2: ngang giữa 1; Nét 3: ngang giữa 2; Nét 4: sổ trái dài rồi hất móc lên phải; Nét 5: phẩy ngắn bên phải; Nét 6: mác phải xuống dưới cùng.",
-    strokePaths: [
-      "M 30 18 L 68 18 C 70 18, 70 20, 70 22 L 68 46",
-      "M 32 30 L 69 28",
-      "M 32 45 L 66 43",
-      "M 30 18 L 30 84 Q 30 90, 36 87 C 42 83, 48 78, 54 73",
-      "M 74 49 C 71 54, 66 59, 62 63",
-      "M 40 53 C 52 63, 68 76, 84 86",
-    ],
+    strokePaths: ["M 28.4 15.5 C 29.8 16.4, 32 16.3, 34.6 15.9 C 42.1 14.8, 54.3 13, 59.6 12.5 C 62.5 12.2, 65.2 13.5, 65 16.4 C 64.5 23.2, 62.8 36.9, 61.7 43.1", "M 31.4 29.8 C 40.1 28.6, 56.9 26.6, 63.3 26.1", "M 31.5 43.8 C 40.6 42.9, 51.4 41.7, 61.2 40.8", "M 29.6 16.4 C 30.3 17.1, 30.5 18.2, 30.5 19.1 C 30.5 22.1, 30.4 80.5, 30.4 84.8 C 30.4 88.5, 31.5 89.6, 34.7 86.8 C 39.8 82.5, 44.7 78.6, 48.8 75.2", "M 69 46.7 C 69 47.7, 68.7 48.7, 68 49.3 C 63.6 53.6, 61.6 55.8, 58.2 58.6", "M 38.9 49.1 C 43.1 49.1, 60.7 66.1, 70.3 74.4 C 73.7 77.3, 78.4 80.7, 83.1 82.2"],
     exampleKanji: [
       { char: "良", pinyin: "liáng", hanViet: "Lương", meaning: "Tốt lành (良い)" },
       { char: "退", pinyin: "tuì", hanViet: "Thoái", meaning: "Rút lui, nghỉ hưu" },
@@ -1226,14 +1153,7 @@ export const KANJI_RADICALS: KanjiRadical[] = [
     meaningEn: "Brush / Writing instrument",
     strokes: 6,
     strokeGuide: "Nét 1-5: năm nét ngang song song (nét 1 hơi cong xuống ở cuối); Nét 6: sổ đứng xuyên suốt từ trên xuống dưới qua giữa các nét ngang.",
-    strokePaths: [
-      "M 25 20 L 75 20",
-      "M 18 34 L 82 33",
-      "M 26 48 L 74 47",
-      "M 20 62 L 80 61",
-      "M 16 76 L 84 75",
-      "M 50 10 L 50 92",
-    ],
+    strokePaths: ["M 25 23.4 C 27.3 23.6, 27.9 24, 30 23.9 C 39.7 23.2, 59.4 20.4, 68.6 20 C 71.6 19.8, 73.6 21.1, 73.2 23.4 C 72.5 27.1, 71.1 32.3, 69.5 42.7", "M 13.8 35.6 C 15.8 36, 17.4 36.2, 19.7 36 C 39.7 34.2, 64 31, 79.8 30.3 C 82.3 30.2, 84.4 30.7, 85.6 31", "M 25.9 47.5 C 27.1 47.7, 29.1 47.8, 30.5 47.7 C 43.1 46.6, 56 45.4, 67.4 44.3 C 69.3 44.1, 70.4 44.3, 71.8 44.5", "M 24 60 C 25 60.4, 26.9 60.4, 28 60.4 C 38.9 60, 63.5 57.1, 74.2 56.3 C 75.9 56.2, 77 56.5, 77.9 56.7", "M 15.7 73.1 C 17.1 73.6, 19.7 73.8, 21.1 73.6 C 37.4 71.8, 66.7 69.3, 79.4 68.8 C 81.7 68.8, 83.1 69.1, 84.3 69.3", "M 47.8 9.6 C 48.8 10.1, 49.4 11.7, 49.6 12.6 C 49.8 13.5, 49.6 85.8, 49.4 91.5"],
     exampleKanji: [
       { char: "書", pinyin: "shū", hanViet: "Thư", meaning: "Viết, cuốn sách (書きます)" },
       { char: "津", pinyin: "jīn", hanViet: "Tân", meaning: "Bến sông" },
@@ -1247,7 +1167,7 @@ export const KANJI_RADICALS: KanjiRadical[] = [
     meaningEn: "Stand",
     strokes: 5,
     strokeGuide: "Nét 1: chấm đỉnh; Nét 2: ngang ngắn; Nét 3: chấm/sổ chéo trái xuống phải; Nét 4: phẩy chéo phải xuống trái (hai nét 3-4 chụm vào giữa); Nét 5: ngang đáy dài.",
-    strokePaths: ["M 50 15 L 50 28", "M 25 28 L 75 28", "M 32 45 C 35 55, 38 65, 39 74", "M 68 42 C 65 52, 60 63, 57 76", "M 15 78 L 85 78"],
+    strokePaths: ["M 47.3 13.8 C 48.6 15.1, 49.3 16.7, 49.3 19.1 C 49.3 22.8, 49.3 27.9, 49.3 31.7", "M 20.2 34.7 C 22.6 35.2, 24.5 35, 26.6 34.9 C 37 34.1, 59.8 31.8, 73.1 31 C 75.3 30.8, 77.5 31, 79.4 31.3", "M 29.4 45 C 33.7 53.9, 36.9 65.6, 38.1 73.9", "M 67.9 35.8 C 68.6 37, 68.6 38.8, 68.3 39.9 C 65.7 50.1, 60.6 67.8, 56.7 78.4", "M 14 81.5 C 16.1 81.9, 19.4 82, 21.2 81.8 C 38 80.6, 58.1 80, 80.6 79.3 C 83.6 79.2, 86.3 79.3, 88.4 80.1"],
     exampleKanji: [
       { char: "立", pinyin: "lì", hanViet: "Lập", meaning: "Đứng lên (立ちます)" },
       { char: "音", pinyin: "yīn", hanViet: "Âm", meaning: "Âm thanh (音楽)" },
@@ -1261,14 +1181,7 @@ export const KANJI_RADICALS: KanjiRadical[] = [
     meaningEn: "Insect / Worm",
     strokes: 6,
     strokeGuide: "Nét 1: sổ trái khung nhỏ (không chạm đỉnh); Nét 2: ngang trên rồi gập sổ phải; Nét 3: ngang đáy khung; Nét 4: sổ đứng dài xuyên suốt từ đỉnh; Nét 5: hất dài dưới bên trái; Nét 6: chấm chéo dưới bên phải.",
-    strokePaths: [
-      "M 27 33 L 28 57",
-      "M 24 35 C 40 33, 60 31, 76 30 C 75 37, 73 44, 71 50",
-      "M 28 55 L 74 51",
-      "M 48 15 L 49 87",
-      "M 21 82 C 35 80, 55 76, 70 72",
-      "M 68 64 C 74 70, 79 76, 82 83",
-    ],
+    strokePaths: ["M 21.7 33.3 C 22.4 34, 23.1 34.9, 23.2 35.6 C 24.4 39.8, 25.1 45.3, 26.3 52.7 C 26.6 54.1, 26.8 55.6, 27.1 57.1", "M 23.6 34.9 C 37.3 33.7, 64.9 31.1, 72.9 30.7 C 76.5 30.6, 76.6 32.4, 76.3 34.6 C 75.6 38.7, 74 45.8, 72.5 50.5", "M 27.5 55 C 36.4 54.1, 54.7 52.8, 68.6 51.8 C 70.4 51.7, 72.2 51.6, 73.9 51.5", "M 48.2 14.8 C 49.1 15.7, 49.7 17.4, 49.7 18.4 C 49.7 23.4, 49.8 75.9, 49.7 76.8", "M 20.9 82.3 C 22.1 83.5, 23.6 83.7, 24.8 83.5 S 67.9 73.9, 75 72", "M 68.8 64.1 C 73.5 67.4, 80.2 77.3, 82.1 82.9"],
     exampleKanji: [
       { char: "虫", pinyin: "chóng", hanViet: "Trùng", meaning: "Côn trùng, sâu" },
       { char: "強", pinyin: "qiáng", hanViet: "Cường", meaning: "Mạnh mẽ (勉強)" },
@@ -1282,15 +1195,7 @@ export const KANJI_RADICALS: KanjiRadical[] = [
     meaningEn: "Speech / Words",
     strokes: 7,
     strokeGuide: "Nét 1: chấm; Nét 2-4: 3 nét ngang; Nét 5-7: bộ khẩu bên dưới.",
-    strokePaths: [
-      "M 50 12 L 50 20",
-      "M 20 24 L 80 24",
-      "M 32 36 L 68 36",
-      "M 32 46 L 68 46",
-      "M 32 58 L 32 82",
-      "M 32 58 L 68 58 L 68 82",
-      "M 32 82 L 68 82",
-    ],
+    strokePaths: ["M 44.4 10.3 C 48.4 12.6, 52.5 17.4, 53.9 20.9", "M 13.7 31.2 C 16 31.7, 20 31.9, 22.3 31.7 C 43.3 29.8, 59.7 28, 77.3 27.3 C 81.2 27.2, 83.5 27.6, 85.4 27.8", "M 35.4 42.8 C 36.7 43.1, 37.6 43.1, 38.9 43 C 45.4 42.5, 56 40.9, 59.9 40.6 C 61.6 40.5, 63 40.5, 64.2 40.8", "M 34.8 56.3 C 36.1 56.5, 37.3 56.7, 38.6 56.5 C 45.6 55.9, 57.1 54.4, 61.3 53.9 C 63.3 53.7, 64.7 53.8, 66.1 54.1", "M 33.9 68.6 C 34.7 69.3, 35.2 70.2, 35.3 71.1 C 36.1 77.3, 37.1 81.6, 38 88 C 38.2 89.2, 38.3 90.3, 38.5 91.3", "M 36.3 70.4 C 44.7 68.8, 57 67.3, 64.1 66.5 C 66.1 66.3, 67.3 67.6, 67 68.6 C 66.4 70.9, 63.6 80.3, 62.5 84.2", "M 38.7 87.3 C 44.4 86.8, 53.9 86, 61.9 85.3 C 63.2 85.1, 64.4 85.2, 65.6 85.2"],
     exampleKanji: [
       { char: "言", pinyin: "yán", hanViet: "Ngôn", meaning: "Nói (言います)" },
       { char: "語", pinyin: "yǔ", hanViet: "Ngữ", meaning: "Ngôn ngữ (日本語)" },
@@ -1304,15 +1209,7 @@ export const KANJI_RADICALS: KanjiRadical[] = [
     meaningEn: "Bean / Vessel",
     strokes: 7,
     strokeGuide: "Nét 1: ngang; Nét 2-4: ô khẩu; Nét 5-6: hai phẩy chân; Nét 7: ngang đáy.",
-    strokePaths: [
-      "M 22 18 L 78 18",
-      "M 30 30 L 30 52",
-      "M 30 30 L 70 30 L 70 52",
-      "M 30 52 L 70 52",
-      "M 38 62 L 28 78",
-      "M 62 62 L 72 78",
-      "M 15 88 L 85 88",
-    ],
+    strokePaths: ["M 26 18.7 C 28.4 19.2, 31.4 19.2, 33.7 19 C 42 18.2, 55.4 16.5, 67.2 16 C 69.3 15.9, 71.5 16, 73.5 16.6", "M 27.4 35 C 28.4 35.4, 29.1 36.2, 29.3 37 C 30 40, 31.3 45.3, 32.8 51.1 C 33.1 52.4, 33.4 53.6, 33.7 54.8", "M 29.9 36.2 C 39.1 35.1, 58.7 32.9, 66.1 32.5 C 69.5 32.3, 71.1 34.3, 70.1 37.2 C 69 40.6, 67.7 43.5, 65 50", "M 34.4 53.2 C 41.1 52.7, 52.6 51.5, 62 51 C 63.6 50.9, 65.1 50.8, 66.4 50.8", "M 35.1 63.5 C 37.5 65.8, 41.2 73.3, 41.8 77", "M 63.6 58.5 C 63.8 59.2, 63.7 60, 63.6 60.7 C 62.5 65.2, 59.8 73, 55.4 79.1", "M 13.9 83.1 C 16.1 83.8, 20.3 84, 22.6 83.8 C 41.7 82.3, 57.4 81.3, 76.7 80.9 C 80.5 80.8, 82.8 81.2, 84.6 81.6"],
     exampleKanji: [
       { char: "豆", pinyin: "dòu", hanViet: "Đậu", meaning: "Hạt đậu (豆腐)" },
       { char: "頭", pinyin: "tóu", hanViet: "Đầu", meaning: "Cái đầu (頭)" },
@@ -1326,15 +1223,7 @@ export const KANJI_RADICALS: KanjiRadical[] = [
     meaningEn: "Valley",
     strokes: 7,
     strokeGuide: "Nét 1-2: phẩy mác trên; Nét 3-4: nhân trên; Nét 5-7: ô khẩu dưới.",
-    strokePaths: [
-      "M 35 15 L 22 28",
-      "M 65 15 L 78 28",
-      "M 50 28 L 25 50",
-      "M 50 28 L 75 50",
-      "M 32 60 L 32 85",
-      "M 32 60 L 68 60 L 68 85",
-      "M 32 85 L 68 85",
-    ],
+    strokePaths: ["M 33.7 15.1 C 33.8 16.4, 33.7 17.4, 33.1 18.5 C 30.7 22.5, 25.6 28.4, 19.6 32.8", "M 62.2 14.6 C 68.8 18.3, 76.9 25.3, 79.1 29.1", "M 48.5 27.3 C 48.7 29, 48.6 30.3, 47.8 31.8 C 42.8 40.8, 30.5 53.2, 14.4 61.9", "M 49.2 32.4 C 58.3 40.1, 70.4 49.2, 79.2 54.7 C 82.2 56.6, 85.4 58.4, 89 59.1", "M 29 62.3 C 29.9 63.2, 30.1 63.8, 30.5 65.1 C 31.7 69.4, 33.1 77.7, 34.2 84.4 C 34.4 85.6, 34.6 86.7, 34.7 87.8", "M 31 63.5 C 42.5 62.4, 58.5 60.8, 65.2 60.1 C 67.8 59.8, 69.5 61.5, 68.9 63.5 C 67.6 68.3, 65.7 76.7, 64.4 81.9", "M 35.5 85.2 C 45.1 84.3, 52.5 83.8, 61.9 82.9 C 63.3 82.8, 64.6 82.7, 66 82.6"],
     exampleKanji: [
       { char: "谷", pinyin: "gǔ", hanViet: "Cốc", meaning: "Thung lũng (谷)" },
       { char: "容", pinyin: "róng", hanViet: "Dung", meaning: "Nội dung, dung mạo" },
@@ -1348,7 +1237,7 @@ export const KANJI_RADICALS: KanjiRadical[] = [
     meaningEn: "Divination / Fortune",
     strokes: 2,
     strokeGuide: "Nét 1: sổ đứng; Nét 2: chấm/ngang hất phải.",
-    strokePaths: ["M 45 15 L 45 88", "M 45 42 L 78 42"],
+    strokePaths: ["M 45.7 11.1 C 46.4 11.5, 47.9 14.2, 48 15 C 48.1 15.9, 47.9 84, 47.8 89.1", "M 50.7 36 C 57.7 39.3, 68.6 48.2, 70.4 54.8"],
     exampleKanji: [
       { char: "卜", pinyin: "bǔ", hanViet: "Bốc", meaning: "Bói toán" },
       { char: "外", pinyin: "wài", hanViet: "Ngoại", meaning: "Bên ngoài (外国)" },
@@ -1362,7 +1251,7 @@ export const KANJI_RADICALS: KanjiRadical[] = [
     meaningEn: "Sprout / Grass growing",
     strokes: 3,
     strokeGuide: "Nét 1: sổ ngắn trái rồi gập ngang sang phải; Nét 2: sổ ngắn phải (nét riêng biệt); Nét 3: sổ dài xuyên giữa, hơi cong về trái ở đáy.",
-    strokePaths: ["M 28 32 L 28 58 L 70 58", "M 72 32 L 72 58", "M 50 15 C 50 45, 49 70, 46 82 Q 44 90, 34 86"],
+    strokePaths: ["M 20.7 30.4 C 21.6 30.8, 22.8 32, 22.8 34.5 C 22.8 37.3, 21.8 50.8, 21.3 55.8 C 21.1 58.4, 20.4 60, 24.4 59.7 C 35.9 58.8, 68.8 54.9, 79.1 53.8", "M 79.3 25.5 C 80 26, 81.6 27.9, 81.4 29 C 81 34.5, 79.8 49, 78.9 58.5", "M 48.7 9.3 C 49.8 10.2, 50.8 12, 50.8 13.5 C 50.8 26.3, 50.8 34.1, 50.6 46 C 50.2 67.3, 43.8 83.6, 25.3 93.2"],
     exampleKanji: [
       { char: "屯", pinyin: "tún", hanViet: "Truân", meaning: "Tụ tập, đồn trú" },
       { char: "徹", pinyin: "chè", hanViet: "Triệt", meaning: "Triệt để, thông suốt" },
@@ -1376,7 +1265,7 @@ export const KANJI_RADICALS: KanjiRadical[] = [
     meaningEn: "River / Stream",
     strokes: 3,
     strokeGuide: "3 nét lằn sóng ngoằn ngoèo chảy song song từ trên xuống.",
-    strokePaths: ["M 28 20 L 22 50 L 28 85", "M 50 20 L 44 50 L 50 85", "M 72 20 L 66 50 L 72 85"],
+    strokePaths: ["M 32.3 13.2 C 33.3 14, 33.7 16.9, 33 18.5 C 29.4 27.1, 25 37.4, 18.8 48.4 C 17.6 50.5, 18.3 50.3, 18.8 51.1 C 24.8 61.5, 31.9 73.4, 34.4 87.4", "M 53.4 12.7 C 54.4 13.5, 54.7 16.4, 54.1 18 C 50.9 26.8, 48.4 37.4, 42.4 47.7 C 41.8 48.8, 42.2 49.9, 42.7 50.7 C 48.6 60.3, 54.6 70.9, 58.3 86.5", "M 77.3 13.6 C 78.2 14.4, 78.5 17.3, 77.9 18.9 C 74.8 28.4, 70.9 38.3, 64.9 48.6 C 64.3 49.7, 64.6 50.8, 65.1 51.6 C 71.1 61.2, 77.1 70.9, 80.7 86.5"],
     exampleKanji: [
       { char: "川", pinyin: "chuān", hanViet: "Xuyên", meaning: "Dòng sông (川)" },
       { char: "州", pinyin: "zhōu", hanViet: "Châu", meaning: "Tỉnh, tiểu bang" },

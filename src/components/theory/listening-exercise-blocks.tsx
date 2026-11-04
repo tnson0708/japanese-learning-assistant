@@ -185,7 +185,7 @@ function PictureIcon({
       <img
         src={encodeURI(imageUrl)}
         alt={badgeName ? `${badgeName} ${badgeNumber ?? ""}` : "Tranh minh họa"}
-        className="aspect-square w-full rounded-md border object-cover"
+        className="aspect-square w-full rounded-md border bg-white object-contain"
       />
     );
   }
@@ -281,6 +281,62 @@ function PictureIcon({
   );
 }
 
+/** One numbered row of ①②③ pictures; grades the pick once `correctOptionId` is known. */
+function PictureChoiceGroup({
+  group,
+  chosen,
+  onChoose,
+}: {
+  group: ListeningPictureGroup;
+  chosen?: string;
+  onChoose: (optionId: string) => void;
+}) {
+  return (
+    <div className="flex flex-col gap-2">
+      {group.num && <span className="text-xs font-bold text-foreground">{group.num}</span>}
+      <div className="grid grid-cols-3 gap-2.5">
+        {group.options.map((opt, i) => {
+          const isChosen = chosen === opt.id;
+          const isCorrect = group.correctOptionId === opt.id;
+          const showFeedback = !!chosen && !!group.correctOptionId;
+
+          return (
+            <button
+              key={opt.id}
+              type="button"
+              onClick={() => onChoose(opt.id)}
+              className={`flex flex-col gap-1.5 rounded-xl border p-2 text-left transition-colors cursor-pointer ${
+                showFeedback && isChosen
+                  ? isCorrect
+                    ? "border-emerald-500 bg-emerald-500/10"
+                    : "border-red-500 bg-red-500/10"
+                  : isChosen
+                    ? "border-primary bg-primary/10"
+                    : "border-border/70 bg-card hover:border-primary/40"
+              }`}
+            >
+              <div className="flex items-center justify-between">
+                <span className="text-[10px] font-bold text-muted-foreground">
+                  {["①", "②", "③", "④"][i] || i + 1}
+                </span>
+                {isChosen ? (
+                  <CheckSquare className="size-3.5 text-primary" />
+                ) : (
+                  <Square className="size-3.5 text-muted-foreground/50" />
+                )}
+              </div>
+              <PictureIcon icon={opt.icon} imageUrl={opt.imageUrl} badgeName={opt.badgeName} badgeNumber={opt.badgeNumber} />
+              {opt.label && (
+                <span className="text-[10px] text-muted-foreground">{opt.label}</span>
+              )}
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
 /**
  * 2. Listening Picture-Choice Drill (問題 2-style): learner listens then
  * checks the picture that matches. The book's original illustrations aren't
@@ -328,55 +384,14 @@ export function ListeningPictureChoiceBlock({
       <CardContent className="flex flex-col gap-4">
         <ExerciseAudioPlayer audioUrl={audioUrl} />
 
-        {groups.map((group) => {
-          const chosen = selected[group.id];
-          return (
-            <div key={group.id} className="flex flex-col gap-2">
-              <span className="text-xs font-bold text-foreground">{group.num}</span>
-              <div className="grid grid-cols-3 gap-2.5">
-                {group.options.map((opt, i) => {
-                  const isChosen = chosen === opt.id;
-                  const isCorrect = group.correctOptionId === opt.id;
-                  const showFeedback = !!chosen && !!group.correctOptionId;
-
-                  return (
-                    <button
-                      key={opt.id}
-                      type="button"
-                      onClick={() =>
-                        setSelected((prev) => ({ ...prev, [group.id]: opt.id }))
-                      }
-                      className={`flex flex-col gap-1.5 rounded-xl border p-2 text-left transition-colors cursor-pointer ${
-                        showFeedback && isChosen
-                          ? isCorrect
-                            ? "border-emerald-500 bg-emerald-500/10"
-                            : "border-red-500 bg-red-500/10"
-                          : isChosen
-                            ? "border-primary bg-primary/10"
-                            : "border-border/70 bg-card hover:border-primary/40"
-                      }`}
-                    >
-                      <div className="flex items-center justify-between">
-                        <span className="text-[10px] font-bold text-muted-foreground">
-                          {["①", "②", "③", "④"][i] || i + 1}
-                        </span>
-                        {isChosen ? (
-                          <CheckSquare className="size-3.5 text-primary" />
-                        ) : (
-                          <Square className="size-3.5 text-muted-foreground/50" />
-                        )}
-                      </div>
-                      <PictureIcon icon={opt.icon} imageUrl={opt.imageUrl} badgeName={opt.badgeName} badgeNumber={opt.badgeNumber} />
-                      {opt.label && (
-                        <span className="text-[10px] text-muted-foreground">{opt.label}</span>
-                      )}
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
-          );
-        })}
+        {groups.map((group) => (
+          <PictureChoiceGroup
+            key={group.id}
+            group={group}
+            chosen={selected[group.id]}
+            onChoose={(optId) => setSelected((prev) => ({ ...prev, [group.id]: optId }))}
+          />
+        ))}
       </CardContent>
     </Card>
   );
@@ -513,6 +528,7 @@ export function ReadingComprehensionBlock({
   passageVi,
   passageImageUrl,
   items,
+  pictureQuestion,
 }: {
   title: string;
   instruction?: string;
@@ -521,11 +537,13 @@ export function ReadingComprehensionBlock({
   passageVi?: string;
   passageImageUrl?: string;
   items: ListeningTrueFalseItem[];
+  pictureQuestion?: { questionJp: string; group: ListeningPictureGroup };
 }) {
   const [answers, setAnswers] = useState<Record<string, boolean>>({});
+  const [pictureChoice, setPictureChoice] = useState<string>();
   const [showTranslation, setShowTranslation] = useState(false);
 
-  const blockId = `exercise-reading-${items[0]?.id || title.replace(/\s+/g, "-")}`;
+  const blockId = `exercise-reading-${items[0]?.id || pictureQuestion?.group.id || title.replace(/\s+/g, "-")}`;
   const examples = items.filter((it) => it.isExample);
   const questions = items.filter((it) => !it.isExample);
 
@@ -645,6 +663,17 @@ export function ReadingComprehensionBlock({
             );
           })}
         </div>
+
+        {pictureQuestion && (
+          <div className="flex flex-col gap-2">
+            <JapaneseText text={pictureQuestion.questionJp} className="text-sm font-medium text-foreground" />
+            <PictureChoiceGroup
+              group={pictureQuestion.group}
+              chosen={pictureChoice}
+              onChoose={setPictureChoice}
+            />
+          </div>
+        )}
       </CardContent>
     </Card>
   );

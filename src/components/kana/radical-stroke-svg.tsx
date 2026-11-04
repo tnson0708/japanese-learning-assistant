@@ -42,12 +42,14 @@ export function RadicalStrokeSvg({
         role="img"
         aria-label={`Stroke order for ${radical.char}`}
       >
-        {/* Background grid lines for Kanji practice square (田字格) */}
+        {/* 3x3 practice grid (9 squares) */}
         <g className="stroke-muted-foreground/40" strokeWidth={0.8} strokeDasharray="3 3">
-          <line x1={50} y1={0} x2={50} y2={100} />
-          <line x1={0} y1={50} x2={100} y2={50} />
-          <line x1={0} y1={0} x2={100} y2={100} opacity={0.4} />
-          <line x1={100} y1={0} x2={0} y2={100} opacity={0.4} />
+          {[100 / 3, 200 / 3].map((p) => (
+            <g key={p}>
+              <line x1={p} y1={0} x2={p} y2={100} />
+              <line x1={0} y1={p} x2={100} y2={p} />
+            </g>
+          ))}
         </g>
 
         {/* Animated stroke paths */}
@@ -71,18 +73,24 @@ export function RadicalStrokeSvg({
         </g>
 
         {/* Stroke Order Numbers */}
-        <g className="fill-muted-foreground" fontSize={7} fontWeight="bold">
-          {radical.strokePaths.map((d, i) => {
+        <g className="fill-muted-foreground stroke-background" fontSize={7} fontWeight="bold" strokeWidth={2.2} strokeLinejoin="round" paintOrder="stroke">
+          {(() => {
+            const placed: [number, number][] = [];
+            return radical.strokePaths.map((d, i) => {
             const start = d.match(/M\s*(-?[\d.]+)[, ]\s*(-?[\d.]+)/);
             if (!start) return null;
-            const x = parseFloat(start[1]);
-            const y = parseFloat(start[2]);
+            let lx = Math.max(4, parseFloat(start[1]) - 6);
+            const ly = Math.max(10, parseFloat(start[2]) - 2);
+            // Strokes sharing a start point (e.g. 口-style frames): shift label right
+            while (placed.some(([px, py]) => Math.abs(px - lx) < 5 && Math.abs(py - ly) < 6)) lx += 6;
+            placed.push([lx, ly]);
             return (
-              <text key={i} x={Math.max(4, x - 6)} y={Math.max(10, y - 2)}>
+              <text key={i} x={lx} y={ly}>
                 {i + 1}
               </text>
             );
-          })}
+            });
+          })()}
         </g>
       </svg>
     </div>

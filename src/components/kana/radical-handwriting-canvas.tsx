@@ -37,10 +37,12 @@ export function RadicalHandwritingCanvas({
     ctx.setLineDash([4, 4]);
 
     ctx.beginPath();
-    ctx.moveTo(canvas.width / 2, 0);
-    ctx.lineTo(canvas.width / 2, canvas.height);
-    ctx.moveTo(0, canvas.height / 2);
-    ctx.lineTo(canvas.width, canvas.height / 2);
+    for (const t of [1 / 3, 2 / 3]) {
+      ctx.moveTo(canvas.width * t, 0);
+      ctx.lineTo(canvas.width * t, canvas.height);
+      ctx.moveTo(0, canvas.height * t);
+      ctx.lineTo(canvas.width, canvas.height * t);
+    }
     ctx.stroke();
 
     ctx.setLineDash([]);

@@ -98,11 +98,15 @@ export function FillInBlankExerciseBlock({
   title,
   instruction,
   audioUrl,
+  imageUrl,
+  imageAlt,
   questions,
 }: {
   title: string;
   instruction?: string;
   audioUrl?: string;
+  imageUrl?: string;
+  imageAlt?: string;
   questions: FillInBlankQuestion[];
 }) {
   const [userAnswers, setUserAnswers] = useState<Record<string, string>>({});
@@ -153,6 +157,14 @@ export function FillInBlankExerciseBlock({
       </CardHeader>
       <CardContent className="flex flex-col gap-4 print:gap-3">
         <ExerciseAudioPlayer audioUrl={audioUrl} />
+        {imageUrl && (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            src={encodeURI(imageUrl)}
+            alt={imageAlt || "Tranh minh họa bài tập"}
+            className="w-full max-w-xl rounded-lg border object-contain"
+          />
+        )}
         <div className="flex flex-col gap-3">
           {questions.map((q, index) => {
             const selected = userAnswers[q.id];
